@@ -1,5 +1,5 @@
-classdef constants
-    %CONSTANTS: class for holding physical constants
+classdef const
+    %CONST: class for holding physical constants
     properties (Constant)
         F = 96485.3328959; % As/mol - Faraday constant
         R = 8.3144598; % J/(mol*K) - universal gas constant
