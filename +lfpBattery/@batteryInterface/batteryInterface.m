@@ -66,7 +66,7 @@ classdef (Abstract) batteryInterface < constants
         end
         function b = set.socMax(b, s)
             assert(s <= 1, 'soc_max cannot be greater than 1')
-            assert(s > b.socMin, 'soc_max cannot be smaller than or equal to soc_min') %#ok<MCSUP>
+            assert(s > b.socMin, 'soc_max cannot be smaller than or equal to soc_min')
             b.soc_max = s;
         end
         function b = set.soc(b, s)
