@@ -24,20 +24,25 @@ classdef dischargeFit < handle
     %
     % Authors:  Marc Jakobi, Festus Anyangbe, Marc Schmidt,
     % December 2016
-    properties
-        rmse; % root mean squared error of fit
-    end
-    properties %(Hidden)%, GetAccess = 'protected', SetAccess = 'protected')
-        f; % Nernst-fit (function Handle)
-        fs; % exponential drop at the beginning of the discharge curve (function handle)
-        fe; % exponential drop at the end of the discharge curve (function handle)
-        %MTODO: Set params public & add fit method
+    properties (Dependent)
         x; % parameters for f
         xs; % parameters for fs
         xe; % parameters for fe
         stD; % DoD at starting index of the nernst fit
         enD; % DoD at ending index of the nernst fit
+    end
+    properties (Dependent, SetAccess = 'protected')
+       rmse; % root mean squared error of fit
+    end
+    properties (Dependent)%, Hidden, GetAccess = 'protected', SetAccess = 'protected')
         Cmax; % maximum of discharge capacity (used for conversion between dod & C_dis)
+    end
+    properties %(Hidden, GetAccess = 'protected', SetAccess = 'immutable')
+        f; % Nernst-fit (function Handle)
+        fs; % exponential drop at the beginning of the discharge curve (function handle)
+        fe; % exponential drop at the end of the discharge curve (function handle)
+        Cd_raw; % x data (discharge capacity) of initial fit curve
+        V_raw; % y data (OC voltage) of initial fit curve
         C; % C-Rate at which curve was measured
         T; % Temperature at which curve was measured
     end
@@ -66,8 +71,6 @@ classdef dischargeFit < handle
             %   st:             starting index of the nernst fit
             %   en:             ending index of the nernst fit
             %   C:              C-Rate at which curve was measured
-            %   T:              Temperature (K) at which curve was measured
-            
             d.Cmax = max(C_d);
             dod = C_dis ./ d.Cmax; % Conversion to depth of discharge
             options = optimoptions('lsqcurvefit', 'Algorithm', 'levenberg-marquardt');
@@ -76,7 +79,7 @@ classdef dischargeFit < handle
                 ./ (lfpBattery.const.z .* lfpBattery.const.F) ...
                 .* log(xdata./(1-xdata)) + x(2) .* xdata + x(3));
             % MTODO: disable workspace output
-            d.x = lsqcurvefit(f, [E0; Ea; Eb], dod(st:en), V(st:en), [], [], options);
+            d.x = xval;
             e_f = d.f(d.x, dod(st:en)) - V(st:en); % fit errors
             % Exponential drop (beginning of curve)
             d.fs = @(x, xdata)((x(1) + (x(2) + x(1).*x(3)).*xdata) .* exp(-x(3).*xdata));
@@ -115,6 +118,10 @@ classdef dischargeFit < handle
             v(is) = d.fs(d.xs, dod(is));
             v(ie) = d.fe(d.xe, dod(ie));
             v(in) = d.f(d.x, dod(in));
+        end
+        %% Dependent getters:
+        function fh = set.x(d, xval)
+            d.x = lsqcurvefit(d.f, xval, dod(st:en), V(st:en), [], [], options);
         end
     end
     
