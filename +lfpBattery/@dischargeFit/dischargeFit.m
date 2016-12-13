@@ -1,5 +1,29 @@
 classdef dischargeFit < handle
-    %DISCHARGEFIT: Class for fitting discharge curves
+    %DISCHARGEFIT: Uses Levenberg-Marquardt algorithm to fit a
+    %discharge curve of a lithium-ion battery in three parts:
+    %1: exponential drop at the beginning of the discharge curve
+    %2: according to the nernst-equation
+    %3: exponential drop at the end of the discharge curve
+    %
+    %Syntax:
+    %   d = dischargeFit(V, C_dis, E0, Ea, Eb, Aex, Bex, Cex, ...
+    %                       x0, v0, delta, st, en, C, T);
+    %
+    %Input arguments:
+    %   V:              Voltage (V) = f(C_dis) (from data sheet)
+    %   C_dis:          Discharge capacity (Ah) (from data sheet)
+    %   E0, Ea, Eb:     Parameters for Nernst fit (initial estimations)
+    %   Aex, Bex, Cex:  Parameters for fit of exponential drop at
+    %                   the beginning of the curve (initial estimations)
+    %   x0, v0, delta:  Parameters for fit of exponential drop at
+    %                   the end of the curve (initial estimations)
+    %   st:             starting index of the nernst fit
+    %   en:             ending index of the nernst fit
+    %   C:              C-Rate at which curve was measured
+    %   T:              Temperature (K) at which curve was measured
+    %
+    % Authors:  Marc Jakobi, Festus Anyangbe, Marc Schmidt,
+    % December 2016
     properties
         rmse; % root mean squared error of fit
     end
@@ -13,12 +37,13 @@ classdef dischargeFit < handle
         stD; % DoD at starting index of the nernst fit
         enD; % DoD at ending index of the nernst fit
         Cmax; % maximum of discharge capacity (used for conversion between dod & C_dis)
-        T; % Temperature at which curve was recorded
+        C; % C-Rate at which curve was measured
+        T; % Temperature at which curve was measured
     end
     methods
         % MTODO: Constructor
         function d = dischargeFit(V, C_dis, E0, Ea, Eb, Aex, Bex, Cex, x0, v0, delta, ...
-                st, en, Temp)
+                st, en, CRate, Temp)
             %DISCHARGEFIT: Uses Levenberg-Marquardt algorithm to fit a
             %discharge curve of a lithium-ion battery in three parts:
             %1: exponential drop at the beginning of the discharge curve
@@ -26,12 +51,12 @@ classdef dischargeFit < handle
             %3: exponential drop at the end of the discharge curve
             %
             %Syntax:
-            %   d = dischargeFit(V, C_dis, E0, Ea, Eb, Aex, Bex, Cex, x0, v0, delta, st, en)
-            %   d = dischargeFit(V, C_dis, E0, Ea, Eb, Aex, Bex, Cex, x0, v0, delta, st, en, Temp)
+            %   d = dischargeFit(V, C_dis, E0, Ea, Eb, Aex, Bex, Cex, ...
+            %                       x0, v0, delta, st, en, C, T);
             %
             %Input arguments:
-            %   V:              Voltage = f(C_dis) from data sheet
-            %   C_dis:          Discharge capacity (from data sheet)
+            %   V:              Voltage (V) = f(C_dis) (from data sheet)
+            %   C_dis:          Discharge capacity (Ah) (from data sheet)
             %   E0, Ea, Eb:     Parameters for Nernst fit (initial estimations)
             %   Aex, Bex, Cex:  Parameters for fit of exponential drop at
             %                   the beginning of the curve (initial estimations)
@@ -39,16 +64,9 @@ classdef dischargeFit < handle
             %                   the end of the curve (initial estimations)
             %   st:             starting index of the nernst fit
             %   en:             ending index of the nernst fit
-            %   T:              Temperature at which curve was measured
-            %
-            % Authors:  Marc Jakobi, Festus Anyangbe, Marc Schmidt,
-            % December 2016
+            %   C:              C-Rate at which curve was measured
+            %   T:              Temperature (K) at which curve was measured
             
-            if nargin < 12 % Default: room temperature
-                d.T = lfpBattery.const.T_room;
-            else
-                d.T = Temp;
-            end
             d.Cmax = max(C_d);
             dod = C_dis ./ d.Cmax; % Conversion to depth of discharge
             options = optimoptions('lsqcurvefit', 'Algorithm', 'levenberg-marquardt');
@@ -70,8 +88,33 @@ classdef dischargeFit < handle
             d.rmse = sqrt(sum([e_f(:); e_fs(:); e_fe(:)].^2)); % root mean squared error
             d.stD = dod(st);
             d.enD = dod(en);
+            d.C = CRate;
+            d.T = Temp;
         end
         % MTODO: apply method
+        function v = discharge(d, C_dis)
+            %DISCHARGE: Calculate the voltage for a given discharge capacity
+            %
+            %Syntax: v = discharge(d, C_dis)
+            %        v = d.discharge(C_dis)
+            %
+            %Input arguments:
+            %   d:      dischargeFit
+            %   C_dis:  discharge capacity (Ah)
+            %
+            %Output arguments:
+            %   v:      Resulting open circuit voltage (V)
+            
+            dod = C_dis ./ d.Cmax; % conversion to DoD
+            v = nan(size(dod));
+            is = dod <= d.stD; % exp. drop at beginning
+            ie = dod >= d.enD; % exp. drop at end
+            in = dod > d.stD && dod < d.enD; %#ok<BDSCI>    % nernst          
+            % apply fits
+            v(is) = d.fs(d.xs, dod(is));
+            v(ie) = d.fe(d.xe, dod(ie));
+            v(in) = d.f(d.x, dod(in));
+        end
     end
     
 end
