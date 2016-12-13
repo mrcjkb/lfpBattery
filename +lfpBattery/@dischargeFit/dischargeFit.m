@@ -31,6 +31,7 @@ classdef dischargeFit < handle
         f; % Nernst-fit (function Handle)
         fs; % exponential drop at the beginning of the discharge curve (function handle)
         fe; % exponential drop at the end of the discharge curve (function handle)
+        %MTODO: Set params public & add fit method
         x; % parameters for f
         xs; % parameters for fs
         xe; % parameters for fe
