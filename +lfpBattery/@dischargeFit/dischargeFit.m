@@ -67,7 +67,7 @@ classdef dischargeFit < handle
         MINARGS = 6; % minumum number of input args for constructor
     end
     methods
-        % MTODO: Constructor
+        % Constructor
         function d = dischargeFit(V, C_dis, CRate, Temp, st, en, E0, Ea, Eb, Aex, Bex, Cex, x0, v0, delta)
             %DISCHARGEFIT: Uses Levenberg-Marquardt algorithm to fit a
             %discharge curve of a lithium-ion battery in three parts:
