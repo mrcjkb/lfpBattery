@@ -79,7 +79,7 @@ classdef dischargeFit < handle
                 ./ (lfpBattery.const.z .* lfpBattery.const.F) ...
                 .* log(xdata./(1-xdata)) + x(2) .* xdata + x(3));
             % MTODO: disable workspace output
-            d.x = xval;
+            d.x = [E0; Ea; Eb];
             e_f = d.f(d.x, dod(st:en)) - V(st:en); % fit errors
             % Exponential drop (beginning of curve)
             d.fs = @(x, xdata)((x(1) + (x(2) + x(1).*x(3)).*xdata) .* exp(-x(3).*xdata));
