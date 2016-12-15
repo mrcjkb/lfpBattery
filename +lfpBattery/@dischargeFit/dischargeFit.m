@@ -6,25 +6,33 @@ classdef dischargeFit < handle
     %3: exponential drop at the end of the discharge curve
     %
     %Syntax:
-    %   d = dischargeFit(V, C_dis, E0, Ea, Eb, Aex, Bex, Cex, ...
-    %                       x0, v0, delta, st, en, C, T);
+    %   d = dischargeFit(V, C_dis, C, T, st, en);
+    %           --> initialization of curve fit params with zeros
+    %
+    %   d = dischargeFit(V, C_dis, C, T, st, en, E0, Ea, Eb, Aex, Bex, Cex, x0, v0, delta);
+    %           --> custom initialization of curve fit params
     %
     %Input arguments:
     %   V:              Voltage (V) = f(C_dis) (from data sheet)
     %   C_dis:          Discharge capacity (Ah) (from data sheet)
-    %   E0, Ea, Eb:     Parameters for Nernst fit (initial estimations)
-    %   Aex, Bex, Cex:  Parameters for fit of exponential drop at
-    %                   the beginning of the curve (initial estimations)
-    %   x0, v0, delta:  Parameters for fit of exponential drop at
-    %                   the end of the curve (initial estimations)
+    %   C:              C-Rate at which curve was measured
+    %   T:              Temperature (K) at which curve was mearured
     %   st:             starting index of the nernst fit
     %   en:             ending index of the nernst fit
-    %   C:              C-Rate at which curve was measured
-    %   T:              Temperature (K) at which curve was measured
+    %
+    %Optional input arguments:
+    %   E0, Ea, Eb:     Parameters for Nernst fit (initial estimations)
+    %   Aex, Bex, Cex:  Parameters for fit of exponential drop at
+    %                   the end of the curve (initial estimations)
+    %   x0, v0, delta:  Parameters for fit of exponential drop at
+    %                   the beginning of the curve (initial estimations)
     %
     % Authors:  Marc Jakobi, Festus Anyangbe, Marc Schmidt,
     % December 2016
     
+    properties (SetAccess = 'immutable')
+       C; % C-Rate at which curve was measured 
+    end
     properties (Dependent)
         x; % 3 parameters for f
         xs; % 3 parameters for fs
@@ -57,7 +65,6 @@ classdef dischargeFit < handle
         dod; % x data (raw DoD) of initial fit curve
         V_raw; % y data (OC voltage) of initial fit curve
         Cdmax; % maximum of discharge capacity (used for conversion between dod & C_dis)
-        C; % C-Rate at which curve was measured
     end
     properties (Constant, Hidden, GetAccess = 'protected')
         % lsqcurvefit options
@@ -65,11 +72,10 @@ classdef dischargeFit < handle
             'Display', 'off', ... % suppress command window output
             'FiniteDifferenceType', 'central', ... % should be more precise than 'forward'
             'FunctionTolerance', 1e-12, ...
-            'MaxFunctionEvaluations', '1000*numberOfVariables', ...
-            'MaxIterations', 4.*1e3, ...
+            'MaxIterations', 1e10, ...
             'OptimalityTolerance', 1e-12, ...
             'StepTolerance', 1e-12, ...
-            'UseParallel', true); 
+            'MaxFunctionEvaluations', 1e10);
         fs = @(x, xdata)((x(1) + (x(2) + x(1).*x(3)).*xdata) .* exp(-x(3).*xdata)); % exponential drop at the beginning of the discharge curve (function handle)
         fe = @(x, xdata)(x(1) .* exp(-x(2) .* xdata) + x(3)); % exponential drop at the end of the discharge curve (function handle)
         MINARGS = 6; % minumum number of input args for constructor
@@ -84,20 +90,27 @@ classdef dischargeFit < handle
             %3: exponential drop at the end of the discharge curve
             %
             %Syntax:
-            %   d = dischargeFit(V, C_dis, E0, Ea, Eb, Aex, Bex, Cex, ...
-            %                       x0, v0, delta, st, en, C, T);
+            %   d = dischargeFit(V, C_dis, C, T, st, en);
+            %           --> initialization of curve fit params with zeros
+            %
+            %   d = dischargeFit(V, C_dis, C, T, st, en, E0, Ea, Eb, Aex, Bex, Cex, x0, v0, delta);
+            %           --> custom initialization of curve fit params
             %
             %Input arguments:
             %   V:              Voltage (V) = f(C_dis) (from data sheet)
             %   C_dis:          Discharge capacity (Ah) (from data sheet)
+            %   C:              C-Rate at which curve was measured
+            %   T:              Temperature (K) at which curve was mearured
+            %   st:             starting index of the nernst fit
+            %   en:             ending index of the nernst fit
+            %
+            %Optional input arguments:
             %   E0, Ea, Eb:     Parameters for Nernst fit (initial estimations)
             %   Aex, Bex, Cex:  Parameters for fit of exponential drop at
             %                   the end of the curve (initial estimations)
             %   x0, v0, delta:  Parameters for fit of exponential drop at
             %                   the beginning of the curve (initial estimations)
-            %   st:             starting index of the nernst fit
-            %   en:             ending index of the nernst fit
-            %   C:              C-Rate at which curve was measured
+            
             if nargin < d.MINARGS
                 error('Not enough input arguments')
             else
