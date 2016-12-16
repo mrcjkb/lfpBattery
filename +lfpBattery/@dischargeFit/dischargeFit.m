@@ -213,6 +213,14 @@ classdef dischargeFit < handle
         end
         function set.nernstInds(d, inds)
            assert(numel(inds) == 2, 'Wrong number of indexes')
+           if inds(1) < 1
+               warning('nernstInds(1) cannot be smaller than 1');
+               inds(1) = 1;
+           end
+           if inds(2) > numel(d.V_raw)-1 % nernst(dod==1) --> Inf
+               warning(['nernstInds(2) cannot be greater than ', num2str(numel(d.V_raw)-1)])
+               inds(2) = numel(d.V_raw)-1;
+           end
            d.stI = inds(1);
            d.enI = inds(2);
            d.stD = d.dod(inds(1));
