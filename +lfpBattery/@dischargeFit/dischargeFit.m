@@ -9,7 +9,7 @@ classdef dischargeFit < handle
     %   d = dischargeFit(V, C_dis, C, T);
     %           --> initialization of curve fit params with zeros
     %
-    %   d = dischargeFit(V, C_dis, C, T, E0, Ea, Eb, Aex, Bex, Cex, x0, v0, delta);
+    %   d = dischargeFit(V, C_dis, C, T, 'OptionName', 'OptionValue');
     %           --> custom initialization of curve fit params
     %
     %Input arguments:
@@ -18,12 +18,23 @@ classdef dischargeFit < handle
     %   C:              C-Rate at which curve was measured
     %   T:              Temperature (K) at which curve was mearured
     %
-    %Optional input arguments:
+    %OptionName-OptionValue pairs:
+    %
+    %   'x0'            Initial params for fit functions.
+    %                   default: zeros(9, 1)
+    %
+    %   x0 = [E0; Ea; Eb; Aex; Bex; Cex; x0; v0; delta] with:
+    %
     %   E0, Ea, Eb:     Parameters for Nernst fit (initial estimations)
     %   Aex, Bex, Cex:  Parameters for fit of exponential drop at
     %                   the end of the curve (initial estimations)
     %   x0, v0, delta:  Parameters for fit of exponential drop at
     %                   the beginning of the curve (initial estimations)
+    %
+    %   'mode'          Function used for fitting curves
+    %                   'lsq' (default) - lsqcurvefit
+    %                   'fmin'          - fminsearch
+    %                   'both'          - a combination (lsq, then fmin)
     %
     % Authors:  Marc Jakobi, Festus Anyangbe, Marc Schmidt,
     % December 2016
@@ -48,7 +59,7 @@ classdef dischargeFit < handle
     end
     properties (Hidden, GetAccess = 'protected', SetAccess = 'protected')
         px; % parameters for f
-        fmin = true; % true for fminsearch, false for lsqcurvefit
+        fmin; % true for fminsearch, false for lsqcurvefit
     end
     properties (Hidden, GetAccess = 'protected', SetAccess = 'immutable')
         f; % Fit function Handle
@@ -71,11 +82,10 @@ classdef dischargeFit < handle
             'StepTolerance', 1e-12, ...
             'MaxFunctionEvaluations', 1e10);
         MINARGS = 4; % minumum number of input args for constructor
-        MAXARGS = 13; % maximum number of input args for constructor
     end
     methods
         % Constructor
-        function d = dischargeFit(V, C_dis, CRate, Temp, E0, Ea, Eb, Aex, Bex, Cex, x0, v0, delta)
+        function d = dischargeFit(V, C_dis, CRate, Temp, varargin)
             %DISCHARGEFIT: Uses Levenberg-Marquardt algorithm to fit a
             %discharge curve of a lithium-ion battery in three parts:
             %1: exponential drop at the beginning of the discharge curve
@@ -86,7 +96,7 @@ classdef dischargeFit < handle
             %   d = dischargeFit(V, C_dis, C, T);
             %           --> initialization of curve fit params with zeros
             %
-            %   d = dischargeFit(V, C_dis, C, T, E0, Ea, Eb, Aex, Bex, Cex, x0, v0, delta);
+            %   d = dischargeFit(V, C_dis, C, T, 'OptionName', 'OptionValue');
             %           --> custom initialization of curve fit params
             %
             %Input arguments:
@@ -95,12 +105,23 @@ classdef dischargeFit < handle
             %   C:              C-Rate at which curve was measured
             %   T:              Temperature (K) at which curve was mearured
             %
-            %Optional input arguments:
+            %OptionName-OptionValue pairs:
+            %
+            %   'x0'            Initial params for fit functions.
+            %                   default: zeros(9, 1)
+            %
+            %   x0 = [E0; Ea; Eb; Aex; Bex; Cex; x0; v0; delta] with:
+            %
             %   E0, Ea, Eb:     Parameters for Nernst fit (initial estimations)
             %   Aex, Bex, Cex:  Parameters for fit of exponential drop at
             %                   the end of the curve (initial estimations)
             %   x0, v0, delta:  Parameters for fit of exponential drop at
             %                   the beginning of the curve (initial estimations)
+            %
+            %   'mode'          Function used for fitting curves
+            %                   'lsq'           - lsqcurvefit
+            %                   'fmin'          - fminsearch
+            %                   'both'          - a combination (lsq, then fmin)
             
             if nargin < d.MINARGS
                 error('Not enough input arguments')
@@ -112,37 +133,26 @@ classdef dischargeFit < handle
                 d.f = @(x, xdata)(x(1) - (lfpBattery.const.R .* Temp) ... % Nernst
                         ./ (lfpBattery.const.z_Li .* lfpBattery.const.F) ...
                         .* log(xdata./(1-xdata)) + x(2) .* xdata + x(3)) ...
-                    + ((x(4) + (x(5) + x(4).*x(6)).*xdata) .* exp(-x(6).*xdata)) ... % exponential drop at the beginning of the discharge curve
+                    + ((x(4) + (x(5) + x(4).*x(6)) .* xdata) .* exp(-x(6) .* xdata)) ... % exponential drop at the beginning of the discharge curve
                     + (x(7) .* exp(-x(8) .* xdata) + x(9)); % exponential drop at the end of the discharge curve
-                % Fit params optional for initialization
-                if nargin < d.MAXARGS
-                    delta = 0;
-                    if nargin < d.MAXARGS - 1
-                        v0 = 0;
-                        if nargin < d.MAXARGS - 2
-                            x0 = 0;
-                            if nargin < d.MAXARGS - 3
-                                Cex = 0;
-                                if nargin < d.MAXARGS - 4
-                                    Bex = 0;
-                                    if nargin < d.MAXARGS - 5
-                                        Aex = 0;
-                                        if nargin < d.MAXARGS - 6
-                                            Eb = 0;
-                                            if nargin < d.MAXARGS - 7
-                                                Ea = 0;
-                                                if nargin < d.MAXARGS - 8
-                                                    E0 = 0;
-                                                end
-                                            end
-                                        end
-                                    end
-                                end
-                            end
-                        end
-                    end
+                
+                % Optional Inputs
+                p = inputParser;
+                % fit mode (lsqcurvefit or fminsearch)
+                addOptional(p, 'mode', 'both', @(x) any(validatestring(x, {'lsq', 'fmin', 'both'})))
+                % param initialization
+                x0 = zeros(9,1);
+                addOptional(p, 'x0', x0, @(x) (isnumeric(x) & numel(x) == 9))
+                % interpret varargin
+                parse(p, varargin{:})
+                if strcmp(p.Results.mode, 'fmin')
+                    d.fmin = 1;
+                elseif strcmp(p.Results.mode, 'lsq')
+                    d.fmin = 2;
+                else
+                    d.fmin = 3;
                 end
-                d.px = [E0; Ea; Eb; Aex; Bex; Cex; x0; v0; delta];
+                d.px = p.Results.x0;
                 d.fit;
             end
         end
@@ -252,11 +262,15 @@ classdef dischargeFit < handle
     end
     methods (Access = 'protected')
         function d = fit(d)
-            if d.fmin
+            if d.fmin == 1 % fminsearch
                 fun = @(x) d.sseval(x, d.f(x, d.dod(1:end-1)), d.V_raw(1:end-1));
                 d.px = fminsearch(fun, d.px, d.fmsoptions);
-            else
+            elseif d.fmin == 2 % lsqcurvefit
                 d.px = lsqcurvefit(d.f, d.px, d.dod(1:end-1), d.V_raw(1:end-1), [], [], d.lsqoptions);
+            else % both (lsq, then fmin)
+                d.px = lsqcurvefit(d.f, d.px, d.dod(1:end-1), d.V_raw(1:end-1), [], [], d.lsqoptions);
+                fun = @(x) d.sseval(x, d.f(x, d.dod(1:end-1)), d.V_raw(1:end-1));
+                d.px = fminsearch(fun, d.px, d.fmsoptions);
             end
         end
     end
