@@ -1,8 +1,6 @@
 function dischargeFitTests(fig)
 if nargin == 0
     fig = false;
-else
-    fig = true;
 end
 
 import lfpBattery.*
