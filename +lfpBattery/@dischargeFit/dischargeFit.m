@@ -262,6 +262,8 @@ classdef dischargeFit < handle
     end
     methods (Access = 'protected')
         function d = fit(d)
+            %FIT: Checks which fit mode is selected and calls the
+            %respective fit function/s accordingly
             if d.fmin == 1 % fminsearch
                 fun = @(x) d.sseval(x, d.f(x, d.dod(1:end-1)), d.V_raw(1:end-1));
                 d.px = fminsearch(fun, d.px, d.fmsoptions);
