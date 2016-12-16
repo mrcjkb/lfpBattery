@@ -143,7 +143,7 @@ classdef dischargeFit < handle
                     end
                 end
                 d.px = [E0; Ea; Eb; Aex; Bex; Cex; x0; v0; delta];
-                d.fit
+                d.fit;
             end
         end
         function v = subsref(d, S)
@@ -157,13 +157,15 @@ classdef dischargeFit < handle
             %
             %Output arguments:
             %   v:      Resulting open circuit voltage (V)
-            if strcmp(S.type, '()') && nargout == 1
+            if strcmp(S.type, '()')
                 if numel(S.subs) > 1
                     error('Cannot index dischargeFit')
                 end
                 C_dis = S.subs{1};
                 DoD = max(0, min(C_dis ./ d.Cdmax, 1)); % conversion to DoD
                 v = d.f(d.px, DoD);
+            elseif nargout == 1
+                v = builtin('subsref', d, S);
             else
                 builtin('subsref', d, S);
             end
@@ -190,17 +192,17 @@ classdef dischargeFit < handle
         function set.x(d, params)
             assert(numel(params) == 3, 'Wrong number of params')
             d.px(1:3) = params(:);
-            d.fit
+            d.fit;
         end
         function set.xs(d, params)
             assert(numel(params) == 3, 'Wrong number of params')
             d.px(4:6) = params(:);
-            d.fit
+            d.fit;
         end
         function set.xe(d, params)
             assert(numel(params) == 3, 'Wrong number of params')
             d.px(7:9) = params(:);
-            d.fit
+            d.fit;
         end
         function set.mode(d, str)
             validatestring(str, {'lsq', 'fmin'});
@@ -251,7 +253,7 @@ classdef dischargeFit < handle
     methods (Access = 'protected')
         function d = fit(d)
             if d.fmin
-                fun = @(x) d.sseval(d.px, d.f(d.px, d.dod(1:end-1)), d.V_raw(1:end-1));
+                fun = @(x) d.sseval(x, d.f(x, d.dod(1:end-1)), d.V_raw(1:end-1));
                 d.px = fminsearch(fun, d.px, d.fmsoptions);
             else
                 d.px = lsqcurvefit(d.f, d.px, d.dod(1:end-1), d.V_raw(1:end-1), [], [], d.lsqoptions);
