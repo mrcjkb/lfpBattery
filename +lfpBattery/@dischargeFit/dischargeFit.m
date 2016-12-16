@@ -29,12 +29,13 @@ classdef dischargeFit < handle
     % December 2016
     
     properties (SetAccess = 'immutable')
-       C; % C-Rate at which curve was measured 
+       C; % C-Rate at which curve was measured
     end
     properties (Dependent)
         x; % 3 parameters for f
         xs; % 3 parameters for fs
         xe; % 3 parameters for fe
+        mode; % function used for fitting ('fmin' for fminsearch or 'lsq' for lsqcurvefit)
     end
     properties (Dependent, SetAccess = 'protected')
         rmse; % root mean squared error of fit
@@ -47,17 +48,22 @@ classdef dischargeFit < handle
     end
     properties (Hidden, GetAccess = 'protected', SetAccess = 'protected')
         px; % parameters for f
+        fmin = true; % true for fminsearch, false for lsqcurvefit
     end
     properties (Hidden, GetAccess = 'protected', SetAccess = 'immutable')
-        f; % Nernst-fit (function Handle)
+        f; % Fit function Handle
         dod; % x data (raw DoD) of initial fit curve
         V_raw; % y data (OC voltage) of initial fit curve
         Cdmax; % maximum of discharge capacity (used for conversion between dod & C_dis)
     end
     properties (Constant, Hidden, GetAccess = 'protected')
-        % lsqcurvefit options
-        options = optimoptions('lsqcurvefit', 'Algorithm', 'levenberg-marquardt',...
-            'Display', 'off', ... % suppress command window output
+        sseval = @(x, fdata, ydata) sum((ydata - fdata).^2); % calculation of sum squared error
+        fmsoptions = optimset('Algorithm','levenberg-marquardt', ... % fminsearch options
+            'Display', 'off', ...
+            'MaxFunEvals', 1e10, ... 
+            'MaxIter', 1e10);
+        lsqoptions = optimoptions('lsqcurvefit', 'Algorithm', 'levenberg-marquardt',... % lsqcurvefit options
+            'Display', 'off', ...
             'FiniteDifferenceType', 'central', ... % should be more precise than 'forward'
             'FunctionTolerance', 1e-12, ...
             'MaxIterations', 1e10, ...
@@ -65,6 +71,7 @@ classdef dischargeFit < handle
             'StepTolerance', 1e-12, ...
             'MaxFunctionEvaluations', 1e10);
         MINARGS = 4; % minumum number of input args for constructor
+        MAXARGS = 13; % maximum number of input args for constructor
     end
     methods
         % Constructor
@@ -102,29 +109,29 @@ classdef dischargeFit < handle
                 d.dod = C_dis ./ d.Cdmax; % Conversion to depth of discharge
                 d.C = CRate;
                 d.V_raw = V;
-                d.f = @(x, xdata)(x(1) - (lfpBattery.const.R .* Temp) ...
+                d.f = @(x, xdata)(x(1) - (lfpBattery.const.R .* Temp) ... % Nernst
                         ./ (lfpBattery.const.z_Li .* lfpBattery.const.F) ...
                         .* log(xdata./(1-xdata)) + x(2) .* xdata + x(3)) ...
                     + ((x(4) + (x(5) + x(4).*x(6)).*xdata) .* exp(-x(6).*xdata)) ... % exponential drop at the beginning of the discharge curve
                     + (x(7) .* exp(-x(8) .* xdata) + x(9)); % exponential drop at the end of the discharge curve
                 % Fit params optional for initialization
-                if nargin < 15
+                if nargin < d.MAXARGS
                     delta = 0;
-                    if nargin < 14
+                    if nargin < d.MAXARGS - 1
                         v0 = 0;
-                        if nargin < 13
+                        if nargin < d.MAXARGS - 2
                             x0 = 0;
-                            if nargin < 12
+                            if nargin < d.MAXARGS - 3
                                 Cex = 0;
-                                if nargin < 11
+                                if nargin < d.MAXARGS - 4
                                     Bex = 0;
-                                    if nargin < 10
+                                    if nargin < d.MAXARGS - 5
                                         Aex = 0;
-                                        if nargin < 9
+                                        if nargin < d.MAXARGS - 6
                                             Eb = 0;
-                                            if nargin < 8
+                                            if nargin < d.MAXARGS - 7
                                                 Ea = 0;
-                                                if nargin < 7
+                                                if nargin < d.MAXARGS - 8
                                                     E0 = 0;
                                                 end
                                             end
@@ -135,8 +142,8 @@ classdef dischargeFit < handle
                         end
                     end
                 end
-                x = [E0; Ea; Eb; Aex; Bex; Cex; x0; v0; delta];
-                d.px = lsqcurvefit(d.f, x, d.dod(1:end-1), d.V_raw(1:end-1), [], [], d.options);
+                d.px = [E0; Ea; Eb; Aex; Bex; Cex; x0; v0; delta];
+                d.fit
             end
         end
         function v = subsref(d, S)
@@ -150,7 +157,7 @@ classdef dischargeFit < handle
             %
             %Output arguments:
             %   v:      Resulting open circuit voltage (V)
-            if strcmp(S.type, '()')
+            if strcmp(S.type, '()') && nargout == 1
                 if numel(S.subs) > 1
                     error('Cannot index dischargeFit')
                 end
@@ -178,24 +185,43 @@ classdef dischargeFit < handle
                 ['max(\DeltaV) = ', num2str(d.dV_max), ' V']})
             grid on
         end
+        
         %% Dependent setters:
         function set.x(d, params)
             assert(numel(params) == 3, 'Wrong number of params')
             d.px(1:3) = params(:);
-            d.px = lsqcurvefit(d.f, d.px, d.dod(1:end-1), d.V_raw(1:end-1), [], [], d.options);
+            d.fit
         end
         function set.xs(d, params)
             assert(numel(params) == 3, 'Wrong number of params')
             d.px(4:6) = params(:);
-            d.px = lsqcurvefit(d.fs, d.px, d.dod(1:end-1), d.V_raw(1:end-1), [], [], d.options);
+            d.fit
         end
         function set.xe(d, params)
             assert(numel(params) == 3, 'Wrong number of params')
             d.px(7:9) = params(:);
-            d.px = lsqcurvefit(d.fe, d.px, d.dod(1:end-1), d.V_raw(1:end-1), [], [], d.options);
+            d.fit
+        end
+        function set.mode(d, str)
+            validatestring(str, {'lsq', 'fmin'});
+            if ~strcmp(d.mode, str)
+                if strcmp(str, 'fmin')
+                    d.fmin = true;
+                else
+                    d.fmin = false;
+                end
+                d.fit;
+            end
         end
         
         %% Dependent getters
+        function m = get.mode(d)
+           if d.fmin
+               m = 'fmin';
+           else
+               m = 'lsq';
+           end
+        end
         function params = get.x(d)
             params = d.px(1:3);
         end
@@ -220,6 +246,16 @@ classdef dischargeFit < handle
         end
         function c = get.Cd_raw(d)
            c = d.dod .* d.Cdmax; 
+        end
+    end
+    methods (Access = 'protected')
+        function d = fit(d)
+            if d.fmin
+                fun = @(x) d.sseval(d.px, d.f(d.px, d.dod(1:end-1)), d.V_raw(1:end-1));
+                d.px = fminsearch(fun, d.px, d.fmsoptions);
+            else
+                d.px = lsqcurvefit(d.f, d.px, d.dod(1:end-1), d.V_raw(1:end-1), [], [], d.lsqoptions);
+            end
         end
     end
     
