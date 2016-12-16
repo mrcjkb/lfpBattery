@@ -6,10 +6,10 @@ classdef dischargeFit < handle
     %3: exponential drop at the end of the discharge curve
     %
     %Syntax:
-    %   d = dischargeFit(V, C_dis, C, T, st, en);
+    %   d = dischargeFit(V, C_dis, C, T);
     %           --> initialization of curve fit params with zeros
     %
-    %   d = dischargeFit(V, C_dis, C, T, st, en, E0, Ea, Eb, Aex, Bex, Cex, x0, v0, delta);
+    %   d = dischargeFit(V, C_dis, C, T, E0, Ea, Eb, Aex, Bex, Cex, x0, v0, delta);
     %           --> custom initialization of curve fit params
     %
     %Input arguments:
@@ -17,8 +17,6 @@ classdef dischargeFit < handle
     %   C_dis:          Discharge capacity (Ah) (from data sheet)
     %   C:              C-Rate at which curve was measured
     %   T:              Temperature (K) at which curve was mearured
-    %   st:             starting index of the nernst fit
-    %   en:             ending index of the nernst fit
     %
     %Optional input arguments:
     %   E0, Ea, Eb:     Parameters for Nernst fit (initial estimations)
