@@ -37,7 +37,6 @@ classdef dischargeFit < handle
         x; % 3 parameters for f
         xs; % 3 parameters for fs
         xe; % 3 parameters for fe
-        nernstInds; % start and end index of nernst fit range [st, en]
     end
     properties (Dependent, SetAccess = 'protected')
         rmse; % root mean squared error of fit
@@ -46,19 +45,10 @@ classdef dischargeFit < handle
     end
     properties (Dependent, Hidden, SetAccess = 'protected', GetAccess = 'protected')
        Cd_raw; % x data (raw discharge capacity) of initial fit curve
-       e_f; % nernst differences
-       e_fs; % beginning differences
-       e_fe; % end differences
        e_tot; % total differences
     end
     properties (Hidden, GetAccess = 'protected', SetAccess = 'protected')
-        stD; % DoD at starting index of the nernst fit
-        enD; % DoD at ending index of the nernst fit
-        stI; % start index of nernst part of curve
-        enI; % end index of nernst part of curve
         px; % parameters for f
-        pxs; % parameters for fs
-        pxe; % parameters for fe
     end
     properties (Hidden, GetAccess = 'protected', SetAccess = 'immutable')
         f; % Nernst-fit (function Handle)
@@ -76,13 +66,11 @@ classdef dischargeFit < handle
             'OptimalityTolerance', 1e-12, ...
             'StepTolerance', 1e-12, ...
             'MaxFunctionEvaluations', 1e10);
-        fs = @(x, xdata)((x(1) + (x(2) + x(1).*x(3)).*xdata) .* exp(-x(3).*xdata)); % exponential drop at the beginning of the discharge curve (function handle)
-        fe = @(x, xdata)(x(1) .* exp(-x(2) .* xdata) + x(3)); % exponential drop at the end of the discharge curve (function handle)
-        MINARGS = 6; % minumum number of input args for constructor
+        MINARGS = 4; % minumum number of input args for constructor
     end
     methods
         % Constructor
-        function d = dischargeFit(V, C_dis, CRate, Temp, st, en, E0, Ea, Eb, Aex, Bex, Cex, x0, v0, delta)
+        function d = dischargeFit(V, C_dis, CRate, Temp, E0, Ea, Eb, Aex, Bex, Cex, x0, v0, delta)
             %DISCHARGEFIT: Uses Levenberg-Marquardt algorithm to fit a
             %discharge curve of a lithium-ion battery in three parts:
             %1: exponential drop at the beginning of the discharge curve
@@ -90,10 +78,10 @@ classdef dischargeFit < handle
             %3: exponential drop at the end of the discharge curve
             %
             %Syntax:
-            %   d = dischargeFit(V, C_dis, C, T, st, en);
+            %   d = dischargeFit(V, C_dis, C, T);
             %           --> initialization of curve fit params with zeros
             %
-            %   d = dischargeFit(V, C_dis, C, T, st, en, E0, Ea, Eb, Aex, Bex, Cex, x0, v0, delta);
+            %   d = dischargeFit(V, C_dis, C, T, E0, Ea, Eb, Aex, Bex, Cex, x0, v0, delta);
             %           --> custom initialization of curve fit params
             %
             %Input arguments:
@@ -101,8 +89,6 @@ classdef dischargeFit < handle
             %   C_dis:          Discharge capacity (Ah) (from data sheet)
             %   C:              C-Rate at which curve was measured
             %   T:              Temperature (K) at which curve was mearured
-            %   st:             starting index of the nernst fit
-            %   en:             ending index of the nernst fit
             %
             %Optional input arguments:
             %   E0, Ea, Eb:     Parameters for Nernst fit (initial estimations)
@@ -120,11 +106,9 @@ classdef dischargeFit < handle
                 d.V_raw = V;
                 d.f = @(x, xdata)(x(1) - (lfpBattery.const.R .* Temp) ...
                         ./ (lfpBattery.const.z_Li .* lfpBattery.const.F) ...
-                        .* log(xdata./(1-xdata)) + x(2) .* xdata + x(3));
-                d.stI = st;
-                d.enI = en;
-                d.stD = d.dod(st);
-                d.enD = d.dod(en);
+                        .* log(xdata./(1-xdata)) + x(2) .* xdata + x(3)) ...
+                    + ((x(4) + (x(5) + x(4).*x(6)).*xdata) .* exp(-x(6).*xdata)) ... % exponential drop at the beginning of the discharge curve
+                    + (x(7) .* exp(-x(8) .* xdata) + x(9)); % exponential drop at the end of the discharge curve
                 % Fit params optional for initialization
                 if nargin < 15
                     delta = 0;
@@ -153,42 +137,40 @@ classdef dischargeFit < handle
                         end
                     end
                 end
-                d.x = [E0; Ea; Eb];
-                d.xe = [Aex; Bex; Cex];
-                d.xs = [x0; v0; delta];
+                x = [E0; Ea; Eb; Aex; Bex; Cex; x0; v0; delta];
+                d.px = lsqcurvefit(d.f, x, d.dod(1:end-1), d.V_raw(1:end-1), [], [], d.options);
             end
         end
-        function v = discharge(d, C_dis)
+        function v = subsref(d, S)
             %DISCHARGE: Calculate the voltage for a given discharge capacity
             %
-            %Syntax: v = discharge(d, C_dis)
-            %        v = d.discharge(C_dis)
+            %Syntax: v = d(C_dis)
             %
             %Input arguments:
-            %   d:      dischargeFit
+            %   d:      dischargeFit object
             %   C_dis:  discharge capacity (Ah)
             %
             %Output arguments:
             %   v:      Resulting open circuit voltage (V)
-            
-            DoD = C_dis ./ d.Cdmax; % conversion to DoD
-            v = nan(size(DoD));
-            is = DoD <= d.stD; % exp. drop at beginning
-            ie = DoD >= d.enD; % exp. drop at end
-            in = DoD > d.stD & DoD < d.enD; % nernst          
-            % apply fits
-            v(is) = d.fs(d.xs, DoD(is));
-            v(ie) = d.fe(d.xe, DoD(ie));
-            v(in) = d.f(d.x, DoD(in));
+            if strcmp(S.type, '()')
+                if numel(S.subs) > 1
+                    error('Cannot index dischargeFit')
+                end
+                C_dis = S.subs{1};
+                DoD = max(0, min(C_dis ./ d.Cdmax, 1)); % conversion to DoD
+                v = d.f(d.px, DoD);
+            else
+                builtin('subsref', d, S);
+            end
         end
         function plotResults(d)
             %PLOTRESULTS: Compares a scatter of the raw data with the fit
             %in a figure window.
-            C_dis = linspace(min(d.Cd_raw), max(d.Cd_raw), 1000);
+            C_dis = linspace(min(d.Cd_raw), max(d.Cd_raw), 1000)';
             figure;
             hold on
             scatter(d.Cd_raw, d.V_raw, 'filled', 'MarkerFaceColor', lfpBattery.const.red)
-            plot(C_dis, d.discharge(C_dis), 'Color', lfpBattery.const.green, ...
+            plot(C_dis, d.f(d.px, C_dis./d.Cdmax), 'Color', lfpBattery.const.green, ...
                 'LineWidth', 2)
             legend('raw data', 'fit', 'Location', 'Best')
             xlabel('discharge capacity / Ah')
@@ -201,62 +183,36 @@ classdef dischargeFit < handle
         %% Dependent setters:
         function set.x(d, params)
             assert(numel(params) == 3, 'Wrong number of params')
-            d.px = lsqcurvefit(d.f, params, d.dod(d.stI:d.enI), d.V_raw(d.stI:d.enI), [], [], d.options);
+            d.px(1:3) = params(:);
+            d.px = lsqcurvefit(d.f, d.px, d.dod(1:end-1), d.V_raw(1:end-1), [], [], d.options);
         end
         function set.xs(d, params)
             assert(numel(params) == 3, 'Wrong number of params')
-            d.pxs = lsqcurvefit(d.fs, params, d.dod(1:d.stI), d.V_raw(1:d.stI), [], [], d.options);
+            d.px(4:6) = params(:);
+            d.px = lsqcurvefit(d.fs, d.px, d.dod(1:end-1), d.V_raw(1:end-1), [], [], d.options);
         end
         function set.xe(d, params)
             assert(numel(params) == 3, 'Wrong number of params')
-            d.pxe = lsqcurvefit(d.fe, params, d.dod(d.enI:end), d.V_raw(d.enI:end), [], [], d.options);
+            d.px(7:9) = params(:);
+            d.px = lsqcurvefit(d.fe, d.px, d.dod(1:end-1), d.V_raw(1:end-1), [], [], d.options);
         end
-        function set.nernstInds(d, inds)
-           assert(numel(inds) == 2, 'Wrong number of indexes')
-           if inds(1) < 1
-               warning('nernstInds(1) cannot be smaller than 1');
-               inds(1) = 1;
-           end
-           if inds(2) > numel(d.V_raw)-1 % nernst(dod==1) --> Inf
-               warning(['nernstInds(2) cannot be greater than ', num2str(numel(d.V_raw)-1)])
-               inds(2) = numel(d.V_raw)-1;
-           end
-           d.stI = inds(1);
-           d.enI = inds(2);
-           d.stD = d.dod(inds(1));
-           d.enD = d.dod(inds(2));
-           d.px = lsqcurvefit(d.f, d.px, d.dod(d.stI:d.enI), d.V_raw(d.stI:d.enI), [], [], d.options);
-           d.pxs = lsqcurvefit(d.fs, d.pxs, d.dod(1:d.stI), d.V_raw(1:d.stI), [], [], d.options);
-           d.pxe = lsqcurvefit(d.fe, d.pxe, d.dod(d.enI:end), d.V_raw(d.enI:end), [], [], d.options);
-        end
+        
         %% Dependent getters
         function params = get.x(d)
-            params = d.px;
+            params = d.px(1:3);
         end
         function params = get.xs(d)
-            params = d.pxs;
+            params = d.px(4:6);
         end
         function params = get.xe(d)
-            params = d.pxe;
-        end
-        function inds = get.nernstInds(d)
-            inds = [d.stI, d.enI];
+            params = d.px(7:9);
         end
         function r = get.rmse(d)
             % fit errors
             r = sqrt(sum(d.e_tot.^2)); % root mean squared error
         end
-        function e = get.e_f(d)
-            e = d.f(d.x, d.dod(d.stI:d.enI)) - d.V_raw(d.stI:d.enI);
-        end
-        function e = get.e_fs(d)
-            e = d.fs(d.xs, d.dod(1:d.stI)) - d.V_raw(1:d.stI);
-        end
-        function e = get.e_fe(d)
-            e = d.fe(d.xe, d.dod(d.enI:end)) - d.V_raw(d.enI:end);
-        end
         function e = get.e_tot(d)
-           e = [d.e_f(:); d.e_fs(:); d.e_fe(:)]; 
+            e = d.f(d.px, d.dod(1:end-1)) - d.V_raw(1:end-1);
         end
         function e = get.dV_mean(d)
             e = mean(d.e_tot);

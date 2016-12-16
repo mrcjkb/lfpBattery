@@ -1,4 +1,10 @@
-function dischargeFitTests
+function dischargeFitTests(fig)
+if nargin == 0
+    fig = false;
+else
+    fig = true;
+end
+
 import lfpBattery.*
 
 %% Input data
@@ -16,21 +22,20 @@ v0 = 1400;
 delta = 260;
 
 %% Args
-en = 340;
-st = 13;
 Temp = const.T_room;
 CRate = 1;
 
 %% Initialize with params
-d = dischargeFit(V, C_d, CRate, Temp, st, en, E0, Ea, Eb, Aex, Bex, Cex, x0, v0, delta);
-% d.plotResults
-assert(isequal(d.rmse, 0.3587), 'unexpected rmse')
-
+d = dischargeFit(V, C_d, CRate, Temp, E0, Ea, Eb, Aex, Bex, Cex, x0, v0, delta);
+if fig
+    d.plotResults
+end
 %% Initialize without params
-d2 = dischargeFit(V, C_d, CRate, Temp, st, en);
-% d2.plotResults
-assert(isequal(d2.rmse, 0.3587), 'unexpected rmse')
+d2 = dischargeFit(V, C_d, CRate, Temp);
+if fig
+    d2.plotResults
+end
 
-% TODO: Create additional assetion tests
+% TODO: Create assertion tests
 
 end
