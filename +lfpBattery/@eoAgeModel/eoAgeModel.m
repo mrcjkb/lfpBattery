@@ -23,10 +23,18 @@ classdef eoAgeModel < lfpBattery.batteryAgeModel
             % cycleCounter subclass cy with the 'NewCycle' event. The age
             % is calculated according to the woehler curve fit specified by
             % fit. fit can be a function handle or a woehlerFit object.
-            if ~isa(@(x) sin(x), 'function_handle') && isa(@(x) sin(x), 'woehlerFit')
+            addlistener(cy, 'NewCycle', @a.addAging);
+            if nargin == 2
+                a.wFit = fit;
+            else
+                warning('age model does not contain a woehler curve fit.')
+            end
+        end
+        % setters
+        function set.wFit(a, fit)
+            if ~isa(fit, 'function_handle') && ~isa(fit, 'woehlerFit')
                 error('fit must be a function_handle or a woehlerFit')
             end
-            addlistener(cy, 'NewCycle', @a.addAging);
             a.wFit = fit;
         end
     end

@@ -36,7 +36,7 @@ classdef (Abstract) batteryAgeModel < handle % MTODO: make abstract
                 init_soh = 1;
             end
             lfpBattery.errChks.onezeroChk(eols, 'eol')
-            lfpBattery.errChks.onezeroChk(init_age, 'init_age')
+            lfpBattery.errChks.onezeroChk(init_soh, 'init_soh')
             b.eolSoH = eols;
             b.SoH = init_soh;
         end
@@ -47,6 +47,9 @@ classdef (Abstract) batteryAgeModel < handle % MTODO: make abstract
             if b.Ac >= b.eolAc %#ok<MCSUP>
                 notify(b, 'EolReached')
             end
+        end
+        function set.SoH(b, soh)
+           b.Ac = 1-soh; 
         end
         function set.eolSoH(b, soh)
             lfpBattery.errChks.onezeroChk(soh, 'End of life state of health')
