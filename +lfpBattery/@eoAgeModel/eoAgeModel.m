@@ -12,7 +12,7 @@ classdef eoAgeModel < lfpBattery.batteryAgeModel
     %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt, December 2016
     
-    properties (Hidden, GetAccess = 'protected', SetAccess = 'immutable')
+    properties (Hidden, GetAccess = 'protected')
         wFit; % Woehler curve fit
     end
     
@@ -27,7 +27,8 @@ classdef eoAgeModel < lfpBattery.batteryAgeModel
             if nargin == 2
                 a.wFit = fit;
             else
-                error('age model does not contain a woehler curve fit.')
+                warning('age model does not contain a woehler curve fit. Aging will not occur until one is added.')
+                a.wFit = @(x) inf; % dividing by inf returns zero
             end
         end
         % setters
