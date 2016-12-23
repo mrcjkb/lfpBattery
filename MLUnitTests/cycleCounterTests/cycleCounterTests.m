@@ -4,7 +4,7 @@ import lfpBattery.*
 socMax = 0.8;
 socMin = 0.2;
 
-c = cycleCounter(socMin, socMax);
+c = dambrowskiCounter(socMin, socMax);
 load(fullfile(pwd,'cycleCounterTests','testInputs.mat'))
 
 cDoC = [];
