@@ -16,6 +16,15 @@ classdef dambrowskiCounter < lfpBattery.cycleCounter
     %
     %The cycle-depth-of-cycle histogram can be used in aging models.
     %
+    %dambrowskiCounter Methods:
+    %
+    %   dambrowskiCounter - dambrowskiCounter constructor
+    %   update            - Use this method to add a new SoC value to a cycleCounter
+    %                       object c. If a new full cycle is reached, the count() method is
+    %                       called.
+    %   count             - Transforms the state-of-charge (SoC) profile
+    %                       into a cycle-depth-of-discharge (cDoC) histogram using the dambrowski et al. cycle counting algorithm
+    %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt, December 2016
     
     methods
