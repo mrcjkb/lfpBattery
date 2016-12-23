@@ -6,6 +6,7 @@ socMin = 0.2;
 
 c = dambrowskiCounter(socMin, socMax);
 cl = ccListener(c);
+a = eoAgeModel(c);
 load(fullfile(pwd,'cycleCounterTests','testInputs.mat'))
 
 cDoC = [];
