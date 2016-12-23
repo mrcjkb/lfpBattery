@@ -10,7 +10,7 @@ load(fullfile(pwd,'cycleCounterTests','testInputs.mat'))
 cDoC = [];
 cDoC0 = 0;
 for i = uint64(2):uint64(numel(soc))
-    c = c.update(soc(i));
+    c.update(soc(i));
     if c.isnewC
         if isequal(c.cDoC, cDoC0)
             error('double counting')

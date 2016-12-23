@@ -1,4 +1,4 @@
-classdef cycleCounter
+classdef cycleCounter < handle
     %CYCLECOUNTER: Interface for counting cycles according to J. Dambrowski,
     %S. Pichlmaier, A. Jossen - "Mathematical methods for classification of
     %state-of-charge time series for cycle lifetime prediction".
@@ -54,16 +54,16 @@ classdef cycleCounter
             %cycleCounter object c.
             if soc ~= c.soc0 % ignore idle states
                 if soc == c.socMax % full cycle reached
-                    c = c.addSoC(soc);
+                    c.addSoC(soc);
                     c.isnewC = true; % set flag that new results have been calculated
-                    c = c.dambrowskiCount; % count cycles
+                    c.count; % count cycles
                     % reset SoC
                     c.currCycle = c.currCycle.*0;
                     c.ct = int32(1);
                     c.currCycle(1) = soc;
                 else
                     c.isnewC = false;
-                    c = c.addSoC(soc);
+                    c.addSoC(soc);
                     c.isnewC = false;
                 end
             else
@@ -72,14 +72,14 @@ classdef cycleCounter
             c.soc0 = soc;
         end % update
         %% cycle counter
-        function c = dambrowskiCount(c)
-            %DAMBROWSKICOUNT: Transforms the state-of-charge (SoC) profile into a
+        function c = count(c)
+            %COUNT: Transforms the state-of-charge (SoC) profile into a
             %cycle-depth-of-discharge (cDoC) histogram using the method described
             %in J. Dambrowski, S. Pichlmaier, A. Jossen - "Mathematical methods for
             %classification of state-of-charge time series for cycle lifetime
             %prediction".
             %
-            %Syntax:    c.dambrowskiCount;
+            %Syntax:    c.count;
             
             SoC = c.currCycle(1:c.ct);
             %% eliminate extensive peaks [with diff(SoC) == 0]
@@ -215,7 +215,7 @@ classdef cycleCounter
             else % no cycles found (possible at initialization)
                 c.isnewC = false;
             end
-        end % dambrowskiCount
+        end % count
     end % public methods
     
     %% protected methods
