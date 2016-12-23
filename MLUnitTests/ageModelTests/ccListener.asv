@@ -1,0 +1,17 @@
+classdef ccListener < handle
+    %CCLISTENER eventListener class for the purpose of recognizing a
+    %cycleCounter object's full cycles
+    
+    properties
+        isnewC = false;
+    end
+    
+    methods
+        function c = ccListener(cy)
+            % ccListene
+        end
+        
+    end
+    
+end
+
