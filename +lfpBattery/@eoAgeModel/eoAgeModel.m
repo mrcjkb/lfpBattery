@@ -27,7 +27,7 @@ classdef eoAgeModel < lfpBattery.batteryAgeModel
             if nargin == 2
                 a.wFit = fit;
             else
-                warning('age model does not contain a woehler curve fit.')
+                error('age model does not contain a woehler curve fit.')
             end
         end
         % setters
