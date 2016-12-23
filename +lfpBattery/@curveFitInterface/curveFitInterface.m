@@ -16,6 +16,7 @@ classdef (Abstract) curveFitInterface < handle
     properties (Hidden, GetAccess = 'protected', SetAccess = 'protected')
         px; % parameters for fit function handle
         fmin; % true for fminsearch, false for lsqcurvefit
+        xxlim  = [-inf, inf]; % upper & lower limits for x data
     end
     properties (Hidden, GetAccess = 'protected', SetAccess = 'immutable')
         f; % Fit function Handle
@@ -38,11 +39,26 @@ classdef (Abstract) curveFitInterface < handle
             'MaxFunctionEvaluations', 1e10);
     end
     methods
-        function d = curveFitInterface(f, rawx, rawy, x0, fmin)
+        function d = curveFitInterface(f, rawx, rawy, varargin)
+            x0 = zeros(100, 1);
+            % Optional inputs
+            p = inputParser;
+            addOptional(p, 'x0', x0, @(x) isnumeric(x));
+            addOptional(p, 'mode', 'both', @(x) any(validatestring(x, {'fmin', 'lsq', 'both'})));
+            parse(p, varargin{:})
+            % interpret varargin
+            parse(p, varargin{:})
+            if strcmp(p.Results.mode, 'fmin')
+                fmin = 1;
+            elseif strcmp(p.Results.mode, 'lsq')
+                fmin = 2;
+            else
+                fmin = 3;
+            end
             d.f = f;
             d.rawX = rawx;
             d.rawY = rawy;
-            d.px = x0;
+            d.px = p.Results.x0;
             d.fmin = fmin;
             d.fit;
         end
@@ -52,7 +68,7 @@ classdef (Abstract) curveFitInterface < handle
                 if numel(S.subs) > 1
                     error('Attempted to index non-indexable object.')
                 end
-                sub = S.subs{1};
+                sub = min(max(d.xxlim(1), S.subs{1}), d.xxlim(2));
                 v = d.f(d.px, sub);
             elseif nargout == 1
                 v = builtin('subsref', d, S);

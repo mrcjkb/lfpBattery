@@ -95,7 +95,7 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             %   'mode'          Function used for fitting curves
             %                   'lsq'           - lsqcurvefit
             %                   'fmin'          - fminsearch
-            %                   'both'          - a combination (lsq, then fmin)
+            %                   'both'          - (default) a combination (lsq, then fmin)
             
             if nargin < 4
                 error('Not enough input arguments')
@@ -112,20 +112,13 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             % Optional inputs
             p = inputParser;
             addOptional(p, 'x0', x0, @(x) (isnumeric(x) & numel(x) == 9));
-            addOptional(p, 'mode', 'both', @(x) any(validatestring(x, {'fmin', 'lsq', 'both'})));
+            addOptional(p, 'mode', 'both');
             parse(p, varargin{:})
-            % interpret varargin
-            parse(p, varargin{:})
-            if strcmp(p.Results.mode, 'fmin')
-                fmin = 1;
-            elseif strcmp(p.Results.mode, 'lsq')
-                fmin = 2;
-            else
-                fmin = 3;
-            end
-            d = d@lfpBattery.curveFitInterface(f, rawx, rawy, x0, fmin); % Superclass constructor
+            varargin = [{'x0', p.Results.x0}, varargin];
+            d = d@lfpBattery.curveFitInterface(f, rawx, rawy, varargin{:}); % Superclass constructor
             d.Cdmax = cdmax;
             d.C = CRate;
+            d.xxlim = [0, cdmax];
         end
         function v = subsref(d, S)
             if strcmp(S.type, '()')
