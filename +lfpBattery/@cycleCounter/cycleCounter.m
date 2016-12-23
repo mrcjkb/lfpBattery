@@ -20,6 +20,8 @@ classdef (Abstract) cycleCounter < handle
     %   update       - Use this method to add a new SoC value to a cycleCounter
     %                   object c. If a new full cycle is reached, the count() method is
     %                   called.
+    %   lUpdate      - Called if cycleCounter is added to a model Obj as an event listener.
+    %                  Calls the update method when Obj's SoC is updated.
     %   count        - (Abstract) Transforms the state-of-charge (SoC) profile into a
     %                   cycle-depth-of-discharge (cDoC) histogram using a specified cycle counting algorithm
     %   iMaxima      - Returns the indexes of the local maxima in the SoC
@@ -89,7 +91,12 @@ classdef (Abstract) cycleCounter < handle
             c.soc0 = init_soc;
             c.socMax = soc_max;
         end % constructor
-        %% update method
+        %%
+        function c = lUpdate(c, src, ~)
+            %LUPDATE: Add this method to a battery model using it's
+            %addlistener method.
+            c.update(src.soc);
+        end
         function c = update(c, soc)
             %UPDATE: Use this method to add a new SoC value to a
             %cycleCounter object c. If a new full cycle is reached, the count() method is
