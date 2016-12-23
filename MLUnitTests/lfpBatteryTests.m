@@ -7,3 +7,5 @@ clearvars p
 disp(' ')
 disp('Beginning MLUnit tests...')
 cycleCounterTests
+
+dischargeFitTests;

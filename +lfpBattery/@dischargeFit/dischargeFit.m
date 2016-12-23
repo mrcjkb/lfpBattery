@@ -1,4 +1,4 @@
-classdef dischargeFit < handle
+classdef dischargeFit < lfpBattery.curveFitInterface
     %DISCHARGEFIT: Uses Levenberg-Marquardt algorithm to fit a
     %discharge curve of a lithium-ion battery in three parts:
     %1: exponential drop at the beginning of the discharge curve
@@ -43,45 +43,19 @@ classdef dischargeFit < handle
        C; % C-Rate at which curve was measured
     end
     properties (Dependent)
-        x; % 3 parameters for f
-        xs; % 3 parameters for fs
-        xe; % 3 parameters for fe
-        mode; % function used for fitting ('fmin' for fminsearch or 'lsq' for lsqcurvefit)
+        x;  % 3 fit parameters for f
+        xs; % 3 fit parameters for fs
+        xe; % 3 fit parameters for fe
     end
     properties (Dependent, SetAccess = 'protected')
-        rmse; % root mean squared error of fit
         dV_mean; % mean difference in voltage between fit and raw data
         dV_max; % max difference in voltage between fit and raw data
     end
     properties (Dependent, Hidden, SetAccess = 'protected', GetAccess = 'protected')
        Cd_raw; % x data (raw discharge capacity) of initial fit curve
-       e_tot; % total differences
-    end
-    properties (Hidden, GetAccess = 'protected', SetAccess = 'protected')
-        px; % parameters for f
-        fmin; % true for fminsearch, false for lsqcurvefit
     end
     properties (Hidden, GetAccess = 'protected', SetAccess = 'immutable')
-        f; % Fit function Handle
-        dod; % x data (raw DoD) of initial fit curve
-        V_raw; % y data (OC voltage) of initial fit curve
         Cdmax; % maximum of discharge capacity (used for conversion between dod & C_dis)
-    end
-    properties (Constant, Hidden, GetAccess = 'protected')
-        sseval = @(x, fdata, ydata) sum((ydata - fdata).^2); % calculation of sum squared error
-        fmsoptions = optimset('Algorithm','levenberg-marquardt', ... % fminsearch options
-            'Display', 'off', ...
-            'MaxFunEvals', 1e10, ... 
-            'MaxIter', 1e10);
-        lsqoptions = optimoptions('lsqcurvefit', 'Algorithm', 'levenberg-marquardt',... % lsqcurvefit options
-            'Display', 'off', ...
-            'FiniteDifferenceType', 'central', ... % should be more precise than 'forward'
-            'FunctionTolerance', 1e-12, ...
-            'MaxIterations', 1e10, ...
-            'OptimalityTolerance', 1e-12, ...
-            'StepTolerance', 1e-12, ...
-            'MaxFunctionEvaluations', 1e10);
-        MINARGS = 4; % minumum number of input args for constructor
     end
     methods
         % Constructor
@@ -123,50 +97,37 @@ classdef dischargeFit < handle
             %                   'fmin'          - fminsearch
             %                   'both'          - a combination (lsq, then fmin)
             
-            if nargin < d.MINARGS
+            if nargin < 4
                 error('Not enough input arguments')
-            else
-                d.Cdmax = max(C_dis);
-                d.dod = C_dis ./ d.Cdmax; % Conversion to depth of discharge
-                d.C = CRate;
-                d.V_raw = V;
-                d.f = @(x, xdata)(x(1) - (lfpBattery.const.R .* Temp) ... % Nernst
-                        ./ (lfpBattery.const.z_Li .* lfpBattery.const.F) ...
-                        .* log(xdata./(1-xdata)) + x(2) .* xdata + x(3)) ...
-                    + ((x(4) + (x(5) + x(4).*x(6)) .* xdata) .* exp(-x(6) .* xdata)) ... % exponential drop at the beginning of the discharge curve
-                    + (x(7) .* exp(-x(8) .* xdata) + x(9)); % exponential drop at the end of the discharge curve
-                
-                % Optional Inputs
-                p = inputParser;
-                % fit mode (lsqcurvefit or fminsearch)
-                addOptional(p, 'mode', 'both', @(x) any(validatestring(x, {'lsq', 'fmin', 'both'})))
-                % param initialization
-                x0 = zeros(9,1);
-                addOptional(p, 'x0', x0, @(x) (isnumeric(x) & numel(x) == 9))
-                % interpret varargin
-                parse(p, varargin{:})
-                if strcmp(p.Results.mode, 'fmin')
-                    d.fmin = 1;
-                elseif strcmp(p.Results.mode, 'lsq')
-                    d.fmin = 2;
-                else
-                    d.fmin = 3;
-                end
-                d.px = p.Results.x0;
-                d.fit;
             end
+            cdmax = max(C_dis);
+            rawx = C_dis ./ cdmax; % Conversion to depth of discharge
+            rawy = V;
+            f = @(x, xdata)(x(1) - (lfpBattery.const.R .* Temp) ... % Nernst
+                ./ (lfpBattery.const.z_Li .* lfpBattery.const.F) ...
+                .* log(xdata./(1-xdata)) + x(2) .* xdata + x(3)) ...
+                + ((x(4) + (x(5) + x(4).*x(6)) .* xdata) .* exp(-x(6) .* xdata)) ... % exponential drop at the beginning of the discharge curve
+                + (x(7) .* exp(-x(8) .* xdata) + x(9)); % exponential drop at the end of the discharge curve
+            x0 = zeros(9, 1);
+            % Optional inputs
+            p = inputParser;
+            addOptional(p, 'x0', x0, @(x) (isnumeric(x) & numel(x) == 9));
+            addOptional(p, 'mode', 'both', @(x) any(validatestring(x, {'fmin', 'lsq', 'both'})));
+            parse(p, varargin{:})
+            % interpret varargin
+            parse(p, varargin{:})
+            if strcmp(p.Results.mode, 'fmin')
+                fmin = 1;
+            elseif strcmp(p.Results.mode, 'lsq')
+                fmin = 2;
+            else
+                fmin = 3;
+            end
+            d = d@lfpBattery.curveFitInterface(f, rawx, rawy, x0, fmin); % Superclass constructor
+            d.Cdmax = cdmax;
+            d.C = CRate;
         end
         function v = subsref(d, S)
-            %DISCHARGE: Calculate the voltage for a given discharge capacity
-            %
-            %Syntax: v = d(C_dis)
-            %
-            %Input arguments:
-            %   d:      dischargeFit object
-            %   C_dis:  discharge capacity (Ah)
-            %
-            %Output arguments:
-            %   v:      Resulting open circuit voltage (V)
             if strcmp(S.type, '()')
                 if numel(S.subs) > 1
                     error('Cannot index dischargeFit')
@@ -183,19 +144,12 @@ classdef dischargeFit < handle
         function plotResults(d)
             %PLOTRESULTS: Compares a scatter of the raw data with the fit
             %in a figure window.
-            C_dis = linspace(min(d.Cd_raw), max(d.Cd_raw), 1000)';
-            figure;
-            hold on
-            scatter(d.Cd_raw, d.V_raw, 'filled', 'MarkerFaceColor', lfpBattery.const.red)
-            plot(C_dis, d.f(d.px, C_dis./d.Cdmax), 'Color', lfpBattery.const.green, ...
-                'LineWidth', 2)
-            legend('raw data', 'fit', 'Location', 'Best')
-            xlabel('discharge capacity / Ah')
-            ylabel('voltage / V')
+            plotResults@lfpBattery.curveFitInterface(d); % Call superclas plot method
             title({['rmse = ', num2str(d.rmse)]; ...
                 ['mean(\DeltaV) = ', num2str(d.dV_mean), ' V']; ...
                 ['max(\DeltaV) = ', num2str(d.dV_max), ' V']})
-            grid on
+            ylabel('voltage / V')
+            xlabel('SoC')
         end
         
         %% Dependent setters:
@@ -214,26 +168,8 @@ classdef dischargeFit < handle
             d.px(7:9) = params(:);
             d.fit;
         end
-        function set.mode(d, str)
-            validatestring(str, {'lsq', 'fmin'});
-            if ~strcmp(d.mode, str)
-                if strcmp(str, 'fmin')
-                    d.fmin = true;
-                else
-                    d.fmin = false;
-                end
-                d.fit;
-            end
-        end
         
         %% Dependent getters
-        function m = get.mode(d)
-           if d.fmin
-               m = 'fmin';
-           else
-               m = 'lsq';
-           end
-        end
         function params = get.x(d)
             params = d.px(1:3);
         end
@@ -243,13 +179,6 @@ classdef dischargeFit < handle
         function params = get.xe(d)
             params = d.px(7:9);
         end
-        function r = get.rmse(d)
-            % fit errors
-            r = sqrt(sum(d.e_tot.^2)); % root mean squared error
-        end
-        function e = get.e_tot(d)
-            e = d.f(d.px, d.dod(1:end-1)) - d.V_raw(1:end-1);
-        end
         function e = get.dV_mean(d)
             e = mean(d.e_tot);
         end
@@ -257,23 +186,7 @@ classdef dischargeFit < handle
             e = max(d.e_tot);
         end
         function c = get.Cd_raw(d)
-           c = d.dod .* d.Cdmax; 
-        end
-    end
-    methods (Access = 'protected')
-        function d = fit(d)
-            %FIT: Checks which fit mode is selected and calls the
-            %respective fit function/s accordingly
-            if d.fmin == 1 % fminsearch
-                fun = @(x) d.sseval(x, d.f(x, d.dod(1:end-1)), d.V_raw(1:end-1));
-                d.px = fminsearch(fun, d.px, d.fmsoptions);
-            elseif d.fmin == 2 % lsqcurvefit
-                d.px = lsqcurvefit(d.f, d.px, d.dod(1:end-1), d.V_raw(1:end-1), [], [], d.lsqoptions);
-            else % both (lsq, then fmin)
-                d.px = lsqcurvefit(d.f, d.px, d.dod(1:end-1), d.V_raw(1:end-1), [], [], d.lsqoptions);
-                fun = @(x) d.sseval(x, d.f(x, d.dod(1:end-1)), d.V_raw(1:end-1));
-                d.px = fminsearch(fun, d.px, d.fmsoptions);
-            end
+           c = d.rawX .* d.Cdmax; 
         end
     end
     
