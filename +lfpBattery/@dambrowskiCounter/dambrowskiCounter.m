@@ -12,7 +12,7 @@ classdef dambrowskiCounter < lfpBattery.cycleCounter
     %state of charge SoC reaches the maximum SoC SoC_max of the battery).
     %Each time this occurs, the aforementioned cycle counting method is
     %used to count smaller cycles, which are output as a cycle-depth-of-cycle
-    %histogram (cDoC) and the flag isnewC is set to true.
+    %histogram (cDoC).
     %
     %The cycle-depth-of-cycle histogram can be used in aging models.
     %
@@ -24,6 +24,14 @@ classdef dambrowskiCounter < lfpBattery.cycleCounter
     %                       called.
     %   count             - Transforms the state-of-charge (SoC) profile
     %                       into a cycle-depth-of-discharge (cDoC) histogram using the dambrowski et al. cycle counting algorithm
+    %
+    %The DAMBROWSKICOUNTER object will notify event listeners (e. g. aging models) about a new
+    %full cycle occuring. To define an event listener Obj for a
+    %DAMBROWSKICOUNTER c, pass the c as follows, using Obj's addlistener
+    %method:
+    %
+    %addlistener(c, 'NewCycle', @Obj.methodName)
+    %
     %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt, December 2016
     
@@ -42,7 +50,7 @@ classdef dambrowskiCounter < lfpBattery.cycleCounter
             %state of charge SoC reaches the maximum SoC SoC_max of the battery).
             %Each time this occurs, the aforementioned cycle counting method is
             %used to count smaller cycles, which are output as a cycle-depth-of-cycle
-            %histogram (cDoC) and the flag isnewC is set to true.
+            %histogram (cDoC).
             %
             %The cycle-depth-of-cycle histogram can be used in aging models.
             c = c@lfpBattery.cycleCounter(varargin{:});
@@ -188,8 +196,6 @@ classdef dambrowskiCounter < lfpBattery.cycleCounter
                 CycMin = allmin(filter3); %Minima of the full cycles
                 cdoc = CycMax - CycMin; %cycle-depth of cycle histogram
                 c.cDoC = cdoc(cdoc > 0);
-            else % no cycles found (possible at initialization)
-                c.isnewC = false;
             end
         end % count
     end

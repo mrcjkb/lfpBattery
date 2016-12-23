@@ -10,7 +10,7 @@ classdef (Abstract) cycleCounter < handle
     %state of charge SoC reaches the maximum SoC SoC_max of the battery).
     %Each time this occurs, a specified cycle counting method is
     %used to count smaller cycles, which are output as a cycle-depth-of-cycle
-    %histogram (cDoC) and the flag isnewC is set to true.
+    %histogram (cDoC).
     %
     %The cycle-depth-of-cycle histogram can be used in aging models.
     %
@@ -26,11 +26,18 @@ classdef (Abstract) cycleCounter < handle
     %                  profile. To be called from within the count()
     %                  method.
     %
+    %The CYCLECOUNTER object will notify event listeners (e. g. aging models) about a new
+    %full cycle occuring. To define an event listener Obj for a
+    %CYCLECOUNTER c, pass the c as follows, using Obj's addlistener
+    %method:
+    %
+    %addlistener(c, 'NewCycle', @Obj.methodName)
+    %
+    %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt, November 2016
     
     properties (SetAccess = 'protected')
         cDoC; % cycle - depth of cycle histogram
-        isnewC = false; % true indicates that a new full cycle has started and that a new cDoC histogram has been calculated for the current cycle.
     end % public properties
     properties (GetAccess = 'protected', Hidden = true)
         socMax; % maximum allowed soc
@@ -40,10 +47,13 @@ classdef (Abstract) cycleCounter < handle
         ct = int32(1); % counter for "intelligent indexing"
         soc0; % last soc
     end % hidden properties
+    events
+        NewCycle; % Notifies listeners that a new full cycle has started and that a new cDoC histogram has been calculated for the current cycle.
+    end
     methods
         %% constructor
         function c = cycleCounter(init_soc, soc_max)
-            % CYCLECOUNTER constructor:
+            %CYCLECOUNTER constructor:
             %
             %   c = cycleCounter;                       creates a cycleCounter object for a battery with
             %                                           SoC_max = 1 and initializes with an SoC of 0
@@ -54,7 +64,14 @@ classdef (Abstract) cycleCounter < handle
             %state of charge SoC reaches the maximum SoC SoC_max of the battery).
             %Each time this occurs, a specified cycle counting method is
             %used to count smaller cycles, which are output as a cycle-depth-of-cycle
-            %histogram (cDoC) and the flag isnewC is set to true.
+            %histogram (cDoC).
+            %
+            %The CYCLECOUNTER object will notify event listeners (e. g. aging models) about a new
+            %full cycle occuring. To define an event listener Obj for a
+            %CYCLECOUNTER c, pass the c as follows, using Obj's addlistener
+            %method:
+            %
+            %addlistener(c, 'NewCycle', @Obj.methodName)
             
             if nargin == 0
                 init_soc = eps; % Zero reserved for recognition of initialized memory
@@ -79,20 +96,19 @@ classdef (Abstract) cycleCounter < handle
             %called.
             if soc ~= c.soc0 % ignore idle states
                 if soc == c.socMax % full cycle reached
+                    cdoc = c.cDoC;
                     c.addSoC(soc);
-                    c.isnewC = true; % set flag that new results have been calculated
                     c.count; % count cycles
                     % reset SoC
                     c.currCycle = c.currCycle.*0;
                     c.ct = int32(1);
                     c.currCycle(1) = soc;
+                    if ~isequal(cdoc, c.cDoC) % make sure algorithm didn't count the same cycles twice
+                        notify(c, 'NewCycle'); % notify listeners about new full cycle being reached
+                    end
                 else
-                    c.isnewC = false;
                     c.addSoC(soc);
-                    c.isnewC = false;
                 end
-            else
-                c.isnewC = false;
             end
             c.soc0 = soc;
         end % update
