@@ -19,7 +19,7 @@ classdef (Abstract) batteryAgeModel < handle % MTODO: make abstract
         EolReached; % Notify listeners that the end of life specified by eolSoH has been reached
     end
     methods
-        function b = batteryAgeModel(eols, init_age)
+        function b = batteryAgeModel(eols, init_soh)
             %BATTERYAGEMODEL Constructor:
             %
             %   b = batteryAgeModel;                creates a batteryAgeModel object
@@ -27,29 +27,29 @@ classdef (Abstract) batteryAgeModel < handle % MTODO: make abstract
             %   b = batteryAgeModel(eol);           creates a batteryAgeModel object
             %                                       with an end of life SoH
             %                                       specified by eol
-            %   b = batteryAgeModel(eol, init_age); initializes the age
-            %                                       with init_age
+            %   b = batteryAgeModel(eol, init_soh); initializes the SoH
+            %                                       with init_soh
             if nargin < 1
                 eols = 0.2;
-                init_age = 0;
+                init_soh = 1;
             elseif nargin < 2
-                init_age = 0;
+                init_soh = 1;
             end
-            errChks.onezeroChk(eols, 'eols')
-            errChks.onezeroChk(init_age, 'init_age')
+            lfpBattery.errChks.onezeroChk(eols, 'eol')
+            lfpBattery.errChks.onezeroChk(init_age, 'init_age')
             b.eolSoH = eols;
-            b.Ac = init_age;
+            b.SoH = init_soh;
         end
         % Dependent setters
         function set.Ac(b, a)
             b.Ac = a;
             notify(b, 'SohChanged')
-            if b.Ah >= b.eolAh
+            if b.Ac >= b.eolAc %#ok<MCSUP>
                 notify(b, 'EolReached')
             end
         end
         function set.eolSoH(b, soh)
-            errChks.onezeroChk(soh, 'End of life state of health')
+            lfpBattery.errChks.onezeroChk(soh, 'End of life state of health')
             b.eolAc = 1 - soh;
         end
         % Dependent getters
