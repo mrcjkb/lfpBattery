@@ -61,5 +61,6 @@ end
 % TODO: Create assertion tests
 assert(isequal(d.rmse, d2.rmse), 'mode switch or ''both'' mode not functioning as expected')
 
+disp('discharge fit tests passed')
 
 end

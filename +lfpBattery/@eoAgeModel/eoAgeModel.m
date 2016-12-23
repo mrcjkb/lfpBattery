@@ -37,7 +37,7 @@ classdef eoAgeModel < lfpBattery.batteryAgeModel
         end
         % setters
         function set.wFit(a, fit)
-            if ~isa(fit, 'function_handle') && ~isa(fit, 'woehlerFit')
+            if ~isa(fit, 'function_handle') && ~isa(fit, 'lfpBattery.woehlerFit')
                 error('fit must be a function_handle or a woehlerFit')
             end
             a.wFit = fit;
