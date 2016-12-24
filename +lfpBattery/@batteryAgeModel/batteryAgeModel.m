@@ -13,7 +13,7 @@ classdef (Abstract) batteryAgeModel < handle
         % This property can be observed by adding an event listener
         % to a batteryAgeModel subclass with this classe's addlistener() method:
         %       addlistener(b, 'SoH', 'PostSet', @obj.handlePropertyEvents);
-        % Subcalsses cannot set this property and should set the Ah (Ac
+        % Subcalsses cannot set this property and should set the Age (Ac
         % property instead)
         SoH;
     end
