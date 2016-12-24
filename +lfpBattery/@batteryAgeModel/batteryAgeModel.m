@@ -1,7 +1,7 @@
 classdef (Abstract) batteryAgeModel < handle
     %BATTERYAGEMODEL Abstract class for modelling the aging of a battery.
     %Notifies event listeners every time SoH changes. Use this class's
-    %addlistener() method to add event listeners for the SohChanged and EolReached events.
+    %addlistener() method to add event listeners for the SoH property and the EolReached event.
     %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt, December 2016
     
