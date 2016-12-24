@@ -1,21 +1,29 @@
-classdef (Abstract) batteryAgeModel < handle % MTODO: make abstract
+classdef (Abstract) batteryAgeModel < handle
     %BATTERYAGEMODEL Abstract class for modelling the aging of a battery.
     %Notifies event listeners every time SoH changes. Use this class's
     %addlistener() method to add event listeners for the SohChanged and EolReached events.
     %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt, December 2016
     
-    properties (Hidden, SetAccess = 'protected')
-        Ac; % Total age loss [0..1]
-        eolAc; % age at which end of life is reached 
-    end
-    properties (Dependent)
-        SoH; % State of health [0..1]
+    properties
         eolSoH; % SoH at which end of life is reached.
     end
-
+    properties (SetObservable, SetAccess = 'private')
+        % State of health [0..1] (observable)
+        % This property can be observed by adding an event listener
+        % to a batteryAgeModel subclass with this classe's addlistener() method:
+        %       addlistener(b, 'SoH', 'PostSet', @obj.handlePropertyEvents);
+        % Subcalsses cannot set this property and should set the Ah (Ac
+        % property instead)
+        SoH;
+    end
+    properties (Dependent, SetAccess = 'protected')
+        Ac; % Total age loss [0..1]
+    end
+    properties (Dependent)
+        eolAc; % age at which end of life is reached 
+    end
     events
-        SohChanged; % Notify listeners that the state of health has changed
         EolReached; % Notify listeners that the end of life specified by eolSoH has been reached
     end
     methods
@@ -42,29 +50,25 @@ classdef (Abstract) batteryAgeModel < handle % MTODO: make abstract
         end
         % Dependent setters
         function set.Ac(b, a)
-            b.Ac = a;
-            notify(b, 'SohChanged')
-            if b.Ac >= b.eolAc %#ok<MCSUP>
-                notify(b, 'EolReached')
-            end
+            b.SoH = 1-a;
+            if b.SoH <= b.eolSoH
+               notify(b, 'EolReached')
+           end
         end
-        function set.SoH(b, soh)
-           b.Ac = 1-soh; 
-        end
-        function set.eolSoH(b, soh)
-            lfpBattery.errChks.onezeroChk(soh, 'End of life state of health')
-            b.eolAc = 1 - soh;
+        function set.eolAc(b, a)
+            lfpBattery.errChks.onezeroChk(a, 'End of life state of health')
+            b.eolSoH = 1 - a;
         end
         % Dependent getters
-        function soh = get.SoH(b)
-            soh = 1 - b.Ac;
+        function a = get.Ac(b)
+            a = 1 - b.SoH;
         end
-        function soh = get.eolSoH(b)
-            soh = 1 - b.eolAh;
+        function a = get.eolAc(b)
+            a = 1 - b.eolSoH;
         end
     end
     methods (Abstract, Access = 'protected')
-        b = addAging(b); % add to the age.
+        b = addAging(b); % add to the current age.
     end
 end
 
