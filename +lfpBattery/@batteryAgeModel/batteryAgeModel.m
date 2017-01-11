@@ -43,8 +43,8 @@ classdef (Abstract) batteryAgeModel < handle
             elseif nargin < 2
                 init_soh = 1;
             end
-            lfpBattery.errChks.onezeroChk(eols, 'eol')
-            lfpBattery.errChks.onezeroChk(init_soh, 'init_soh')
+            lfpBattery.commons.onezeroChk(eols, 'eol')
+            lfpBattery.commons.onezeroChk(init_soh, 'init_soh')
             b.eolSoH = eols;
             b.SoH = init_soh;
         end
@@ -56,7 +56,7 @@ classdef (Abstract) batteryAgeModel < handle
            end
         end
         function set.eolAc(b, a)
-            lfpBattery.errChks.onezeroChk(a, 'End of life state of health')
+            lfpBattery.commons.onezeroChk(a, 'End of life state of health')
             b.eolSoH = 1 - a;
         end
         % Dependent getters
