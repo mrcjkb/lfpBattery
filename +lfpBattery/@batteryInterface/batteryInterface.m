@@ -1,4 +1,4 @@
-classdef (Abstract) batteryInterface
+classdef (Abstract) batteryInterface < handle
     %BATTERYINTERFACE: Abstract class / interface for creating battery
     %models.
     
