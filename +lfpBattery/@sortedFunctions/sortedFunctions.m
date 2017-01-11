@@ -1,11 +1,11 @@
-classdef sortedFunctions < lfpBattery.composite
+classdef (Abstract) sortedFunctions < lfpBattery.composite
     %SORTEDFUNCTIONS Abstract class for storing functions of x and y with
     %different z values.
     %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt, January 2017
     
     % MTODO create iterator for this object
-    properties (SetAccess = 'protected')
+    properties (Access = 'protected')
         xydata; % Array of curve fits that implement the curveFitInterface
         z; % Sorted vector holding 3rd dimension of curveFit objects
     end
