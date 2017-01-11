@@ -8,13 +8,13 @@ classdef (Abstract) iterator < handle
       ind;  % index of collection's next item
    end
    methods
-       function i = iterator(c)
-          i.collection = c;
+       function it = iterator(c)
+          it.collection = c;
        end
    end
    methods (Abstract)
-      obj = next(i); % Returns next object.
-      tf = hasNext(i); % Returns true if iterator has another object to return
-      reset(i); % Resets the iterator to first object
+      obj = next(it); % Returns next object.
+      tf = hasNext(it); % Returns true if iterator has another object to return
+      reset(it); % Resets the iterator to first object
    end
 end
