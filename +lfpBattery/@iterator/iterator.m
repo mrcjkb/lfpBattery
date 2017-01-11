@@ -1,11 +1,11 @@
 classdef (Abstract) iterator < handle
    %ITERATOR Abstract Class for iterator design pattern
+   %
+   %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
+   %January 2017
    
    properties (SetAccess = 'immutable', GetAccess = 'protected', Hidden = true)
       collection;  % The elements the iterator traverses through
-   end
-   properties (Access = 'protected', Hidden = true)
-      ind;  % index of collection's next item
    end
    methods
        function it = iterator(c)
