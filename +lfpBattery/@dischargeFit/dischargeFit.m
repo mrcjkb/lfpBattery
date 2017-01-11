@@ -118,14 +118,14 @@ classdef dischargeFit < lfpBattery.curveFitInterface
         end
         function v = subsref(d, S)
             if strcmp(S(1).type, '()') && numel(d) == 1
-                if numel(S.subs) > 1
+                if numel(S(1).subs) > 1
                     error('Cannot index dischargeFit')
                 end
-                C_dis = S.subs{1};
+                C_dis = S(1).subs{1};
                 DoD = max(0, min(C_dis ./ d.Cdmax, 1)); % conversion to DoD
                 v = d.f(d.px, DoD);
             elseif nargout == 1
-                v = builtin('subsref', d, S);
+                v = builtin('subsref', d, S(1));
             else
                 builtin('subsref', d, S(1));
             end

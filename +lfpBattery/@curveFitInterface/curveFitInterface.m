@@ -68,16 +68,16 @@ classdef (Abstract) curveFitInterface < handle
         end
         % Override of subsref (indexing) function
         function v = subsref(d, S)
-            if strcmp(S.type, '()')
-                if numel(S.subs) > 1
+            if strcmp(S(1).type, '()') && numel(d) == 1
+                if numel(S(1).subs) > 1
                     error('Attempted to index non-indexable object.')
                 end
-                sub = min(max(d.xxlim(1), S.subs{1}), d.xxlim(2));
+                sub = min(max(d.xxlim(1), S(1).subs{1}), d.xxlim(2));
                 v = d.f(d.px, sub);
             elseif nargout == 1
-                v = builtin('subsref', d, S);
+                v = builtin('subsref', d, S(1));
             else
-                builtin('subsref', d, S);
+                builtin('subsref', d, S(1));
             end
         end
         

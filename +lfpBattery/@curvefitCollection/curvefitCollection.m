@@ -23,6 +23,10 @@ classdef curvefitCollection < lfpBattery.sortedFunctions
             end
             c@lfpBattery.sortedFunctions(varargin{:})
         end
+        % MTODO write method for getting voltage from current and discharge
+        % capacity
+%         function v = subsref(
+        
         function plotResults(c, newfig)
             %PLOTRESULTS: Compares scatters of the raw data with the fits
             %in a figure window.
