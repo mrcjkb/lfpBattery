@@ -1,6 +1,9 @@
 classdef (Abstract) curveFitInterface < handle
     %CURVEFITINTERFACE Interface for curve fitting classes
     
+    properties (SetAccess = 'immutable')
+       z; % z-data of fitted curve. (i. e. the current at which the curve was recorded)
+    end
     properties (Dependent)
         mode; % function used for fitting ('fmin' for fminsearch or 'lsq' for lsqcurvefit)
     end
@@ -39,7 +42,7 @@ classdef (Abstract) curveFitInterface < handle
             'MaxFunctionEvaluations', 1e10);
     end
     methods
-        function d = curveFitInterface(f, rawx, rawy, varargin)
+        function d = curveFitInterface(f, rawx, rawy, zdata, varargin)
             x0 = zeros(100, 1);
             % Optional inputs
             p = inputParser;
@@ -58,6 +61,7 @@ classdef (Abstract) curveFitInterface < handle
             d.f = f;
             d.rawX = rawx;
             d.rawY = rawy;
+            d.z = sum(zdata); % Converts zdata to 0 if it is empty
             d.px = p.Results.x0;
             d.fmin = fmin;
             d.fit;

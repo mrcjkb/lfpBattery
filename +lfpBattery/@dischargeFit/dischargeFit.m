@@ -39,9 +39,6 @@ classdef dischargeFit < lfpBattery.curveFitInterface
     % Authors:  Marc Jakobi, Festus Anyangbe, Marc Schmidt,
     % December 2016
     
-    properties (SetAccess = 'immutable')
-       C; % C-Rate at which curve was measured
-    end
     properties (Dependent)
         x;  % 3 fit parameters for f
         xs; % 3 fit parameters for fs
@@ -59,7 +56,7 @@ classdef dischargeFit < lfpBattery.curveFitInterface
     end
     methods
         % Constructor
-        function d = dischargeFit(V, C_dis, CRate, Temp, varargin)
+        function d = dischargeFit(V, C_dis, I, Temp, varargin)
             %DISCHARGEFIT: Uses Levenberg-Marquardt algorithm to fit a
             %discharge curve of a lithium-ion battery in three parts:
             %1: exponential drop at the beginning of the discharge curve
@@ -67,16 +64,16 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             %3: exponential drop at the end of the discharge curve
             %
             %Syntax:
-            %   d = dischargeFit(V, C_dis, C, T);
+            %   d = dischargeFit(V, C_dis, I, T);
             %           --> initialization of curve fit params with zeros
             %
-            %   d = dischargeFit(V, C_dis, C, T, 'OptionName', 'OptionValue');
+            %   d = dischargeFit(V, C_dis, I, T, 'OptionName', 'OptionValue');
             %           --> custom initialization of curve fit params
             %
             %Input arguments:
             %   V:              Voltage (V) = f(C_dis) (from data sheet)
             %   C_dis:          Discharge capacity (Ah) (from data sheet)
-            %   C:              C-Rate at which curve was measured
+            %   I:              Current at which curve was measured
             %   T:              Temperature (K) at which curve was mearured
             %
             %OptionName-OptionValue pairs:
@@ -115,7 +112,7 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             addOptional(p, 'mode', 'both');
             parse(p, varargin{:})
             varargin = [{'x0', p.Results.x0}, varargin];
-            d = d@lfpBattery.curveFitInterface(f, rawx, rawy, varargin{:}); % Superclass constructor
+            d = d@lfpBattery.curveFitInterface(f, rawx, rawy, I, varargin{:}); % Superclass constructor
             d.Cdmax = cdmax;
             d.C = CRate;
             d.xxlim = [0, cdmax];
