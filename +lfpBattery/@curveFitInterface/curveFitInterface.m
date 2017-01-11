@@ -81,11 +81,16 @@ classdef (Abstract) curveFitInterface < handle
             end
         end
         
-        function plotResults(d)
+        function plotResults(d, newfig)
             %PLOTRESULTS: Compares a scatter of the raw data with the fit
             %in a figure window.
+            if nargin < 2
+                newfig = true;
+            end
             xdata = linspace(min(d.rawX), max(d.rawX), 1000)';
-            figure;
+            if newfig
+                figure;
+            end
             hold on
             scatter(d.rawX, d.rawY, 'filled', 'MarkerFaceColor', lfpBattery.const.red)
             plot(xdata, d.f(d.px, xdata), 'Color', lfpBattery.const.green, ...
