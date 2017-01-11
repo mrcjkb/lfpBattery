@@ -5,15 +5,15 @@ classdef (Abstract) sortedFunctions < lfpBattery.composite
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt, January 2017
     
     % MTODO create iterator for this object
-    properties (Access = 'protected')
+    properties %(Access = 'protected')
         xydata; % Array of curve fits that implement the curveFitInterface
         z; % Sorted vector holding 3rd dimension of curveFit objects
     end
     
     methods
         function c = sortedFunctions(varargin)
-            if nargin == 0
-               error('At least one object needs to be added to the collection') 
+            if nargin < 2
+               error('At least two object needs to be added to the collection') 
             end
             for i = 1:numel(varargin)
                c.add(varargin{i}); 

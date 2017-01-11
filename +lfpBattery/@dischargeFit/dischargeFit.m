@@ -117,7 +117,7 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             d.xxlim = [0, cdmax];
         end
         function v = subsref(d, S)
-            if strcmp(S.type, '()')
+            if strcmp(S(1).type, '()') && numel(d) == 1
                 if numel(S.subs) > 1
                     error('Cannot index dischargeFit')
                 end
@@ -127,16 +127,21 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             elseif nargout == 1
                 v = builtin('subsref', d, S);
             else
-                builtin('subsref', d, S);
+                builtin('subsref', d, S(1));
             end
         end
-        function plotResults(d)
+        function plotResults(d, newfig)
+            if nargin < 2
+                newfig = false;
+            end
             %PLOTRESULTS: Compares a scatter of the raw data with the fit
             %in a figure window.
-            plotResults@lfpBattery.curveFitInterface(d); % Call superclas plot method
-            title({['rmse = ', num2str(d.rmse)]; ...
-                ['mean(\DeltaV) = ', num2str(d.dV_mean), ' V']; ...
-                ['max(\DeltaV) = ', num2str(d.dV_max), ' V']})
+            plotResults@lfpBattery.curveFitInterface(d, newfig); % Call superclas plot method
+            if newfig
+                title({['rmse = ', num2str(d.rmse)]; ...
+                    ['mean(\DeltaV) = ', num2str(d.dV_mean), ' V']; ...
+                    ['max(\DeltaV) = ', num2str(d.dV_max), ' V']})
+            end
             ylabel('voltage / V')
             xlabel('SoC')
         end

@@ -95,9 +95,11 @@ classdef (Abstract) curveFitInterface < handle
             scatter(d.rawX, d.rawY, 'filled', 'MarkerFaceColor', lfpBattery.const.red)
             plot(xdata, d.f(d.px, xdata), 'Color', lfpBattery.const.green, ...
                 'LineWidth', 2)
-            legend('raw data', 'fit', 'Location', 'Best')
-            title(['rmse = ', num2str(d.rmse)])
-            grid on
+            if newfig
+                legend('raw data', 'fit', 'Location', 'Best')
+                title(['rmse = ', num2str(d.rmse)])
+                grid on
+            end
         end
         
         %% dependent setters
