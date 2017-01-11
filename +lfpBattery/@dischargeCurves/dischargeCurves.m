@@ -1,6 +1,5 @@
-classdef dischargeCurves
-    %DISCHARGECURVES Summary of this class goes here
-    %   Detailed explanation goes here
+classdef dischargeCurves < lfpBattery.curvefitCollection
+    %DISCHARGECURVES class for storing curveFit
     
     properties
     end
