@@ -114,7 +114,6 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             varargin = [{'x0', p.Results.x0}, varargin];
             d = d@lfpBattery.curveFitInterface(f, rawx, rawy, I, varargin{:}); % Superclass constructor
             d.Cdmax = cdmax;
-            d.C = CRate;
             d.xxlim = [0, cdmax];
         end
         function v = subsref(d, S)
