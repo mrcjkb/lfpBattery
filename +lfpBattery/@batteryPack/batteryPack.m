@@ -1,4 +1,4 @@
-classdef batteryPack < lfpBattery.batteryInterface
+classdef batteryPack < lfpBattery.batteryInterface & lfpBattery.composite
     %BATTERYPACK: Model of lithium iron phosphate battery pack containing
     %multiple cells
     
@@ -10,6 +10,9 @@ classdef batteryPack < lfpBattery.batteryInterface
         function b = chargeRequest(b, P)
             % MTODO: implement charging function here
         end
+%         function it = createIterator(b)
+%            % MTODO: create iterator class and implement this method
+%         end
     end
     
 end
