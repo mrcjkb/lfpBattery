@@ -12,21 +12,36 @@ classdef curvefitCollection < lfpBattery.sortedFunctions
     %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
     %         January 2017
-    properties
+    
+    properties (Abstract)
+        interpMethod; % Method for interpolation
     end
     
     methods
         function c = curvefitCollection(varargin)
-            for i = 1:numel(varargin)
-                % Make sure added curve fits implement curveFitInterface
-                lfpBattery.commons.validateInterface(varargin{i}, 'lfpBattery.curveFitInterface')
-            end
             c@lfpBattery.sortedFunctions(varargin{:})
         end
-        % MTODO write method for getting voltage from current and discharge
-        % capacity
-%         function v = subsref(
         
+        function y = calc(c, z, x)
+            %CALC the y data for a given z and x values.
+            %Syntax: y = CALC(z, x)
+            %z must have a length of 1
+            if numel(z) ~= 1
+                error('z must have a length of 1')
+            end
+            chk = c.z == z;
+            if any(chk) % exact match?
+                tmp = c.xydata(chk);
+                y = tmp(x);
+            else % interpolation
+                y = c.interp(z, x);
+            end
+        end
+        
+        function add(c, d)
+           c.validateInputInterface(d);
+           c.add@lfpBattery.sortedFunctions(d);
+        end
         function plotResults(c, newfig)
             %PLOTRESULTS: Compares scatters of the raw data with the fits
             %in a figure window.
@@ -49,6 +64,16 @@ classdef curvefitCollection < lfpBattery.sortedFunctions
             end
         end
     end
-    
+    methods (Abstract, Access = 'protected')
+        %INTERP returns interpolated result between calculations of
+        %multiple curveFits.
+        %Syntax: y = INTERP(z, x)
+        y = interp(c, z, x);
+    end
+    methods (Static)
+        function validateInputInterface(obj)
+            lfpBattery.commons.validateInterface(obj, 'lfpBattery.curveFitInterface');
+        end
+    end
 end
 
