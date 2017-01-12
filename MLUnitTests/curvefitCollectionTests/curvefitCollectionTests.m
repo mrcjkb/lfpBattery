@@ -47,12 +47,12 @@ V = zeros(size(Cd));
 for i = 1:numel(Cd)
     V(i) = d.interp(I_test, Cd(i));
 end
-hold on
 if fig
     df = dischargeFit(raw(idx).V, raw(idx).Cd, I_test, const.T_room);
     d.add(df);
     LW = {'LineWidth', 2};
     d.plotResults('noRawData', true);
+    hold on
     l = findobj(gcf, 'type', 'line');
     for i = 1:numel(l)
         l(i).Color = const.grey;
