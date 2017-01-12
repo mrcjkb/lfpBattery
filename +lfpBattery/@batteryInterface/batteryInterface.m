@@ -56,7 +56,7 @@ classdef (Abstract) batteryInterface < handle
         end % constructor
         
         %% setters
-        function b = set.socMin(b, s)
+        function set.socMin(b, s)
             assert(s >= 0 && s <= 1, 'socMin must be between 0 and 1')
             if s == 0
                 b.soc_min = eps;
@@ -64,12 +64,12 @@ classdef (Abstract) batteryInterface < handle
                 b.soc_min = s;
             end
         end
-        function b = set.socMax(b, s)
+        function set.socMax(b, s)
             assert(s <= 1, 'soc_max cannot be greater than 1')
             assert(s > b.socMin, 'soc_max cannot be smaller than or equal to soc_min')
             b.soc_max = s;
         end
-        function b = set.soc(b, s)
+        function set.soc(b, s)
             if s == 0
                 s = eps;
             end
