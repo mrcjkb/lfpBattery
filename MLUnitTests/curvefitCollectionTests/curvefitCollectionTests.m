@@ -49,7 +49,6 @@ for i = 1:numel(Cd)
 end
 if fig
     df = dischargeFit(raw(idx).V, raw(idx).Cd, I_test, const.T_room);
-    d.add(df);
     LW = {'LineWidth', 2};
     d.plotResults('noRawData', true);
     hold on
@@ -66,6 +65,25 @@ if fig
         ['interpolation at ', num2str(I_test), ' A'],...
         'curves used for interpolation'}, ...
         'Location', 'SouthWest')
+    d.add(df);
+    % with x scaled as SoC
+    LW = {'LineWidth', 2};
+    d.plotResults('noRawData', true, 'SoCx', true);
+    hold on
+    l = findobj(gcf, 'type', 'line');
+    for i = 1:numel(l)
+        l(i).Color = const.grey;
+        l(i).LineWidth = 1;
+        l(i).LineStyle = '--';
+    end
+    pl_df = plot(Cd./max(Cd), df(Cd), 'Color', const.blue, LW{:});
+    pl_int = plot(Cd./max(Cd), V, 'Color', const.red, LW{:});
+    legend([pl_df, pl_int, l(1)], ...
+        {['fit at ', num2str(I_test),' A'],...
+        ['interpolation at ', num2str(I_test), ' A'],...
+        'curves used for interpolation'}, ...
+        'Location', 'SouthWest')
+    d.add(df);
 end
 
 disp('curvefitCollection tests passed')

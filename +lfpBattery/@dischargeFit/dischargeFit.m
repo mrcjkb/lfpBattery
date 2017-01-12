@@ -149,18 +149,39 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             %Options:
             %   noRawData (logical) - don't scatter raw data (default: false)
             %   noFitData (logical) - don't scatter fit data (default: false)
+            %   SoCx (logical)      - Scale x axis as SoC instead of discharge capacity (default: false)
+            p = inputParser;
+            addOptional(p, 'SoCx', false, @(x)islogical(x));
+            addOptional(p, 'noRawData', false, @(x)islogical(x));
+            addOptional(p, 'noFitData', false, @(x)islogical(x));
+            parse(p, varargin{:})
             if nargin < 2
                 newfig = false;
             end
+            % Remove SoCx if it exists in varargin and pass the rest to
+            % superclass
+            tf = cellfun(@(s) isequal('SoCx', s), varargin);
+            if any(tf)
+                tf(find(tf,1) + 1) = true;
+                varargin = varargin(~tf);
+            end
+            socx = p.Results.SoCx;
+            if socx
+                xf = 1;
+                xl = 'SoC';
+            else
+                xf = d.Cdmax;
+                xl = 'Discharge capacity / Ah';
+            end
             % Call superclas plot method
-            plotResults@lfpBattery.curveFitInterface(d, 'newfig', newfig, 'xf', d.Cdmax, varargin{:});
+            plotResults@lfpBattery.curveFitInterface(d, 'newfig', newfig, 'xf', xf, varargin{:});
             if newfig
                 title({['rmse = ', num2str(d.rmse)]; ...
                     ['mean(\DeltaV) = ', num2str(d.dV_mean), ' V']; ...
                     ['max(\DeltaV) = ', num2str(d.dV_max), ' V']})
             end
             ylabel('Voltage / V')
-            xlabel('Discharge capacity / Ah')
+            xlabel(xl)
         end
         
         %% Dependent setters:

@@ -77,6 +77,7 @@ classdef curvefitCollection < lfpBattery.sortedFunctions
             %Options:
             %   noRawData (logical) - don't scatter raw data (default: false)
             %   noFitData (logical) - don't scatter fit data (default: false)
+            %   SoCx (logical)      - Scale x axis as SoC instead of discharge capacity for discharge curves (default: false)
             figure;
             hold on
             tmp = c.xydata(1);
