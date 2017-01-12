@@ -17,39 +17,57 @@ classdef eoAgeModel < lfpBattery.batteryAgeModel
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt, December 2016
     
     properties (Hidden, GetAccess = 'protected')
-        wFit; % Woehler curve fit
+        % woehlerFit object or function handle (must implement the curveFitInterface)
+        % of a cycles to failure = f(DoC) curve.
+        wFit;
     end
     
     methods
-        function a = eoAgeModel(cy, fit)
-            % EOAGEMODEL(cy, fit) creates an eoAgeModel event listener that
-            % updates the age of the battery whenever notified by a
-            % cycleCounter subclass cy with the 'NewCycle' event. The age
-            % is calculated according to the woehler curve fit specified by
-            % fit. fit can be a function handle or a woehlerFit object.
-            addlistener(cy, 'NewCycle', @a.addAging);
-            if nargin == 2
-                a.wFit = fit;
+        function a = eoAgeModel(cy, cfit, eols, init_soh)
+            % EOAGEMODEL(cy);                        Creates an eoAgeModel object that
+            %                                       updates the age of the battery whenever notified by a
+            %                                       cycleCounter subclass cy with the 'NewCycle' event
+            %                                       (using Matlab's implementation of the observer pattern).
+            % EOAGEMODEL(cy, cfit);                  The age is calculated according to the curve fit
+            %                                       specified by cfit. cfit can be a function handle 
+            %                                       or a woehlerFit object or a custom curve fit object
+            %                                       that implements the curveFitInterface.
+            % EOAGEMODEL(cy, cfit, eol);             Initializes the object with an end of life SoH
+            %                                       specified by eols (must be between 0 and 1)
+            % EOAGEMODEL(cy, cfit, eols, init_soh);  Initializes the SoH with init_soh (must be
+            %                                       between 0 and 1)
+            %
+            %   cy is a cycleCounter object that is to be observed by a.
+            if nargin < 3
+                eols = 0.2;
+            end
+            if nargin < 4
+                init_soh = 1;
+            end
+            a = a@lfpBattery.batteryAgeModel(cy, eols, init_soh); % call superclass constructor
+            if nargin > 1
+                a.wFit = cfit;
             else
-                warning('age model does not contain a woehler curve fit. Aging will not occur until one is added.')
-                a.wFit = @(x) inf; % dividing by inf returns zero
+                warning('age model does not contain a curve fit. Aging will not occur until one is added.')
+                % Set wFit to function handle that always returns inf
+                % (dividing by inf returns zero)
+                a.wFit = @(x) inf; 
             end
         end
         % setters
         function set.wFit(a, fit)
-            if ~isa(fit, 'function_handle') && ~isa(fit, 'lfpBattery.woehlerFit')
-                error('fit must be a function_handle or a woehlerFit')
+            if ~isa(fit, 'function_handle')
+                lfpBattery.commons.validateInterface(fit, 'lfpBattery.curveFitInterface')
             end
             a.wFit = fit;
         end
     end
     
     methods (Access = 'protected')
-        function a = addAging(a, src, ~)
+        function addAging(a, src, ~)
             % ADDAGING adds to the battery's age every time a cycleCounter
-            % object notifies about a new cycle.
+            % object (or subclass) notifies about a new cycle.
             a.Ac = a.Ac + sum(src.cDoC ./ a.wFit(src.cDoC));
         end
     end
 end
-

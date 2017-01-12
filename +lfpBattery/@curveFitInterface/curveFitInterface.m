@@ -74,7 +74,7 @@ classdef (Abstract) curveFitInterface < handle
                     error('Attempted to index non-indexable object.')
                 end
                 % limit x data
-                sub = lfpBattery.commons.upperlowerlim(y, d.xxlim(1), d.xxlim(2));
+                sub = lfpBattery.commons.upperlowerlim(S(1).subs{1}, d.xxlim(1), d.xxlim(2));
                 % limit y data 
                 v = lfpBattery.commons.upperlowerlim(d.f(d.px, sub), d.yylim(1), d.yylim(2));
             elseif nargout == 1

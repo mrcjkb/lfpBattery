@@ -13,7 +13,7 @@ classdef ccListener < handle
             %   cycleCounterObject cy
             addlistener(cy, 'NewCycle', @c.setnewC);
         end
-        function c = setnewC(c, ~, ~)
+        function setnewC(c, ~, ~)
             c.isnewC = true;
         end
     end

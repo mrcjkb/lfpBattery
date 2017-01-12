@@ -1,48 +1,66 @@
 classdef (Abstract) batteryAgeModel < handle
     %BATTERYAGEMODEL Abstract class for modelling the aging of a battery.
-    %Notifies event listeners every time SoH changes. Use this class's
+    %Notifies event listeners (observers) every time the SoH property changes. Use this class's
     %addlistener() method to add event listeners for the SoH property and the EolReached event.
     %
-    %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt, December 2016
+    %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
+    %         December 2016
     
     properties
         eolSoH; % SoH at which end of life is reached.
     end
     properties (SetObservable, SetAccess = 'private')
         % State of health [0..1] (observable)
-        % This property can be observed by adding an event listener
-        % to a batteryAgeModel subclass with this classe's addlistener() method:
+        % This property can be observed by creating an event listener
+        % for a batteryAgeModel subclass with the class's addlistener() method:
         %       addlistener(b, 'SoH', 'PostSet', @obj.handlePropertyEvents);
+        %              - b is the batteryAgeModel subclass (the source) 
+        %              - @obj.handlePropertyEvents is a handle to the
+        %                   object's function that is called when the object is
+        %                   notified of the SoH change.
         % Subcalsses cannot set this property and should set the Age (Ac
-        % property instead)
+        % property instead), which is equal to 1-SoH.
         SoH;
     end
     properties (Dependent, SetAccess = 'protected')
-        Ac; % Total age loss [0..1]
+        Ac; % Total age loss [0..1] = 1-SoH
     end
     properties (Dependent)
-        eolAc; % age at which end of life is reached 
+        % Age at which end of life is reached [0..1]
+        % e. g. 0.2 for an end of life at an age of 20 %
+        % or at an SoH of 80 %, respectively.
+        eolAc;
     end
     events
-        EolReached; % Notify listeners that the end of life specified by eolSoH has been reached
+        EolReached; % Notifys listeners (observers) that the end of life specified by eolSoH has been reached
     end
     methods
-        function b = batteryAgeModel(eols, init_soh)
+        function b = batteryAgeModel(cy, eols, init_soh)
             %BATTERYAGEMODEL Constructor:
             %
-            %   b = batteryAgeModel;                creates a batteryAgeModel object
-            %                                       with an end of life SoH of 0.2
-            %   b = batteryAgeModel(eol);           creates a batteryAgeModel object
-            %                                       with an end of life SoH
-            %                                       specified by eol
-            %   b = batteryAgeModel(eol, init_soh); initializes the SoH
-            %                                       with init_soh
-            if nargin < 1
+            %   b = BATTERYAGEMODEL(cy);                creates a batteryAgeModel object
+            %                                           with an end of life SoH
+            %                                           of 0.2 (20 %)
+            %   b = BATTERYAGEMODEL(cy, eol);           creates a batteryAgeModel object
+            %                                           with an end of life SoH
+            %                                           specified by eol (must
+            %                                           be between 0 and 1)
+            %   b = BATTERYAGEMODEL(cy, eol, init_soh); initializes the SoH
+            %                                           with init_soh (must be
+            %                                           between 0 and 1)
+            %
+            %   cy is a cycleCounter object that is to be observed by b.
+            if nargin < 2
                 eols = 0.2;
-                init_soh = 1;
-            elseif nargin < 2
+            end
+            if nargin < 3
                 init_soh = 1;
             end
+            % Make sure cy is a subclass of cycleCounter and register this class
+            % as an observer/listener
+            lfpBattery.commons.validateInterface(cy, 'lfpBattery.cycleCounter')
+            addlistener(cy, 'NewCycle', @b.addAging);
+            % Make sure values are between 0 and 1
             lfpBattery.commons.onezeroChk(eols, 'eol')
             lfpBattery.commons.onezeroChk(init_soh, 'init_soh')
             b.eolSoH = eols;
@@ -68,7 +86,8 @@ classdef (Abstract) batteryAgeModel < handle
         end
     end
     methods (Abstract, Access = 'protected')
-        b = addAging(b); % add to the current age.
+        % ADDAGING adds to the battery's age every time a cycleCounter
+        % object (or subclass) notifies about a new cycle.
+        addAging(b, src, ~);
     end
 end
-

@@ -12,16 +12,13 @@ cl = ccListener(c);
 warning('off', 'all')
 a = eoAgeModel(c);
 warning('on', 'all')
-% MTODO: replace this with woehlerFit object when class is completed
 modelfun = @(beta,xx)(beta(1).*xx.^(-beta(2)));
 beta = [10.^7, 1.691];
 N1 = nlinfit(DoDN,N,modelfun,beta);
-fit = @(x)(N1(1).*x.^(-N1(2)));
-a2 = eoAgeModel(c, fit);
+cfit = @(x)(N1(1).*x.^(-N1(2)));
+a2 = eoAgeModel(c, cfit);
 w = woehlerFit(N, DoDN);
 a3 = eoAgeModel(c, w);
-
-
 
 cDoC = [];
 cDoC0 = 0;
