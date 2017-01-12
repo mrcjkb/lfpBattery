@@ -67,3 +67,4 @@ if fig
         'Location', 'SouthWest')
 end
 
+disp('curvefitCollection tests passed')

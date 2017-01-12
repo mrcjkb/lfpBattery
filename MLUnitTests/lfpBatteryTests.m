@@ -7,6 +7,9 @@ clearvars p
 disp(' ')
 disp('Beginning MLUnit tests...')
 
+cycleCounterTests
 ageModelTests
-
 dischargeFitTests
+curvefitCollectionTests
+
+disp('All MLUnit tests passed!')
