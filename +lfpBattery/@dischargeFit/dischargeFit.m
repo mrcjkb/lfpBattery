@@ -36,6 +36,11 @@ classdef dischargeFit < lfpBattery.curveFitInterface
     %                   'fmin'          - fminsearch
     %                   'both'          - a combination (lsq, then fmin)
     %
+    %
+    % DISCHARGEFIT Methods:
+    %   plotResults - plots the fitted curve.
+    %
+    %
     % Authors:  Marc Jakobi, Festus Anyangbe, Marc Schmidt,
     % December 2016
     

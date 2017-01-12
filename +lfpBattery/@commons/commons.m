@@ -2,9 +2,11 @@ classdef commons
     %COMMONS: Class for commonly used static functions
     
     methods (Static)
-        function onezeroChk(val, valName)
-            if val > 1 || val < 0
-                error([valName, ' must be between 0 and 1'])
+        function onezeroChk(var, varName)
+            % ONEZEROCHK: Returns an error if the variable var with varName
+            % is not in the interval [0,..1]
+            if var > 1 || var < 0
+                error([varName, ' must be between 0 and 1'])
             end
         end
         function validateInterface(obj, name)

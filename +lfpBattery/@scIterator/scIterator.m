@@ -1,6 +1,8 @@
 classdef scIterator < lfpBattery.iterator
     %SCITERATOR iterator for the sortedCollection class and it's subclasses
     %
+    %SEE ALSO lfpBattery.iterator
+    %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
     %January 2017
     

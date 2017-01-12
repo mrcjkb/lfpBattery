@@ -2,6 +2,9 @@ classdef woehlerFit < lfpBattery.curveFitInterface
     %WOEHLERFIT creates a fit object for a woehler curve
     %according to the function N(DoD) = p1 * DoD ^ (-p2)
     %
+    %Used in the
+    %lfpBattery package for cycle aging curves (cycles to failure vs DoD 
+    %
     %N is the number of cycles to failure at a constant depth of discharge
     %DoD.
     %

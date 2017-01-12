@@ -1,5 +1,5 @@
 classdef const
-    %CONST: class for holding physical constants
+    %CONST: class for holding physical constants and shared variables
     properties (Constant)
         F = 96485.3328959; % As/mol - Faraday constant
         R = 8.3144598; % J/(mol*K) - universal gas constant
@@ -14,7 +14,7 @@ classdef const
         yellow = [215 155 40]./255; %yellow
         grey = [113 113 113]./255; %grey
         logo = [197 14 31]./255; %logo red
-        cmap = [0.6451    0.1952    0.1556
+        cmap = [0.6451    0.1952    0.1556 % colormap
             0.7545    0.3341    0.1346
             0.8266    0.4460    0.1258
             0.8612    0.5309    0.1291

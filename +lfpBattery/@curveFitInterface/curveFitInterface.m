@@ -1,5 +1,39 @@
 classdef (Abstract) curveFitInterface < handle
-    %CURVEFITINTERFACE Interface for curve fitting classes
+    %CURVEFITINTERFACE Abstract interface for curve fitting classes.
+    %
+    %Creates a curve fit using either the lsqcurvefit
+    %method, fminsearch or both.
+    %
+    %d = CURVEFITINTERFACE(f, x, y, zdata); fits data to x and y
+    %                                       according to the
+    %                                       function specified by
+    %                                       the function handle f.
+    %                                       zdata (1x1) must be
+    %                                       added to make the curve
+    %                                       fit sortable.
+    %
+    %d = CURVEFITINTERFACE(f, x, y, zdata, 'OptionName', 'OptionValue')
+    %                                       Fit curve with
+    %                                       additional options;
+    %
+    %Options:
+    %   x0      parameters for curve fit.
+    %   mode    'lsq' for lsqcurvefit, 'fmin' for fminsearch or
+    %           'both' for lsqcurvefit followed by fminsearch
+    %
+    %CURVEFITINTERFACE Properties:
+    %   z    -   z-data of fitted curve. (i. e. the current at which the curve was recorded)
+    %   mode -   function used for fitting ('fmin' for fminsearch or 'lsq' for lsqcurvefit)
+    %   x    -   parameters for curve fit
+    %   rmse -   root mean squared error
+    %
+    %CURVEFITINTERFACE Methods:
+    %   plotResults - plots the fitted curve.
+    %
+    %SEE ALSO: lfpBattery.curvefitCollection, lfpBattery.dischargeCurves
+    %
+    %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
+    %         December 2017
     
     properties (SetAccess = 'immutable')
        z; % z-data of fitted curve. (i. e. the current at which the curve was recorded)
@@ -11,7 +45,7 @@ classdef (Abstract) curveFitInterface < handle
        x; % parameters for fit function
     end
     properties (Dependent, SetAccess = 'protected')
-        rmse;
+        rmse; % root mean squared error
     end
     properties (Dependent, Hidden, SetAccess = 'protected', GetAccess = 'protected')
         e_tot; % total differences
@@ -44,6 +78,25 @@ classdef (Abstract) curveFitInterface < handle
     end
     methods
         function d = curveFitInterface(f, rawx, rawy, zdata, varargin)
+            %CURVEFITINTERFACE: Creates a curve fit using either the lsqcurvefit
+            %method, fminsearch or both.
+            %
+            %d = CURVEFITINTERFACE(f, x, y, zdata); fits data to x and y
+            %                                       according to the
+            %                                       function specified by
+            %                                       the function handle f.
+            %                                       zdata (1x1) must be
+            %                                       added to make the curve
+            %                                       fit sortable.
+            %
+            %d = CURVEFITINTERFACE(f, x, y, zdata, 'OptionName', 'OptionValue')
+            %                                       Fit curve with
+            %                                       additional options;
+            %
+            %Options:
+            %   x0      parameters for curve fit.
+            %   mode    'lsq' for lsqcurvefit, 'fmin' for fminsearch or
+            %           'both' for lsqcurvefit followed by fminsearch
             x0 = zeros(100, 1);
             % Optional inputs
             p = inputParser;

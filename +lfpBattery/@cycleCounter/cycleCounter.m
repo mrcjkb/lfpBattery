@@ -35,8 +35,11 @@ classdef (Abstract) cycleCounter < handle
     %
     %addlistener(c, 'NewCycle', @Obj.methodName)
     %
+    %SEE ALSO: lfpBattery.eoAgeModel lfpBattery.dambrowskiCounter
+    %lfpBattery.batteryAgeModel
     %
-    %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt, November 2016
+    %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
+    %         November 2016
     
     properties (SetAccess = 'protected')
         cDoC; % cycle - depth of cycle histogram
@@ -93,7 +96,7 @@ classdef (Abstract) cycleCounter < handle
         end % constructor
         %%
         function c = lUpdate(c, src, ~)
-            %LUPDATE: Add this method to a battery model using it's
+            %LUPDATE: Add this method to a battery model b using it's
             %addlistener method.
             c.update(src.soc);
         end

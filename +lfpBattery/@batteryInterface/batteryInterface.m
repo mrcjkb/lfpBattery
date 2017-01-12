@@ -14,7 +14,7 @@ classdef (Abstract) batteryInterface < handle
         ageModel = 'on'; % Indicates whether aging model is on or off
     end
     properties (Dependent, SetAccess = 'protected')
-        SoC; % State of charge [0,..,1]
+        SoC; % State of charge [0,..,1] % MTODO make observable
         SoH; % State of health [0,..,1]
         Q; % Left over nominal battery capacity in Ah (after aging)
     end

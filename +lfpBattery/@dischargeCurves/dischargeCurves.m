@@ -1,5 +1,24 @@
 classdef dischargeCurves < lfpBattery.curvefitCollection
-    %DISCHARGECURVES class for storing curveFit
+    %DISCHARGECURVES sorted collection of dischargeFit (or other curveFitInterface) objects.
+    %Uses interplation to extract data between two curve fits according to
+    %the current (stored as the z property).
+    %
+    %DISCHARGECURVES Properties:
+    %
+    %   xydata - Array of dischargeFit or other curve fit objects (should implement curveFitInterface)
+    %   z      - Array of currents (in A) at which the respective curve measurements were
+    %            recorded
+    %
+    %DISCHARGECURVES Methods:
+    %
+    %   add                 - Adds a curve fit object cf to a collection c.
+    %   remove              - Removes the object with the z coordinate specified by z from the collection c.
+    %   createIterator      - Returns an iterator for the DISCHARGECURVES object.
+    %
+    %SEE ALSO: lfpBattery.dischargeFit lfpBattery.curveFitInterface
+    %
+    %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
+    %         January 2017
     
     properties
         interpMethod = 'spline';
@@ -10,6 +29,12 @@ classdef dischargeCurves < lfpBattery.curvefitCollection
     
     methods
         function d = dischargeCurves(varargin)
+            %DISCHARGECURVES  Initializes collection of discharge curves, each with a single current value.
+            %DISCHARGECURVES(d1, d2, .., dn) Initializes collection with
+            %                                curve fits d1, d2, .. up to dn
+            %d1, d2, .., dn must implement the curveFitInterface. If two
+            %curve fits dn-1 and dn have the same z property, the curve fit
+            %dn-1 will be removed.
             d@lfpBattery.curvefitCollection(varargin{:})
         end
         function dischargeFit(d, V, C_dis, I, Temp, varargin)

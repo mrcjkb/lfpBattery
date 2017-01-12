@@ -1,6 +1,6 @@
 classdef (Abstract) sortedFunctions < lfpBattery.composite
-    %SORTEDFUNCTIONS Abstract class for storing functions of x and y with
-    %different z values.
+    %SORTEDFUNCTIONS Abstract class for storing functions of x and y, each with
+    %a single z value.
     %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt, January 2017
     
@@ -16,11 +16,21 @@ classdef (Abstract) sortedFunctions < lfpBattery.composite
     end
     methods
         function c = sortedFunctions(varargin)
+            %SORTEDFUNCTIONS  Initializes collection of functions of x and
+            %                 y, each with a single z value.
+            %SORTEDFUNCTIONS(f1, f2, .., fn) Initializes collection with
+            %                                functions f1, f2, .. up to fn
+            %f1, f2, .., fn must have a 1x1 z property.
             for i = 1:numel(varargin)
                c.add(varargin{i}); 
             end
         end
         function add(c, d)
+            %ADD:   Adds an object to the collection
+            %     Syntax: c.ADD(cf)
+            %
+            %If an object cf with the same z coordinate exists, the
+            %existing one is replaced.
             if isempty(c.xydata) % object initialization
                c.xydata = d;
                c.z = d.z;
@@ -42,6 +52,8 @@ classdef (Abstract) sortedFunctions < lfpBattery.composite
             end
         end
         function remove(c, z)
+            %REMOVE: Removes the object with the z coordinate specified by z from the collection c.
+            %        Syntax: c.REMOVE(z)
             ind = c.z == z;
             if ~any(ind)
                 warning('Nothing found that could be removed.')
@@ -53,8 +65,11 @@ classdef (Abstract) sortedFunctions < lfpBattery.composite
                 end
             end
         end
-        function it = createIterator(obj)
-            it = lfpBattery.scIterator(obj);
+        function it = createIterator(c)
+            %CREATEITERATOR: Returns an iterator for the object it.
+            %                Syntax: it = c.CREATEITERATOR;
+            %SEE ALSO: lfpbattery.scIterator
+            it = lfpBattery.scIterator(c);
         end
     end
     methods (Static, Access = 'protected')

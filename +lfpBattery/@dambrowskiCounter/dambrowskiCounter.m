@@ -24,6 +24,7 @@ classdef dambrowskiCounter < lfpBattery.cycleCounter
     %                       called.
     %   count             - Transforms the state-of-charge (SoC) profile
     %                       into a cycle-depth-of-discharge (cDoC) histogram using the dambrowski et al. cycle counting algorithm
+    %   lUpdate           - Add this method to a battery model using it's addlistener method.
     %
     %The DAMBROWSKICOUNTER object will notify event listeners (e. g. aging models) about a new
     %full cycle occuring. To define an event listener Obj for a
@@ -32,8 +33,11 @@ classdef dambrowskiCounter < lfpBattery.cycleCounter
     %
     %addlistener(c, 'NewCycle', @Obj.methodName)
     %
+    %SEE ALSO: lfpBattery.eoAgeModel lfpBattery.dambrowskiCounter
+    %lfpBattery.batteryAgeModel
     %
-    %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt, December 2016
+    %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
+    %         December 2016
     
     methods
         function c = dambrowskiCounter(varargin)
