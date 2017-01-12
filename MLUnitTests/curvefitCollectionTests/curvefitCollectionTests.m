@@ -39,9 +39,31 @@ if fig
 end
 
 %% MTODO validate spline interpolation of dischargeCurves
-I_test = 10;
-
-
-
+idx = 4;
+I_test = raw(idx).I;
+d.remove(I_test)
+Cd = linspace(min(raw(idx).Cd), max(raw(idx).Cd), 1000)';
+V = zeros(size(Cd));
+for i = 1:numel(Cd)
+    V(i) = d.interp(I_test, Cd(i));
+end
+hold on
+if fig
+    df = dischargeFit(raw(idx).V, raw(idx).Cd, I_test, const.T_room);
+    LW = {'LineWidth', 2};
+    d.plotResults('noRawData', true);
+    l = findobj(gcf, 'type', 'line');
+    for i = 1:numel(l)
+        l(i).Color = const.grey;
+        l(i).LineWidth = 1;
+        l(i).LineStyle = '--';
+    end
+    pl_df = plot(Cd, df(Cd), 'Color', const.blue, LW{:});
+    pl_int = plot(Cd, V, 'Color', const.red, LW{:});
+    legend([pl_df, pl_int, l(1)], ...
+        {['fit at ', num2str(I_test),' A'],...
+        ['interpolation at ', num2str(I_test), ' A'],...
+        'curves used for interpolation'}, ...
+        'Location', 'SouthWest')
 end
 
