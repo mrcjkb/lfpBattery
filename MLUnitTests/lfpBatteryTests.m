@@ -1,15 +1,46 @@
+function lfpBatteryTests(test)
+%LFPBATTERYTESTS calls MLUnit tests.
+%
+%LFPBATTERYTESTS('testName') calls one of the following tests:
+%'cycleCounter'
+%'ageModel'
+%'dischargeFit'
+%'curvefitCollections'
+
+%% Parse inputs
+thandles = {@cycleCounterTests, @ageModelTests, @dischargeFitTests, @curvefitCollectionTests};
+TTF = true(numel(thandles), 1);
+if nargin > 0
+    TTF = ~TTF;
+    switch test
+        case 'cycleCounter'
+            TTF(1) = true;
+        case 'ageModel'
+            TTF(2) = true;
+        case 'dischargeFit'
+            TTF(3) = true;
+        case 'curvefitCollections'
+            TTF(4) = true;
+    end
+end
 import lfpBattery.*
+st = pwd;
 [p, ~] = fileparts(which('lfpBatteryTests'));
 cd(p)
-clearvars p
 
-%% Script for calling lfpBattery MLUnit tests
+%% call lfpBattery MLUnit tests
 disp(' ')
-disp('Beginning MLUnit tests...')
-
-cycleCounterTests
-ageModelTests
-dischargeFitTests
-curvefitCollectionTests
-
-disp('All MLUnit tests passed!')
+if nargin < 1
+    disp('Beginning MLUnit tests...')
+end
+for i = 1:numel(thandles)
+    if TTF(i)
+        feval(thandles{i})
+    end
+end
+if nargin < 1
+    disp('All MLUnit tests passed!')
+end
+disp(' ')
+cd(st)
+end
