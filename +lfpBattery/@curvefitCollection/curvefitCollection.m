@@ -33,7 +33,12 @@ classdef curvefitCollection < lfpBattery.sortedFunctions
                 cfit = c.xydata(i); % extract curve fit pointer
                 c.y(i) = cfit(x);
             end
-            y = interp1(c.z, c.y, z, c.interpMethod, 'extrap'); % interpolation
+            % interpolate 
+              y = interp1(c.z, c.y, z, c.interpMethod, 'extrap');
+              % uncomment below to limit to curve fits
+%             y = lfpBattery.commons.upperlowerlim(...
+%                 interp1(c.z, c.y, z, c.interpMethod, 'extrap'), ...
+%                 min(c.y), max(c.y)); 
         end
         
         function add(c, d)
