@@ -115,6 +115,7 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             d = d@lfpBattery.curveFitInterface(f, rawx, rawy, I, varargin{:}); % Superclass constructor
             d.Cdmax = cdmax;
             d.xxlim = [0, cdmax];
+            d.yylim = [min(V), max(V)]; % limit output to raw data
         end
         function v = subsref(d, S)
             if strcmp(S(1).type, '()') && numel(d) == 1
@@ -122,8 +123,10 @@ classdef dischargeFit < lfpBattery.curveFitInterface
                     error('Cannot index dischargeFit')
                 end
                 C_dis = S(1).subs{1};
-                DoD = max(0, min(C_dis ./ d.Cdmax, 1)); % conversion to DoD
-                v = d.f(d.px, DoD);
+                % conversion to DoD and limitation to 0 and 1
+                DoD = lfpBattery.commons.upperlowerlim(C_dis ./ d.Cdmax, 0, 1); 
+                % limit output to raw data
+                v = lfpBattery.commons.upperlowerlim(d.f(d.px, DoD), d.yylim(1), d.yylim(2));
             elseif nargout == 1
                 v = builtin('subsref', d, S(1));
             else

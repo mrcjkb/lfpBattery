@@ -14,6 +14,10 @@ classdef commons
                 error('Specified object does not implement the correct interface.')
             end
         end
+        function y = upperlowerlim(y, low, high)
+            % UPPERLOWERLIM: Limits y to interval [low, high]
+            y = min(max(low, y), high);
+        end
     end
     
 end

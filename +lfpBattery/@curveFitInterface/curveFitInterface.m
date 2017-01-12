@@ -20,6 +20,7 @@ classdef (Abstract) curveFitInterface < handle
         px; % parameters for fit function handle
         fmin; % true for fminsearch, false for lsqcurvefit
         xxlim  = [-inf, inf]; % upper & lower limits for x data
+        yylim = [-inf, inf]; % upper & lower limits for y data
     end
     properties (Hidden, GetAccess = 'protected', SetAccess = 'immutable')
         f; % Fit function Handle
@@ -72,8 +73,10 @@ classdef (Abstract) curveFitInterface < handle
                 if numel(S(1).subs) > 1
                     error('Attempted to index non-indexable object.')
                 end
-                sub = min(max(d.xxlim(1), S(1).subs{1}), d.xxlim(2));
-                v = d.f(d.px, sub);
+                % limit x data
+                sub = lfpBattery.commons.upperlowerlim(y, d.xxlim(1), d.xxlim(2));
+                % limit y data 
+                v = lfpBattery.commons.upperlowerlim(d.f(d.px, sub), d.yylim(1), d.yylim(2));
             elseif nargout == 1
                 v = builtin('subsref', d, S(1));
             else
