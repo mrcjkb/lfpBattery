@@ -50,6 +50,7 @@ end
 hold on
 if fig
     df = dischargeFit(raw(idx).V, raw(idx).Cd, I_test, const.T_room);
+    d.add(df);
     LW = {'LineWidth', 2};
     d.plotResults('noRawData', true);
     l = findobj(gcf, 'type', 'line');
