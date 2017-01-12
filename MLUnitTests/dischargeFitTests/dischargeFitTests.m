@@ -22,25 +22,25 @@ x0 = [E0; Ea; Eb; Aex; Bex; Cex; x0; v0; delta];
 
 %% Args
 Temp = const.T_room;
-CRate = 1;
+I = 1;
 
 %% Initialize with params
-d = dischargeFit(V, C_d, CRate, Temp, 'x0', x0, 'mode', 'lsq');
+d = dischargeFit(V, C_d, I, Temp, 'x0', x0, 'mode', 'lsq');
 if fig
     d.plotResults
 end
 %% Initialize without params
-d2 = dischargeFit(V, C_d, CRate, Temp, 'mode', 'lsq');
+d2 = dischargeFit(V, C_d, I, Temp, 'mode', 'lsq');
 if fig
     d2.plotResults
 end
 
 %% fminsearch options
-d3 = dischargeFit(V, C_d, CRate, Temp, 'x0', x0, 'mode', 'fmin');
+d3 = dischargeFit(V, C_d, I, Temp, 'x0', x0, 'mode', 'fmin');
 if fig
     d3.plotResults
 end
-d4 = dischargeFit(V, C_d, CRate, Temp, 'mode', 'fmin');
+d4 = dischargeFit(V, C_d, I, Temp, 'mode', 'fmin');
 if fig
     d4.plotResults
 end
@@ -52,8 +52,8 @@ if fig
 end
 
 %% both
-dischargeFit(V, C_d, CRate, Temp, 'mode', 'both'); % validate syntax
-d = dischargeFit(V, C_d, CRate, Temp); % 'both' should be default
+dischargeFit(V, C_d, I, Temp, 'mode', 'both'); % validate syntax
+d = dischargeFit(V, C_d, I, Temp); % 'both' should be default
 if fig
     d.plotResults
 end

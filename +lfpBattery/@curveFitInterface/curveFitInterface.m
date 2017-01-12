@@ -81,20 +81,43 @@ classdef (Abstract) curveFitInterface < handle
             end
         end
         
-        function plotResults(d, newfig)
+        function plotResults(d, varargin)
             %PLOTRESULTS: Compares a scatter of the raw data with the fit
             %in a figure window.
-            if nargin < 2
-                newfig = true;
-            end
+            %
+            %Syntax: obj.PLOTRESULTS
+            %        obj.PLOTRESULTS('OptionName', 'OptionValue')
+            %
+            %Options:
+            %   newfig (logical)    - create new figure? (default: true)
+            %   xf (numeric)        - factor for x data (default: 1)
+            %   yf (numeric)        - factor for y data (default: 1)
+            %   noRawData (logical) - don't scatter raw data (default: false)
+            %   noFitData (logical) - don't scatter fit data (default: false)
+            p = inputParser;
+            addOptional(p, 'newfig', true, @(x)islogical(x));
+            addOptional(p, 'xf', 1, @(x)isnumeric(x));
+            addOptional(p, 'yf', 1, @(x)isnumeric(x));
+            addOptional(p, 'noRawData', false, @(x)islogical(x));
+            addOptional(p, 'noFitData', false, @(x)islogical(x));
+            parse(p, varargin{:})
+            newfig = p.Results.newfig;
+            xf = p.Results.xf;
+            yf = p.Results.yf;
+            nrd = p.Results.noRawData;
+            nfd = p.Results.noFitData;
             xdata = linspace(min(d.rawX), max(d.rawX), 1000)';
             if newfig
                 figure;
             end
             hold on
-            scatter(d.rawX, d.rawY, 'filled', 'MarkerFaceColor', lfpBattery.const.red)
-            plot(xdata, d.f(d.px, xdata), 'Color', lfpBattery.const.green, ...
-                'LineWidth', 2)
+            if ~nrd
+                scatter(xf.*d.rawX, yf.*d.rawY, 'filled', 'MarkerFaceColor', lfpBattery.const.red)
+            end
+            if ~nfd
+                plot(xf.*xdata, yf.*d.f(d.px, xdata), 'Color', lfpBattery.const.green, ...
+                    'LineWidth', 2)
+            end
             if newfig
                 legend('raw data', 'fit', 'Location', 'Best')
                 title(['rmse = ', num2str(d.rmse)])

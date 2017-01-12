@@ -16,31 +16,34 @@ classdef curvefitCollection < lfpBattery.sortedFunctions
     properties (Abstract)
         interpMethod; % Method for interpolation
     end
+    properties (Access = 'protected')
+        y; % Initialization of curve fit results that will be interpolated in iterp method.
+    end
     
     methods
         function c = curvefitCollection(varargin)
             c@lfpBattery.sortedFunctions(varargin{:})
         end
-        
-        function y = calc(c, z, x)
-            %CALC the y data for a given z and x values.
-            %Syntax: y = CALC(z, x)
-            %z must have a length of 1
-            if numel(z) ~= 1
-                error('z must have a length of 1')
+        function y = interp(c, z, x)
+            %INTERP returns interpolated result between calculations of
+            %multiple curveFits.
+            %Syntax: y = INTERP(z, x)
+            feval(c.errHandler, c); % make sure there are enough functions in the collection
+            for i = 1:numel(c.y)
+                cfit = c.xydata(i); % extract curve fit pointer
+                c.y(i) = cfit(x);
             end
-            chk = c.z == z;
-            if any(chk) % exact match?
-                tmp = c.xydata(chk);
-                y = tmp(x);
-            else % interpolation
-                y = c.interp(z, x);
-            end
+            y = interp1(c.z, c.y, z, c.interpMethod); % interpolation
         end
         
         function add(c, d)
            c.validateInputInterface(d);
            c.add@lfpBattery.sortedFunctions(d);
+           c.y = zeros(size(c.z));
+        end
+        function remove(c, z)
+            c.remove@lfpBattery.sortedFunctions(z);
+            c.y = zeros(size(c.z));
         end
         function plotResults(c, newfig)
             %PLOTRESULTS: Compares scatters of the raw data with the fits
@@ -63,12 +66,6 @@ classdef curvefitCollection < lfpBattery.sortedFunctions
                 tmp.plotResults(false);
             end
         end
-    end
-    methods (Abstract, Access = 'protected')
-        %INTERP returns interpolated result between calculations of
-        %multiple curveFits.
-        %Syntax: y = INTERP(z, x)
-        y = interp(c, z, x);
     end
     methods (Static)
         function validateInputInterface(obj)

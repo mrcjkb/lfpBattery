@@ -131,19 +131,21 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             end
         end
         function plotResults(d, newfig)
+            %PLOTRESULTS: Compares a scatter of the raw data with the fit
+            %into the current figure window.
+            %PLOTRESULTS(true) plots figure into a new figure window
             if nargin < 2
                 newfig = false;
             end
-            %PLOTRESULTS: Compares a scatter of the raw data with the fit
-            %in a figure window.
-            plotResults@lfpBattery.curveFitInterface(d, newfig); % Call superclas plot method
+            % Call superclas plot method
+            plotResults@lfpBattery.curveFitInterface(d, 'newfig', newfig, 'xf', d.Cdmax);
             if newfig
                 title({['rmse = ', num2str(d.rmse)]; ...
                     ['mean(\DeltaV) = ', num2str(d.dV_mean), ' V']; ...
                     ['max(\DeltaV) = ', num2str(d.dV_max), ' V']})
             end
-            ylabel('voltage / V')
-            xlabel('SoC')
+            ylabel('Voltage / V')
+            xlabel('Discharge capacity / Ah')
         end
         
         %% Dependent setters:

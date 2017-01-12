@@ -4,23 +4,20 @@ classdef (Abstract) sortedFunctions < lfpBattery.composite
     %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt, January 2017
     
+    properties
+       z; % Sorted vector holding 3rd dimension of curveFit objects 
+    end
     properties (Access = 'protected')
         xydata; % Array of curve fits that implement the curveFitInterface
-        z; % Sorted vector holding 3rd dimension of curveFit objects
+        errHandler = @lfpBattery.sortedFunctions.minfunErr; % function handle for handling errors in case of operation attempt
     end
     properties (Abstract, Access = 'protected')
         minFuns; % Minimum number of functions permitted
     end
     methods
         function c = sortedFunctions(varargin)
-            if nargin < c.minFuns
-               c.minfunErr
-            end
             for i = 1:numel(varargin)
                c.add(varargin{i}); 
-            end
-            if numel(c.xydata) < c.minFuns
-                c.minfunErr
             end
         end
         function add(c, d)
@@ -40,18 +37,36 @@ classdef (Abstract) sortedFunctions < lfpBattery.composite
                     c.xydata = c.xydata(i); % rearrange fits accordingly
                 end
             end
+            if numel(c.z) >= c.minFuns % set error handler to do nothing
+                c.errHandler = @lfpBattery.sortedFunctions.noErr;
+            end
+        end
+        function remove(c, z)
+            ind = c.z == z;
+            if ~any(ind)
+                warning('Nothing found that could be removed.')
+            else
+                c.z(ind) = [];
+                c.xydata(ind) = [];
+                if numel(c.z) < c.minFuns % set error handler to return error
+                    c.errHandler = @lfpBattery.sortedFunctions.minfunErr;
+                end
+            end
         end
         function it = createIterator(obj)
             it = lfpBattery.scIterator(obj);
         end
     end
-    methods (Access = 'protected')
+    methods (Static, Access = 'protected')
         function minfunErr(c)
            if c.minFuns == 1
                error('At least 1 object must be added to the collection.')
            else
                error(['At least ', num2str(c.minFuns),' objects must be added to the collection.'])
            end
+        end
+        function noErr(~)
+           % empty function
         end
     end
 end
