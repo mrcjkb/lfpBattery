@@ -19,7 +19,7 @@ assert(isequal(chk, err_msg), chk)
 for i = 1:3
     d.dischargeFit(raw(i).V, raw(i).Cd, raw(i).I, const.T_room);
 end
-d.interp(1, 1500) % error handling should work now
+d.interp(1, 1500); % error handling should work now
 d.remove(raw(i).I);
 try
     chk = 'error handling failure';
