@@ -6,7 +6,7 @@ if nargin < 1
 end
 load(fullfile(pwd, 'curvefitCollectionTests', 'rawCurves.mat'))
 
-%% MTODO test functionality of error handling in add() and remove() methods
+%% test functionality of error handling in add() and remove() methods
 d = dischargeCurves;
 err_msg = 'At least 3 objects must be added to the collection.';
 try
@@ -37,7 +37,10 @@ if fig
     % may be shifted horizontally compared to the originals
     d.plotResults
 end
+
 %% MTODO validate spline interpolation of dischargeCurves
+I_test = 10;
+
 
 
 end

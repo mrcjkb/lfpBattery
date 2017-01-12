@@ -45,25 +45,26 @@ classdef curvefitCollection < lfpBattery.sortedFunctions
             c.remove@lfpBattery.sortedFunctions(z);
             c.y = zeros(size(c.z));
         end
-        function plotResults(c, newfig)
+        function plotResults(c, varargin)
             %PLOTRESULTS: Compares scatters of the raw data with the fits
             %in a figure window.
-            %PLOTRESULTS(newfig) determines whether a new figure window
-            %should be opened or not (default: false)
-            if nargin < 2
-                newfig = true;
-            end
-            if newfig
-                figure;
-            end
+            %PLOTRESULTS('OptionName', 'OptionValue') plots results
+            %with additional options.
+            %
+            %Options:
+            %   noRawData (logical) - don't scatter raw data (default: false)
+            %   noFitData (logical) - don't scatter fit data (default: false)
+            figure;
             hold on
             tmp = c.xydata(1);
-            tmp.plotResults(false);
-            legend('raw data', 'fits', 'Location', 'Best')
+            plotResults(tmp, false, varargin{:});
+            if nargin < 3
+                legend('raw data', 'fits', 'Location', 'Best')
+            end
             grid on
             for i = 2:numel(c.xydata)
                 tmp = c.xydata(i);
-                tmp.plotResults(false);
+                plotResults(tmp, false, varargin{:});
             end
         end
     end

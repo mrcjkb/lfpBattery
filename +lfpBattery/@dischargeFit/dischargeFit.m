@@ -130,15 +130,22 @@ classdef dischargeFit < lfpBattery.curveFitInterface
                 builtin('subsref', d, S(1));
             end
         end
-        function plotResults(d, newfig)
+        function plotResults(d, newfig, varargin)
             %PLOTRESULTS: Compares a scatter of the raw data with the fit
             %into the current figure window.
             %PLOTRESULTS(true) plots figure into a new figure window
+            %PLOTRESULTS(newfig, 'OptionName', 'OptionValue') plots results
+            %with additional options. Setting newfig to true plots results
+            %in a new figure.
+            %
+            %Options:
+            %   noRawData (logical) - don't scatter raw data (default: false)
+            %   noFitData (logical) - don't scatter fit data (default: false)
             if nargin < 2
                 newfig = false;
             end
             % Call superclas plot method
-            plotResults@lfpBattery.curveFitInterface(d, 'newfig', newfig, 'xf', d.Cdmax);
+            plotResults@lfpBattery.curveFitInterface(d, 'newfig', newfig, 'xf', d.Cdmax, varargin{:});
             if newfig
                 title({['rmse = ', num2str(d.rmse)]; ...
                     ['mean(\DeltaV) = ', num2str(d.dV_mean), ' V']; ...
