@@ -1,0 +1,132 @@
+\documentclass [a4paper, 12pt] {scrartcl}		%Textformat Article, KomaScript
+\linespread{1.2}								% Setzt Zeilenabstand auf x*1.2 (KomaScript)
+\renewcommand{\familydefault}{\sfdefault}		% Setzt Schrift auf Serifenlos (fast wie Arial)
+
+
+\usepackage{amsfonts} %   AMS sind für den Mathematikmodus
+\usepackage{amsmath}
+\usepackage{acronym}
+\usepackage{amssymb}
+\usepackage{longtable}
+\usepackage[hidelinks]{hyperref} % Paket für Hyperlinks
+\usepackage{tabularx} % für andere Darstellung von Tabellen z.B. mit dickem Rahmen
+\usepackage{graphicx, color} % zum Einbinden von Grafiken
+\usepackage{fancyhdr}	% Paket für Kopf- und Fußzeile
+\usepackage[margin=1in,headsep=.6in]{geometry} % Für Abstand zwischen Kopfzeile & Text
+\usepackage{rotating}	% Bilder per rotate umgebung drehen
+\usepackage{wrapfig} 	% Text um Bild fließen lassen
+\usepackage{multirow}	% Text über mehrere Spalten und Zeilen in Tabelle
+\usepackage{textcomp}	% Copyleftzeichen
+\usepackage[utf8]{inputenc} %  UFT8 Zeichenkodierung
+\usepackage{color}	% farbige Elemnete, zum Beispiel Rahmen, Linien etc.
+\usepackage{caption} % falls man Bildunterschriten und Tabellenüberschriften formatieren will
+%\usepackage[ngerman]{babel} %deutsche Rechtschreibung
+\usepackage{booktabs}
+\usepackage{epstopdf}
+\usepackage[xindy,toc,nonumberlist,toc,section]{glossaries}
+\usepackage{blindtext}
+\usepackage{microtype}
+\usepackage{color,siunitx} %for SI-units
+\usepackage{todonotes}
+
+\usepackage{subfig} %subfig statt subfigure (das veraltet ist)
+\usepackage{csquotes}
+\usepackage{perpage} % perpage-Paket (resettet vorgegebene Zähler für jede neue Seite)
+\MakePerPage{footnote} % wendet perpage-Paket auf Fußnoten an
+
+\usepackage[backend=biber,natbib=true,hyperref=true,style=ieee]{biblatex} %Biblatex mit biber (IEEE) [style=ieee,backend=biber,natbib=true,hyperref=true]
+\addbibresource{PRO.bib}
+%
+% Eigene definierte Zeichen
+\newcommand{\sei}{\stackrel{!}{=}} % Soll-Gleich-Sein Zeichen
+\newcommand{\cel}{$^{\circ}$C \ } % Grad Celsius in Textumgebung
+\newcommand{\mcel}{^{\circ}C \ } % Gra Celsius und Mathematikumgebung
+\newcommand{\matlab}{Matlab\textsuperscript{\textregistered}} % Matlab mit (R)-Zeichen
+\newcommand{\polysun}{Polysun\textsuperscript{\textregistered}} % Polysun mit (R)-Zeichen
+\newcommand{\java}{JAVA\textsuperscript{\texttrademark}} %  JAVA mit TM-Zeichen
+\newcommand{\subi}[1]{_\text{#1}} % subscript index
+\newcommand{\subs}[2]{_{\text{#1}, #2}} % subscript index + Laufindex
+\newcommand{\dexp}[1]{\cdot 10^{#1}} % *10^...
+
+%Definition der HTW Farben für Überschriften usw.
+\usepackage{xcolor}
+\definecolor{HTWgreen}{RGB}{119,185,0}
+\definecolor{grey}{RGB}{175,175,175}
+\definecolor{TUred}{RGB}{197,14,31}
+\definecolor{TUgrey}{RGB}{113,113,113}
+\usepackage{sectsty}
+\chapterfont{\color{TUred}}  % sets colour of chapters
+\sectionfont{\color{TUred}}  % sets colour of sections
+\subsectionfont{\color{TUgrey}}  % sets colour of sections
+
+\pagestyle{fancy} % leere unformatierte Seite
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+
+%Kopfzeile definieren
+\lhead{\includegraphics[width=0.1\textwidth]{tulogo.pdf}} %  HTW Logo in linke Kopfzeile
+%\chead{\leftmark} % mittlere Kopfzeile
+\rhead{\hspace{-0.14in}\vspace{-0.14in}\includegraphics[width=0.25\textwidth]{htwlogo}} % rechte Kopfzeile
+\chead{}
+%\rhead{\leftmark}
+
+%Fußzeile definieren
+\lfoot{} %links
+\cfoot{\thepage} % Mitte mit Anzeige der Seitenzahl
+\rfoot{} % rechts 
+\renewcommand{\headrulewidth}{0.4pt}	%Dicke der Kopf und Fußzeilentrenner
+\renewcommand{\footrulewidth}{0.4pt} 
+
+\captionsetup{format=hang,font=small,labelfont=bf,textfont=it,
+	justification=justified,singlelinecheck=false}
+\renewcommand{\thefootnote}{\roman{footnote}} % Fußnoten in römischen Zeichen
+
+\begin{document}
+	
+\begin{titlepage}
+	\begin{figure}
+%		\includegraphics[width=\textwidth]{HTW-Titel.png}
+			\vskip 30px % Abstand zum Runterschieben
+		\begin{minipage}[b]{\textwidth}
+			\flushright % oder \flushleft oder \center, wie es halt ausgerichtet sein soll
+			{\LARGE\textbf{Cell resolved \matlab\ OOP model of a lithium iron phosphate battery pack}}\\
+			\vskip 10px
+			\textbf{Marc Jakobi, Festus Anyangbe, Marc Schmitdt} \\
+			\today \\ % current date
+			HTW Berlin \\
+			\vskip 10px
+			Supervisor: \\ \textbf{M.Sc. Steven Neupert}\\
+			TU Berlin \\
+			\vskip 10px
+		\end{minipage}
+	\end{figure}
+\end{titlepage}
+\clearpage
+
+\begin{titlepage}
+	\fancypagestyle{myheadings}{Inhalt}
+	\tableofcontents
+	
+\end{titlepage}\clearpage
+\setcounter{page}{1}
+
+\pagenumbering{roman}
+
+\listoffigures
+\listoftables
+\include{abbreviations}
+\include{symbols}
+
+
+\captionsetup{list=true} %captions werden in die zugehörigen Verzeichnisse geschrieben
+\setcounter{table}{0}
+\clearpage
+\setcounter{page}{1}
+\pagenumbering{arabic}
+
+
+%% INCLUDES / SUBSECTIONS HERE
+
+\addcontentsline{toc}{section}{References}
+\printbibliography
+
+\end{document}
