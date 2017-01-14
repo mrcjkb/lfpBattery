@@ -5,7 +5,7 @@ import lfpBattery.*
 
 %% Input data
 load(fullfile(pwd,'dischargeFitTests','testCurve.mat'))
-
+C_d = C_d.*1e-3; %#ok<NODEF> % convert to Ah
 %% Params
 E0 = 3;
 Ea = 0.01;
