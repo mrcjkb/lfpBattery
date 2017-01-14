@@ -30,6 +30,20 @@ classdef (Abstract) curveFitInterface < handle
     %CURVEFITINTERFACE Methods:
     %   plotResults - plots the fitted curve.
     %
+    %CURVERFITINTERFACE Indexing:
+    %       In order to retrieve the fit for a given value, use subsref
+    %   indexing with (), e.g. y = cF(x);
+    %       In order to retrieve the fit for an array of curve fits, use
+    %   subsref indexing with {}.
+    %   e. g. 
+    %       cF = [cF1; cF2; cF3]; % array of curve fit objects
+    %       y = cF(x); % y is a 3x1 vector
+    %   NOTE: This vectorized approach may be faster than using a loop in
+    %   some cases (like on gpuArrays). However, in other cases, a loop may
+    %   be faster.
+    %       In order to retrieve a curve fit handle from an array of curve
+    %   fit handles, use subsref indexing with ().
+    %
     %SEE ALSO: lfpBattery.curvefitCollection, lfpBattery.dischargeCurves
     %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
@@ -123,13 +137,20 @@ classdef (Abstract) curveFitInterface < handle
         % Override of subsref (indexing) function
         function v = subsref(d, S)
             if strcmp(S(1).type, '()') && numel(d) == 1
-                if numel(S(1).subs) > 1
-                    error('Attempted to index non-indexable object.')
-                end
                 % limit x data
                 sub = lfpBattery.commons.upperlowerlim(S(1).subs{1}, d.xxlim(1), d.xxlim(2));
                 % limit y data 
                 v = lfpBattery.commons.upperlowerlim(d.f(d.px, sub), d.yylim(1), d.yylim(2));
+            elseif numel(d) > 1
+                if strcmp(S(1).type, '{}')
+                    S(1).type = '()';
+                    v = arrayfun(@subsref, d, repmat(S, size(d)));
+                elseif strcmp(S(1).type, '()')
+                    S(1).type = '()';
+                    v = builtin('subsref', d, S(1));
+                else
+                    error('Unexpected MATLAB expression.')
+                end
             elseif nargout == 1
                 v = builtin('subsref', d, S(1));
             else

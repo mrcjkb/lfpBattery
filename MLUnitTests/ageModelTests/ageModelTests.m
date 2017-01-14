@@ -19,6 +19,11 @@ cfit = @(x)(N1(1).*x.^(-N1(2)));
 a2 = eoAgeModel(c, cfit);
 w = woehlerFit(N, DoDN);
 a3 = eoAgeModel(c, w);
+% test subsref overload
+w2 = woehlerFit(N, DoDN-5);
+w3 = woehlerFit(N, DoDN-10);
+wa = [w; w2; w3];
+assert(isequal(wa{0}, [inf; inf; inf]), 'Subsref overload problem.');
 
 cDoC = [];
 cDoC0 = 0;
