@@ -9,9 +9,7 @@ classdef batteryCell < lfpBattery.batteryInterface
         function P = powerRequest(b, P, dt)
             % P:  power in W
             % dt: size of time step in S
-            % MTODO: Adapt function to C in Ah
-            % MTODO: change dischargeFit unit in plotResults to Ah
-            % MTODO: convert Cd to Ah in respective MLunit tests
+            
             % set operator handles according to charge or discharge
             if P > 0 % charge
                 pmH = @plus;
@@ -54,13 +52,13 @@ classdef batteryCell < lfpBattery.batteryInterface
         function P = iteratePower(b, P, dt, pmH, reH, socLim, sd)
             %ITERATEPOWER: Iteration to determine current and new state using recursion
             I = P ./ b.V; % MTODO: Limit I according to data sheet
-            Cd = b.Cd - I.*dt./3600;
+            Cd = b.Cd - I .* dt ./ 3600;
             V = b.interp(I, Cd);
             Pit = I .* mean([b.V; V]);
             err = P - Pit;
             if abs(err) > b.pTol && b.pct < b.maxIterations
                 b.pct = b.pct + 1;
-                b.powerRequest(P + err, dt);
+                b.iteratePower(P + err, dt, pmH, reH, socLim, sd);
             elseif P ~= 0
                 b.pct = 0;
                 % Limit power here using recursion
@@ -70,7 +68,7 @@ classdef batteryCell < lfpBattery.batteryInterface
                         && b.sct < b.maxIterations && ~sd
                     b.sct = b.sct + 1;
                     b.slTF = true; % indicate that SoC
-                    b.powerRequest(pmH(P, P.*err), dt)
+                    P = b.iteratePower(pmH(P, P.*err), dt, pmH, reH, socLim, sd);
                     % BUG: Attempting to exceed limit once limit is set results
                     % in long iteration
                 else
