@@ -137,10 +137,7 @@ classdef (Abstract) curveFitInterface < handle
         % Override of subsref (indexing) function
         function v = subsref(d, S)
             if strcmp(S(1).type, '()') && numel(d) == 1
-                % limit x data
-                sub = lfpBattery.commons.upperlowerlim(S(1).subs{1}, d.xxlim(1), d.xxlim(2));
-                % limit y data 
-                v = lfpBattery.commons.upperlowerlim(d.f(d.px, sub), d.yylim(1), d.yylim(2));
+                v = d.fiteval(S);
             elseif numel(d) > 1
                 if strcmp(S(1).type, '{}')
                     S(1).type = '()';
@@ -237,7 +234,7 @@ classdef (Abstract) curveFitInterface < handle
     end
     
     methods (Access = 'protected')
-        function d = fit(d)
+        function fit(d)
             %FIT: Checks which fit mode is selected and calls the
             %respective fit function/s accordingly
             if d.fmin == 1 % fminsearch
@@ -250,6 +247,15 @@ classdef (Abstract) curveFitInterface < handle
                 fun = @(x) d.sseval(x, d.f(x, d.rawX(1:end-1)), d.rawY(1:end-1));
                 d.px = fminsearch(fun, d.px, d.fmsoptions);
             end
+        end
+        function v = fiteval(d, S)
+            %FITEVAL: Called by subsref if appropriate indexing for
+            %retrieving fit data is used.
+            
+            % limit x data
+            sub = lfpBattery.commons.upperlowerlim(S(1).subs{1}, d.xxlim(1), d.xxlim(2));
+            % limit y data
+            v = lfpBattery.commons.upperlowerlim(d.f(d.px, sub), d.yylim(1), d.yylim(2));
         end
     end
     

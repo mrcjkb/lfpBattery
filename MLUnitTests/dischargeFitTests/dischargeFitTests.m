@@ -1,7 +1,5 @@
-function dischargeFitTests(fig)
-if nargin == 0
-    fig = false;
-end
+function dischargeFitTests
+
 
 import lfpBattery.*
 
@@ -26,38 +24,32 @@ I = 1;
 
 %% Initialize with params
 d = dischargeFit(V, C_d, I, Temp, 'x0', x0, 'mode', 'lsq');
-if fig
-    d.plotResults
-end
+d.plotResults
+close gcf
 %% Initialize without params
 d2 = dischargeFit(V, C_d, I, Temp, 'mode', 'lsq');
-if fig
-    d2.plotResults
-end
-
+d2.plotResults
+close gcf
 %% fminsearch options
 d3 = dischargeFit(V, C_d, I, Temp, 'x0', x0, 'mode', 'fmin');
-if fig
-    d3.plotResults
-end
+d3.plotResults
 d4 = dischargeFit(V, C_d, I, Temp, 'mode', 'fmin');
-if fig
-    d4.plotResults
-end
+d4.plotResults
+close gcf
+%% test subsref overload
+da = [d; d2; d3; d4];
+assert(isequal(size(da{100}), size(da)), 'unexpected subsref behaviour.');
+assert(isequal(size(da(1)), [1 1]), 'unexpexted subsref behaviour.');
 
 %% switch modes
 d2.mode = 'fmin';
-if fig
-   d2.plotResults
-end
-
+d2.plotResults
+close gcf
 %% both
 dischargeFit(V, C_d, I, Temp, 'mode', 'both'); % validate syntax
 d = dischargeFit(V, C_d, I, Temp); % 'both' should be default
-if fig
-    d.plotResults
-end
-
+d.plotResults
+close gcf
 % TODO: Create assertion tests
 assert(isequal(d.rmse, d2.rmse), 'mode switch or ''both'' mode not functioning as expected')
 

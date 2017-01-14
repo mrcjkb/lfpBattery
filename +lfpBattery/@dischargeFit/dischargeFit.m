@@ -40,6 +40,19 @@ classdef dischargeFit < lfpBattery.curveFitInterface
     % DISCHARGEFIT Methods:
     %   plotResults - plots the fitted curve.
     %
+    % DISCHARGEFIT Indexing:
+    %       In order to retrieve the fit for a given value, use subsref
+    %   indexing with (), e.g. y = cF(x);
+    %       In order to retrieve the fit for an array of DISCHARGEFIT objects, use
+    %   subsref indexing with {}.
+    %   e. g. 
+    %       cF = [cF1; cF2; cF3]; % array of DISCHARGEFIT objects
+    %       y = cF(x); % y is a 3x1 vector
+    %   NOTE: This vectorized approach may be faster than using a loop in
+    %   some cases (like on gpuArrays). However, in other cases, a loop may
+    %   be faster.
+    %       In order to retrieve a DISCHARGEFIT handle from an array of DISCHARGEFIT
+    %   handles, use subsref indexing with ().
     %
     % Authors:  Marc Jakobi, Festus Anyangbe, Marc Schmidt,
     % December 2016
@@ -121,22 +134,6 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             d.Cdmax = cdmax;
             d.xxlim = [0, cdmax];
             d.yylim = [min(V), max(V)]; % limit output to raw data
-        end
-        function v = subsref(d, S)
-            if strcmp(S(1).type, '()') && numel(d) == 1
-                if numel(S(1).subs) > 1
-                    error('Cannot index dischargeFit')
-                end
-                C_dis = S(1).subs{1};
-                % conversion to DoD and limitation to 0 and 1
-                DoD = lfpBattery.commons.upperlowerlim(C_dis ./ d.Cdmax, 0, 1); 
-                % limit output to raw data
-                v = lfpBattery.commons.upperlowerlim(d.f(d.px, DoD), d.yylim(1), d.yylim(2));
-            elseif nargout == 1
-                v = builtin('subsref', d, S(1));
-            else
-                builtin('subsref', d, S(1));
-            end
         end
         function plotResults(d, newfig, varargin)
             %PLOTRESULTS: Compares a scatter of the raw data with the fit
@@ -221,6 +218,15 @@ classdef dischargeFit < lfpBattery.curveFitInterface
            c = d.rawX .* d.Cdmax; 
         end
     end
-    
+    methods (Access = 'protected')
+        function v = fiteval(d, S)
+            % Overload of curveFitInterface's fiteval function
+            C_dis = S(1).subs{1};
+            % conversion to DoD and limitation to 0 and 1
+            DoD = lfpBattery.commons.upperlowerlim(C_dis ./ d.Cdmax, 0, 1);
+            % limit output to raw data
+            v = lfpBattery.commons.upperlowerlim(d.f(d.px, DoD), d.yylim(1), d.yylim(2));
+        end
+    end
 end
 

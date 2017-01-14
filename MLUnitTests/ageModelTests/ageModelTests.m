@@ -18,6 +18,8 @@ N1 = nlinfit(DoDN,N,modelfun,beta);
 cfit = @(x)(N1(1).*x.^(-N1(2)));
 a2 = eoAgeModel(c, cfit);
 w = woehlerFit(N, DoDN);
+w.plotResults
+close gcf
 a3 = eoAgeModel(c, w);
 % test subsref overload
 w2 = woehlerFit(N, DoDN-5);

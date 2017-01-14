@@ -1,9 +1,6 @@
-function curvefitCollectionTests(fig)
+function curvefitCollectionTests
 %CURVEFITCOLLECTIONTESTS MLUnit tests for curvefit collections
 import lfpBattery.*
-if nargin < 1
-    fig = false;
-end
 load(fullfile(pwd, 'curvefitCollectionTests', 'rawCurves.mat'))
 
 %% test functionality of error handling in add() and remove() methods
@@ -32,11 +29,11 @@ assert(isequal(chk, err_msg), chk) % Error function should be called
 for i = 3:6
     d.dischargeFit(raw(i).V, raw(i).Cd, raw(i).I, const.T_room);
 end
-if fig
-    % NOTE: Due to the DoD scale being different for each curve, the curves
-    % may be shifted horizontally compared to the originals
-    d.plotResults
-end
+
+% NOTE: Due to the DoD scale being different for each curve, the curves
+% may be shifted horizontally compared to the originals
+d.plotResults
+close gcf
 
 %% MTODO validate spline interpolation of dischargeCurves
 idx = 4;
@@ -47,43 +44,47 @@ V = zeros(size(Cd));
 for i = 1:numel(Cd)
     V(i) = d.interp(I_test, Cd(i));
 end
-if fig
-    df = dischargeFit(raw(idx).V, raw(idx).Cd, I_test, const.T_room);
-    LW = {'LineWidth', 2};
-    d.plotResults('noRawData', true);
-    hold on
-    l = findobj(gcf, 'type', 'line');
-    for i = 1:numel(l)
-        l(i).Color = const.grey;
-        l(i).LineWidth = 1;
-        l(i).LineStyle = '--';
-    end
-    pl_df = plot(Cd, df(Cd), 'Color', const.blue, LW{:});
-    pl_int = plot(Cd, V, 'Color', const.red, LW{:});
-    legend([pl_df, pl_int, l(1)], ...
-        {['fit at ', num2str(I_test),' A'],...
-        ['interpolation at ', num2str(I_test), ' A'],...
-        'curves used for interpolation'}, ...
-        'Location', 'SouthWest')
-    d.add(df);
-    % with x scaled as SoC
-    LW = {'LineWidth', 2};
-    d.plotResults('noRawData', true, 'SoCx', true);
-    hold on
-    l = findobj(gcf, 'type', 'line');
-    for i = 1:numel(l)
-        l(i).Color = const.grey;
-        l(i).LineWidth = 1;
-        l(i).LineStyle = '--';
-    end
-    pl_df = plot(Cd./max(Cd), df(Cd), 'Color', const.blue, LW{:});
-    pl_int = plot(Cd./max(Cd), V, 'Color', const.red, LW{:});
-    legend([pl_df, pl_int, l(1)], ...
-        {['fit at ', num2str(I_test),' A'],...
-        ['interpolation at ', num2str(I_test), ' A'],...
-        'curves used for interpolation'}, ...
-        'Location', 'SouthWest')
-    d.add(df);
+
+df = dischargeFit(raw(idx).V, raw(idx).Cd, I_test, const.T_room);
+LW = {'LineWidth', 2};
+d.plotResults('noRawData', true);
+hold on
+l = findobj(gcf, 'type', 'line');
+for i = 1:numel(l)
+    l(i).Color = const.grey;
+    l(i).LineWidth = 1;
+    l(i).LineStyle = '--';
 end
+pl_df = plot(Cd, df(Cd), 'Color', const.blue, LW{:});
+pl_int = plot(Cd, V, 'Color', const.red, LW{:});
+legend([pl_df, pl_int, l(1)], ...
+    {['fit at ', num2str(I_test),' A'],...
+    ['interpolation at ', num2str(I_test), ' A'],...
+    'curves used for interpolation'}, ...
+    'Location', 'SouthWest')
+d.add(df);
+
+close gcf
+
+% with x scaled as SoC
+LW = {'LineWidth', 2};
+d.plotResults('noRawData', true, 'SoCx', true);
+hold on
+l = findobj(gcf, 'type', 'line');
+for i = 1:numel(l)
+    l(i).Color = const.grey;
+    l(i).LineWidth = 1;
+    l(i).LineStyle = '--';
+end
+pl_df = plot(Cd./max(Cd), df(Cd), 'Color', const.blue, LW{:});
+pl_int = plot(Cd./max(Cd), V, 'Color', const.red, LW{:});
+legend([pl_df, pl_int, l(1)], ...
+    {['fit at ', num2str(I_test),' A'],...
+    ['interpolation at ', num2str(I_test), ' A'],...
+    'curves used for interpolation'}, ...
+    'Location', 'SouthWest')
+d.add(df);
+
+close gcf
 
 disp('curvefitCollection tests passed')
