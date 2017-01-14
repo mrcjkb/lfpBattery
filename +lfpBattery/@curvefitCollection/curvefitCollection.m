@@ -23,9 +23,6 @@ classdef curvefitCollection < lfpBattery.sortedFunctions
     properties (Abstract)
         interpMethod; % Method for interpolation (see interp1)
     end
-    properties (Access = 'protected')
-        y; % Initialization of curve fit results that will be interpolated in iterp method.
-    end
     
     methods
         function c = curvefitCollection(varargin)
@@ -41,19 +38,14 @@ classdef curvefitCollection < lfpBattery.sortedFunctions
             %Syntax: y = INTERP(z, x);  Returns y for the the coordinates
             %                           [z, x]
             feval(c.errHandler, c); % make sure there are enough functions in the collection
-            for i = 1:numel(c.y)
-                cfit = c.xydata(i); % extract curve fit pointer
-                c.y(i) = cfit(x);
-            end
-            % interpolate 
-              y = interp1(c.z, c.y, z, c.interpMethod, 'extrap');
-              % use commented out code below to limit y to curve fits in a
-              % subclass
+            % interpolate with available curve fit returns at x
+            y = interp1(c.z, c.xydata{x}, z, c.interpMethod, 'extrap');
+            % use commented out code below to limit y to curve fits in a
+            % subclass
 %             y = lfpBattery.commons.upperlowerlim(...
-%                 interp1(c.z, c.y, z, c.interpMethod, 'extrap'), ...
-%                 min(c.y), max(c.y)); 
+%                 interp1(c.z, c.xydata{x}, z, c.interpMethod, 'extrap'), ...
+%                 min(c.y), max(c.y));
         end
-        
         function add(c, d)
             %ADD: Adds a curve fit object cf to a collection c.
             %     Syntax: c.ADD(cf)
@@ -62,11 +54,9 @@ classdef curvefitCollection < lfpBattery.sortedFunctions
             %existing one is replaced.
            c.validateInputInterface(d);
            c.add@lfpBattery.sortedFunctions(d);
-           c.y = zeros(size(c.z));
         end
         function remove(c, z)
             c.remove@lfpBattery.sortedFunctions(z);
-            c.y = zeros(size(c.z));
         end
         function plotResults(c, varargin)
             %PLOTRESULTS: Compares scatters of the raw data with the fits
@@ -92,6 +82,7 @@ classdef curvefitCollection < lfpBattery.sortedFunctions
             end
         end
     end
+    
     methods (Static)
         function validateInputInterface(obj)
             lfpBattery.commons.validateInterface(obj, 'lfpBattery.curveFitInterface');
