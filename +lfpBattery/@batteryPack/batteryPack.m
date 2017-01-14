@@ -5,11 +5,20 @@ classdef batteryPack < lfpBattery.batteryInterface & lfpBattery.composite
     properties (SetAccess = 'immutable')
         ageModelLevel = 'pack'; % 'pack' or 'cell'
     end
+    properties (Access = 'protected')
+        cells; % batteryCell objects % MTODO: create classes for different topologies (PS, SP,...)
+    end
     
     methods
-        function powerRequest(b, P, dt)
+%         function powerRequest(b, P, dt)
             % MTODO: implement charging function here
-        end
+%         end
+%         function adddfit(b, d)
+            % MTODO: add discharge fit handle to cells
+%         end
+%         function adddcurves(b, d)
+            % MTODO: add discharge curve handle to cells
+%         end
 %         function it = createIterator(b)
 %            % MTODO: create iterator class and implement this method
 %         end
