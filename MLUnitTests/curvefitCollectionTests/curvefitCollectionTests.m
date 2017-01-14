@@ -2,7 +2,9 @@ function curvefitCollectionTests
 %CURVEFITCOLLECTIONTESTS MLUnit tests for curvefit collections
 import lfpBattery.*
 load(fullfile(pwd, 'curvefitCollectionTests', 'rawCurves.mat'))
-
+for i = 1:6
+    raw(i).Cd = raw(i).Cd .* 1e-3; %#ok<AGROW> % convert from mAh to Ah
+end
 %% test functionality of error handling in add() and remove() methods
 d = dischargeCurves;
 err_msg = 'At least 3 objects must be added to the collection.';
