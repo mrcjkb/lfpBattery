@@ -10,9 +10,6 @@ classdef (Abstract) batteryInterface < handle
         socMax; % Max SoC
         socMin; % Min SoC
     end
-    properties (Dependent, SetAccess = 'immutable')
-        ageModel = 'on'; % Indicates whether aging model is on or off
-    end
     properties (Dependent, SetAccess = 'protected')
         SoC; % State of charge [0,..,1] % MTODO make observable
         SoH; % State of health [0,..,1]
@@ -21,6 +18,10 @@ classdef (Abstract) batteryInterface < handle
     properties (Dependent, Hidden)
         Qbu; % Useable left over capacity (soc.*C)
     end
+    properties (SetAccess = 'protected');
+       V; % Resting voltage / V
+       C; % Current capacity level / Ah
+    end
     properties (Hidden, SetAccess = 'protected', GetAccess = 'protected')
         soh0; % Last state of health
         cyc; % cycleCounter Object
@@ -28,27 +29,17 @@ classdef (Abstract) batteryInterface < handle
         soc_min;
         soc; % State of charge [eps,..,1] (used for calculations, because 0 is reserved)
     end
-    properties (Hidden, SetAccess = 'immutable',  GetAccess = 'protected')
-        ageTF = true; % Model battery aging (1/0 --> 'on'/'off')
-    end
     
     methods
         function b = batteryInterface(varargin)
             Cn_default = 5; % MTODO: change default value
             %% parse optional inputs
             p = inputParser;
-            % on/off switch for aging model
-            addOptional(p, 'agingModel', 'on', @(x) any(validatestring(x, {'on', 'off'})));
             addOptional(p, 'Cn', Cn_default, @isnumeric)
             addOptional(p, 'socMin', 0, @isnumeric)
             addOptional(p, 'socMax', 1, @isnumeric)
             addOptional(p, 'socIni', 0, @(x) x >= 0 && x <= 1)
             parse(p, varargin{:});
-            if strcmp(p.Results.agingModel, 'on')
-                b.ageTF = true;
-            else
-                b.ageTF = false;
-            end
             b.Cn = p.Results.Cn;
             b.socMin = p.Results.socMin;
             b.socMax = p.Results.socMax;
@@ -88,11 +79,8 @@ classdef (Abstract) batteryInterface < handle
             end
         end
         function a = get.SoH(b)
-            if b.ageTF
-                a = 0.9; % MTODO: implement aging model here
-            else
-                a = 1;
-            end
+            a = 1;
+            % MTODO: retrieve SoH from age model
         end
         function a = get.Q(b)
             a = b.SoH .* b.Cn; 
@@ -109,17 +97,10 @@ classdef (Abstract) batteryInterface < handle
                 a = 0;
             end
         end
-        function a = get.ageModel(b)
-            if b.ageTF
-                a = 'on';
-            else
-                a = 'off';
-            end
-        end % ageModel
     end % public methods
     
     methods (Abstract)
-        b = chargeRequest(b, P);
+        powerRequest(b, P, dt);
     end % abstract methods
 end
 
