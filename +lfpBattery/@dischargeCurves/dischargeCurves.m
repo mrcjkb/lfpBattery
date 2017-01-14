@@ -78,6 +78,17 @@ classdef dischargeCurves < lfpBattery.curvefitCollection
             % add a new dischargeFit object according to the input arguments
             d.add(lfpBattery.dischargeFit(V, C_dis, I, Temp, varargin{:}));
         end % dischargeFit
+        function v = interp(d, I, C)
+            %INTERP returns interpolated voltage in V between calculations of
+            %multiple dischargeCurves.
+            %Syntax: V = INTERP(I, C);
+            %
+            %V = voltage in V
+            %I = current in A
+            %C = capacity in Ah
+            v = d.interp@lfpBattery.curvefitCollection(abs(I), C);
+            % overloads curvefitCollection interp to use abs(z)
+        end
     end
 end
 
