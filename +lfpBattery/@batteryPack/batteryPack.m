@@ -7,7 +7,7 @@ classdef batteryPack < lfpBattery.batteryInterface & lfpBattery.composite
     end
     
     methods
-        function b = chargeRequest(b, P)
+        function powerRequest(b, P, dt)
             % MTODO: implement charging function here
         end
 %         function it = createIterator(b)
