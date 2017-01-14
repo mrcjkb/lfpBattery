@@ -55,9 +55,6 @@ classdef curvefitCollection < lfpBattery.sortedFunctions
            c.validateInputInterface(d);
            c.add@lfpBattery.sortedFunctions(d);
         end
-        function remove(c, z)
-            c.remove@lfpBattery.sortedFunctions(z);
-        end
         function plotResults(c, varargin)
             %PLOTRESULTS: Compares scatters of the raw data with the fits
             %in a figure window.
