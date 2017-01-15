@@ -18,25 +18,25 @@ classdef batteryCell < lfpBattery.batteryInterface
             if P > 0 % charge
                 b.reH = @gt; % greater than
                 b.socLim = b.socMax;
-                b.sd = false; % self-discharge
             else % discharge
                 if P == 0 % MTODO: calculate self-discharge
-                    b.sd = true;
+                    b.socLim = 0;
+%                     P = selfDischargePower;
                 else
-                    b.sd = false;
+                    b.socLim = b.socMin;
                 end
                 b.reH = @lt; % less than
-                b.socLim = b.socMin;
             end
             if abs(b.socLim - b.soc) > b.sTol
                 b.lastPr = P;
                 [P, b.Cd, b.V, b.soc] = b.iteratePower(P, dt);
+                % MTODO: handle battery efficiency here.
             else
                 P = 0;
             end
         end % powerRequest
         function [P, Cd, V, soc] = iteratePower(b, P, dt)
-            I = P ./ b.V; % MTODO: Limit I according to data sheet
+            I = P ./ b.V; 
             Cd = b.Cd - I .* dt ./ 3600;
             V = b.interp(I, Cd);
             Pit = I .* mean([b.V; V]);
@@ -44,15 +44,19 @@ classdef batteryCell < lfpBattery.batteryInterface
             if abs(err) > b.pTol && b.pct < b.maxIterations
                 b.pct = b.pct + 1;
                 [P, Cd, V, soc] = b.iteratePower(P + err, dt);
-            elseif P ~= 0
+            elseif abs(I) > b.Imax % Limit power according to max current using recursion
+                    P = sign(I) .* b.Imax .* mean([b.V; V]);
+                    b.lastPr = P;
+                    [P, Cd, V, soc] = b.iteratePower(P, dt);
+            end
+            if P ~= 0 % Limit power according to SoC using recursion
                 b.pct = 0;
-                % Limit power here using recursion
                 soc = 1 - Cd ./ b.Cn;
                 os = soc - b.soc; % charged
                 req = b.socLim - b.soc; % required to reach limit
                 err = (req - os) ./ os;
                 if (b.reH(soc, b.socLim) || b.slTF) && abs(err) > b.sTol ...
-                        && ~b.sd && b.sct < b.maxIterations 
+                        && b.sct < b.maxIterations 
                     b.sct = b.sct + 1;
                     b.slTF = true; % indicate that SoC limiting is active
                     % correct power request

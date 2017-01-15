@@ -25,7 +25,7 @@ classdef (Abstract) batteryInterface < handle
     end
     properties (SetAccess = 'protected');
        V; % Resting voltage / V
-       Imax = 0; % maximum current (determined from cell discharge curves)
+       Imax = 0; % maximum current in A (determined from cell discharge curves)
     end
     properties (Access = 'protected')
         soh0; % Last state of health
@@ -40,9 +40,8 @@ classdef (Abstract) batteryInterface < handle
         lastPr = 0; % last power request (for handling powerIteration through recursion)
         reH; % function handle: @gt for charging and @lt for discharging
         socLim; % SoC to limit charging/discharging to (depending on charging or discharging)
-        sd = false; % true if soc limitation is active
     end
-    properties %(SetObservable, Access = 'protected')
+    properties (SetObservable, Access = 'protected')
         soc; % State of charge (for internal handling)
     end
     methods
