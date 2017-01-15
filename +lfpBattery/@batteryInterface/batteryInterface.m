@@ -3,7 +3,7 @@ classdef (Abstract) batteryInterface < handle
     %models.
     
     properties
-       maxIterations = 1e3; % maximum number of iterations
+       maxIterations = uint32(1e3); % maximum number of iterations
        pTol = 1e-6; % tolerance for power iteration
        sTol = 1e-6; % tolerance for SoC limitation iteration
     end
@@ -23,10 +23,10 @@ classdef (Abstract) batteryInterface < handle
     properties %(Access = 'protected')
         Cd; % Discharge capacity in Ah (Cd = 0 if SoC = 1)
     end
-    properties %(SetAccess = 'protected');
+    properties (SetAccess = 'protected');
        V; % Resting voltage / V
     end
-    properties %(Access = 'protected')
+    properties (Access = 'protected')
         soh0; % Last state of health
         cyc; % cycleCounter Object
         soc_max;
@@ -34,11 +34,11 @@ classdef (Abstract) batteryInterface < handle
         CnMax; % maximum discharge capacity
         CnMin; % minimum discharge capacity
         slTF = false; % true/false variable for limitation of SoC in recursive iteration
-        pct = 0; % counter for power iteration
-        sct = 0; % counter for soc limiting iteration
+        pct = uint32(0); % counter for power iteration
+        sct = uint32(0); % counter for soc limiting iteration
         lastPr = 0; % last power request (for handling powerIteration through recursion)
     end
-    properties %(SetObservable, Access = 'protected')
+    properties (SetObservable, Access = 'protected')
         soc; % State of charge (for internal handling)
     end
     methods
@@ -116,7 +116,7 @@ classdef (Abstract) batteryInterface < handle
             b.soc_max = s;
         end
         function set.maxIterations(b, n)
-            b.maxIterations = max(1, n);
+            b.maxIterations = uint32(max(1, n));
         end
         function set.pTol(b, tol)
             b.pTol = abs(tol);

@@ -105,7 +105,7 @@ classdef (Abstract) cycleCounter < handle
             %cycleCounter object c. If a new full cycle is reached, the count() method is
             %called.
             if soc ~= c.soc0 % ignore idle states
-                if soc == c.socMax % full cycle reached
+                if soc >= c.socMax % full cycle reached
                     cdoc = c.cDoC;
                     c.addSoC(soc);
                     c.count; % count cycles

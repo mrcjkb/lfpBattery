@@ -79,12 +79,7 @@ classdef batteryCell < lfpBattery.batteryInterface
                     % correct power request
                     P = b.lastPr + err .* b.lastPr;
                     b.lastPr = P;
-                    if isnan(P)
-                        error('here?')
-                    end
                     P = b.iteratePower(P, dt, reH, socLim, sd);
-                    % BUG: Attempting to exceed limit once limit is set results
-                    % in long iteration
                 else
                     b.sct = 0;
                     b.slTF = false;
