@@ -6,6 +6,9 @@ classdef batteryCell < lfpBattery.batteryInterface
     end
     
     methods
+        function b = batteryCell(varargin)
+           b@lfpBattery.batteryInterface(varargin{:}) 
+        end
         function P = powerRequest(b, P, dt)
             % P:  power in W
             % dt: size of time step in S
@@ -51,29 +54,48 @@ classdef batteryCell < lfpBattery.batteryInterface
     methods (Access = 'protected')
         function P = iteratePower(b, P, dt, pmH, reH, socLim, sd)
             %ITERATEPOWER: Iteration to determine current and new state using recursion
-            I = P ./ b.V; % MTODO: Limit I according to data sheet
-            Cd = b.Cd - I .* dt ./ 3600;
-            V = b.interp(I, Cd);
-            Pit = I .* mean([b.V; V]);
-            err = P - Pit;
-            if abs(err) > b.pTol && b.pct < b.maxIterations
-                b.pct = b.pct + 1;
-                b.iteratePower(P + err, dt, pmH, reH, socLim, sd);
-            elseif P ~= 0
+            P0 = P;
+            err = b.pTol + 1e3;
+            while abs(err) > b.pTol && b.pct < b.maxIterations
+                I = P0 ./ b.V; % MTODO: Limit I according to data sheet
+                Cd = b.Cd - I .* dt ./ 3600;
+                V = b.interp(I, Cd);
+                Pit = I .* mean([b.V; V]);
+                err = P - Pit;
+                P0 = P0 + err;
+            end
+            P = Pit;    
+%             I = P ./ b.V; % MTODO: Limit I according to data sheet
+%             Cd = b.Cd - I .* dt ./ 3600;
+%             V = b.interp(I, Cd);
+%             Pit = I .* mean([b.V; V]);
+%             err = P - Pit;
+%             if abs(err) > b.pTol && b.pct < b.maxIterations
+%                 b.pct = b.pct + 1;
+%                 disp(Pit)
+%                 pause(0.5)
+%                 b.iteratePower(P + err, dt, pmH, reH, socLim, sd);
+% else
+              if P ~= 0
                 b.pct = 0;
                 % Limit power here using recursion
                 soc = 1 - Cd ./ b.Cn;
                 ous = socLim - soc; % over-/under shot
                 req = socLim - b.soc; % required to reach limit
                 if (reH(soc, socLim) || b.slTF) && abs(ous) > b.sTol ...
-                        && b.sct < b.maxIterations && ~sd
+                        && b.sct < b.maxIterations && ~sd && abs(req) > b.sTol
                     b.sct = b.sct + 1;
                     b.slTF = true; % indicate that SoC limiting is active
                     % correct power request
-                    P = b.iteratePower(pmH(P, P.*req./abs(ous)), dt, pmH, reH, socLim, sd);
+                    P2 = P + P.*req./ous;
+                    if isnan(P2)
+                        error('here?')
+                    end
+                    P = b.iteratePower(P, dt, pmH, reH, socLim, sd);
                     % BUG: Attempting to exceed limit once limit is set results
                     % in long iteration
                 else
+                    disp(P)
                     b.sct = 0;
                     b.slTF = false;
                     b.Cd = Cd;
