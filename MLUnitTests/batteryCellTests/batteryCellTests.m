@@ -20,6 +20,10 @@ for i = 1:100
 end
 assert(isequal(b.SoC, 1), 'Unexpected upper SoC limitation')
 
+%% Init batteryCell with ageModel
+batteryCell('ageModel', 'EO');
+batteryCell('cycleCounter', dummyCycleCounter);
+batteryCell('ageModel', dummyAgeModel);
 %%
 disp('batteryCell tests passed')
 

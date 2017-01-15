@@ -115,9 +115,7 @@ classdef (Abstract) batteryInterface < handle
             if ~isempty(b.hl)
                 delete(b.hl)
             end
-            if ~isempty(b.sl)
-                delete(b.sl)
-            end
+            
             if ~strcmp(p.Results.ageModel, 'none')
                 if strcmp(p.Results.cycleCounter, 'auto')
                     cy = lfpBattery.dambrowskiCounter(b.soc, b.socMax);
@@ -126,11 +124,9 @@ classdef (Abstract) batteryInterface < handle
                     cy.socMax = b.socMax;
                 end
                 b.cyc = cy;
-                % Make sure the cycleCounter's lUpdate method is called
-                % every time the soc property changes.
-                b.sl = addlistener(b, 'soc', 'PostSet', @cy.lUpdate);
+                
                 if strcmp(p.Results.ageModel, 'EO')
-                    b.ageModel = lfpBattery.eoAgeModel(b.cyc);
+                    b.ageModel = lfpBattery.eoAgeModel(cy);
                 else
                     b.ageModel = p.Results.ageModel;
                     b.addCounter(b.cyc)
@@ -142,6 +138,15 @@ classdef (Abstract) batteryInterface < handle
                 b.cyc = lfpBattery.dummyCycleCounter;
                 b.ageModel = lfpBattery.dummyAgeModel;
             end
+        end % initAgeModel
+        function addCounter(b, cy)
+            if ~isempty(b.sl)
+                delete(b.sl)
+            end
+            % Make sure the cycleCounter's lUpdate method is called
+            % every time the soc property changes.
+            b.sl = addlistener(b, 'soc', 'PostSet', @cy.lUpdate);
+            b.ageModel.addCounter(cy);
         end
         %% setters
         function set.socMin(b, s)
@@ -205,12 +210,23 @@ classdef (Abstract) batteryInterface < handle
             addOptional(p, 'socMin', 0.2, @isnumeric)
             addOptional(p, 'socMax', 1, @isnumeric)
             addOptional(p, 'socIni', 0.2, @(x) x >= 0 && x <= 1)
+            validModels = {'auto'};
+            type = 'lfpBattery.cycleCounter';
             addOptional(p, 'cycleCounter', 'auto', ...
-                @(x)strcmp(x, 'auto') | lfpBattery.commons.itfcmp(x, 'lfpBattery.cycleCounter'))
+                @(x) lfpBattery.batteryInterface.validateAM(x, validModels, type))
             validModels = {'none', 'EO'};
+            type = 'lfpBattery.batteryAgeModel';
             addOptional(p, 'ageModel', 'none', ...
-                @(x)any(validatestring(x, validModels)) | lfpBattery.commons.itfcmp(x, 'lfpBattery.batteryAgeModel'))
+                @(x) lfpBattery.batteryInterface.validateAM(x, validModels, type))
             parse(p, varargin{:});
+        end
+        function tf = validateAM(x, validModels, type)
+            % validates age model & cycle counter inputs
+            if ischar(x)
+                tf = any(validatestring(x, validModels));
+            else
+                tf = lfpBattery.commons.itfcmp(x, type);
+            end
         end
     end
     
