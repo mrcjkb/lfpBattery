@@ -104,5 +104,6 @@ legend([pl_int, l(1)], ...
     ['interpolation at ', num2str(I_test), ' A']}, ...
     'Location', 'SouthWest')
 
+close gcf
 %%
 disp('curvefitCollection tests passed')
