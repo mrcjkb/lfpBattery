@@ -30,7 +30,8 @@ classdef (Abstract) batteryInterface < handle
     end
     properties (Access = 'protected')
         soh0; % Last state of health
-        cyc; % cycleCounter Object
+        cyc; % cycleCounter object
+        ageModel; % batteryAgeModel object
         soc_max;
         soc_min;
         CnMax; % maximum discharge capacity
@@ -54,6 +55,11 @@ classdef (Abstract) batteryInterface < handle
             addOptional(p, 'socMin', 0.2, @isnumeric)
             addOptional(p, 'socMax', 1, @isnumeric)
             addOptional(p, 'socIni', 0.2, @(x) x >= 0 && x <= 1)
+            addOptional(p, 'cycleCounter', 'auto', ...
+                @(x)strcmp(x, 'auto') | lfpBattery.commons.itfcmp(x, 'lfpBattery.cycleCounter'))
+            validModels = {'none', 'EO'};
+            addOptional(p, 'ageModel', 'none', ...
+                @(x)any(validatestring(x, validModels)) | lfpBattery.commons.itfcmp(x, 'lfpBattery.batteryAgeModel'))
             parse(p, varargin{:});
             b.Cn = p.Results.Cn;
             b.socMin = p.Results.socMin;
@@ -63,6 +69,28 @@ classdef (Abstract) batteryInterface < handle
             b.CnMin = (1 - b.socMax) .* b.Cn;
             b.Cd = (1 - b.SoC) .* b.Cn;
             b.V = 3; % MTODO: Set init voltage according to discharge capacity and nominal current
+            
+            %% set up age model
+            if ~strcmp(p.Results.ageModel, 'none')
+                if strcmp(p.Results.cycleCounter, 'auto')
+                    b.cyc = dambrowskiCounter(b.soc, b.socMax);
+                else
+                    b.cyc = p.Results.cycleCounter;
+                end
+                % Make sure the cycleCounter's lUpdate method is called
+                % every time the soc property changes.
+                addlistener(b, 'soc', 'PostSet', @b.cyc.lUpdate)
+                if strcmp(p.Results.ageModel, 'EO')
+                    b.ageModel = eoAgeModel(b.cyc);
+                else
+                    b.ageModel = p.Results.ageModel;
+                    b.addCounter(b.cyc)
+                end
+                % Make sure the battery model's SoH is updated every time
+                % the age model's SoH changes.
+                addlistener(b.ageModel, 'SoH', 'PostSet', @b.updateSoH);
+            end
+            
         end % constructor
         function dischargeFit(b, V, C_dis, I, Temp, varargin)
             %DISCHARGEFIT: Uses Levenberg-Marquardt algorithm to fit a
@@ -132,10 +160,6 @@ classdef (Abstract) batteryInterface < handle
             b.iTol = abs(tol);
         end
         %% getters
-        function a = get.SoH(b)
-            a = 1;
-            % MTODO: retrieve SoH from age model
-        end
         function a = get.SoC(b)
             a = lfpBattery.commons.upperlowerlim(b.soc, 0, b.socMax);
         end
@@ -155,7 +179,11 @@ classdef (Abstract) batteryInterface < handle
             end
         end
     end % public methods
-    
+    methods (Access = 'protected')
+        function updateSoH(b, src, ~)
+            b.SoH = src.SoH;
+        end
+    end
     methods (Abstract)
         P = powerRequest(b, P, dt); % Method for requesting power
         adddfit(b, d); % adds a discharge curve fit.
@@ -176,7 +204,7 @@ classdef (Abstract) batteryInterface < handle
         % soc    -   State of charge [0,..,1]
         [P, Cd, V, soc] = iteratePower(b, P, dt, reH, socLim, sd);
     end % abstract methods
-
+    
     methods (Abstract, Access = 'protected')
         findImax(b); % determins the maximum current according to the discharge curves
     end

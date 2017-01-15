@@ -31,6 +31,9 @@ classdef (Abstract) batteryAgeModel < handle
         % or at an SoH of 80 %, respectively.
         eolAc;
     end
+    properties (Access = 'protected')
+       lh; % Event listener (observer) 
+    end
     events
         EolReached; % Notifys listeners (observers) that the end of life specified by eolSoH has been reached
     end
@@ -56,10 +59,9 @@ classdef (Abstract) batteryAgeModel < handle
             if nargin < 3
                 init_soh = 1;
             end
-            % Make sure cy is a subclass of cycleCounter and register this class
-            % as an observer/listener
-            lfpBattery.commons.validateInterface(cy, 'lfpBattery.cycleCounter')
-            addlistener(cy, 'NewCycle', @b.addAging);
+            if nargin > 0
+                b.addCounter(cy)
+            end
             % Make sure values are between 0 and 1
             lfpBattery.commons.onezeroChk(eols, 'eol')
             lfpBattery.commons.onezeroChk(init_soh, 'init_soh')
@@ -83,6 +85,15 @@ classdef (Abstract) batteryAgeModel < handle
         end
         function a = get.eolAc(b)
             a = 1 - b.eolSoH;
+        end
+        function addCounter(b, cy)
+            % Make sure cy is a subclass of cycleCounter and register this class
+            % as an observer/listener
+            lfpBattery.commons.validateInterface(cy, 'lfpBattery.cycleCounter')
+            if ~isempty(b.lh)
+                delete(b.lh)
+            end
+            b.lh = addlistener(cy, 'NewCycle', @b.addAging);
         end
     end
     methods (Abstract, Access = 'protected')
