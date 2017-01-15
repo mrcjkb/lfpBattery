@@ -12,9 +12,14 @@ classdef commons
         function validateInterface(obj, name)
             % VALIDATEINTERFACE: Checks the superclasses to make sure the class obj subclasses
             % the superclass name
-            if ~any(ismember(superclasses(obj), name))
+            if ~lfpBattery.commons.itfcmp(obj, name)
                 error('Specified object does not implement the correct interface.')
             end
+        end
+        function tf = itfcmp(obj, name)
+            % ITFCMP: Compares the class of obj to the name and returns
+            % true if obj implements the interface specified by name.
+            tf = any(ismember(superclasses(obj), name));
         end
         function y = upperlowerlim(y, low, high)
             % UPPERLOWERLIM: Limits y to interval [low, high]
