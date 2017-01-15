@@ -10,6 +10,9 @@ classdef batteryPack < lfpBattery.batteryInterface & lfpBattery.composite
     end
     
     methods
+        function b = batteryPack(varargin)
+            b@lfpBattery.batteryInterface(varargin{:})
+        end
 %         function powerRequest(b, P, dt)
             % MTODO: implement charging function here
 %         end
