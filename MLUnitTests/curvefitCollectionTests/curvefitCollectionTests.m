@@ -97,6 +97,12 @@ for i = 1:numel(Cd)
     V(i) = d.interp(I_test, Cd(i));
 end
 d.plotResults('noRawData', true)
+l = findobj(gcf, 'type', 'line');
 pl_int = plot(Cd, V, 'Color', const.red, LW{:});
+legend([pl_int, l(1)], ...
+    {'fits',...
+    ['interpolation at ', num2str(I_test), ' A']}, ...
+    'Location', 'SouthWest')
 
+%%
 disp('curvefitCollection tests passed')
