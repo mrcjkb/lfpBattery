@@ -4,8 +4,13 @@ function batteryCellTests
 
 import lfpBattery.*
 load(fullfile(pwd, 'batteryCellTests', 'dcCurves.mat'))
+
+%% Initialization
 b = batteryCell;
 b.adddcurves(d)
 
+
+
+%%
 disp('batteryCell tests passed')
 

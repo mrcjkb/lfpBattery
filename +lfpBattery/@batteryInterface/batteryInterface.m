@@ -5,7 +5,7 @@ classdef (Abstract) batteryInterface < handle
     properties
        maxIterations = 1e3; % maximum number of iterations
        pTol = 1e-6; % tolerance for power iteration
-       sTol = 1e-3; % tolerance for SoC limitation iteration
+       sTol = 1e-6; % tolerance for SoC limitation iteration
     end
     properties (SetAccess = 'immutable')
        Cn; % Nominal capacity in Ah 
@@ -26,7 +26,7 @@ classdef (Abstract) batteryInterface < handle
     properties %(SetAccess = 'protected');
        V; % Resting voltage / V
     end
-    properties (Access = 'protected')
+    properties %(Access = 'protected')
         soh0; % Last state of health
         cyc; % cycleCounter Object
         soc_max;
@@ -36,6 +36,7 @@ classdef (Abstract) batteryInterface < handle
         slTF = false; % true/false variable for limitation of SoC in recursive iteration
         pct = 0; % counter for power iteration
         sct = 0; % counter for soc limiting iteration
+        lastPr = 0; % last power request (for handling powerIteration through recursion)
     end
     properties %(SetObservable, Access = 'protected')
         soc; % State of charge (for internal handling)
@@ -157,7 +158,7 @@ classdef (Abstract) batteryInterface < handle
     methods (Abstract, Access = 'protected')
         % Method for determining the power via iteration
         % Called by powerRequest method
-        P = iteratePower(b, P, dt, pmH, reH, socLim, sd);
+        P = iteratePower(b, P, dt, reH, socLim, sd);
     end
 end
 
