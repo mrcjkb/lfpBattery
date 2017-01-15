@@ -17,12 +17,14 @@ classdef (Abstract) batteryInterface < handle
         socMin; % Min SoC
     end
     properties (Dependent, SetAccess = 'protected')
-        SoH; % State of health [0,..,1]
         SoC; % State of charge [0,..,1]
-        Q; % Left over nominal battery capacity in Ah (after aging)
     end
-    properties (Access = 'protected')
+    properties (Dependent, Access = 'protected')
+       Q; % Left over nominal battery capacity in Ah (after aging) 
+    end
+    properties (SetAccess = 'protected')
         Cd; % Discharge capacity in Ah (Cd = 0 if SoC = 1)
+        SoH; % State of health [0,..,1]
     end
     properties (SetAccess = 'protected');
        V; % Resting voltage / V
@@ -43,7 +45,7 @@ classdef (Abstract) batteryInterface < handle
         reH; % function handle: @gt for charging and @lt for discharging
         socLim; % SoC to limit charging/discharging to (depending on charging or discharging)
     end
-    properties (SetObservable, Access = 'protected')
+    properties (SetObservable, Hidden, SetAccess = 'protected')
         soc; % State of charge (for internal handling)
     end
     methods
@@ -73,15 +75,17 @@ classdef (Abstract) batteryInterface < handle
             %% set up age model
             if ~strcmp(p.Results.ageModel, 'none')
                 if strcmp(p.Results.cycleCounter, 'auto')
-                    b.cyc = dambrowskiCounter(b.soc, b.socMax);
+                    cyc = lfpBattery.dambrowskiCounter(b.soc, b.socMax);
                 else
-                    b.cyc = p.Results.cycleCounter;
+                    cyc = p.Results.cycleCounter;
+                    cyc.socMax = b.socMax;
                 end
+                b.cyc = cyc;
                 % Make sure the cycleCounter's lUpdate method is called
                 % every time the soc property changes.
-                addlistener(b, 'soc', 'PostSet', @b.cyc.lUpdate)
+                addlistener(b, 'soc', 'PostSet', @cyc.lUpdate)
                 if strcmp(p.Results.ageModel, 'EO')
-                    b.ageModel = eoAgeModel(b.cyc);
+                    b.ageModel = lfpBattery.eoAgeModel(b.cyc);
                 else
                     b.ageModel = p.Results.ageModel;
                     b.addCounter(b.cyc)
@@ -180,8 +184,8 @@ classdef (Abstract) batteryInterface < handle
         end
     end % public methods
     methods (Access = 'protected')
-        function updateSoH(b, src, ~)
-            b.SoH = src.SoH;
+        function updateSoH(b, ~, event)
+            b.SoH = event.AffectedObject.SoH;
         end
     end
     methods (Abstract)

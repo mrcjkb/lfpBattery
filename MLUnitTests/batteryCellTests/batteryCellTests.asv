@@ -1,0 +1,20 @@
+function batteryCellTests
+%BATTERYCELLTESTS Summary of this function goes here
+%   Detailed explanation goes here
+
+import lfpBattery.*
+load(fullfile(pwd, 'MLUnitTests', 'batteryCellTests', 'dcCurves.mat'))
+
+%% Initialization
+b = batteryCell;
+b.adddcurves(d)
+dt = 60;
+
+%% Charge and discharge with current and SoC limiting tests
+P = b.powerRequest(500, dt);
+assert(P < 500, 'current 
+
+
+%%
+disp('batteryCell tests passed')
+

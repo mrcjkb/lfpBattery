@@ -73,7 +73,7 @@ classdef dambrowskiCounter < lfpBattery.cycleCounter
             %% eliminate extensive peaks [with diff(SoC) == 0]
             SoC([false; diff(SoC) == 0]) = [];
             SoC(SoC == 0) = eps; % zeros are reserved for possible expanding matrices
-            %% find indexex of maxima
+            %% find indexes of maxima
             imax = c.iMaxima;
             if ~isempty(imax)
                 nmax = int32(numel(imax));

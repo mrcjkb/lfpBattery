@@ -41,13 +41,13 @@ classdef (Abstract) cycleCounter < handle
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
     %         November 2016
     
-    properties (SetAccess = 'protected')
+    properties (SetAccess = 'protected', Hidden)
         cDoC; % cycle - depth of cycle histogram
     end % public properties
     properties (GetAccess = 'protected', Hidden = true)
         socMax; % maximum allowed soc
     end
-    properties (SetAccess = 'protected', GetAccess = 'protected', Hidden = true)
+    properties (Access = 'protected')
         currCycle; % current SoC profile between two socMax
         ct = int32(1); % counter for "intelligent indexing"
         soc0; % last soc
@@ -95,10 +95,10 @@ classdef (Abstract) cycleCounter < handle
             c.socMax = soc_max;
         end % constructor
         %%
-        function lUpdate(c, src, ~)
+        function lUpdate(c, ~, event)
             %LUPDATE: Add this method to a battery model b using it's
             %addlistener method.
-            c.update(src.soc);
+            c.update(event.AffectedObject.soc);
         end
         function update(c, soc)
             %UPDATE: Use this method to add a new SoC value to a
@@ -106,15 +106,17 @@ classdef (Abstract) cycleCounter < handle
             %called.
             if soc ~= c.soc0 % ignore idle states
                 if soc >= c.socMax % full cycle reached
-                    cdoc = c.cDoC;
-                    c.addSoC(soc);
+                    % In case of tolerances, set start and end values equal
+                    c.addSoC(c.socMax);
+                    % Make sure counting is correct
                     c.count; % count cycles
                     % reset SoC
                     c.currCycle = c.currCycle.*0;
                     c.ct = int32(1);
-                    c.currCycle(1) = soc;
-                    if ~isequal(cdoc, c.cDoC) % make sure algorithm didn't count the same cycles twice
+                    c.currCycle(1) = c.socMax;
+                    if ~isempty(c.cDoC) % make sure algorithm didn't count the same cycles twice
                         notify(c, 'NewCycle'); % notify listeners about new full cycle being reached
+                        c.cDoC = [];
                     end
                 else
                     c.addSoC(soc);
@@ -132,7 +134,7 @@ classdef (Abstract) cycleCounter < handle
     end
     
     %% protected methods
-    methods (Access = 'protected')
+    methods %(Access = 'protected')
         function addSoC(c, soc)
             %ADDSOC: increments indexing counter and adds soc to currCycle
             c.ct = c.ct + 1;
@@ -152,8 +154,8 @@ classdef (Abstract) cycleCounter < handle
             %
             %NOTE: NaNs are not filtered in this function.
             
-            Nt = numel(c.currCycle(1:c.ct));
-            a = int32((1:Nt)');
+            Nt = int32(numel(c.currCycle(1:c.ct)));
+            a = (1:Nt)';
             b = (diff(c.currCycle(1:c.ct)) > 0);     %1  =>  positive slope (begin of minima)
             %0  =>  negative slope (begin of maxima)
             xb  = diff(b);          %-1 =>  indices of maxima
@@ -177,6 +179,7 @@ classdef (Abstract) cycleCounter < handle
                     imax(end+1) = Nt;
                 end
             end
+            imax = unique([1; imax(:); Nt]);
         end % iMaxima
     end % protected methods
 end % of classdef
