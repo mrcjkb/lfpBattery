@@ -63,12 +63,14 @@ classdef batteryCell < lfpBattery.batteryInterface
                 b.pct = 0;
                 % Limit power here using recursion
                 soc = 1 - Cd ./ b.Cn;
-                err = socLim - soc; % relative error
-                if (reH(soc, socLim) || b.slTF) && abs(err) > b.sTol ...
+                ous = socLim - soc; % over-/under shot
+                req = socLim - b.soc; % required to reach limit
+                if (reH(soc, socLim) || b.slTF) && abs(ous) > b.sTol ...
                         && b.sct < b.maxIterations && ~sd
                     b.sct = b.sct + 1;
-                    b.slTF = true; % indicate that SoC
-                    P = b.iteratePower(pmH(P, P.*err), dt, pmH, reH, socLim, sd);
+                    b.slTF = true; % indicate that SoC limiting is active
+                    % correct power request
+                    P = b.iteratePower(pmH(P, P.*req./abs(ous)), dt, pmH, reH, socLim, sd);
                     % BUG: Attempting to exceed limit once limit is set results
                     % in long iteration
                 else

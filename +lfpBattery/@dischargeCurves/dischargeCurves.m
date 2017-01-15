@@ -25,6 +25,8 @@ classdef dischargeCurves < lfpBattery.curvefitCollection
     end
     properties (Access = 'protected')
         minFuns = 3; % Minimum number of functions permitted
+        Imin; % minimum current
+        Imax; % maximum current
     end
     
     methods
@@ -86,8 +88,33 @@ classdef dischargeCurves < lfpBattery.curvefitCollection
             %V = voltage in V
             %I = current in A
             %C = capacity in Ah
-            v = d.interp@lfpBattery.curvefitCollection(abs(I), C);
-            % overloads curvefitCollection interp to use abs(z)
+            %
+            %NOTE: Due to the fact that an extrapolation of low and high
+            %currents leads to bad results at a low SoC, the current is
+            %limited to the dischargeCurve's maximum and minimum current
+            %recordings (property: z)
+            I = lfpBattery.commons.upperlowerlim(abs(I), d.Imin, d.Imax);
+            % abs(I) is used for discharge curves
+            v = d.interp@lfpBattery.curvefitCollection(I, C);
+        end
+        function add(d, cf)
+            %ADD: Adds a curve fit object cf to a dischargeCurve object d.
+            %     Syntax: d.ADD(cf)
+            %
+            %If an object cf with the same current exists, the
+            %existing one is replaced.
+            d.add@lfpBattery.curvefitCollection(cf);
+            d.setCurrentLims
+        end
+        function remove(d, z)
+            d.remove@lfpBattery.curvefitCollection(z);
+            d.setCurrentLims
+        end
+    end
+    methods (Access = 'protected')
+        function setCurrentLims(d)
+            d.Imin = min(d.z);
+            d.Imax = max(d.z);
         end
     end
 end

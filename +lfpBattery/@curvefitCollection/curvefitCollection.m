@@ -39,7 +39,7 @@ classdef curvefitCollection < lfpBattery.sortedFunctions
             %                           [z, x]
             feval(c.errHandler, c); % make sure there are enough functions in the collection
             % interpolate with available curve fit returns at x
-            y = interp1(c.z, c.xydata{x}, z, c.interpMethod, 'extrap');
+            y = interp1(c.z, c.xydata{x}, z, c.interpMethod);
             % use commented out code below to limit y to curve fits in a
             % subclass
 %             y = lfpBattery.commons.upperlowerlim(...

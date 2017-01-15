@@ -89,4 +89,14 @@ d.add(df);
 
 close gcf
 
+%% plot low current curve
+I_test = 0.01;
+Cd = linspace(min(raw(1).Cd), max(raw(1).Cd), 1000)';
+V = zeros(size(Cd));
+for i = 1:numel(Cd)
+    V(i) = d.interp(I_test, Cd(i));
+end
+d.plotResults('noRawData', true)
+pl_int = plot(Cd, V, 'Color', const.red, LW{:});
+
 disp('curvefitCollection tests passed')
