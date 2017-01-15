@@ -3,13 +3,14 @@ function batteryCellTests
 %   Detailed explanation goes here
 
 import lfpBattery.*
-load(fullfile(pwd, 'batteryCellTests', 'dcCurves.mat'))
+load(fullfile(pwd, 'MLUnitTests', 'batteryCellTests', 'dcCurves.mat'))
 
 %% Initialization
 b = batteryCell;
 b.adddcurves(d)
 
 
+% Charge and discharge
 
 %%
 disp('batteryCell tests passed')

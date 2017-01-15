@@ -29,7 +29,7 @@ if nargin > 0
 end
 import lfpBattery.*
 st = pwd;
-[p, ~] = fileparts(which('lfpBatteryTests'));
+[p, ~] = fileparts(fileparts(which('lfpBatteryTests')));
 cd(p)
 
 %% call lfpBattery MLUnit tests

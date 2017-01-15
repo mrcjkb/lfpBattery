@@ -2,7 +2,7 @@
 function ageModelTests
 import lfpBattery.*
 
-load(fullfile(pwd,'ageModelTests', 'testInputs.mat'))
+load(fullfile(pwd, 'MLUnitTests', 'ageModelTests', 'testInputs.mat'))
 
 socMax = 0.8;
 socMin = 0.2;

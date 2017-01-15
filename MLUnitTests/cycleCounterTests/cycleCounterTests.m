@@ -9,7 +9,7 @@ cl = ccListener(c);
 warning('off', 'all')
 a = eoAgeModel(c);
 warning('on', 'all')
-load(fullfile(pwd,'cycleCounterTests', 'testInputs.mat'))
+load(fullfile(pwd, 'MLUnitTests', 'cycleCounterTests', 'testInputs.mat'))
 
 cDoC = [];
 cDoC0 = 0;

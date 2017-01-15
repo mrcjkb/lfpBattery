@@ -1,7 +1,7 @@
 function curvefitCollectionTests
 %CURVEFITCOLLECTIONTESTS MLUnit tests for curvefit collections
 import lfpBattery.*
-load(fullfile(pwd, 'curvefitCollectionTests', 'rawCurves.mat'))
+load(fullfile(pwd, 'MLUnitTests',  'curvefitCollectionTests', 'rawCurves.mat'))
 for i = 1:6
     raw(i).Cd = raw(i).Cd .* 1e-3; %#ok<AGROW> % convert from mAh to Ah
 end
