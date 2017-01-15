@@ -134,7 +134,7 @@ classdef (Abstract) cycleCounter < handle
     end
     
     %% protected methods
-    methods %(Access = 'protected')
+    methods (Access = 'protected')
         function addSoC(c, soc)
             %ADDSOC: increments indexing counter and adds soc to currCycle
             c.ct = c.ct + 1;
