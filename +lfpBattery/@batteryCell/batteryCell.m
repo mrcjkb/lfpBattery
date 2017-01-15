@@ -44,13 +44,14 @@ classdef batteryCell < lfpBattery.batteryInterface
             if abs(err) > b.pTol && b.pct < b.maxIterations
                 b.pct = b.pct + 1;
                 [P, Cd, V, soc] = b.iteratePower(P + err, dt);
-            elseif abs(I) > b.Imax % Limit power according to max current using recursion
-                    P = sign(I) .* b.Imax .* mean([b.V; V]);
-                    b.lastPr = P;
-                    [P, Cd, V, soc] = b.iteratePower(P, dt);
-            end
-            if P ~= 0 % Limit power according to SoC using recursion
+            elseif abs(I) > b.Imax + b.iTol % Limit power according to max current using recursion
                 b.pct = 0;
+                P = sign(I) .* b.Imax .* mean([b.V; V]);
+                b.lastPr = P;
+                [P, Cd, V, soc] = b.iteratePower(P, dt);
+            end
+            b.pct = 0;
+            if P ~= 0 % Limit power according to SoC using recursion
                 soc = 1 - Cd ./ b.Cn;
                 os = soc - b.soc; % charged
                 req = b.socLim - b.soc; % required to reach limit

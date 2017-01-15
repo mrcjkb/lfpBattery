@@ -6,6 +6,7 @@ classdef (Abstract) batteryInterface < handle
        maxIterations = uint32(1e3); % maximum number of iterations
        pTol = 1e-6; % tolerance for power iteration
        sTol = 1e-6; % tolerance for SoC limitation iteration
+       iTol = 1e-6; % tolerance for current limitation iteration
     end
     properties (SetAccess = 'immutable')
        Cn; % Nominal capacity in Ah 
@@ -127,7 +128,9 @@ classdef (Abstract) batteryInterface < handle
         function set.sTol(b, tol)
             b.sTol = abs(tol);
         end
-        
+        function set.iTol(b, tol)
+            b.iTol = abs(tol);
+        end
         %% getters
         function a = get.SoH(b)
             a = 1;
