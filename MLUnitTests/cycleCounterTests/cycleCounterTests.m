@@ -6,7 +6,7 @@ socMin = 0.2;
 
 c = dambrowskiCounter(socMin, socMax);
 cl = ccListener(c);
-% load(fullfile(pwd, 'MLUnitTests', 'cycleCounterTests', 'testInputs.mat'))
+load(fullfile(pwd, 'MLUnitTests', 'cycleCounterTests', 'testInputs.mat'))
 
 for i = uint64(2):uint64(numel(soc))
     c.update(soc(i));
