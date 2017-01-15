@@ -60,7 +60,7 @@ classdef dambrowskiCounter < lfpBattery.cycleCounter
             c = c@lfpBattery.cycleCounter(varargin{:});
         end
         %% cycle counter
-        function c = count(c)
+        function count(c)
             %COUNT: Transforms the state-of-charge (SoC) profile into a
             %cycle-depth-of-discharge (cDoC) histogram using the method described
             %in J. Dambrowski, S. Pichlmaier, A. Jossen - "Mathematical methods for

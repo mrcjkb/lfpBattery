@@ -95,12 +95,12 @@ classdef (Abstract) cycleCounter < handle
             c.socMax = soc_max;
         end % constructor
         %%
-        function c = lUpdate(c, src, ~)
+        function lUpdate(c, src, ~)
             %LUPDATE: Add this method to a battery model b using it's
             %addlistener method.
             c.update(src.soc);
         end
-        function c = update(c, soc)
+        function update(c, soc)
             %UPDATE: Use this method to add a new SoC value to a
             %cycleCounter object c. If a new full cycle is reached, the count() method is
             %called.
@@ -128,12 +128,12 @@ classdef (Abstract) cycleCounter < handle
     methods (Abstract)
         % COUNT: Transforms the state-of-charge (SoC) profile into a
         % cycle-depth-of-discharge (cDoC) histogram using a specified cycle counting algorithm
-        c = count(c);
+        count(c);
     end
     
     %% protected methods
     methods (Access = 'protected')
-        function c = addSoC(c, soc)
+        function addSoC(c, soc)
             %ADDSOC: increments indexing counter and adds soc to currCycle
             c.ct = c.ct + 1;
             c.currCycle(c.ct) = soc;
