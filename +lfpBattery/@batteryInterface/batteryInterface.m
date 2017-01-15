@@ -20,11 +20,12 @@ classdef (Abstract) batteryInterface < handle
         SoC; % State of charge [0,..,1]
         Q; % Left over nominal battery capacity in Ah (after aging)
     end
-    properties %(Access = 'protected')
+    properties (Access = 'protected')
         Cd; % Discharge capacity in Ah (Cd = 0 if SoC = 1)
     end
     properties (SetAccess = 'protected');
        V; % Resting voltage / V
+       Imax = 0; % maximum current (determined from cell discharge curves)
     end
     properties (Access = 'protected')
         soh0; % Last state of health
@@ -37,8 +38,11 @@ classdef (Abstract) batteryInterface < handle
         pct = uint32(0); % counter for power iteration
         sct = uint32(0); % counter for soc limiting iteration
         lastPr = 0; % last power request (for handling powerIteration through recursion)
+        reH; % function handle: @gt for charging and @lt for discharging
+        socLim; % SoC to limit charging/discharging to (depending on charging or discharging)
+        sd = false; % true if soc limitation is active
     end
-    properties (SetObservable, Access = 'protected')
+    properties %(SetObservable, Access = 'protected')
         soc; % State of charge (for internal handling)
     end
     methods
@@ -99,7 +103,7 @@ classdef (Abstract) batteryInterface < handle
             %                   'both'          - (default) a combination (lsq, then fmin)
             
             % add a new dischargeFit object according to the input arguments
-            b.addDcurve(lfpBattery.dischargeFit(V, C_dis, I, Temp, varargin{:}));
+            b.adddfit(lfpBattery.dischargeFit(V, C_dis, I, Temp, varargin{:}));
         end
         %% setters
         function set.socMin(b, s)
@@ -154,11 +158,25 @@ classdef (Abstract) batteryInterface < handle
         P = powerRequest(b, P, dt); % Method for requesting power
         adddfit(b, d); % adds a discharge curve fit.
         adddcurves(b, d); % adds a collection of discharge curves
+        %ITERATEPOWER: Iteration to determine new state given a certain power.
+        % The state of the battery is not changed by this method.
+        % Syntax: [P, Cd, V, soc] = b.iteratePower(P, dt);
+        % 
+        % Input arguments: 
+        % b      -   Subclass of the batteryInterface (object calling the method)
+        % P      -   Requested charge or discharge power in W
+        % dt     -   Simulation time step size in s
+        % 
+        % Output arguments:
+        % P      -   Actual charge or discharge power in W
+        % Cd     -   Discharge capacity of the battery in Ah
+        % V      -   Resting voltage in V
+        % soc    -   State of charge [0,..,1]
+        [P, Cd, V, soc] = iteratePower(b, P, dt, reH, socLim, sd);
     end % abstract methods
+
     methods (Abstract, Access = 'protected')
-        % Method for determining the power via iteration
-        % Called by powerRequest method
-        P = iteratePower(b, P, dt, reH, socLim, sd);
+        findImax(b); % determins the maximum current according to the discharge curves
     end
 end
 

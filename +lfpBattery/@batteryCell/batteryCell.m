@@ -16,25 +16,55 @@ classdef batteryCell < lfpBattery.batteryInterface
             
             % set operator handles according to charge or discharge
             if P > 0 % charge
-                reH = @gt; % greater than
-                socLim = b.socMax;
-                sd = false; % self-discharge
+                b.reH = @gt; % greater than
+                b.socLim = b.socMax;
+                b.sd = false; % self-discharge
             else % discharge
                 if P == 0 % MTODO: calculate self-discharge
-                    sd = true;
+                    b.sd = true;
                 else
-                    sd = false;
+                    b.sd = false;
                 end
-                reH = @lt; % less than
-                socLim = b.socMin;
+                b.reH = @lt; % less than
+                b.socLim = b.socMin;
             end
-            if abs(socLim - b.soc) > b.sTol
+            if abs(b.socLim - b.soc) > b.sTol
                 b.lastPr = P;
-                P = b.iteratePower(P, dt, reH, socLim, sd);
+                [P, b.Cd, b.V, b.soc] = b.iteratePower(P, dt);
             else
                 P = 0;
             end
-        end
+        end % powerRequest
+        function [P, Cd, V, soc] = iteratePower(b, P, dt)
+            I = P ./ b.V; % MTODO: Limit I according to data sheet
+            Cd = b.Cd - I .* dt ./ 3600;
+            V = b.interp(I, Cd);
+            Pit = I .* mean([b.V; V]);
+            err = b.lastPr - Pit;
+            if abs(err) > b.pTol && b.pct < b.maxIterations
+                b.pct = b.pct + 1;
+                [P, Cd, V, soc] = b.iteratePower(P + err, dt);
+            elseif P ~= 0
+                b.pct = 0;
+                % Limit power here using recursion
+                soc = 1 - Cd ./ b.Cn;
+                os = soc - b.soc; % charged
+                req = b.socLim - b.soc; % required to reach limit
+                err = (req - os) ./ os;
+                if (b.reH(soc, b.socLim) || b.slTF) && abs(err) > b.sTol ...
+                        && ~b.sd && b.sct < b.maxIterations 
+                    b.sct = b.sct + 1;
+                    b.slTF = true; % indicate that SoC limiting is active
+                    % correct power request
+                    P = b.lastPr + err .* b.lastPr;
+                    b.lastPr = P;
+                    [P, Cd, V, soc] = b.iteratePower(P, dt);
+                else
+                    b.sct = 0;
+                    b.slTF = false;
+                end
+            end
+        end % iteratePower
         %% Methods handled by strategy objects
         function v = interp(b, I, C)
             v = b.dC.interp(I, C);
@@ -44,6 +74,7 @@ classdef batteryCell < lfpBattery.batteryInterface
                 b.dC = lfpBattery.dischargeCurves;
             end
             b.dC.add(d);
+            b.findImax();
         end
         function adddcurves(b, d)
             if isempty(b.dC) % initialize dC property with d
@@ -51,42 +82,16 @@ classdef batteryCell < lfpBattery.batteryInterface
             else % add d if dC exists already
                 b.dC.add(d)
             end
+            b.findImax();
         end
     end
     
     methods (Access = 'protected')
-        function P = iteratePower(b, P, dt, reH, socLim, sd)
-            %ITERATEPOWER: Iteration to determine current and new state using recursion  
-            I = P ./ b.V; % MTODO: Limit I according to data sheet
-            Cd = b.Cd - I .* dt ./ 3600;
-            V = b.interp(I, Cd);
-            Pit = I .* mean([b.V; V]);
-            err = b.lastPr - Pit;
-            if abs(err) > b.pTol && b.pct < b.maxIterations
-                b.pct = b.pct + 1;
-                P = b.iteratePower(P + err, dt, reH, socLim, sd);
-            elseif P ~= 0
-                b.pct = 0;
-                % Limit power here using recursion
-                soc = 1 - Cd ./ b.Cn;
-                os = soc - b.soc; % charged
-                req = socLim - b.soc; % required to reach limit
-                err = (req - os) ./ os;
-                if (reH(soc, socLim) || b.slTF) && abs(err) > b.sTol ...
-                        && ~sd% && abs(req) > b.sTol% && b.sct < b.maxIterations 
-                    b.sct = b.sct + 1;
-                    b.slTF = true; % indicate that SoC limiting is active
-                    % correct power request
-                    P = b.lastPr + err .* b.lastPr;
-                    b.lastPr = P;
-                    P = b.iteratePower(P, dt, reH, socLim, sd);
-                else
-                    b.sct = 0;
-                    b.slTF = false;
-                    b.Cd = Cd;
-                    b.V = V;
-                    b.soc = soc;
-                end
+        function findImax(b)
+            if ~isempty(b.dC)
+                b.Imax = max(b.dC.z);
+            else
+                b.Imax = 0;
             end
         end
     end

@@ -18,9 +18,11 @@ classdef batteryPack < lfpBattery.batteryInterface & lfpBattery.composite
 %         end
 %         function adddfit(b, d)
             % MTODO: add discharge fit handle to cells
+%             b.findImax();
 %         end
 %         function adddcurves(b, d)
             % MTODO: add discharge curve handle to cells
+            %b.findImax();
 %         end
 %         function it = createIterator(b)
 %            % MTODO: create iterator class and implement this method
