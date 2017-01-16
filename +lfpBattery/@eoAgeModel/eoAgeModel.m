@@ -16,12 +16,6 @@ classdef eoAgeModel < lfpBattery.batteryAgeModel
     %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt, December 2016
     
-    properties (Hidden, GetAccess = 'protected')
-        % woehlerFit object or function handle (must implement the curveFitInterface)
-        % of a cycles to failure = f(DoC) curve.
-        wFit;
-    end
-    
     methods
         function a = eoAgeModel(cy, cfit, eols, init_soh)
             % EOAGEMODEL(cy);                        Creates an eoAgeModel object that
@@ -53,13 +47,6 @@ classdef eoAgeModel < lfpBattery.batteryAgeModel
                 % (dividing by inf returns zero)
                 a.wFit = @(x) inf; 
             end
-        end
-        % setters
-        function set.wFit(a, fit)
-            if ~isa(fit, 'function_handle')
-                lfpBattery.commons.validateInterface(fit, 'lfpBattery.curveFitInterface')
-            end
-            a.wFit = fit;
         end
     end
     

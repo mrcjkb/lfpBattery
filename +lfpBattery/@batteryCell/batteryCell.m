@@ -7,22 +7,21 @@ classdef batteryCell < lfpBattery.batteryInterface
     
     methods
         function b = batteryCell(varargin)
-           b@lfpBattery.batteryInterface(varargin{:}) 
+           b@lfpBattery.batteryInterface(varargin{:})
         end
         function P = powerRequest(b, P, dt)
-            % MTODO: Move this to batteryInterface?
-            % P:  power in W
-            % dt: size of time step in S
             
             % set operator handles according to charge or discharge
             if P > 0 % charge
+                P = b.eta_bc .* P; % limit by charging efficiency
                 b.reH = @gt; % greater than
                 b.socLim = b.socMax;
             else % discharge
-                if P == 0 % MTODO: calculate self-discharge
-                    b.socLim = 0;
-%                     P = selfDischargePower;
+                if P == 0 % Set P to self-discharge power and limit soc to zero
+                    b.socLim = eps; % eps in case dambrowskiCounter is used for cycle counting
+                    P = b.Psd;
                 else
+                    P = b.eta_bd .* P; % limit by discharging efficiency
                     b.socLim = b.socMin;
                 end
                 b.reH = @lt; % less than
@@ -30,7 +29,6 @@ classdef batteryCell < lfpBattery.batteryInterface
             if abs(b.socLim - b.soc) > b.sTol
                 b.lastPr = P;
                 [P, b.Cd, b.V, b.soc] = b.iteratePower(P, dt);
-                % MTODO: handle battery efficiency here.
             else
                 P = 0;
             end
@@ -74,18 +72,23 @@ classdef batteryCell < lfpBattery.batteryInterface
         function v = interp(b, I, C)
             v = b.dC.interp(I, C);
         end
-        function adddfit(b, d)
-            if isempty(b.dC) % initialize
-                b.dC = lfpBattery.dischargeCurves;
+        function addcurves(b, d, type)
+            if nargin < 3
+                type = 'discharge';
             end
-            b.dC.add(d);
-            b.findImax();
-        end
-        function adddcurves(b, d)
-            if isempty(b.dC) % initialize dC property with d
-                b.dC = d;
-            else % add d if dC exists already
-                b.dC.add(d)
+            if strcmp(type, 'discharge')
+                if isempty(b.dC) % initialize dC property with d
+                    if lfpBattery.commons.itfcmp(d, 'lfpBattery.curvefitCollection')
+                        b.dC = d; % init with collection
+                    else
+                        b.dC = lfpBattery.dischargeCurves; % create new curve fit collection
+                        b.dC.add(d)
+                    end
+                else % add d if dC exists already
+                    b.dC.add(d)
+                end
+            elseif strcmp(type, 'cycleLife')
+                b.ageModel.wFit = d; % MTODO: Implement tests for this
             end
             b.findImax();
         end

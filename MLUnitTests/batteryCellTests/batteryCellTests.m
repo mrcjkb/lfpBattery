@@ -7,7 +7,7 @@ load(fullfile(pwd, 'MLUnitTests', 'batteryCellTests', 'dcCurves.mat'))
 
 %% Initialization
 b = batteryCell('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
-b.adddcurves(d)
+b.addcurves(d)
 dt = 60;
 
 %% Charge and discharge with current and SoC limiting tests

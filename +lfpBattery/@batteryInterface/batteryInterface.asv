@@ -9,12 +9,14 @@ classdef (Abstract) batteryInterface < handle
         iTol = 1e-6; % tolerance for current limitation iteration
     end
     properties (SetAccess = 'immutable')
-        Cn; % Nominal capacity in Ah
+        Cn; % Nominal (or average) capacity in Ah
+        Vn; % Nominal (or average) voltage in V
     end
     properties (Dependent)
         Cbu; % Useable capacity in Ah
         socMax; % Max SoC
         socMin; % Min SoC
+        psd; % self discharge rate [0,..,1]
     end
     properties (Dependent, SetAccess = 'protected')
         SoC; % State of charge [0,..,1]
@@ -44,6 +46,7 @@ classdef (Abstract) batteryInterface < handle
         socLim; % SoC to limit charging/discharging to (depending on charging or discharging)
         hl; % property listener (observer) for ageModel SoH
         sl; % property listener (observer) for soc
+        Psd; % self-discharge power in W
     end
     properties (SetObservable, Hidden, SetAccess = 'protected')
         soc; % State of charge (for internal handling)
@@ -61,7 +64,8 @@ classdef (Abstract) batteryInterface < handle
             b.CnMin = (1 - b.socMax) .* b.Cn;
             b.Cd = (1 - b.SoC) .* b.Cn;
             b.V = 3; % MTODO: Set init voltage according to discharge capacity and nominal current
-
+            b.Vn = 3; % MTODO: Set init nominal voltage with inputParsers or according to dischargeCurves for cell
+            
             % initialize age model
             warning('off', 'all')
             b.initAgeModel(varargin{:})
@@ -115,9 +119,7 @@ classdef (Abstract) batteryInterface < handle
             if ~isempty(b.hl)
                 delete(b.hl)
             end
-            if ~isempty(b.sl)
-                delete(b.sl)
-            end
+            
             if ~strcmp(p.Results.ageModel, 'none')
                 if strcmp(p.Results.cycleCounter, 'auto')
                     cy = lfpBattery.dambrowskiCounter(b.soc, b.socMax);
@@ -126,11 +128,9 @@ classdef (Abstract) batteryInterface < handle
                     cy.socMax = b.socMax;
                 end
                 b.cyc = cy;
-                % Make sure the cycleCounter's lUpdate method is called
-                % every time the soc property changes.
-                b.sl = addlistener(b, 'soc', 'PostSet', @cy.lUpdate);
+                
                 if strcmp(p.Results.ageModel, 'EO')
-                    b.ageModel = lfpBattery.eoAgeModel(b.cyc);
+                    b.ageModel = lfpBattery.eoAgeModel(cy);
                 else
                     b.ageModel = p.Results.ageModel;
                     b.addCounter(b.cyc)
@@ -144,7 +144,13 @@ classdef (Abstract) batteryInterface < handle
             end
         end % initAgeModel
         function addCounter(b, cy)
-            
+            if ~isempty(b.sl)
+                delete(b.sl)
+            end
+            % Make sure the cycleCounter's lUpdate method is called
+            % every time the soc property changes.
+            b.sl = addlistener(b, 'soc', 'PostSet', @cy.lUpdate);
+            b.ageModel.addCounter(cy);
         end
         %% setters
         function set.socMin(b, s)
@@ -172,6 +178,10 @@ classdef (Abstract) batteryInterface < handle
         end
         function set.iTol(b, tol)
             b.iTol = abs(tol);
+        end
+        function set.psd(b, p)
+           lfpBattery.commons.onezeroChk(p, 'self-discharge rate')
+           b.Esd = p .* b.Cn .* b.Vn;
         end
         %% getters
         function a = get.SoC(b)

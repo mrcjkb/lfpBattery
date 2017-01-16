@@ -9,6 +9,11 @@ classdef (Abstract) batteryAgeModel < handle
     properties
         eolSoH; % SoH at which end of life is reached.
     end
+    properties (Hidden, GetAccess = 'protected')
+        % woehlerFit object or function handle (must implement the curveFitInterface)
+        % of a cycles to failure = f(DoC) curve.
+        wFit;
+    end
     properties (SetObservable, SetAccess = 'private')
         % State of health [0..1] (observable)
         % This property can be observed by creating an event listener
@@ -67,6 +72,13 @@ classdef (Abstract) batteryAgeModel < handle
             lfpBattery.commons.onezeroChk(init_soh, 'init_soh')
             b.eolSoH = eols;
             b.SoH = init_soh;
+        end
+        % setters
+        function set.wFit(a, fit)
+            if ~isa(fit, 'function_handle')
+                lfpBattery.commons.validateInterface(fit, 'lfpBattery.curveFitInterface')
+            end
+            a.wFit = fit;
         end
         % Dependent setters
         function set.Ac(b, a)
