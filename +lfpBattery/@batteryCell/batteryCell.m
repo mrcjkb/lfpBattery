@@ -6,8 +6,8 @@ classdef batteryCell < lfpBattery.batteryInterface
     end
     
     methods
-        function b = batteryCell(varargin)
-           b@lfpBattery.batteryInterface(varargin{:})
+        function b = batteryCell(Cn, Vn, varargin)
+           b@lfpBattery.batteryInterface('Cn', Cn, 'Vn', Vn, varargin{:})
         end
         function P = powerRequest(b, P, dt)
             

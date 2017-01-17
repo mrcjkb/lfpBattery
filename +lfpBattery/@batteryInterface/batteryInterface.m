@@ -1,43 +1,96 @@
 classdef (Abstract) batteryInterface < handle
     %BATTERYINTERFACE: Abstract class / interface for creating battery
-    %models.
+    %models. This is the common interface for batteryPacks, batteryCells,
+    %stringElements and parallelElements,...
+    %
+    %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
+    %         January 2017
     
     properties
-        maxIterations = uint32(1e3); % maximum number of iterations
-        pTol = 1e-6; % tolerance for power iteration
-        sTol = 1e-6; % tolerance for SoC limitation iteration
-        iTol = 1e-6; % tolerance for current limitation iteration
+        % Maximum number of iterations.
+        % The methods powerRequest() and powerIterator() iterate through
+        % currents in order to find the current / voltage combination
+        % required for a given power. Also, the SoC and current limitations
+        % are handled using similar iterations. Set the maximum number of
+        % iterations with the maxIterations property.
+        % Reducing this number can decrease the simulation time, but can
+        % also reduce the accuracy.
+        maxIterations = uint32(1e3); 
+        % Tolerance for the power iteration in W.
+        % Increasing this number can decrease the simulation time, but can
+        % also reduce the accuracy of the power requests.
+        pTol = 1e-6; 
+        % Tolerance for SoC limitation iteration.
+        % Increasing this number can decrease the simulation time, but can
+        % also reduce the accuracy of the SoC limitation.
+        sTol = 1e-6;
+        % Tolerance for current limitation iteration in A.
+        % Increasing this number can decrease the simulation time, but can
+        % also reduce the accuracy of the current limitation.
+        iTol = 1e-6;
     end
     properties (SetAccess = 'immutable')
         Cn; % Nominal (or average) capacity in Ah
         Vn; % Nominal (or average) voltage in V
-        eta_bc; % efficiency when charging [0,..,1]
-        eta_bd; % efficiency when discharging [0,..,1]
+        % Efficiency when charging [0,..,1].
+        % Note: If only a total efficiency is given, set the discharging
+        % efficiency eta_bd to 1.
+        eta_bc;
+        % Efficiency when discharging [0,..,1].
+        % Note: Set this property to 1 if only a total efficiency is given.
+        eta_bd;
+    end
+    properties (Dependent, SetAccess = 'immutable')
+        % Self discharge rate in 1/month [0,..,1] (default: 0)
+        % By default, the self-discharge of the batteries is neglected.
+        psd;
     end
     properties (Dependent)
-        Cbu; % Useable capacity in Ah
-        socMax; % Max SoC (default: 1)
-        socMin; % Min SoC (default: 0.2)
-        psd; % self discharge rate in 1/month [0,..,1] (default: 0)
+        % Max SoC (default: 1)
+        % In some cases it may make sense to limit the SoC in order to
+        % reduce aging effects.
+        socMax;
+        % Min SoC (default: 0.2)
+        % In some cases it may make sense to limit the SoC in order to
+        % reduce aging effects.
+        % Note: If a current that was not fitted is used, the accuracy
+        % of the voltage interpolation is drastically reduced at SoCs 
+        % below 0.1 or 0.2, depending on the current.
+        socMin;
     end
     properties (Dependent, SetAccess = 'protected')
-        SoC; % State of charge [0,..,1]
+        % State of charge [0,..,1].
+        % In this model, the SoC is fraction between the current capacity
+        % and the nominal capacity. SoC = C ./ Cn. Capacity loss due to
+        % aging is not included in the SoC calculation.
+        SoC;
+        % Useable capacity in Ah.
+        % This property takes into account aging effects (if an aging model
+        % is used) and the SoC limitation.
+        Cbu;
     end
     properties (SetAccess = 'protected')
-        Cd; % Discharge capacity in Ah (Cd = 0 if SoC = 1)
+        % Discharge capacity in Ah (Cd = 0 if SoC = 1).
+        % The discharge capacity is given by the nominal capacity Cn and
+        % the current capacity C at SoC.
+        % Cd = Cn - C
+        Cd;
         SoH; % State of health [0,..,1]
         V; % Resting voltage / V
         Imax = 0; % maximum current in A (determined from cell discharge curves)
     end
-    properties %(Access = 'protected')
+    properties (Access = 'protected')
         soh0; % Last state of health
         cyc; % cycleCounter object
         ageModel; % batteryAgeModel object
         soc_max; % internal soc_max is lower than external socMax if SoH < 1
+        % If the external socMin is set to zero, the internal soc_min is set
+        % to eps in case a dambrowskiCounter is used for cycle counting
         soc_min;
-        CnMax; % maximum discharge capacity
-        CnMin; % minimum discharge capacity
-        slTF = false; % true/false variable for limitation of SoC in recursive iteration
+        % true/false variable for limitation of SoC in recursive iteration.
+        % This is set to true when SoC limitation is active, otherwise
+        % false.
+        slTF = false;
         pct = uint32(0); % counter for power iteration
         sct = uint32(0); % counter for soc limiting iteration
         lastPr = 0; % last power request (for handling powerIteration through recursion)
@@ -48,23 +101,48 @@ classdef (Abstract) batteryInterface < handle
         Psd; % self-discharge energy in W
     end
     properties (SetObservable, Hidden, SetAccess = 'protected')
-        soc; % State of charge (for internal handling)
+        % State of charge (handled internally) This soc can be slightly
+        % higher or lower than the public SoC property, due to the error
+        % tolerances of the SoC limitation.
+        soc;
     end
     methods
         function b = batteryInterface(varargin)
+            % BATTERYINTERFACE: Common Constructor. The properties that
+            % must be instanciated may vary between subclasses. Define
+            % non-optional input arguments in the subclasses and pass them
+            % to this class's constructor using:
+            %
+            % obj@lfpBattery.batteryInterface('Name', 'Value');
+            %
+            % Name-Value pairs:
+            %
+            % Cn            -    nominal capacity in Ah (default: empty)
+            % Vn            -    nominal voltage in Ah (default: empty)
+            % sohIni        -    initial state of health [0,..,1] (default: 1)
+            % socIni        -    initial state of charge [0,..,1] (default: 0.2)
+            % socMin        -    minimum state of charge (default: 0.2)
+            % socMax        -    maximum state of charge (default: 1)
+            % ageModel      -    'none' (default), 'EO' (for event oriented
+            %                    aging) or a custom age model that implements
+            %                    the batteryAgeModel interface.
+            % cycleCounter  -    'auto' for automatic determination
+            %                    depending on the ageModel (none for 'none'
+            %                    and dambrowskiCounter for 'EO' or a custom
+            %                    cycle counter that implements the
+            %                    cycleCounter interface.
+
             %% parse optional inputs
             p = lfpBattery.batteryInterface.parseInputs(varargin{:});
             
-            b.SoH = 1;
+            b.SoH = p.Results.sohIni;
             b.Cn = p.Results.Cn;
             b.socMin = p.Results.socMin;
             b.socMax = p.Results.socMax;
             b.soc = p.Results.socIni;
-            b.CnMax = (1 - b.socMin) .* b.Cn;
-            b.CnMin = (1 - b.socMax) .* b.Cn;
             b.Cd = (1 - b.SoC) .* b.Cn;
-            b.Vn = 3; % MTODO: Set init nominal voltage with inputParsers or according to dischargeCurves for cell
-            b.V = b.Vn; % MTODO: Set init voltage according to discharge capacity and nominal current
+            b.Vn = p.Results.Vn;
+            b.V = b.Vn;
             b.eta_bc = 0.97;
             b.eta_bd = 0.97;
                         
@@ -214,12 +292,13 @@ classdef (Abstract) batteryInterface < handle
     
     methods (Static, Access = 'protected')
         function p = parseInputs(varargin)
-            Cn_default = 3.5; % MTODO: remove default value
             p = inputParser;
-            addOptional(p, 'Cn', Cn_default, @isnumeric)
+            addOptional(p, 'Cn', [], @isnumeric)
+            addOptional(p, 'Vn', [], @isnumeric)
             addOptional(p, 'socMin', 0.2, @isnumeric)
             addOptional(p, 'socMax', 1, @isnumeric)
-            addOptional(p, 'socIni', 0.2, @(x) x >= 0 && x <= 1)
+            addOptional(p, 'socIni', 0.2, @(x) ~lfpBattery.commons.ge1le0(x))
+            addOptional(p, 'sohIni', 1, @(x) ~lfpBattery.commons.ge1le0(x))
             validModels = {'auto'};
             type = 'lfpBattery.cycleCounter';
             addOptional(p, 'cycleCounter', 'auto', ...

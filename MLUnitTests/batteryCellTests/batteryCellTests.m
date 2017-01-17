@@ -6,7 +6,7 @@ import lfpBattery.*
 load(fullfile(pwd, 'MLUnitTests', 'batteryCellTests', 'dcCurves.mat'))
 
 %% Initialization
-b = batteryCell('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
+b = batteryCell(3.5, 3.2, 'socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
 b.addcurves(d)
 dt = 60;
 
@@ -21,9 +21,9 @@ end
 assert(isequal(b.SoC, 1), 'Unexpected upper SoC limitation')
 
 %% Init batteryCell with ageModel
-batteryCell('ageModel', 'EO');
-batteryCell('cycleCounter', dummyCycleCounter);
-batteryCell('ageModel', dummyAgeModel);
+batteryCell(3.5, 3.2, 'ageModel', 'EO');
+batteryCell(3.5, 3.2, 'cycleCounter', dummyCycleCounter);
+batteryCell(3.5, 3.2, 'ageModel', dummyAgeModel);
 %%
 disp('batteryCell tests passed')
 
