@@ -141,7 +141,7 @@ classdef (Abstract) curveFitInterface < handle
             elseif numel(d) > 1
                 if strcmp(S(1).type, '{}')
                     S(1).type = '()';
-                    v = arrayfun(@subsref, d, repmat(S, size(d)));
+                    v = arrayfun(@(x) subsref(x, S), d);
                 elseif strcmp(S(1).type, '()')
                     S(1).type = '()';
                     v = builtin('subsref', d, S(1));

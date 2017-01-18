@@ -1,7 +1,7 @@
 classdef (Abstract) batteryInterface < lfpBattery.composite
     %BATTERYINTERFACE: Abstract class / interface for creating battery
     %models. This is the common interface for batteryPacks, batteryCells,
-    %stringElements and parallelElements,...
+    %seriesElements and parallelElements,...
     %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
     %         January 2017
@@ -30,11 +30,6 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         iTol = 1e-6;
     end
     properties (SetAccess = 'immutable')
-        Cn; % Nominal (or average) capacity in Ah
-        Vn; % Nominal (or average) voltage in V
-        % Efficiency when charging [0,..,1].
-        % Note: If only a total efficiency is given, set the discharging
-        % efficiency eta_bd to 1.
         eta_bc;
         % Efficiency when discharging [0,..,1].
         % Note: Set this property to 1 if only a total efficiency is given.
@@ -58,7 +53,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         % below 0.1 or 0.2, depending on the current.
         socMin;
     end
-    properties (Dependent, SetAccess = 'protected')
+    properties (Dependent)
         V; % Resting voltage / V
         % Discharge capacity in Ah (Cd = 0 if SoC = 1).
         % The discharge capacity is given by the nominal capacity Cn and
@@ -78,6 +73,12 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
     properties (SetAccess = 'protected')
         SoH; % State of health [0,..,1]
         Imax = 0; % maximum current in A (determined from cell discharge curves)
+        Cn; % Nominal (or average) capacity in Ah
+        % Nominal (or average) voltage in V
+        % Efficiency when charging [0,..,1].
+        % Note: If only a total efficiency is given, set the discharging
+        % efficiency eta_bd to 1.
+        Vn;
     end
     properties (Access = 'protected')
         soh0; % Last state of health
@@ -157,6 +158,34 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             warning('on', 'all')
             
         end % constructor
+        function P = powerRequest(b, P, dt)
+            % POWERREQUEST: MTODO: Doc
+            % P:  power in W
+            % dt: size of time step in S
+            % MTODO: Increase precision!
+            
+            % set operator handles according to charge or discharge
+            if P > 0 % charge
+                P = b.eta_bc .* P; % limit by charging efficiency
+                b.reH = @gt; % greater than
+                b.socLim = b.socMax;
+            else % discharge
+                if P == 0 % Set P to self-discharge power and limit soc to zero
+                    b.socLim = eps; % eps in case dambrowskiCounter is used for cycle counting
+                    P = b.Psd;
+                else
+                    P = b.eta_bd .* P; % limit by discharging efficiency
+                    b.socLim = b.socMin;
+                end
+                b.reH = @lt; % less than
+            end
+            if abs(b.socLim - b.soc) > b.sTol
+                b.lastPr = P;
+                [P, b.Cd, b.V, b.soc] = b.iteratePower(P, dt);
+            else
+                P = 0;
+            end
+        end % powerRequest
         function [P, Cd, V, soc] = iteratePower(b, P, dt)
             %ITERATEPOWER: Iteration to determine new state given a certain power.
             % The state of the battery is not changed by this method.
@@ -172,16 +201,18 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             % Cd     -   Discharge capacity of the battery in Ah
             % V      -   Resting voltage in V
             % soc    -   State of charge [0,..,1]
-            I = P ./ b.V;
-            [V, Cd] = b.getNewState(I, dt);
-            Pit = I .* mean([b.V; V]);
+            V_curr = b.V;
+            I = P ./ V_curr;
+            V = b.getNewVoltage(I, dt);
+            Cd = b.Cd - I .* dt ./ 3600;
+            Pit = I .* mean([V_curr; V]);
             err = b.lastPr - Pit;
             if abs(err) > b.pTol && b.pct < b.maxIterations
                 b.pct = b.pct + 1;
                 [P, Cd, V, soc] = b.iteratePower(P + err, dt);
             elseif abs(I) > b.Imax + b.iTol % Limit power according to max current using recursion
                 b.pct = 0;
-                P = sign(I) .* b.Imax .* mean([b.V; V]);
+                P = sign(I) .* b.Imax .* mean([V_curr; V]);
                 b.lastPr = P;
                 [P, Cd, V, soc] = b.iteratePower(P, dt);
             end
@@ -284,8 +315,8 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             % add a new dischargeFit object according to the input arguments
             b.adddfit(lfpBattery.dischargeFit(V, C_dis, I, Temp, varargin{:}));
         end
-        function add(b, element)
-            % ADD: Adds an element to the collection (e. g. the
+        function addElement(b, element)
+            % ADDELEMENT: Adds an element to the collection (e. g. the
             % batteryPack, parallelElement or stringElement. An element can
             % be a batteryCell, a parallelElement or a stringElement or a
             % user-defined element.
@@ -296,7 +327,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             % - adding an element to a batteryPack will replace the current
             %   element.
             if isa(b, 'lfpBattery.batteryCell')
-                error('add() is unsupported for batteryCell objects.')
+                error('addElement() is unsupported for batteryCell objects.')
             elseif isa(element, 'lfpBattery.batteryPack')
                 error('batteryPack objects cannot be added.')
             end
@@ -304,8 +335,14 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
                 b.El = element;
             else
                 b.nEl = uint32(sum(b.nEl) + 1); % sum() in case nEl is empty
-                b.El(b.nEl, 1) = element;
+                if isempty(b.El) || isstruct(b.El) % in case El's properties were addressed already
+                    b.El = element;
+                else
+                    b.El(b.nEl, 1) = element;
+                end
             end
+            b.findImax;
+            b.refreshNominals;
         end
         %% setters
         function set.socMin(b, s)
@@ -408,21 +445,19 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
     end
     
     methods (Abstract)
-        % POWERREQUEST: MTODO: Doc
-        % P:  power in W
-        % dt: size of time step in S
-        P = powerRequest(b, P, dt);
-        % GETNEWSTATE: Returns the new current and voltage of
-        [v, cd] = getNewState(b, I, dt);
+        % GETNEWVOLTAGE: Returns the new voltage according to a current and a
+        % time step size
+        v = getNewVoltage(b, I, dt);
         addcurves(b, d, type); % adds a collection of discharge curves
     end % abstract methods
     
     methods (Abstract, Access = 'protected')
-        findImax(b); % determins the maximum current according to the discharge curves and/or the topology
-        setV(b, v); % For implementation of dependent voltage setter
+        i = findImax(b); % determins the maximum current according to the discharge curves and/or the topology
         setCd(b, c); % For implementation of dependent discharge capacity setter
+        setV(b, v); % For implementation of dependent voltage setter
         v = getV(b); % For implementation of dependent voltage getter
         c = getCd(b); % For implementation of dependent discharge capacity getter
+        refreshNominals(b); % Refresh nominal voltage and capacity (called whenever a new element is added)
     end
 end
 

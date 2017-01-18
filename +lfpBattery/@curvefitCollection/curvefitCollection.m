@@ -82,7 +82,11 @@ classdef curvefitCollection < lfpBattery.sortedFunctions
     
     methods (Static)
         function validateInputInterface(obj)
-            lfpBattery.commons.validateInterface(obj, 'lfpBattery.curveFitInterface');
+            try % only curvefitCollection & curveFitInterface subclasses can be added
+                lfpBattery.commons.validateInterface(obj, 'lfpBattery.curvefitCollection')
+            catch
+                lfpBattery.commons.validateInterface(obj, 'lfpBattery.curveFitInterface');
+            end
         end
     end
 end

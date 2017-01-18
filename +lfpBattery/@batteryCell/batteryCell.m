@@ -11,31 +11,7 @@ classdef batteryCell < lfpBattery.batteryInterface
         function b = batteryCell(Cn, Vn, varargin)
            b@lfpBattery.batteryInterface('Cn', Cn, 'Vn', Vn, varargin{:})
         end
-        function P = powerRequest(b, P, dt)
-            
-            % set operator handles according to charge or discharge
-            if P > 0 % charge
-                P = b.eta_bc .* P; % limit by charging efficiency
-                b.reH = @gt; % greater than
-                b.socLim = b.socMax;
-            else % discharge
-                if P == 0 % Set P to self-discharge power and limit soc to zero
-                    b.socLim = eps; % eps in case dambrowskiCounter is used for cycle counting
-                    P = b.Psd;
-                else
-                    P = b.eta_bd .* P; % limit by discharging efficiency
-                    b.socLim = b.socMin;
-                end
-                b.reH = @lt; % less than
-            end
-            if abs(b.socLim - b.soc) > b.sTol
-                b.lastPr = P;
-                [P, b.Cd, b.V, b.soc] = b.iteratePower(P, dt);
-            else
-                P = 0;
-            end
-        end % powerRequest
-        function [v, cd] = getNewState(b, I, dt)
+        function [v, cd] = getNewVoltage(b, I, dt)
             cd = b.Cd - I .* dt ./ 3600;
             v = b.dC.interp(I, cd);
         end
@@ -66,12 +42,17 @@ classdef batteryCell < lfpBattery.batteryInterface
     end
     
     methods (Access = 'protected')
-        function findImax(b)
+        function i = findImax(b)
             if ~isempty(b.dC)
                 b.Imax = max(b.dC.z);
             else
                 b.Imax = 0;
             end
+            if nargout > 0
+                i = b.Imax;
+            end
+        end
+        function refreshNominals(b)   %#ok<MANU> Method not needed
         end
         %% Implementation of abstract setters
         function setV(b, v)
