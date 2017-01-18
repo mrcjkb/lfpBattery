@@ -3,6 +3,8 @@ classdef batteryCell < lfpBattery.batteryInterface
     
     properties (Access = 'protected');
         dC; % curvefitCollection (dischargeCurves object)
+        Vi; % for storing V property of batteryInterface
+        Cdi; % for storing Cd property of batteryInterface
     end
     
     methods
@@ -33,45 +35,14 @@ classdef batteryCell < lfpBattery.batteryInterface
                 P = 0;
             end
         end % powerRequest
-        function [P, Cd, V, soc] = iteratePower(b, P, dt)
-            I = P ./ b.V; 
-            Cd = b.Cd - I .* dt ./ 3600;
-            V = b.interp(I, Cd);
-            Pit = I .* mean([b.V; V]);
-            err = b.lastPr - Pit;
-            if abs(err) > b.pTol && b.pct < b.maxIterations
-                b.pct = b.pct + 1;
-                [P, Cd, V, soc] = b.iteratePower(P + err, dt);
-            elseif abs(I) > b.Imax + b.iTol % Limit power according to max current using recursion
-                b.pct = 0;
-                P = sign(I) .* b.Imax .* mean([b.V; V]);
-                b.lastPr = P;
-                [P, Cd, V, soc] = b.iteratePower(P, dt);
-            end
-            b.pct = 0;
-            if P ~= 0 % Limit power according to SoC using recursion
-                soc = 1 - Cd ./ b.Cn;
-                os = soc - b.soc; % charged
-                req = b.socLim - b.soc; % required to reach limit
-                err = (req - os) ./ os;
-                if (b.reH(soc, b.socLim) || b.slTF) && abs(err) > b.sTol ...
-                        && b.sct < b.maxIterations 
-                    b.sct = b.sct + 1;
-                    b.slTF = true; % indicate that SoC limiting is active
-                    % correct power request
-                    P = b.lastPr + err .* b.lastPr;
-                    b.lastPr = P;
-                    [P, Cd, V, soc] = b.iteratePower(P, dt);
-                else
-                    b.sct = 0;
-                    b.slTF = false;
-                end
-            end
-        end % iteratePower
-        %% Methods handled by strategy objects
-        function v = interp(b, I, C)
-            v = b.dC.interp(I, C);
+        function [v, cd] = getNewState(b, I, dt)
+            cd = b.Cd - I .* dt ./ 3600;
+            v = b.dC.interp(I, cd);
         end
+        function it = createIterator(~)
+            it = lfpBattery.nullIterator;
+        end
+        %% Methods handled by strategy objects
         function addcurves(b, d, type)
             if nargin < 3
                 type = 'discharge';
@@ -101,6 +72,20 @@ classdef batteryCell < lfpBattery.batteryInterface
             else
                 b.Imax = 0;
             end
+        end
+        %% Implementation of abstract setters
+        function setV(b, v)
+            b.Vi = v;
+        end
+        function setCd(b, c)
+            b.Cdi = c;
+        end
+        %% Implementation of abstract getters
+        function v = getV(b)
+            v = b.Vi;
+        end
+        function c = getCd(b)
+            c = b.Cdi;
         end
     end
 end

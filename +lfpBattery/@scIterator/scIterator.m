@@ -6,12 +6,15 @@ classdef scIterator < lfpBattery.iterator
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
     %January 2017
     
-    properties (Access = 'protected', Hidden = true)
+    properties (SetAccess = 'immutable', GetAccess = 'protected')
+      collection;  % The elements the iterator traverses through
+    end
+    properties (Access = 'protected')
         ind = 0;  % index of collection's next item
     end
     methods
         function it = scIterator(scObj)
-            it@lfpBattery.iterator(scObj); % call superclass constructor
+            it.collection = scObj;
         end
         function obj = next(it)
             if hasNext(it)

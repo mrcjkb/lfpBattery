@@ -1,4 +1,4 @@
-classdef (Abstract) batteryInterface < handle
+classdef (Abstract) batteryInterface < lfpBattery.composite
     %BATTERYINTERFACE: Abstract class / interface for creating battery
     %models. This is the common interface for batteryPacks, batteryCells,
     %stringElements and parallelElements,...
@@ -59,6 +59,12 @@ classdef (Abstract) batteryInterface < handle
         socMin;
     end
     properties (Dependent, SetAccess = 'protected')
+        V; % Resting voltage / V
+        % Discharge capacity in Ah (Cd = 0 if SoC = 1).
+        % The discharge capacity is given by the nominal capacity Cn and
+        % the current capacity C at SoC.
+        % Cd = Cn - C
+        Cd;
         % State of charge [0,..,1].
         % In this model, the SoC is fraction between the current capacity
         % and the nominal capacity. SoC = C ./ Cn. Capacity loss due to
@@ -70,13 +76,7 @@ classdef (Abstract) batteryInterface < handle
         Cbu;
     end
     properties (SetAccess = 'protected')
-        % Discharge capacity in Ah (Cd = 0 if SoC = 1).
-        % The discharge capacity is given by the nominal capacity Cn and
-        % the current capacity C at SoC.
-        % Cd = Cn - C
-        Cd;
         SoH; % State of health [0,..,1]
-        V; % Resting voltage / V
         Imax = 0; % maximum current in A (determined from cell discharge curves)
     end
     properties (Access = 'protected')
@@ -99,6 +99,11 @@ classdef (Abstract) batteryInterface < handle
         hl; % property listener (observer) for ageModel SoH
         sl; % property listener (observer) for soc
         Psd; % self-discharge energy in W
+        % number of elements (in case of collection)
+        % The data type is uint32
+        nEl;
+        % Elements (parallelELement, seriesElement or batteryCell objects)
+        El;
     end
     properties (SetObservable, Hidden, SetAccess = 'protected')
         % State of charge (handled internally) This soc can be slightly
@@ -152,6 +157,92 @@ classdef (Abstract) batteryInterface < handle
             warning('on', 'all')
             
         end % constructor
+        function [P, Cd, V, soc] = iteratePower(b, P, dt)
+            %ITERATEPOWER: Iteration to determine new state given a certain power.
+            % The state of the battery is not changed by this method.
+            % Syntax: [P, Cd, V, soc] = b.iteratePower(P, dt);
+            %
+            % Input arguments:
+            % b      -   Subclass of the batteryInterface (object calling the method)
+            % P      -   Requested charge or discharge power in W
+            % dt     -   Simulation time step size in s
+            %
+            % Output arguments:
+            % P      -   Actual charge or discharge power in W
+            % Cd     -   Discharge capacity of the battery in Ah
+            % V      -   Resting voltage in V
+            % soc    -   State of charge [0,..,1]
+            I = P ./ b.V;
+            [V, Cd] = b.getNewState(I, dt);
+            Pit = I .* mean([b.V; V]);
+            err = b.lastPr - Pit;
+            if abs(err) > b.pTol && b.pct < b.maxIterations
+                b.pct = b.pct + 1;
+                [P, Cd, V, soc] = b.iteratePower(P + err, dt);
+            elseif abs(I) > b.Imax + b.iTol % Limit power according to max current using recursion
+                b.pct = 0;
+                P = sign(I) .* b.Imax .* mean([b.V; V]);
+                b.lastPr = P;
+                [P, Cd, V, soc] = b.iteratePower(P, dt);
+            end
+            b.pct = 0;
+            if P ~= 0 % Limit power according to SoC using recursion
+                soc = 1 - Cd ./ b.Cn;
+                os = soc - b.soc; % charged
+                req = b.socLim - b.soc; % required to reach limit
+                err = (req - os) ./ os;
+                if (b.reH(soc, b.socLim) || b.slTF) && abs(err) > b.sTol ...
+                        && b.sct < b.maxIterations 
+                    b.sct = b.sct + 1;
+                    b.slTF = true; % indicate that SoC limiting is active
+                    % correct power request
+                    P = b.lastPr + err .* b.lastPr;
+                    b.lastPr = P;
+                    [P, Cd, V, soc] = b.iteratePower(P, dt);
+                else
+                    b.sct = 0;
+                    b.slTF = false;
+                end
+            end
+        end % iteratePower
+        function initAgeModel(b, varargin)
+            %INITAGEMODEL
+            p = lfpBattery.batteryInterface.parseInputs(varargin{:});
+            if ~isempty(b.hl)
+                delete(b.hl)
+            end
+            if ~strcmp(p.Results.ageModel, 'none')
+                if strcmp(p.Results.cycleCounter, 'auto')
+                    cy = lfpBattery.dambrowskiCounter(b.soc, b.soc_max);
+                else
+                    cy = p.Results.cycleCounter;
+                    cy.socMax = b.soc_max;
+                end
+                b.cyc = cy;
+                if strcmp(p.Results.ageModel, 'EO')
+                    b.ageModel = lfpBattery.eoAgeModel(cy);
+                else
+                    b.ageModel = p.Results.ageModel;
+                    b.addCounter(b.cyc)
+                end
+                % Make sure the battery model's SoH is updated every time
+                % the age model's SoH changes.
+                b.hl = addlistener(b.ageModel, 'SoH', 'PostSet', @b.updateSoH);
+            else
+                b.cyc = lfpBattery.dummyCycleCounter;
+                b.ageModel = lfpBattery.dummyAgeModel;
+            end
+        end % initAgeModel
+        function addCounter(b, cy)
+            %ADDCOUNTER: MTODO: Doc
+            if ~isempty(b.sl)
+                delete(b.sl)
+            end
+            % Make sure the cycleCounter's lUpdate method is called
+            % every time the soc property changes.
+            b.sl = addlistener(b, 'soc', 'PostSet', @cy.lUpdate);
+            b.ageModel.addCounter(cy);
+        end
         function dischargeFit(b, V, C_dis, I, Temp, varargin)
             %DISCHARGEFIT: Uses Levenberg-Marquardt algorithm to fit a
             %discharge curve of a lithium-ion battery in three parts:
@@ -193,43 +284,28 @@ classdef (Abstract) batteryInterface < handle
             % add a new dischargeFit object according to the input arguments
             b.adddfit(lfpBattery.dischargeFit(V, C_dis, I, Temp, varargin{:}));
         end
-        function initAgeModel(b, varargin)
-            %INITAGEMODEL
-            p = lfpBattery.batteryInterface.parseInputs(varargin{:});
-            if ~isempty(b.hl)
-                delete(b.hl)
+        function add(b, element)
+            % ADD: Adds an element to the collection (e. g. the
+            % batteryPack, parallelElement or stringElement. An element can
+            % be a batteryCell, a parallelElement or a stringElement or a
+            % user-defined element.
+            %
+            % Restrictions (that return error messages)
+            % - batteryCells cannot add elements.
+            % - batteryPacks cannot be added to a collection of elements.
+            % - adding an element to a batteryPack will replace the current
+            %   element.
+            if isa(b, 'lfpBattery.batteryCell')
+                error('add() is unsupported for batteryCell objects.')
+            elseif isa(element, 'lfpBattery.batteryPack')
+                error('batteryPack objects cannot be added.')
             end
-            if ~strcmp(p.Results.ageModel, 'none')
-                if strcmp(p.Results.cycleCounter, 'auto')
-                    cy = lfpBattery.dambrowskiCounter(b.soc, b.soc_max);
-                else
-                    cy = p.Results.cycleCounter;
-                    cy.socMax = b.soc_max;
-                end
-                b.cyc = cy;
-                if strcmp(p.Results.ageModel, 'EO')
-                    b.ageModel = lfpBattery.eoAgeModel(cy);
-                else
-                    b.ageModel = p.Results.ageModel;
-                    b.addCounter(b.cyc)
-                end
-                % Make sure the battery model's SoH is updated every time
-                % the age model's SoH changes.
-                b.hl = addlistener(b.ageModel, 'SoH', 'PostSet', @b.updateSoH);
+            if isa(b, 'lfpBattery.batteryPack')
+                b.El = element;
             else
-                b.cyc = lfpBattery.dummyCycleCounter;
-                b.ageModel = lfpBattery.dummyAgeModel;
+                b.nEl = uint32(sum(b.nEl) + 1); % sum() in case nEl is empty
+                b.El(b.nEl, 1) = element;
             end
-        end % initAgeModel
-        function addCounter(b, cy)
-            %ADDCOUNTER: MTODO: Doc
-            if ~isempty(b.sl)
-                delete(b.sl)
-            end
-            % Make sure the cycleCounter's lUpdate method is called
-            % every time the soc property changes.
-            b.sl = addlistener(b, 'soc', 'PostSet', @cy.lUpdate);
-            b.ageModel.addCounter(cy);
         end
         %% setters
         function set.socMin(b, s)
@@ -263,6 +339,12 @@ classdef (Abstract) batteryInterface < handle
            lfpBattery.commons.onezeroChk(p, 'self-discharge rate')
            b.Psd = p .* 1/(365.25.*86400./12) .* b.Cn ./ 3600 .* b.Vn; % 1/(month in seconds) * As * V = W
         end
+        function set.V(b, v)
+            b.setV(v)
+        end
+        function set.Cd(b, c)
+            b.setCd(c)
+        end
         %% getters
         function a = get.SoC(b)
             s = b.soc ./ b.SoH; % SoC according to max capacity
@@ -279,6 +361,12 @@ classdef (Abstract) batteryInterface < handle
             if a == eps
                 a = 0;
             end
+        end
+        function v = get.V(b)
+            v = getV(b);
+        end
+        function c = get.Cd(b)
+            c = getCd(b);
         end
     end % public methods
     
@@ -324,26 +412,17 @@ classdef (Abstract) batteryInterface < handle
         % P:  power in W
         % dt: size of time step in S
         P = powerRequest(b, P, dt);
+        % GETNEWSTATE: Returns the new current and voltage of
+        [v, cd] = getNewState(b, I, dt);
         addcurves(b, d, type); % adds a collection of discharge curves
-        %ITERATEPOWER: Iteration to determine new state given a certain power.
-        % The state of the battery is not changed by this method.
-        % Syntax: [P, Cd, V, soc] = b.iteratePower(P, dt);
-        %
-        % Input arguments:
-        % b      -   Subclass of the batteryInterface (object calling the method)
-        % P      -   Requested charge or discharge power in W
-        % dt     -   Simulation time step size in s
-        %
-        % Output arguments:
-        % P      -   Actual charge or discharge power in W
-        % Cd     -   Discharge capacity of the battery in Ah
-        % V      -   Resting voltage in V
-        % soc    -   State of charge [0,..,1]
-        [P, Cd, V, soc] = iteratePower(b, P, dt, reH, socLim, sd);
     end % abstract methods
     
     methods (Abstract, Access = 'protected')
-        findImax(b); % determins the maximum current according to the discharge curves
+        findImax(b); % determins the maximum current according to the discharge curves and/or the topology
+        setV(b, v); % For implementation of dependent voltage setter
+        setCd(b, c); % For implementation of dependent discharge capacity setter
+        v = getV(b); % For implementation of dependent voltage getter
+        c = getCd(b); % For implementation of dependent discharge capacity getter
     end
 end
 
