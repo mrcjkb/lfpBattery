@@ -2,38 +2,63 @@ classdef parallelElement < lfpBattery.batCircuitElement
     %PARALLELELEMENT Summary of this class goes here
     %   Detailed explanation goes here
     
+    properties (Dependent)
+        V;
+    end
+    properties (Dependent, SetAccess = 'protected')
+        Cd;
+    end
+    properties (Dependent, SetAccess = 'immutable')
+        Zi;
+    end
+    
     methods
         function b = parallelElement(varargin)
             b@lfpBattery.batCircuitElement(varargin{:})
         end
         function v = getNewVoltage(b, I, dt)
-            % split I evenly across elements
-            i = I ./ double(b.nEl);
-            v = mean(getNewVoltage@lfpBattery.batCircuitElement(b, i, dt));
+            % split I across elements according to their internal
+            % impedance
+            p = b.getZProportions;
+            v = mean(arrayfun(@(x, y) getNewVoltage(x, y, dt), b.El, I .* p(:)));
+        end
+        function set.V(b, v)
+            % Pass v on to all elements to account for self-balancing
+            % nature of parallel config
+            [b.El.V] = deal(v);
+        end
+        function v = get.V(b)
+            v = mean([b.El.V]);
+        end
+        function c = get.Cd(b)
+            c = sum([b.El.Cd]);
+        end
+        function z = get.Zi(b)
+            z = 1 ./ sum((1 ./ [b.El.Zi])); % 1/z_total = sum_i(1/z_i)
         end
     end
+    
     methods (Access = 'protected')
         function i = findImax(b)
             i = sum(findImax@lfpBattery.batCircuitElement(b));
             b.Imax = i;
         end
-        %% Implementation of dependent getters & setters overload
-        function v = getV(b)
-            v = mean([b.El.V]);
-        end
-        function c = getCd(b)
-            c = sum([b.El.Cd]);
-        end
-        function setV(b, v)
-            % Pass v on to all elements to account for self-balancing
-            % nature of parallel config
-            [b.El.V] = deal(v);
-        end
-        function setCd(b, c)
+        function charge(b, Q)
             % Pass equal amount of discharge capacity to each element
             % to account for self-balancing nature of parallel config
-            [b.El.Cd] = deal(1./double(b.nEl) .* c);
+            q = 1 ./ double(b.nEl) .* Q;
+            charge@lfpBattery.batCircuitElement(b, q)
         end
+        function p = getZProportions(b)
+            % lowest impedance --> highest current
+            zv = [b.El.Zi]; % vector of internal impedances
+            p = zv ./ sum(zv);
+            p = (1./p) ./ sum(1./p);
+        end
+        function refreshNominals(b)
+            b.Vn = mean([b.El.Vn]);
+            b.Cn = sum([b.El.Cn]);
+        end 
     end
     
 end

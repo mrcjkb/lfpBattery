@@ -40,6 +40,19 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         % By default, the self-discharge of the batteries is neglected.
         psd;
     end
+    properties (Abstract, Dependent, SetAccess = 'immutable')
+        Zi; % Internal impedance in Ohm
+    end
+    properties (Abstract, Dependent, SetAccess = 'protected')
+        % Discharge capacity in Ah (Cd = 0 if SoC = 1).
+        % The discharge capacity is given by the nominal capacity Cn and
+        % the current capacity C at SoC.
+        % Cd = Cn - C
+        Cd;
+    end
+    properties (Abstract, Dependent)
+        V; % Resting voltage / V
+    end
     properties (Dependent)
         % Max SoC (default: 1)
         % In some cases it may make sense to limit the SoC in order to
@@ -52,14 +65,6 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         % of the voltage interpolation is drastically reduced at SoCs 
         % below 0.1 or 0.2, depending on the current.
         socMin;
-    end
-    properties (Dependent)
-        V; % Resting voltage / V
-        % Discharge capacity in Ah (Cd = 0 if SoC = 1).
-        % The discharge capacity is given by the nominal capacity Cn and
-        % the current capacity C at SoC.
-        % Cd = Cn - C
-        Cd;
         % State of charge [0,..,1].
         % In this model, the SoC is fraction between the current capacity
         % and the nominal capacity. SoC = C ./ Cn. Capacity loss due to
@@ -96,6 +101,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         sct = uint32(0); % counter for soc limiting iteration
         lastPr = 0; % last power request (for handling powerIteration through recursion)
         reH; % function handle: @gt for charging and @lt for discharging
+        seH; % function handle: @ge for charging and @le for discharging
         socLim; % SoC to limit charging/discharging to (depending on charging or discharging)
         hl; % property listener (observer) for ageModel SoH
         sl; % property listener (observer) for soc
@@ -105,6 +111,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         nEl;
         % Elements (parallelELement, seriesElement or batteryCell objects)
         El;
+        Cdi; % for storing Cd property in batteryCell
     end
     properties (SetObservable, Hidden, SetAccess = 'protected')
         % State of charge (handled internally) This soc can be slightly
@@ -123,8 +130,6 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             %
             % Name-Value pairs:
             %
-            % Cn            -    nominal capacity in Ah (default: empty)
-            % Vn            -    nominal voltage in Ah (default: empty)
             % sohIni        -    initial state of health [0,..,1] (default: 1)
             % socIni        -    initial state of charge [0,..,1] (default: 0.2)
             % socMin        -    minimum state of charge (default: 0.2)
@@ -142,23 +147,22 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             p = lfpBattery.batteryInterface.parseInputs(varargin{:});
             
             b.SoH = p.Results.sohIni;
-            b.Cn = p.Results.Cn;
             b.socMin = p.Results.socMin;
             b.socMax = p.Results.socMax;
             b.soc = p.Results.socIni;
-            b.Cd = (1 - b.soc) .* b.Cn;
-            b.Vn = p.Results.Vn;
-            b.V = b.Vn;
-            b.eta_bc = 0.97;
-            b.eta_bd = 0.97;
-                        
+            b.eta_bc = p.Results.etaBC;
+            b.eta_bd = p.Results.etaBD;
+            b.socMin = p.Results.socMin;
+            b.socMax = p.Results.socMax;
+            b.soc = p.Results.socIni;
+            
             % initialize age model
             warning('off', 'all')
             b.initAgeModel(varargin{:})
             warning('on', 'all')
             
         end % constructor
-        function P = powerRequest(b, P, dt)
+        function [P, I] = powerRequest(b, P, dt)
             % POWERREQUEST: MTODO: Doc
             % P:  power in W
             % dt: size of time step in S
@@ -168,6 +172,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             if P > 0 % charge
                 P = b.eta_bc .* P; % limit by charging efficiency
                 b.reH = @gt; % greater than
+                b.seH = @ge; % greater than or equal to
                 b.socLim = b.socMax;
             else % discharge
                 if P == 0 % Set P to self-discharge power and limit soc to zero
@@ -178,15 +183,18 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
                     b.socLim = b.socMin;
                 end
                 b.reH = @lt; % less than
+                b.seH = @le; % less than or equal to
             end
-            if abs(b.socLim - b.soc) > b.sTol % call only if SoC limit has not already been reached
+            if b.seH(b.socLim - b.soc, 0) % call only if SoC limit has not already been reached
                 b.lastPr = P;
-                [P, b.Cd, b.V, b.soc] = b.iteratePower(P, dt);
+                [P, I, b.V, b.soc] = b.iteratePower(P, dt);
             else
                 P = 0;
+                I = 0;
             end
+            b.slTF = false; % set SoC limitation flag false
         end % powerRequest
-        function [P, Cd, V, soc] = iteratePower(b, P, dt)
+        function [P, I, V, soc] = iteratePower(b, P, dt)
             %ITERATEPOWER: Iteration to determine new state given a certain power.
             % The state of the battery is not changed by this method.
             % Syntax: [P, Cd, V, soc] = b.iteratePower(P, dt);
@@ -204,32 +212,33 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             V_curr = b.V;
             I = P ./ V_curr;
             V = b.getNewVoltage(I, dt);
-            Cd = b.Cd - I .* dt ./ 3600;
             Pit = I .* mean([V_curr; V]);
             err = b.lastPr - Pit;
             if abs(err) > b.pTol && b.pct < b.maxIterations
                 b.pct = b.pct + 1;
-                [P, Cd, V, soc] = b.iteratePower(P + err, dt);
+                [P, I, V] = b.iteratePower(P + err, dt);
             elseif abs(I) > b.Imax + b.iTol % Limit power according to max current using recursion
                 b.pct = 0;
                 P = sign(I) .* b.Imax .* mean([V_curr; V]);
                 b.lastPr = P;
-                [P, Cd, V, soc] = b.iteratePower(P, dt);
+                [P, I, V] = b.iteratePower(P, dt);
             end
             b.pct = 0;
+            newCd = b.Cd - I .* dt ./ 3600;
+            soc = 1 - newCd ./ b.Cn;
             if P ~= 0 % Limit power according to SoC using recursion
-                soc = 1 - Cd ./ b.Cn;
                 os = soc - b.soc; % charged
                 req = b.socLim - b.soc; % required to reach limit
                 err = (req - os) ./ os;
                 if (b.reH(soc, b.socLim) || b.slTF) && abs(err) > b.sTol ...
-                        && b.sct < b.maxIterations 
+                        && b.sct < b.maxIterations
+                    % MTODO: Something wrong with SoC limitation here!
                     b.sct = b.sct + 1;
                     b.slTF = true; % indicate that SoC limiting is active
                     % correct power request
                     P = b.lastPr + err .* b.lastPr;
                     b.lastPr = P;
-                    [P, Cd, V, soc] = b.iteratePower(P, dt);
+                    [P, I, V, soc] = b.iteratePower(P, dt);
                 else
                     b.sct = 0;
                     b.slTF = false;
@@ -380,12 +389,6 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
            lfpBattery.commons.onezeroChk(p, 'self-discharge rate')
            b.Psd = p .* 1/(365.25.*86400./12) .* b.Cn ./ 3600 .* b.Vn; % 1/(month in seconds) * As * V = W
         end
-        function set.V(b, v)
-            b.setV(v)
-        end
-        function set.Cd(b, c)
-            b.setCd(c)
-        end
         %% getters
         function a = get.SoC(b)
             s = b.soc ./ b.SoH; % SoC according to max capacity
@@ -403,12 +406,6 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
                 a = 0;
             end
         end
-        function v = get.V(b)
-            v = getV(b);
-        end
-        function c = get.Cd(b)
-            c = getCd(b);
-        end
     end % public methods
     
     methods (Access = 'protected')
@@ -417,17 +414,23 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             b.SoH = event.AffectedObject.SoH;
             b.socMax = maxSoC; % update socMax (updated automatically in setter)
         end
+        function s = refreshSoC(b)
+            % REFRESHSOC: Re-calculates the SoC
+            s = 1 - b.Cd ./ b.Cn;
+            b.soc = s;
+        end
     end
     
     methods (Static, Access = 'protected')
         function p = parseInputs(varargin)
             p = inputParser;
-            addOptional(p, 'Cn', [], @isnumeric)
-            addOptional(p, 'Vn', [], @isnumeric)
+            addOptional(p, 'Zi', 17e-3, @isnumeric)
             addOptional(p, 'socMin', 0.2, @isnumeric)
             addOptional(p, 'socMax', 1, @isnumeric)
             addOptional(p, 'socIni', 0.2, @(x) ~lfpBattery.commons.ge1le0(x))
             addOptional(p, 'sohIni', 1, @(x) ~lfpBattery.commons.ge1le0(x))
+            addOptional(p, 'etaBC', 0.97, @isnumeric)
+            addOptional(p, 'etaBD', 0.97, @isnumeric)
             validModels = {'auto'};
             type = 'lfpBattery.cycleCounter';
             addOptional(p, 'cycleCounter', 'auto', ...
@@ -457,10 +460,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
     
     methods (Abstract, Access = 'protected')
         i = findImax(b); % determins the maximum current according to the discharge curves and/or the topology
-        setCd(b, c); % For implementation of dependent discharge capacity setter
-        setV(b, v); % For implementation of dependent voltage setter
-        v = getV(b); % For implementation of dependent voltage getter
-        c = getCd(b); % For implementation of dependent discharge capacity getter
+        charge(b, Q); % For dis/charging a certain capacity Q in Ah
         refreshNominals(b); % Refresh nominal voltage and capacity (called whenever a new element is added)
     end
 end
