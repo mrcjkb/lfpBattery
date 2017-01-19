@@ -60,6 +60,7 @@ classdef batteryCell < lfpBattery.batteryInterface
         end
         function setCd(b, c)
             b.Cdi = c;
+            b.soc = 1 - c ./ b.Cn;
         end
         %% Implementation of abstract getters
         function v = getV(b)

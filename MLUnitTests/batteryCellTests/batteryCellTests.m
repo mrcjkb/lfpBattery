@@ -12,7 +12,7 @@ dt = 60;
 
 %% Charge and discharge with current and SoC limiting tests
 b.powerRequest(-10, dt);
-assert(isequal(b.SoC, 0.2), 'Unexpected lower SoC limitation.')
+assert(abs(b.SoC - 0.2) < 1e-10, 'Unexpected lower SoC limitation.')
 P = b.powerRequest(500, dt);
 assert(P < 100, 'Unexpected current limitation.')
 for i = 1:100

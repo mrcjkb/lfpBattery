@@ -1,35 +1,22 @@
-classdef parallelElement < lfpBattery.batteryInterface
+classdef parallelElement < lfpBattery.batCircuitElement
     %PARALLELELEMENT Summary of this class goes here
     %   Detailed explanation goes here
     
     methods
         function b = parallelElement(varargin)
-            b@lfpBattery.batteryInterface(varargin{:})
+            b@lfpBattery.batCircuitElement(varargin{:})
         end
         function v = getNewVoltage(b, I, dt)
             % split I evenly across elements
             i = I ./ double(b.nEl);
-            v = mean(arrayfun(@(x) getNewVoltage(x, i, dt), b.El));
-        end
-        function addcurves(b, d, type)
-            % pass on to all elements
-            arrayfun(@(x) addcurves(x, d, type), b.El)
-            b.findImax;
-        end
-        function it = createIterator(b)
-            it = batteryIterator(b);
-            % MTODO: create batteryIterator & stack classes
+            v = mean(getNewVoltage@lfpBattery.batCircuitElement(b, i, dt));
         end
     end
     methods (Access = 'protected')
         function i = findImax(b)
-            i = sum(arrayfun(@(x) findImax(x), b.El));
+            i = sum(findImax@lfpBattery.batCircuitElement(b));
             b.Imax = i;
         end
-        function refreshNominals(b)
-            b.Vn = mean([b.El.Vn]);
-            b.Cn = sum([b.El.Cn]);
-        end 
         %% Implementation of dependent getters & setters overload
         function v = getV(b)
             v = mean([b.El.V]);

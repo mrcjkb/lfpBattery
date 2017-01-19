@@ -146,7 +146,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             b.socMin = p.Results.socMin;
             b.socMax = p.Results.socMax;
             b.soc = p.Results.socIni;
-            b.Cd = (1 - b.SoC) .* b.Cn;
+            b.Cd = (1 - b.soc) .* b.Cn;
             b.Vn = p.Results.Vn;
             b.V = b.Vn;
             b.eta_bc = 0.97;
@@ -179,7 +179,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
                 end
                 b.reH = @lt; % less than
             end
-            if abs(b.socLim - b.soc) > b.sTol
+            if abs(b.socLim - b.soc) > b.sTol % call only if SoC limit has not already been reached
                 b.lastPr = P;
                 [P, b.Cd, b.V, b.soc] = b.iteratePower(P, dt);
             else
@@ -343,6 +343,10 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             end
             b.findImax;
             b.refreshNominals;
+        end
+        function it = createIterator(b)
+            it = batteryIterator(b);
+            % MTODO: create batteryIterator & stack classes
         end
         %% setters
         function set.socMin(b, s)
