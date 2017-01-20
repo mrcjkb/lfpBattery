@@ -53,6 +53,7 @@ classdef batteryCell < lfpBattery.batteryInterface
             b.Cdi = (1 - b.soc) .* b.Cn;
             b.Vn = Vn;
             b.V = b.Vn;
+            b.hasCells = true; % always true for batteryCell
         end
         function [v, cd] = getNewVoltage(b, I, dt)
             cd = b.Cd - I .* dt ./ 3600;

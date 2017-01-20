@@ -85,7 +85,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         % efficiency eta_bd to 1.
         Vn;
     end
-    properties (Access = 'protected')
+    properties (Access = 'protected', Hidden)
         soh0; % Last state of health
         cyc; % cycleCounter object
         ageModel; % batteryAgeModel object
@@ -119,6 +119,10 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         % tolerances of the SoC limitation.
         soc;
     end
+    properties (Hidden, SetAccess = 'protected')
+       hasCells = false; % true/false flag to indicate whether circuit element has cells or not 
+    end
+    
     methods
         function b = batteryInterface(varargin)
             % BATTERYINTERFACE: Common Constructor. The properties that
@@ -429,6 +433,9 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
                 error('addElement() is unsupported for batteryCell objects.')
             elseif isa(element, 'lfpBattery.batteryPack')
                 error('batteryPack objects cannot be added.')
+            end
+            if ~element.hasCells
+                error('Attempted to add element that does not contain any cells.')
             end
             if isa(b, 'lfpBattery.batteryPack')
                 b.El = element;
