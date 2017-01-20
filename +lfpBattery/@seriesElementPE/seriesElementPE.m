@@ -11,7 +11,11 @@ classdef seriesElementPE < lfpBattery.seriesElement
             b@lfpBattery.seriesElement(varargin{:})
         end
         function c = get.Cd(b)
-            c = max([b.El.Cd]); % total = Cn - min capacity = max discharge capacity
+            % total capacity = min of elements' capacities
+            % --> discharged capacity = min of elements' discharged
+            % capacities, since chargeable capacity is limited with passive
+            % equalization
+            c = min([b.El.Cd]);
         end
     end
     

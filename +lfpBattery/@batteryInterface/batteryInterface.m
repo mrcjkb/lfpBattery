@@ -324,31 +324,26 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             % add a new dischargeFit object according to the input arguments
             b.adddfit(lfpBattery.dischargeFit(V, C_dis, I, Temp, varargin{:}));
         end
-        function addElement(b, element)
-            % ADDELEMENT: Adds an element to the collection (e. g. the
-            % batteryPack, parallelElement or stringElement. An element can
+        function addElements(b, varargin)
+            % ADDELEMENTS: Adds elements to the collection (e. g. the
+            % batteryPack, parallelElement or stringElement b. An element can
             % be a batteryCell, a parallelElement or a stringElement or a
             % user-defined element.
+            %
+            % Syntax: b.ADDELEMENTS(e1, e2, e3, .., en)
+            %         ADDELEMENTS(b, e1, e2, e3, .., en)
+            %
+            % Input arguments:
+            %   b        - the collection the elements are added to
+            %   e1,..,en - the elements being added to the collection
             %
             % Restrictions (that return error messages)
             % - batteryCells cannot add elements.
             % - batteryPacks cannot be added to a collection of elements.
             % - adding an element to a batteryPack will replace the current
             %   element.
-            if isa(b, 'lfpBattery.batteryCell')
-                error('addElement() is unsupported for batteryCell objects.')
-            elseif isa(element, 'lfpBattery.batteryPack')
-                error('batteryPack objects cannot be added.')
-            end
-            if isa(b, 'lfpBattery.batteryPack')
-                b.El = element;
-            else
-                b.nEl = uint32(sum(b.nEl) + 1); % sum() in case nEl is empty
-                if isempty(b.El) || isstruct(b.El) % in case El's properties were addressed already
-                    b.El = element;
-                else
-                    b.El(b.nEl, 1) = element;
-                end
+            for i = 1:numel(varargin)
+                b.addElement(varargin{i})
             end
             b.findImax;
             b.refreshNominals;
@@ -418,6 +413,33 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             % REFRESHSOC: Re-calculates the SoC
             s = 1 - b.Cd ./ b.Cn;
             b.soc = s;
+        end
+        function addElement(b, element)
+            % ADDELEMENT: Adds an element to the collection (e. g. the
+            % batteryPack, parallelElement or stringElement. An element can
+            % be a batteryCell, a parallelElement or a stringElement or a
+            % user-defined element.
+            %
+            % Restrictions (that return error messages)
+            % - batteryCells cannot add elements.
+            % - batteryPacks cannot be added to a collection of elements.
+            % - adding an element to a batteryPack will replace the current
+            %   element.
+            if isa(b, 'lfpBattery.batteryCell')
+                error('addElement() is unsupported for batteryCell objects.')
+            elseif isa(element, 'lfpBattery.batteryPack')
+                error('batteryPack objects cannot be added.')
+            end
+            if isa(b, 'lfpBattery.batteryPack')
+                b.El = element;
+            else
+                b.nEl = uint32(sum(b.nEl) + 1); % sum() in case nEl is empty
+                if isempty(b.El) || isstruct(b.El) % in case El's properties were addressed already
+                    b.El = element;
+                else
+                    b.El(b.nEl, 1) = element;
+                end
+            end
         end
     end
     
