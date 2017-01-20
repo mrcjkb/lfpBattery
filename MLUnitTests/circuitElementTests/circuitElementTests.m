@@ -20,18 +20,18 @@ assert(abs(p.V - b.V) < tol, 'parallelElement: unexpected voltage')
 
 p.powerRequest(30, 60);
 
-%% seriesElement tests
+%% seriesElementPE tests
 b = batteryCell(3.5, 3.2, 'socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
 b.addcurves(d)
-s = seriesElement('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
+s = seriesElementPE('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
 s.addElement(b)
 s.addElement(b)
 s.addElement(b)
 
-assert(isequal(s.Cn, min(b.Cn)), 'unexpected seriesElement nominal capacity')
-assert(abs(s.Vn - 3.*b.Vn) < tol, 'unexpected seriesElement nominal voltage')
-assert(isequal(s.Cd, max(b.Cd)), 'seriesElement: unexpected discharge capacity')
-assert(abs(s.V - 3.*b.V) < tol, 'seriesElement: unexpected voltage')
+assert(isequal(s.Cn, min(b.Cn)), 'unexpected seriesElementPE nominal capacity')
+assert(abs(s.Vn - 3.*b.Vn) < tol, 'unexpected seriesElementPE nominal voltage')
+assert(isequal(s.Cd, max(b.Cd)), 'seriesElementPE: unexpected discharge capacity')
+assert(abs(s.V - 3.*b.V) < tol, 'seriesElementPE: unexpected voltage')
 
 %% combination test 1
 b = batteryCell(3.5, 3.2, 'socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
@@ -40,7 +40,7 @@ p = parallelElement('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
 p.addElement(b);
 p.addElement(b);
 p.addElement(b);
-s = seriesElement('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
+s = seriesElementPE('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
 s.addElement(p)
 s.addElement(p)
 s.addElement(p)
