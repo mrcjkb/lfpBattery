@@ -59,6 +59,9 @@ classdef parallelElement < lfpBattery.batCircuitElement
             b.Vn = mean([b.El.Vn]);
             b.Cn = sum([b.El.Cn]);
         end 
+        function s = sohCalc(b)
+            s =  mean([b.El.SoH]);
+        end
     end
     
 end

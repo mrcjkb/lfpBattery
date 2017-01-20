@@ -24,6 +24,9 @@ classdef seriesElementPE < lfpBattery.seriesElement
             b.Vn = sum([b.El.Vn]);
             b.Cn = min([b.El.Cn]);
         end 
+        function s = sohCalc(b)
+            s = min([b.El.SoH]); 
+        end
     end
 end
 

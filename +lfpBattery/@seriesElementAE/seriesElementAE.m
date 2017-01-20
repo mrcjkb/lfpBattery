@@ -20,6 +20,9 @@ classdef seriesElementAE < lfpBattery.seriesElement
             b.Vn = sum([b.El.Vn]);
             b.Cn = mean([b.El.Cn]);
         end 
+        function s = sohCalc(b)
+            s = mean([b.El.SoH]); 
+        end
     end
     
 end
