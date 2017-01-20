@@ -10,7 +10,7 @@ function lfpBatteryTests(test)
 
 %% Parse inputs
 thandles = {@cycleCounterTests, @ageModelTests, @dischargeFitTests, @curvefitCollectionTests, ...
-    @batteryCellTests};
+    @batteryCellTests, @circuitElementTests};
 TTF = true(numel(thandles), 1);
 if nargin > 0
     TTF = ~TTF;
@@ -25,6 +25,8 @@ if nargin > 0
             TTF(4) = true;
         case 'batteryCell'
             TTF(5) = true;
+        case 'circuitElement'
+            TTF(6) = true;
     end
 end
 import lfpBattery.*

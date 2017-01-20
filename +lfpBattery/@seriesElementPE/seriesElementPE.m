@@ -2,14 +2,8 @@ classdef seriesElementPE < lfpBattery.seriesElement
     %SERIESELEMENTPE battery elements connected in series with passive
     %equalization
     
-    properties (Dependent)
-        V;
-    end
     properties (Dependent, SetAccess = 'protected')
         Cd;
-    end
-    properties (Dependent, SetAccess = 'immutable')
-        Zi;
     end
     
     methods
