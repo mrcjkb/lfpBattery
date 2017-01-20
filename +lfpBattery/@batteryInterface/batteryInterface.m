@@ -43,6 +43,9 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
     properties (Abstract, Dependent, SetAccess = 'immutable')
         Zi; % Internal impedance in Ohm
     end
+    properties (Dependent, SetAccess = 'protected')
+        SoH; % State of health [0,..,1]
+    end
     properties (Abstract, Dependent, SetAccess = 'protected')
         % Discharge capacity in Ah (Cd = 0 if SoC = 1).
         % The discharge capacity is given by the nominal capacity Cn and
@@ -76,7 +79,6 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         Cbu;
     end
     properties (SetAccess = 'protected')
-        SoH; % State of health [0,..,1]
         Imax = 0; % maximum current in A (determined from cell discharge curves)
         Cn; % Nominal (or average) capacity in Ah
         % Nominal (or average) voltage in V
@@ -86,7 +88,11 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         Vn;
     end
     properties (Access = 'protected', Hidden)
-        soh0; % Last state of health
+        % Internal state of health.
+        % If the age model is connected directly to the object, SoH points
+        % to the internal soh. Otherwise, the SoH is calculated according to
+        % the sub-elements' idividual states of health.
+        soh; 
         cyc; % cycleCounter object
         ageModel; % batteryAgeModel object
         soc_max; % internal soc_max is lower than external socMax if SoH < 1
@@ -112,6 +118,10 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         % Elements (parallelELement, seriesElement or batteryCell objects)
         El;
         Cdi; % for storing Cd property in batteryCell
+        % function handle for method to determine SoH
+        % @sohPoint points to internal SoH
+        % @sohCalc retrieves SoH from subelements
+        sohPointer = @sohPoint;
     end
     properties (SetObservable, Hidden, SetAccess = 'protected')
         % State of charge (handled internally) This soc can be slightly
@@ -122,7 +132,6 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
     properties (Hidden, SetAccess = 'protected')
        hasCells = false; % true/false flag to indicate whether circuit element has cells or not 
     end
-    
     methods
         function b = batteryInterface(varargin)
             % BATTERYINTERFACE: Common Constructor. The properties that
@@ -141,6 +150,8 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             % ageModel      -    'none' (default), 'EO' (for event oriented
             %                    aging) or a custom age model that implements
             %                    the batteryAgeModel interface.
+            %                    'LowerLevel' indicates that there is an
+            %                    age model at a lower cell level.
             % cycleCounter  -    'auto' for automatic determination
             %                    depending on the ageModel (none for 'none'
             %                    and dambrowskiCounter for 'EO' or a custom
@@ -150,7 +161,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             %% parse optional inputs
             p = lfpBattery.batteryInterface.parseInputs(varargin{:});
             
-            b.SoH = p.Results.sohIni;
+            b.soh = p.Results.sohIni;
             b.socMin = p.Results.socMin;
             b.socMax = p.Results.socMax;
             b.soc = p.Results.socIni;
@@ -249,34 +260,6 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
                 end
             end
         end % iteratePower
-        function initAgeModel(b, varargin)
-            %INITAGEMODEL
-            p = lfpBattery.batteryInterface.parseInputs(varargin{:});
-            if ~isempty(b.hl)
-                delete(b.hl)
-            end
-            if ~strcmp(p.Results.ageModel, 'none')
-                if strcmp(p.Results.cycleCounter, 'auto')
-                    cy = lfpBattery.dambrowskiCounter(b.soc, b.soc_max);
-                else
-                    cy = p.Results.cycleCounter;
-                    cy.socMax = b.soc_max;
-                end
-                b.cyc = cy;
-                if strcmp(p.Results.ageModel, 'EO')
-                    b.ageModel = lfpBattery.eoAgeModel(cy);
-                else
-                    b.ageModel = p.Results.ageModel;
-                    b.addCounter(b.cyc)
-                end
-                % Make sure the battery model's SoH is updated every time
-                % the age model's SoH changes.
-                b.hl = addlistener(b.ageModel, 'SoH', 'PostSet', @b.updateSoH);
-            else
-                b.cyc = lfpBattery.dummyCycleCounter;
-                b.ageModel = lfpBattery.dummyAgeModel;
-            end
-        end % initAgeModel
         function addCounter(b, cy)
             %ADDCOUNTER: MTODO: Doc
             if ~isempty(b.sl)
@@ -405,9 +388,56 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
                 a = 0;
             end
         end
+        function s = get.SoH(b)
+            s = b.sohPointer(b);
+        end
     end % public methods
     
     methods (Access = 'protected')
+        function initAgeModel(b, varargin)
+            %INITAGEMODEL
+            p = lfpBattery.batteryInterface.parseInputs(varargin{:});
+            if ~isempty(b.hl)
+                delete(b.hl)
+            end
+            am = p.Results.ageModel;
+            cc = p.Results.cycleCounter;
+            if ischar(am)
+                if ~strcmp(am, 'EO')
+                    b.cyc = lfpBattery.dummyCycleCounter;
+                    b.ageModel = lfpBattery.dummyAgeModel;
+                    if strcmp(am, 'LowerLevel')
+                        b.sohPointer = @sohCalc; % point SoH to subcells
+                    else % 'none'
+                        b.sohPointer = @sohPoint; % point SoH to internal soh
+                    end
+                else % 'EO'
+                    if strcmp(cc, 'auto')
+                        cy = lfpBattery.dambrowskiCounter(b.soc, b.soc_max);
+                    else
+                        cy = cc;
+                        cy.socMax = b.soc_max;
+                    end
+                    b.cyc = cy;
+                    b.ageModel = lfpBattery.eoAgeModel(cy);
+                    b.sohPointer = @sohPoint; % point SoH to internal SoH
+                end
+            else % custom age model
+                if ischar(cc) % 'auto' or 'dambrowski'
+                    cy = lfpBattery.dambrowskiCounter(b.soc, b.soc_max);
+                else
+                    cy = cc;
+                end
+                b.cyc = cy;
+                b.ageModel = am;
+                b.sohPointer = @sohPoint; % point SoH to internal SoH
+            end
+            % Make sure the battery model's SoH is updated every time
+            % the age model's SoH changes.
+            b.hl = addlistener(b.ageModel, 'SoH', 'PostSet', @b.updateSoH);
+            % Make sure battery, age model and cycle counter are linked
+            b.addCounter(b.cyc)
+        end % initAgeModel
         function updateSoH(b, ~, event)
             maxSoC = b.socMax; % save last socMax
             b.SoH = event.AffectedObject.SoH;
@@ -447,6 +477,11 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
                     b.El(b.nEl, 1) = element;
                 end
             end
+            b.hasCells = true;
+        end
+        function s = sohPoint(b)
+            % points to the internal SoC
+            s = b.soh;
         end
     end
     
@@ -460,11 +495,11 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             addOptional(p, 'sohIni', 1, @(x) ~lfpBattery.commons.ge1le0(x))
             addOptional(p, 'etaBC', 0.97, @isnumeric)
             addOptional(p, 'etaBD', 0.97, @isnumeric)
-            validModels = {'auto'};
+            validModels = {'auto', 'dambrowski'};
             type = 'lfpBattery.cycleCounter';
             addOptional(p, 'cycleCounter', 'auto', ...
                 @(x) lfpBattery.batteryInterface.validateAM(x, validModels, type))
-            validModels = {'none', 'EO'};
+            validModels = {'none', 'EO', 'LowerLevel'};
             type = 'lfpBattery.batteryAgeModel';
             addOptional(p, 'ageModel', 'none', ...
                 @(x) lfpBattery.batteryInterface.validateAM(x, validModels, type))
@@ -491,6 +526,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         i = findImax(b); % determins the maximum current according to the discharge curves and/or the topology
         charge(b, Q); % For dis/charging a certain capacity Q in Ah
         refreshNominals(b); % Refresh nominal voltage and capacity (called whenever a new element is added)
+        s = sohCalc(b); % Determines the SoH
     end
 end
 

@@ -73,6 +73,15 @@ classdef (Abstract) batteryAgeModel < handle
             b.eolSoH = eols;
             b.SoH = init_soh;
         end
+        function addCounter(b, cy)
+            % Make sure cy is a subclass of cycleCounter and register this class
+            % as an observer/listener
+            lfpBattery.commons.validateInterface(cy, 'lfpBattery.cycleCounter')
+            if ~isempty(b.lh)
+                delete(b.lh)
+            end
+            b.lh = addlistener(cy, 'NewCycle', @b.addAging);
+        end
         % setters
         function set.wFit(a, fit)
             if ~isa(fit, 'function_handle')
@@ -97,15 +106,6 @@ classdef (Abstract) batteryAgeModel < handle
         end
         function a = get.eolAc(b)
             a = 1 - b.eolSoH;
-        end
-        function addCounter(b, cy)
-            % Make sure cy is a subclass of cycleCounter and register this class
-            % as an observer/listener
-            lfpBattery.commons.validateInterface(cy, 'lfpBattery.cycleCounter')
-            if ~isempty(b.lh)
-                delete(b.lh)
-            end
-            b.lh = addlistener(cy, 'NewCycle', @b.addAging);
         end
     end
     methods (Abstract, Access = 'protected')

@@ -55,6 +55,12 @@ classdef batteryCell < lfpBattery.batteryInterface
             b.V = b.Vn;
             b.hasCells = true; % always true for batteryCell
         end
+        function [P, I] = powerRequest(b, P, dt)
+            [P, I] = powerRequest@lfpBattery.batteryInterface(b, P, dt);
+            Q = I .* dt ./ 3600; % charged / discharged amount in Ah
+            b.charge(Q)
+            b.refreshSoC; % re-calculates element-level SoC as a total
+        end
         function [v, cd] = getNewVoltage(b, I, dt)
             cd = b.Cd - I .* dt ./ 3600;
             v = b.dC.interp(I, cd);
@@ -117,6 +123,10 @@ classdef batteryCell < lfpBattery.batteryInterface
         function charge(b, Q)
             b.Cdi = b.Cdi - Q;
             b.refreshSoC;
+        end
+        function s = sohCalc(b)
+            % sohCalc always points to internal soh for batteryCell
+            s = b.soh;
         end
     end
 end
