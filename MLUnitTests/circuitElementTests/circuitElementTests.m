@@ -47,7 +47,7 @@ s.addElement(p)
 
 assert(abs(s.SoC - (1 - s.Cd ./ s.Cn)) < tol, 'SP: unexpected SoC')
 
-s.powerRequest(100, 60); % MTODO: Requested power is still too high and sets negative powers if SoC is too close to upper limit
 
+s.powerRequest(100, 60); % MTODO: Requested power is still too high and sets negative powers if SoC is too close to upper limit
 
 
