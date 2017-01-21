@@ -29,7 +29,7 @@ classdef simpleSE < lfpBattery.batCircuitElement
         end
         function v = getNewVoltage(b, I, dt)
             % Voltage = number of elements times elements' voltage
-            v = b.nEl .* bEl.getNewVoltage(I, dt);
+            v = b.nEl .* b.El.getNewVoltage(I, dt);
         end
         function v = get.V(b)
             v = b.nEl .* b.El.V;
@@ -54,7 +54,7 @@ classdef simpleSE < lfpBattery.batCircuitElement
     
     methods (Access = 'protected')
         function i = findImax(b)
-            i = b.El.iMax;
+            i = b.El.Imax;
             b.Imax = i;
         end
         function charge(b, Q)
@@ -67,6 +67,13 @@ classdef simpleSE < lfpBattery.batCircuitElement
         function c = dummyCharge(b, Q)
             c = b.El.dummyCharge(Q);
         end
+        function s = sohCalc(b)
+            s = b.El.SoH;
+        end
+        function refreshNominals(b)
+            b.Vn = b.nEl .* b.El.Vn;
+            b.Cn = b.El.Cn;
+        end 
     end
 end
 

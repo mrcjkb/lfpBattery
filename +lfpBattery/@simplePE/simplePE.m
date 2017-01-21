@@ -9,6 +9,7 @@ classdef simplePE < lfpBattery.batCircuitElement
     end
     properties (Dependent, SetAccess = 'protected')
         Cd;
+        C;
     end
     properties (Dependent, SetAccess = 'immutable')
         Zi;
@@ -30,8 +31,7 @@ classdef simplePE < lfpBattery.batCircuitElement
             v = b.El.getNewVoltage(I./b.nEl, dt);
         end
         function set.V(b, v)
-            % Pass v on to all elements to account for self-balancing
-            % nature of parallel config
+            % Pass v down
             b.El.V = v;
         end
         function v = get.V(b)
@@ -39,6 +39,9 @@ classdef simplePE < lfpBattery.batCircuitElement
         end
         function c = get.Cd(b)
             c = b.nEl .* b.El.Cd;
+        end
+        function c = get.C(b)
+            c = b.nEl .* b.El.C;
         end
         function z = get.Zi(b)
             z = 1 ./ (b.nEl ./ b.El.Zi); % 1/z_total = sum_i(1/z_i)
@@ -69,7 +72,7 @@ classdef simplePE < lfpBattery.batCircuitElement
             s = b.El.SoH;
         end
         function c = dummyCharge(b, Q)
-            c = b.El.dummyCharge(Q);
+            c = b.nEl .* b.El.dummyCharge(Q ./ b.nEl);
         end
     end
 end
