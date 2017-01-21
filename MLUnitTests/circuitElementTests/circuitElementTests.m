@@ -85,7 +85,7 @@ s2 = seriesElementPE('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
 s2.addElements(b, b, b)
 p = parallelElement('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
 p.addElements(s, s2, s);
-B = [b, b, b;...
+B = [b, b, b; ...
     b2, b, b2; ...
     b, b, b];
 
@@ -119,8 +119,8 @@ disp('Circuit element tests passed.')
 end
 
 function [b, b2] = initBatteries(d)
+% d = dischargeCurves object
 import lfpBattery.*
-% d = dischargeCurves
 b = batteryCell(3, 3, 'socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
 b2 = batteryCell(3.5, 3.2, 'socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
 b.addcurves(d)
