@@ -1,7 +1,16 @@
 classdef (Abstract) seriesElement < lfpBattery.batCircuitElement
-    %SERIESELEMENT Summary of this class goes here
-    %   Detailed explanation goes here
-
+    %SERIESELEMENT: Abstract Composite/decorator (wrapper) for batteryCells and other
+    %composite decorators that implement the batCircuitElement interface.
+    %Used to create a string circuitry of cells or parallel elements or a
+    %combination.
+    %
+    %SEE ALSO: lfpBattery.batteryPack lfpBattery.batteryCell
+    %          lfpBattery.batCircuitElement lfpBattery.seriesElementPE
+    %          lfpBattery.seriesElementAE lfpBattery.parallelElement
+    %          lfpBattery.simpleSE lfpBattery.simplePE
+    %
+    %Authors: Marc Jakobi, Festus Anynagbe, Marc Schmidt
+    %         January 2017
     properties (Dependent, SetAccess = 'immutable')
         % Internal impedance in Ohm.
         % The internal impedance is currently not used as a physical

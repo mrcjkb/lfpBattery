@@ -63,7 +63,7 @@ classdef batteryCell < lfpBattery.batteryInterface
     % sTol              - Tolerance for SoC limitation iteration.
     % iTol              - Tolerance for current limitation iteration in A.
     %
-    %SEE ALSO: lfpBattery.batteryPack lfpBattery.batteryCell
+    %SEE ALSO: lfpBattery.batteryPack
     %          lfpBattery.batCircuitElement lfpBattery.seriesElement
     %          lfpBattery.seriesElementPE lfpBattery.seriesElementAE
     %          lfpBattery.parallelElement lfpBattery.simplePE
