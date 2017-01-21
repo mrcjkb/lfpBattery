@@ -2,8 +2,7 @@ classdef simplePE < lfpBattery.batCircuitElement
     %SIMPLEPE Simplified implementation of the parallelElement. This
     %version assumes That all battery cells are exactly the same for
     %the purpose of shorter simulation times. This class can be used as a
-    %decorator for the simpleSEA, simpleSEP and batteryCell classes
-    %and also for other simplePE classes.
+    %decorator for the simpleSE, other simplePE and batteryCell objects.
     
     properties (Dependent)
         V;
@@ -70,7 +69,7 @@ classdef simplePE < lfpBattery.batCircuitElement
             s = b.El.SoH;
         end
         function c = dummyCharge(b, Q)
-            
+            c = b.El.dummyCharge(Q);
         end
     end
 end

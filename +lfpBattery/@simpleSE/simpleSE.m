@@ -1,14 +1,19 @@
-classdef (Abstract) simpleSE < lfpBattery.batCircuitElement
-    %SIMPLESE Simplified implementation of the seriesElement. This
-    %version assumes That all battery cells are exactly the same for
-    %the purpose of shorter simulation times. This class's subclasses can be used as a
-    %decorator for the simplePE, simpleSEA, simpleSEP and batteryCell classes.
+classdef simpleSE < lfpBattery.batCircuitElement
+    %SIMPLESE Simplified implementation of the seriesElement (active and 
+    %passive equalizations). This version assumes That all battery cells
+    %are exactly the same for the purpose of shorter simulation times.
+    %This class can be used as a decorator for the simplePE, other simpleSE 
+    %and batteryCell objects.
     
     properties (Dependent)
         V;
     end
     properties (Dependent, SetAccess = 'immutable')
         Zi;
+    end
+    properties (Dependent, SetAccess = 'protected')
+        Cd;
+        C;
     end
     
     methods
@@ -36,6 +41,15 @@ classdef (Abstract) simpleSE < lfpBattery.batCircuitElement
         function z = get.Zi(b)
             z = b.nEl .* b.El.Zi;
         end
+        function c = get.Cd(b)
+            c = b.El.Cd;
+        end
+        function c = get.C(b)
+            c = b.El.C;
+        end
+        function addElements(varargin)
+            error('addElements is not supported for simpleSE objects. The element is passed in the constructor.')
+        end
     end
     
     methods (Access = 'protected')
@@ -45,13 +59,13 @@ classdef (Abstract) simpleSE < lfpBattery.batCircuitElement
         end
         function charge(b, Q)
             % Pass equal amount of discharge capacity to each element
-            q = 1 ./ b.nEl .* Q;
-            charge@lfpBattery.batCircuitElement(b, q)
+            b.El.charge(1 ./ b.nEl .* Q);
         end
         function p = getZProportions(b)
-            % lowest impedance --> lowest voltage
-            zv = [b.El.Zi]; % vector of internal impedances
-            p = zv ./ sum(zv);
+            p = ones(b.nEl, 1) ./ b.nEl;
+        end
+        function c = dummyCharge(b, Q)
+            c = b.El.dummyCharge(Q);
         end
     end
 end
