@@ -13,7 +13,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
     %         January 2017
     
     properties
-        % Maximum number of iterations.
+        % Maximum number of iterations in iteratePower() and iterateCurrent() methods.
         % The methods powerRequest() and powerIterator() iterate through
         % currents in order to find the current / voltage combination
         % required for a given power. Also, the SoC and current limitations
@@ -36,6 +36,8 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         iTol = 1e-3;
     end
     properties (SetAccess = 'immutable')
+        % Efficiency when charging [0,..,1].
+        % Note: Set eta_bd to 1 if only a total efficiency is given.
         eta_bc;
         % Efficiency when discharging [0,..,1].
         % Note: Set this property to 1 if only a total efficiency is given.
@@ -76,7 +78,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         C;
     end
     properties (Abstract, Dependent)
-        V; % Resting voltage / V
+        V; % Resting voltage in V
     end
     properties (Dependent)
         % Max SoC (default: 1)
@@ -478,60 +480,13 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             b.refreshNominals;
         end
         function it = createIterator(b)
+            %CREATEITERATOR: Returns an iterator for iterating through the
+            %collection's battery cells.
+            %
+            %SEE ALSO: lfpBattery.iterator
+            %MTODO: Finish doc
             it = batteryIterator(b);
             % MTODO: create batteryIterator & stack classes
-        end
-        %% setters
-        function set.socMin(b, s)
-            assert(s >= 0 && s <= 1, 'socMin must be between 0 and 1')
-            if s == 0
-                b.soc_min = eps;
-            else
-                b.soc_min = s;
-            end
-        end
-        function set.socMax(b, s)
-            assert(s <= 1, 'soc_max cannot be greater than 1')
-            assert(s > b.socMin, 'soc_max cannot be smaller than or equal to soc_min')
-            % Limit socMax by SoH
-            b.soc_max = s .* b.SoH;
-            b.cyc.socMax = s .* b.SoH;
-        end
-        function set.maxIterations(b, n)
-            b.maxIterations = uint32(max(1, n));
-        end
-        function set.pTol(b, tol)
-            b.pTol = abs(tol);
-        end
-        function set.sTol(b, tol)
-            b.sTol = abs(tol);
-        end
-        function set.iTol(b, tol)
-            b.iTol = abs(tol);
-        end
-        function set.psd(b, p)
-           lfpBattery.commons.onezeroChk(p, 'self-discharge rate')
-           b.Psd = - abs(p .* 1/(365.25.*86400./12) .* b.Cn ./ 3600 .* b.Vn); % 1/(month in seconds) * As * V = W
-        end
-        %% getters
-        function a = get.SoC(b)
-            s = b.soc ./ b.SoH; % SoC according to max capacity
-            a = lfpBattery.commons.upperlowerlim(s, 0, b.socMax);
-        end
-        function a = get.Cbu(b) % useable capacity after aging
-            a = (b.soc_max - b.soc_min) .* b.Cn;
-        end
-        function a = get.socMax(b)
-            a = b.soc_max ./ b.SoH;
-        end
-        function a = get.socMin(b)
-            a = b.soc_min;
-            if a == eps
-                a = 0;
-            end
-        end
-        function s = get.SoH(b)
-            s = b.sohPointer(b);
         end
         function initAgeModel(b, varargin)
             %INITAGEMODEL: Initializes the age model of a battery b.
@@ -595,6 +550,58 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             % Make sure battery, age model and cycle counter are linked
             b.addCounter(b.cyc)
         end % initAgeModel
+        %% setters
+        function set.socMin(b, s)
+            assert(s >= 0 && s <= 1, 'socMin must be between 0 and 1')
+            if s == 0
+                b.soc_min = eps;
+            else
+                b.soc_min = s;
+            end
+        end
+        function set.socMax(b, s)
+            assert(s <= 1, 'soc_max cannot be greater than 1')
+            assert(s > b.socMin, 'soc_max cannot be smaller than or equal to soc_min')
+            % Limit socMax by SoH
+            b.soc_max = s .* b.SoH;
+            b.cyc.socMax = s .* b.SoH;
+        end
+        function set.maxIterations(b, n)
+            b.maxIterations = uint32(max(1, n));
+        end
+        function set.pTol(b, tol)
+            b.pTol = abs(tol);
+        end
+        function set.sTol(b, tol)
+            b.sTol = abs(tol);
+        end
+        function set.iTol(b, tol)
+            b.iTol = abs(tol);
+        end
+        function set.psd(b, p)
+           lfpBattery.commons.onezeroChk(p, 'self-discharge rate')
+           b.Psd = - abs(p .* 1/(365.25.*86400./12) .* b.Cn ./ 3600 .* b.Vn); % 1/(month in seconds) * As * V = W
+        end
+        %% getters
+        function a = get.SoC(b)
+            s = b.soc ./ b.SoH; % SoC according to max capacity
+            a = lfpBattery.commons.upperlowerlim(s, 0, b.socMax);
+        end
+        function a = get.Cbu(b) % useable capacity after aging
+            a = (b.soc_max - b.soc_min) .* b.Cn;
+        end
+        function a = get.socMax(b)
+            a = b.soc_max ./ b.SoH;
+        end
+        function a = get.socMin(b)
+            a = b.soc_min;
+            if a == eps
+                a = 0;
+            end
+        end
+        function s = get.SoH(b)
+            s = b.sohPointer(b);
+        end
     end % public methods
     
     methods (Access = 'protected')
@@ -699,13 +706,41 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
     
     methods (Abstract)
         % GETNEWVOLTAGE: Returns the new voltage according to a current and a
-        % time step size
+        % time step size.
+        % 
+        % Syntax:   v = b.GETNEWVOLTAGE(I, dt);
+        %           v = GETNEWVOLTAGE(b, I, dt);
+        %
+        % Input arguments:
+        %   b   - battery object
+        %   I   - current in A
+        %   dt  - time step size in s
         v = getNewVoltage(b, I, dt);
-        addcurves(b, d, type); % adds a collection of discharge curves
+        % ADDCURVES: Adds a collection of discharge curves or a cycle
+        % life curve to the battery.
+        %
+        % Syntax: b.ADDCURVES(d, type)
+        %         ADDCURVES(b, d, type)
+        %
+        % Input arguments
+        %   b    - battery object to add the curves to
+        %   d    - curve fit object (must implement the curveFitInterface or
+        %          the curvefitCollection interface)
+        %   type - String indicating which type of curve is to be added.
+        %          'discharge' (default) for a discharge curve and 'cycleLife' for a
+        %          cycleLife cell.
+        %
+        % SEE ALSO: lfpBattery.curveFitInterface
+        % lfpBattery.curvefitCollection lfpBattery.dischargeCurves
+        % lfpBattery.dischargeFit lfpBattery.woehlerFit
+        addcurves(b, d, type); 
     end % abstract methods
     
     methods (Abstract, Access = 'protected')
-        i = findImax(b); % determins the maximum current according to the discharge curves and/or the topology
+        % determins the maximum current according to the discharge curves and/or the topology
+        % 
+        % Syntax: i = b.findImax;
+        i = findImax(b);
         charge(b, Q); % For dis/charging a certain capacity Q in Ah
         refreshNominals(b); % Refresh nominal voltage and capacity (called whenever a new element is added)
         s = sohCalc(b); % Determines the SoH

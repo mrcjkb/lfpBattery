@@ -1,5 +1,76 @@
 classdef batteryCell < lfpBattery.batteryInterface
-    %BATTERYCELL: Battery cell model.
+    %BATTERYCELL: Li-ion battery cell model based on fitted discharge curves.
+    %
+    % Syntax:   b = BATTERYCELL(Cn, Vn);
+    %           b = BATTERYCELL(Cn, Vn, 'OptionName', 'OptionValue');
+    %
+    % Input arguments:
+    % Cn            -    Nominal capacity in Ah (default: empty)
+    % Vn            -    Nominal voltage in Ah (default: empty)
+    %
+    % Name-Value pairs:
+    %
+    % 'Zi'            -    Internal impedance in Ohm (default: 17e-3)
+    % 'sohIni'        -    Initial state of health [0,..,1] (default: 1)
+    % 'socIni'        -    Initial state of charge [0,..,1] (default: 0.2)
+    % 'socMin'        -    Minimum state of charge (default: 0.2)
+    % 'socMax'        -    Maximum state of charge (default: 1)
+    % 'ageModel'      -    'none' (default), 'EO' (for event oriented
+    %                      aging) or a custom age model that implements
+    %                      the batteryAgeModel interface.
+    % 'cycleCounter'  -    'auto' for automatic determination
+    %                      depending on the ageModel (none for 'none'
+    %                      and dambrowskiCounter for 'EO' or a custom
+    %                      cycle counter that implements the
+    %                      cycleCounter interface.
+    %
+    % BATTERYCELL Methods:
+    % powerRequest      - Requests a power in W (positive for charging, 
+    %                     negative for discharging) from the battery.
+    % iteratePower      - Iteration to determine new state given a certain power.
+    % currentRequest    - Requests a current in A (positive for charging,
+    %                     negative for discharging) from the battery.
+    % iterateCurrent    - Iteration to determine new state given a certain current.
+    % addCounter        - Registers a cycleCounter object as an observer.
+    % dischargeFit      - Uses Levenberg-Marquardt algorithm to fit a
+    %                     discharge curve.
+    % initAgeModel      - Initializes the age model of the battery.
+    % getNewVoltage     - Returns the new voltage according to a current and a
+    %                     time step size.
+    % addcurves         - Adds a collection of discharge curves or a cycle
+    %                     life curve to the battery.
+    %
+    %
+    % BATTERYCELL Properties:
+    % C                 - Current capacity level in Ah.
+    % Cbu               - Useable capacity in Ah.
+    % Cd                - Discharge capacity in Ah (Cd = 0 if SoC = 1).
+    % Cn                - Nominal (or average) capacity in Ah.
+    % eta_bc            - Efficiency when charging [0,..,1].
+    % eta_bd            - Efficiency when discharging [0,..,1].
+    % Imax              - Maximum current in A.
+    % psd               - Self discharge rate in 1/month [0,..,1].
+    % SoC               - State of charge [0,..,1].
+    % socMax            - Maximum SoC (default: 1).
+    % socMin            - Minimum SoC (default: 0.2).
+    % SoH               - State of health [0,..,1].
+    % V                 - Resting voltage in V.
+    % Vn                - Nominal (or average) voltage in V.
+    % Zi                - Internal impedance in Ohm.
+    % maxIterations     - Maximum number of iterations in iteratePower()
+    %                     and iterateCurrent() methods.
+    % pTol              - Tolerance for the power iteration in W.
+    % sTol              - Tolerance for SoC limitation iteration.
+    % iTol              - Tolerance for current limitation iteration in A.
+    %
+    %SEE ALSO: lfpBattery.batteryPack lfpBattery.batteryCell
+    %          lfpBattery.batCircuitElement lfpBattery.seriesElement
+    %          lfpBattery.seriesElementPE lfpBattery.seriesElementAE
+    %          lfpBattery.parallelElement lfpBattery.simplePE
+    %          lfpBattery.simpleSE
+    %
+    %Authors: Marc Jakobi, Festus Anynagbe, Marc Schmidt
+    %         January 2017
     
     properties (Access = 'protected');
         dC; % curvefitCollection (dischargeCurves object)
@@ -7,23 +78,32 @@ classdef batteryCell < lfpBattery.batteryInterface
         zi; % for storing dependent Zi property
     end
     properties (Dependent)
-        V;
+        V; % Resting voltage / V
     end
     properties (Dependent, SetAccess = 'protected')
+        % Discharge capacity in Ah (Cd = 0 if SoC = 1).
+        % The discharge capacity is given by the nominal capacity Cn and
+        % the current capacity C at SoC.
+        % Cd = Cn - C
         Cd;
+        % Current capacity level in Ah.
         C;
     end
     properties (Dependent, SetAccess = 'immutable')
+        % Internal impedance in Ohm.
+        % The internal impedance is currently not used as a physical
+        % parameter. However, it is used in the circuit elements
+        % (seriesElement/parallelElement) to determine the distribution
+        % of currents and voltages.
         Zi;
     end
     
     methods
         function b = batteryCell(Cn, Vn, varargin)
-            % BATTERYCELL: Initializes a batteryCell object. 
+            % BATTERYCELL: Initializes a BATTERYCELL object. 
             %
-            % Syntax:   BATTERYCELL(Cn, Vn)
-            %           BATTERYCELL(Cn, Vn, 'OptionName', 'OptionValue')
-            % obj@lfpBattery.batteryInterface('Name', 'Value');
+            % Syntax:   b = BATTERYCELL(Cn, Vn);
+            %           b = BATTERYCELL(Cn, Vn, 'OptionName', 'OptionValue');
             %
             % Input arguments:
             % Cn            -    nominal capacity in Ah (default: empty)
@@ -44,18 +124,16 @@ classdef batteryCell < lfpBattery.batteryInterface
             %                    and dambrowskiCounter for 'EO' or a custom
             %                    cycle counter that implements the
             %                    cycleCounter interface.
-            
             b@lfpBattery.batteryInterface(varargin{:})
-            %% parse optional inputs
+            % parse optional inputs
             p = lfpBattery.batteryInterface.parseInputs(varargin{:});
-            
             b.Zi = p.Results.Zi;
             b.Cn = Cn;
             b.Cdi = (1 - b.soc) .* b.Cn;
             b.Vn = Vn;
             b.V = b.Vn;
             b.hasCells = true; % always true for batteryCell
-        end
+        end % constructor
         function [v, cd] = getNewVoltage(b, I, dt)
             cd = b.Cd - I .* dt ./ 3600;
             v = b.dC.interp(I, cd);
@@ -117,6 +195,7 @@ classdef batteryCell < lfpBattery.batteryInterface
             end
         end
         function refreshNominals(b)   %#ok<MANU> Method not needed
+            warning('refreshNominals() should not be called on a batteryCell.')
         end
         function charge(b, Q)
             b.Cdi = b.Cdi - Q;

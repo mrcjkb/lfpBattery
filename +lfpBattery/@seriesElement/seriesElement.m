@@ -3,6 +3,11 @@ classdef (Abstract) seriesElement < lfpBattery.batCircuitElement
     %   Detailed explanation goes here
 
     properties (Dependent, SetAccess = 'immutable')
+        % Internal impedance in Ohm.
+        % The internal impedance is currently not used as a physical
+        % parameter. However, it is used in the circuit elements
+        % (seriesElement/parallelElement) to determine the distribution
+        % of currents and voltages.
         Zi;
     end
     

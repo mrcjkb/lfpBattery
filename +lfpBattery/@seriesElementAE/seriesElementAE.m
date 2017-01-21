@@ -3,10 +3,15 @@ classdef seriesElementAE < lfpBattery.seriesElement
     %equalization
     
     properties (Dependent)
-        V;
+        V; % Resting voltage / V
     end
     properties (Dependent, SetAccess = 'protected')
+        % Discharge capacity in Ah (Cd = 0 if SoC = 1).
+        % The discharge capacity is given by the nominal capacity Cn and
+        % the current capacity C at SoC.
+        % Cd = Cn - C
         Cd;
+        % Current capacity level in Ah.
         C;
     end
     
