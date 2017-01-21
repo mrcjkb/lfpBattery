@@ -1,6 +1,6 @@
 function circuitElementTests
-%CIRCUITELEMENTTESTS Summary of this function goes here
-%   Detailed explanation goes here
+%CIRCUITELEMENTTESTS For testing the composite implementation of the
+%various battery cell topologies
 import lfpBattery.*
 load(fullfile(pwd, 'MLUnitTests', 'batteryCellTests', 'dcCurves.mat'))
 tol = 1e-10;
@@ -58,7 +58,7 @@ assert(isequal(s.Cn, min([sum([B(1,:).Cn]); sum([B(2,:).Cn]); sum([B(3,:).Cn])])
 assert(isequal(s.Cd, min([sum([B(1,:).Cd]); sum([B(2,:).Cd]); sum([B(3,:).Cd])])), 'SPP: unexpected discharge capacity')
 assert(isequal(s.Vn, sum([mean([B(1,:).Vn]); mean([B(2,:).Vn]); mean([B(3,:).Vn])])), 'SPP: unexpected nominal voltage')
 
-chargeDischargeTest(s, 'SPP')
+chargeDischargeTest(s, 'SPP', 100)
 
 %% String of parallel cells with active equalization (SPA)
 B = initBatteries(d);
@@ -76,7 +76,7 @@ assert(abs(s.SoC - (1 - s.Cd ./ s.Cn)) < tol, 'SPA: unexpected SoC')
 assert(isequal(s.Cn, mean([sum([B(1,:).Cn]); sum([B(2,:).Cn]); sum([B(3,:).Cn])])), 'SPA: unexpected nominal capacity')
 assert(isequal(s.Vn, sum([mean([B(1,:).Vn]); mean([B(2,:).Vn]); mean([B(3,:).Vn])])), 'SPA: unexpected nominal voltage')
 
-chargeDischargeTest(s, 'SPA')
+chargeDischargeTest(s, 'SPA', 100)
 
 %% Parallel strings of cells with passive equalization (PSP)
 B = initBatteries(d);
@@ -93,7 +93,7 @@ B = [B(1) B(4) B(7); B(2) B(5) B(8); B(3) B(6) B(9)];
 assert(abs(p.SoC - (1 - p.Cd ./ p.Cn)) < tol, 'PSP: unexpected SoC')
 assert(isequal(p.Cn, sum([min([B(:,1).Cn]); min([B(:,2).Cn]); min([B(:,3).Cn])])), 'PSP: unexpected nominal capacity')
 assert(isequal(p.Vn, mean([sum([B(:,1).Vn]); sum([B(:,2).Vn]); sum([B(:,3).Vn])])), 'PSP: unexpected nominal voltage')
-chargeDischargeTest(p, 'PSP')
+chargeDischargeTest(p, 'PSP', 100)
 
 
 %% Parallel strings of cells with active equalization (PSA)
@@ -111,42 +111,8 @@ B = [B(1) B(4) B(7); B(2) B(5) B(8); B(3) B(6) B(9)];
 assert(abs(p.SoC - (1 - p.Cd ./ p.Cn)) < tol, 'PSA: unexpected SoC')
 assert(isequal(p.Cn, sum([mean([B(:,1).Cn]); mean([B(:,2).Cn]); mean([B(:,3).Cn])])), 'PSA: unexpedced nominal capacity')
 assert(isequal(p.Vn, mean([sum([B(:,1).Vn]); sum([B(:,2).Vn]); sum([B(:,3).Vn])])), 'PSA: unexpected nominal voltage')
-chargeDischargeTest(p, 'PSA')
+chargeDischargeTest(p, 'PSA', 100)
+
 
 %%
 disp('Circuit element tests passed.')
-
-
-end
-
-function [b] = initBatteries(d)
-% d = dischargeCurves object
-import lfpBattery.*
-for i = 1:3
-    b(i) = batteryCell(3, 3, 'socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
-    b(i).addcurves(d)
-end
-for i = 4:6
-    b(i) = batteryCell(3.5, 3.2, 'socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
-    b(i).addcurves(d)
-end
-for i = 7:9
-    b(i) = batteryCell(3, 3, 'socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
-    b(i).addcurves(d)
-end
-end
-
-function chargeDischargeTest(b, config)
-% config = topology name as string
-tol = 1e-6;
-for i = 1:100
-    P = b.powerRequest(100, 60);
-end
-assert(isequal(P, 0), [config, ': Unexpected charging behaviour (Power)'])
-assert(abs(b.SoC - 1) < tol, [config, ': Unexpected charging behaviour (SoC)'])
-for i = 1:100
-    P = b.powerRequest(-100, 60);
-end
-assert(isequal(P, 0), [config, ': Unexpected discharging behaviour (Power)'])
-assert(abs(b.SoC - 0.2) < tol, [config, ': Unexpected discharging behaviour (SoC)'])
-end
