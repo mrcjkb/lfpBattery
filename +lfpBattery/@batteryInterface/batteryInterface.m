@@ -205,11 +205,18 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
                 b.seH = @le; % less than or equal to
             end
             if abs(b.socLim - b.soc) > b.sTol % call only if SoC limit has not already been reached
+                P0 = P; % save initial request
                 b.lastPr = P;
-                [P, I, b.V, ~] = b.iteratePower(P, dt);
-                Q = I .* dt ./ 3600; % charged / discharged amount in Ah
-                b.charge(Q)
-                b.refreshSoC; % re-calculates element-level SoC as a total
+                [P, I, V, ~] = b.iteratePower(P, dt);
+                if sign(P) ~= sign(P0)
+                    % This prevents false power flows in case of changes to
+                    % the SoC limitations
+                    P = 0;
+                else
+                    Q = I .* dt ./ 3600; % charged / discharged amount in Ah
+                    b.charge(Q)
+                    b.refreshSoC; % re-calculates element-level SoC as a total
+                end
             else
                 P = 0;
                 I = 0;
