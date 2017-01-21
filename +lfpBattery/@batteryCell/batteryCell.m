@@ -11,6 +11,7 @@ classdef batteryCell < lfpBattery.batteryInterface
     end
     properties (Dependent, SetAccess = 'protected')
         Cd;
+        C;
     end
     properties (Dependent, SetAccess = 'immutable')
         Zi;
@@ -55,12 +56,6 @@ classdef batteryCell < lfpBattery.batteryInterface
             b.V = b.Vn;
             b.hasCells = true; % always true for batteryCell
         end
-        function [P, I] = powerRequest(b, P, dt)
-            [P, I] = powerRequest@lfpBattery.batteryInterface(b, P, dt);
-            Q = I .* dt ./ 3600; % charged / discharged amount in Ah
-            b.charge(Q)
-            b.refreshSoC; % re-calculates element-level SoC as a total
-        end
         function [v, cd] = getNewVoltage(b, I, dt)
             cd = b.Cd - I .* dt ./ 3600;
             v = b.dC.interp(I, cd);
@@ -99,6 +94,9 @@ classdef batteryCell < lfpBattery.batteryInterface
         function c = get.Cd(b)
             c = b.Cdi;
         end
+        function c = get.C(b)
+            c = b.Cn - b.Cd;
+        end
         function set.Zi(b, z)
             b.zi = z;
         end
@@ -123,6 +121,9 @@ classdef batteryCell < lfpBattery.batteryInterface
         function charge(b, Q)
             b.Cdi = b.Cdi - Q;
             b.refreshSoC;
+        end
+        function c = dummyCharge(b, Q)
+            c = b.C + Q;
         end
         function s = sohCalc(b)
             % sohCalc always points to internal soh for batteryCell

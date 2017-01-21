@@ -19,7 +19,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         % Tolerance for the power iteration in W.
         % Increasing this number can decrease the simulation time, but can
         % also reduce the accuracy of the power requests.
-        pTol = 1e-6; 
+        pTol = 1e-3; 
         % Tolerance for SoC limitation iteration.
         % Increasing this number can decrease the simulation time, but can
         % also reduce the accuracy of the SoC limitation.
@@ -27,7 +27,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         % Tolerance for current limitation iteration in A.
         % Increasing this number can decrease the simulation time, but can
         % also reduce the accuracy of the current limitation.
-        iTol = 1e-6;
+        iTol = 1e-3;
     end
     properties (SetAccess = 'immutable')
         eta_bc;
@@ -45,6 +45,15 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
     end
     properties (Dependent, SetAccess = 'protected')
         SoH; % State of health [0,..,1]
+        % State of charge [0,..,1].
+        % In this model, the SoC is fraction between the current capacity
+        % and the nominal capacity. SoC = C ./ Cn. Capacity loss due to
+        % aging is not included in the SoC calculation.
+        SoC;
+        % Useable capacity in Ah.
+        % This property takes into account aging effects (if an aging model
+        % is used) and the SoC limitation.
+        Cbu;
     end
     properties (Abstract, Dependent, SetAccess = 'protected')
         % Discharge capacity in Ah (Cd = 0 if SoC = 1).
@@ -52,6 +61,8 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         % the current capacity C at SoC.
         % Cd = Cn - C
         Cd;
+        % Current capacity level in Ah.
+        C;
     end
     properties (Abstract, Dependent)
         V; % Resting voltage / V
@@ -68,15 +79,6 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         % of the voltage interpolation is drastically reduced at SoCs 
         % below 0.1 or 0.2, depending on the current.
         socMin;
-        % State of charge [0,..,1].
-        % In this model, the SoC is fraction between the current capacity
-        % and the nominal capacity. SoC = C ./ Cn. Capacity loss due to
-        % aging is not included in the SoC calculation.
-        SoC;
-        % Useable capacity in Ah.
-        % This property takes into account aging effects (if an aging model
-        % is used) and the SoC limitation.
-        Cbu;
     end
     properties (SetAccess = 'protected')
         Imax = 0; % maximum current in A (determined from cell discharge curves)
@@ -177,11 +179,13 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             warning('on', 'all')
             
         end % constructor
-        function [P, I] = powerRequest(b, P, dt)
+        function [P, V, I] = powerRequest(b, P, dt)
             % POWERREQUEST: MTODO: Doc
             % P:  power in W
             % dt: size of time step in S
             % MTODO: Increase precision!
+            % NOTE: This function does not change the battery objects'
+            % properties. This is done by the objects themselves.
             
             % set operator handles according to charge or discharge
             if P > 0 % charge
@@ -200,12 +204,16 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
                 b.reH = @lt; % less than
                 b.seH = @le; % less than or equal to
             end
-            if b.seH(b.socLim - b.soc, 0) % call only if SoC limit has not already been reached
+            if abs(b.socLim - b.soc) > b.sTol % call only if SoC limit has not already been reached
                 b.lastPr = P;
-                [P, I, b.V, b.soc] = b.iteratePower(P, dt);
+                [P, I, b.V, ~] = b.iteratePower(P, dt);
+                Q = I .* dt ./ 3600; % charged / discharged amount in Ah
+                b.charge(Q)
+                b.refreshSoC; % re-calculates element-level SoC as a total
             else
                 P = 0;
                 I = 0;
+                V = b.V;
             end
             b.slTF = false; % set SoC limitation flag false
         end % powerRequest
@@ -232,15 +240,18 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             if abs(err) > b.pTol && b.pct < b.maxIterations
                 b.pct = b.pct + 1;
                 [P, I, V] = b.iteratePower(P + err, dt);
-            elseif abs(I) > b.Imax + b.iTol % Limit power according to max current using recursion
+            else
+                P = b.lastPr;
+            end
+            if abs(I) > b.Imax + b.iTol % Limit power according to max current using recursion
                 b.pct = 0;
                 P = sign(I) .* b.Imax .* mean([V_curr; V]);
                 b.lastPr = P;
                 [P, I, V] = b.iteratePower(P, dt);
             end
             b.pct = 0;
-            newCd = b.Cd - I .* dt ./ 3600;
-            soc = 1 - newCd ./ b.Cn;
+            newC = b.dummyCharge(I .* dt ./ 3600);
+            soc = newC ./ b.Cn;
             if P ~= 0 % Limit power according to SoC using recursion
                 os = soc - b.soc; % charged
                 req = b.socLim - b.soc; % required to reach limit
@@ -249,16 +260,15 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
                         && b.sct < b.maxIterations
                     % MTODO: Something wrong with SoC limitation here!
                     b.sct = b.sct + 1;
-                    b.slTF = true; % indicate that SoC limiting is active
+                    b.slTF = true; % indicate that SoC limiting is active to prevent switching the sign of the power
                     % correct power request
                     P = b.lastPr + err .* b.lastPr;
                     b.lastPr = P;
                     [P, I, V, soc] = b.iteratePower(P, dt);
-                else
-                    b.sct = 0;
-                    b.slTF = false;
                 end
             end
+            b.sct = 0;
+            b.slTF = false;
         end % iteratePower
         function addCounter(b, cy)
             %ADDCOUNTER: MTODO: Doc
@@ -330,7 +340,10 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             % - adding an element to a batteryPack will replace the current
             %   element.
             for i = 1:numel(varargin)
-                b.addElement(varargin{i})
+                el = varargin{i};
+                for j = 1:numel(el) % In case arrays are added
+                    b.addElement(el(j))
+                end
             end
             b.findImax;
             b.refreshNominals;
@@ -445,7 +458,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         end
         function s = refreshSoC(b)
             % REFRESHSOC: Re-calculates the SoC
-            s = 1 - b.Cd ./ b.Cn;
+            s = b.C ./ b.Cn;
             b.soc = s;
         end
         function addElement(b, element)
@@ -527,6 +540,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         charge(b, Q); % For dis/charging a certain capacity Q in Ah
         refreshNominals(b); % Refresh nominal voltage and capacity (called whenever a new element is added)
         s = sohCalc(b); % Determines the SoH
+        c = dummyCharge(b, Q); % returns the new capacity after charge/discharge without altering the object's properties
     end
 end
 

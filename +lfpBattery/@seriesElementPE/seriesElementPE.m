@@ -2,20 +2,38 @@ classdef seriesElementPE < lfpBattery.seriesElement
     %SERIESELEMENTPE battery elements connected in series with passive
     %equalization
     
+    properties (Dependent)
+        V;
+    end
     properties (Dependent, SetAccess = 'protected')
         Cd;
+        C;
     end
     
     methods
         function b = seriesElementPE(varargin)
             b@lfpBattery.seriesElement(varargin{:})
         end
+        function v = get.V(b)
+            v = sum([b.El.V]);
+        end
         function c = get.Cd(b)
             % total capacity = min of elements' capacities
             % --> discharged capacity = min of elements' discharged
             % capacities, since chargeable capacity is limited with passive
             % equalization
-            c = min([b.El.Cd]);
+            c = b.Cn - b.C;
+        end
+        function c = get.C(b)
+            c = min([b.El.C]);
+        end
+        function set.V(b, v)
+            % set voltages according to proportions of internal impedances
+            p = b.getZProportions;
+            v = v .* p(:);
+            for i = uint32(1):b.nEl
+                b.El(i).V = v(i);
+            end
         end
     end
     
@@ -26,6 +44,9 @@ classdef seriesElementPE < lfpBattery.seriesElement
         end 
         function s = sohCalc(b)
             s = min([b.El.SoH]); 
+        end
+        function c = dummyCharge(b, Q)
+            c = min(dummyCharge@lfpBattery.seriesElement(b, Q));
         end
     end
 end

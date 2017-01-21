@@ -7,6 +7,7 @@ classdef parallelElement < lfpBattery.batCircuitElement
     end
     properties (Dependent, SetAccess = 'protected')
         Cd;
+        C;
     end
     properties (Dependent, SetAccess = 'immutable')
         Zi;
@@ -32,6 +33,12 @@ classdef parallelElement < lfpBattery.batCircuitElement
         end
         function c = get.Cd(b)
             c = sum([b.El.Cd]);
+        end
+        function c = get.C(b)
+            c = sum([b.El.C]);
+%             disp('get')
+%             disp([b.El.C])
+%             disp(c)
         end
         function z = get.Zi(b)
             z = 1 ./ sum((1 ./ [b.El.Zi])); % 1/z_total = sum_i(1/z_i)
@@ -61,6 +68,13 @@ classdef parallelElement < lfpBattery.batCircuitElement
         end 
         function s = sohCalc(b)
             s =  mean([b.El.SoH]);
+        end
+        function c = dummyCharge(b, Q)
+            q = 1 ./ double(b.nEl) .* Q;
+            c = sum(dummyCharge@lfpBattery.batCircuitElement(b, q));
+%             disp('dummy')
+%             disp(dummyCharge@lfpBattery.batCircuitElement(b, q));
+%             disp(c)
         end
     end
     
