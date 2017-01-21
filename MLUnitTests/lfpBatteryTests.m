@@ -7,6 +7,8 @@ function lfpBatteryTests(test)
 %'dischargeFit'
 %'curvefitCollections'
 %'batteryCell'
+%'circuitElement'
+%'simpleCircuit'
 
 %% Parse inputs
 thandles = {@cycleCounterTests, @ageModelTests, @dischargeFitTests, @curvefitCollectionTests, ...
@@ -29,6 +31,8 @@ if nargin > 0
             TTF(6) = true;
         case 'simpleCircuit'
             TTF(7) = true;
+        otherwise
+            error([test, 'is not a valid input argument.'])
     end
 end
 import lfpBattery.*

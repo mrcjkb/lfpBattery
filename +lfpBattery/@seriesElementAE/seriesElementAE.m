@@ -25,7 +25,7 @@ classdef seriesElementAE < lfpBattery.seriesElement
         end
         function set.V(b, v)
             % Pass v on to all elements equally to account for balancing
-            [b.El.V] = deal(v ./ double(b.nE));
+            [b.El.V] = deal(v ./ double(b.nEl));
         end
     end
     

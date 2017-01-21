@@ -1,7 +1,13 @@
 classdef (Abstract) batteryInterface < lfpBattery.composite
     %BATTERYINTERFACE: Abstract class / interface for creating battery
     %models. This is the common interface for batteryPacks, batteryCells,
-    %seriesElements and parallelElements,...
+    %seriesElements, parallelElements, simpleSE and simplePE, ...
+    %
+    %SEE ALSO: lfpBattery.batteryPack lfpBattery.batteryCell
+    %          lfpBattery.batCircuitElement lfpBattery.seriesElement
+    %          lfpBattery.seriesElementPE lfpBattery.seriesElementAE
+    %          lfpBattery.parallelElement lfpBattery.simplePE
+    %          lfpBattery.simpleSE
     %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
     %         January 2017
@@ -41,7 +47,12 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         psd;
     end
     properties (Abstract, Dependent, SetAccess = 'immutable')
-        Zi; % Internal impedance in Ohm
+        % Internal impedance in Ohm.
+        % The internal impedance is currently not used as a physical
+        % parameter. However, it is used in the circuit elements
+        % (seriesElement/parallelElement) to determine the distribution
+        % of currents and voltages.
+        Zi;
     end
     properties (Dependent, SetAccess = 'protected')
         SoH; % State of health [0,..,1]
@@ -108,6 +119,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         pct = uint32(0); % counter for power iteration
         sct = uint32(0); % counter for soc limiting iteration
         lastPr = 0; % last power request (for handling powerIteration through recursion)
+        lastIr = 0; % last current request (for handling currentIteration through recursion)
         reH; % function handle: @gt for charging and @lt for discharging
         seH; % function handle: @ge for charging and @le for discharging
         socLim; % SoC to limit charging/discharging to (depending on charging or discharging)
@@ -132,11 +144,14 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         soc;
     end
     properties (Hidden, SetAccess = 'protected')
-       hasCells = false; % true/false flag to indicate whether circuit element has cells or not 
+       % true/false flag to indicate whether circuit element has cells or
+       % not. Set this flag to true if a batteryCell is added to a
+       % composite branch, such as a parallelElement or a seriesElement
+       hasCells = false;
     end
     methods
         function b = batteryInterface(varargin)
-            % BATTERYINTERFACE: Common Constructor. The properties that
+            % BATTERYINTERFACE: Constructor. The properties that
             % must be instanciated may vary between subclasses. Define
             % non-optional input arguments in the subclasses and pass them
             % to this class's constructor using:
@@ -180,14 +195,28 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             
         end % constructor
         function [P, V, I] = powerRequest(b, P, dt)
-            % POWERREQUEST: MTODO: Doc
-            % P:  power in W
-            % dt: size of time step in S
-            % MTODO: Increase precision!
-            % NOTE: This function does not change the battery objects'
-            % properties. This is done by the objects themselves.
+            % POWERREQUEST: Requests a power in W (positive for charging,
+            % negative for discharging) from the battery.
+            %
+            % Syntax: [P, V, I] = b.POWERREQUEST(P, dt);
+            %         [P, V, I] = POWERREQUEST(b, P, dt);
+            %
+            % Input arguments:
+            % b     - battery object
+            % P     - Power in W
+            % dt    - Size of time step in s
+            % 
+            % Output arguments:
+            % P     - Power that went into (positive) or came out of (negative) the battery.
+            %         The requested amount may be limited by the cells'
+            %         maximum current and the SoC limits.
+            % V     - The resting voltage in V of the battery at the end of
+            %         the time step.
+            % I     - The current with which the battery was charged (positive) or discharged
+            %         (negative) in A. 
             
             % set operator handles according to charge or discharge
+            sd = false; % self-discharge flag
             if P > 0 % charge
                 P = b.eta_bc .* P; % limit by charging efficiency
                 b.reH = @gt; % greater than
@@ -197,6 +226,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
                 if P == 0 % Set P to self-discharge power and limit soc to zero
                     b.socLim = eps; % eps in case dambrowskiCounter is used for cycle counting
                     P = b.Psd;
+                    sd = true;
                 else
                     P = b.eta_bd .* P; % limit by discharging efficiency
                     b.socLim = b.socMin;
@@ -204,39 +234,41 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
                 b.reH = @lt; % less than
                 b.seH = @le; % less than or equal to
             end
-            if abs(b.socLim - b.soc) > b.sTol % call only if SoC limit has not already been reached
-                P0 = P; % save initial request
+            P0 = P; % save initial request
+            if b.socChk % call only if SoC limit has not already been reached
                 b.lastPr = P;
                 [P, I, V, ~] = b.iteratePower(P, dt);
-                if sign(P) ~= sign(P0)
+                if sign(P) ~= sign(P0) || sd
                     % This prevents false power flows in case of changes to
                     % the SoC limitations
-                    P = 0;
+                    % OR
+                    % return zero for self-discharge, as this is only internal
+                    [P, I, V] = b.nullRequest;
                 else
-                    Q = I .* dt ./ 3600; % charged / discharged amount in Ah
-                    b.charge(Q)
+                    b.V = V;
+                    b.charge(I .* dt ./ 3600) % charge with Q
                     b.refreshSoC; % re-calculates element-level SoC as a total
                 end
             else
-                P = 0;
-                I = 0;
-                V = b.V;
+                [P, I, V] = b.nullRequest;
             end
             b.slTF = false; % set SoC limitation flag false
         end % powerRequest
         function [P, I, V, soc] = iteratePower(b, P, dt)
             %ITERATEPOWER: Iteration to determine new state given a certain power.
             % The state of the battery is not changed by this method.
-            % Syntax: [P, Cd, V, soc] = b.iteratePower(P, dt);
+            %
+            % Syntax: [P, I, V, soc] = b.ITERATEPOWER(P, dt);
+            %         [P, I, V, soc] = ITERATEPOWER(b, P, dt);
             %
             % Input arguments:
-            % b      -   Subclass of the batteryInterface (object calling the method)
+            % b      -   battery object
             % P      -   Requested charge or discharge power in W
             % dt     -   Simulation time step size in s
             %
             % Output arguments:
-            % P      -   Actual charge or discharge power in W
-            % Cd     -   Discharge capacity of the battery in Ah
+            % P      -   Actual charge (+) or discharge (-) power in W
+            % I      -   Charge (+) or discharge (-) current in A
             % V      -   Resting voltage in V
             % soc    -   State of charge [0,..,1]
             V_curr = b.V;
@@ -260,12 +292,8 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             newC = b.dummyCharge(I .* dt ./ 3600);
             soc = newC ./ b.Cn;
             if P ~= 0 % Limit power according to SoC using recursion
-                os = soc - b.soc; % charged
-                req = b.socLim - b.soc; % required to reach limit
-                err = (req - os) ./ os;
-                if (b.reH(soc, b.socLim) || b.slTF) && abs(err) > b.sTol ...
-                        && b.sct < b.maxIterations
-                    % MTODO: Something wrong with SoC limitation here!
+                [limitReached, err] = b.socLimChk(soc);
+                if limitReached
                     b.sct = b.sct + 1;
                     b.slTF = true; % indicate that SoC limiting is active to prevent switching the sign of the power
                     % correct power request
@@ -277,6 +305,89 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             b.sct = 0;
             b.slTF = false;
         end % iteratePower
+        function [P, V, I] = currentRequest(b, I, dt)
+            % CURRENTREQUEST: Requests a current in A (positive for charging,
+            % negative for discharging) from the battery.
+            %
+            % Syntax: [P, V, I] = b.CURRENTREQUEST(P, dt);
+            %         [P, V, I] = CURRENTREQUEST(b, P, dt);
+            %
+            % Input arguments:
+            % b     - battery object
+            % P     - Power in W
+            % dt    - Size of time step in s
+            % 
+            % Output arguments:
+            % P     - Power that went into (positive) or came out of (negative) the battery.
+            % V     - The resting voltage in V of the battery at the end of
+            %         the time step.
+            % I     - The current with which the battery was charged (positive) or discharged
+            %         (negative) in A. The requested amount may be limited by the cells'
+            %         maximum current and the SoC limits.
+            if I > 0 % charge
+                b.reH = @gt; % greater than
+                b.seH = @ge; % greater than or equal to
+                b.socLim = b.socMax;
+                I = b.eta_bc .* I; % limit by charging efficiency
+            else
+                if I == 0
+                    [P, V, I] = b.powerRequest(0, dt); % self-discharge is handled by powerRequest
+                    return
+                else
+                    b.socLim = b.socMin;
+                    I = b.eta_bd .* I; % limit by discharging efficiency
+                end
+                b.reH = @lt; % less than
+                b.seH = @le; % less than or equal to
+            end
+            if b.socChk
+                I0 = I; % save initial request
+                I = lfpBattery.commons.upperlowerlim(I, -b.Imax, b.Imax); % limit to max current
+                b.lastIr = I;
+                I = b.iterateCurrent(I, dt);
+                if sign(I) ~= sign(I0)
+                    [P, I, V] = b.nullRequest;
+                else
+                    V = b.getNewVoltage(I, dt);
+                    P = I .* mean([b.V; V]);
+                    b.V = V;
+                    b.charge(I .* dt ./ 3600) % charge with Q
+                    b.refreshSoC; % re-calculates element-level SoC as a total
+                end
+            else
+                [P, I, V] = b.nullRequest;
+            end
+            b.slTF = false;
+        end % currentRequest
+        function [I, soc] = iterateCurrent(b, I, dt)
+            %ITERATECURRENT: Iteration to determine new state given a certain current.
+            % The state of the battery is not changed by this method.
+            %
+            % Syntax: [P, I, V, soc] = b.ITERATECURRENT(P, dt);
+            %         [P, I, V, soc] = ITERATECURRENT(b, P, dt);
+            %
+            % Input arguments:
+            % b      -   battery object
+            % P      -   Requested charge or discharge power in W
+            % dt     -   Simulation time step size in s
+            %
+            % Output arguments:
+            % I      -   Actual charge (+) or discharge (-) current in A
+            % soc    -   State of charge [0,..,1]
+            newC = b.dummyCharge(I .* dt ./ 3600);
+            soc = newC ./ b.Cn;
+            [limitReached, err] = b.socLimChk(soc);
+            if limitReached
+                b.sct = b.sct + 1;
+                b.slTF = true; % indicate that SoC limiting is active to prevent switching the sign of the power
+                % correct current request
+                I = b.lastIr + err .* b.lastIr;
+                b.lastIr = I;
+                [I, soc] = b.iterateCurrent(I, dt);
+            end
+            b.sct = 0;
+            b.slTF = false;
+        end % iterateCurrent
         function addCounter(b, cy)
             %ADDCOUNTER: MTODO: Doc
             if ~isempty(b.sl)
@@ -389,7 +500,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         end
         function set.psd(b, p)
            lfpBattery.commons.onezeroChk(p, 'self-discharge rate')
-           b.Psd = p .* 1/(365.25.*86400./12) .* b.Cn ./ 3600 .* b.Vn; % 1/(month in seconds) * As * V = W
+           b.Psd = - abs(p .* 1/(365.25.*86400./12) .* b.Cn ./ 3600 .* b.Vn); % 1/(month in seconds) * As * V = W
         end
         %% getters
         function a = get.SoC(b)
@@ -502,6 +613,22 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         function s = sohPoint(b)
             % points to the internal SoC
             s = b.soh;
+        end
+        function tf = socChk(b)
+            % Makes sure SoC is not close to limit
+            tf = abs(b.socLim - b.soc) > b.sTol;
+        end
+        function [tf, err] = socLimChk(b, soc)
+            os = soc - b.soc; % charged
+            req = b.socLim - b.soc; % required to reach limit
+            err = (req - os) ./ os;
+            tf = (b.reH(soc, b.socLim) || b.slTF) && abs(err) > b.sTol ...
+                && b.sct < b.maxIterations;
+        end
+        function [P, I, V] = nullRequest(b)
+            P = 0;
+            I = 0;
+            V = b.V;
         end
     end
     
