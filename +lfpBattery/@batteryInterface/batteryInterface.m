@@ -389,7 +389,17 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             b.slTF = false;
         end % iterateCurrent
         function addCounter(b, cy)
-            %ADDCOUNTER: MTODO: Doc
+            %ADDCOUNTER: Registers a cycleCounter object cy as an observer
+            %of the battery b. It also registers cy as an observer of the
+            %battery's age model.
+            %An age model must be linked to the battery in order for this
+            %method to be callable.
+            %
+            %Syntax. b.ADDCOUNTER(cy)
+            %        ADDCOUNTER(b, cy)
+            if ~lfpBattery.commons.itfcmp(b.ageModel, 'lfpBattery.batteryAgeModel')   
+                error('No age model registered yet.')
+            end
             if ~isempty(b.sl)
                 delete(b.sl)
             end
@@ -397,7 +407,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             % every time the soc property changes.
             b.sl = addlistener(b, 'soc', 'PostSet', @cy.lUpdate);
             b.ageModel.addCounter(cy);
-        end
+        end % addCounter
         function dischargeFit(b, V, C_dis, I, Temp, varargin)
             %DISCHARGEFIT: Uses Levenberg-Marquardt algorithm to fit a
             %discharge curve of a lithium-ion battery in three parts:
@@ -437,13 +447,14 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             %                   'both'          - (default) a combination (lsq, then fmin)
             
             % add a new dischargeFit object according to the input arguments
-            b.adddfit(lfpBattery.dischargeFit(V, C_dis, I, Temp, varargin{:}));
-        end
+            b.addcurves(lfpBattery.dischargeFit(V, C_dis, I, Temp, varargin{:}));
+        end % dischargeFit
         function addElements(b, varargin)
             % ADDELEMENTS: Adds elements to the collection (e. g. the
             % batteryPack, parallelElement or stringElement b. An element can
-            % be a batteryCell, a parallelElement or a stringElement or a
-            % user-defined element.
+            % be a batteryCell, a parallelElement, a stringElement subclass,
+            % a simplePE, a simpleSE or a user-defined element that implements the
+            % batteryInterface.
             %
             % Syntax: b.ADDELEMENTS(e1, e2, e3, .., en)
             %         ADDELEMENTS(b, e1, e2, e3, .., en)
@@ -522,11 +533,26 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         function s = get.SoH(b)
             s = b.sohPointer(b);
         end
-    end % public methods
-    
-    methods (Access = 'protected')
         function initAgeModel(b, varargin)
-            %INITAGEMODEL
+            %INITAGEMODEL: Initializes the age model of a battery b.
+            %
+            %Syntax: b.INITAGEMODEL(b, 'OptionName', 'OptionValue')
+            %
+            %Options:
+            %
+            % 'ageModel'     -    'none' (default), 'EO' (for event oriented
+            %                     aging) or a custom age model that implements
+            %                     the batteryAgeModel interface.
+            %                     'LowerLevel' indicates that there is an
+            %                     age model at a lower cell level.
+            % 'cycleCounter' -    'auto' for automatic determination
+            %                     depending on the ageModel (none for 'none'
+            %                     and dambrowskiCounter for 'EO' or a custom
+            %                     cycle counter that implements the
+            %                     cycleCounter interface.
+            if nargin < 3
+                error('Not enough input arguments.')
+            end
             p = lfpBattery.batteryInterface.parseInputs(varargin{:});
             if ~isempty(b.hl)
                 delete(b.hl)
@@ -569,7 +595,12 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             % Make sure battery, age model and cycle counter are linked
             b.addCounter(b.cyc)
         end % initAgeModel
+    end % public methods
+    
+    methods (Access = 'protected')
         function updateSoH(b, ~, event)
+            % UPDATESOH: Updates the SoH. This method is called when
+            % notified by a batteryAgeModel.
             maxSoC = b.socMax; % save last socMax
             b.SoH = event.AffectedObject.SoH;
             b.socMax = maxSoC; % update socMax (updated automatically in setter)
@@ -582,14 +613,16 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         function addElement(b, element)
             % ADDELEMENT: Adds an element to the collection (e. g. the
             % batteryPack, parallelElement or stringElement. An element can
-            % be a batteryCell, a parallelElement or a stringElement or a
-            % user-defined element.
+            % be a batteryCell, a parallelElement, a stringElement subclass,
+            % a simplePE, a simpleSE or a user-defined element that implements the
+            % batteryInterface.
             %
             % Restrictions (that return error messages)
             % - batteryCells cannot add elements.
             % - batteryPacks cannot be added to a collection of elements.
             % - adding an element to a batteryPack will replace the current
             %   element.
+            lfpBattery.commons.validateInterface(element, 'lfpBattery.batteryInterface')
             if isa(b, 'lfpBattery.batteryCell')
                 error('addElement() is unsupported for batteryCell objects.')
             elseif isa(element, 'lfpBattery.batteryPack')
@@ -634,6 +667,8 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
     
     methods (Static, Access = 'protected')
         function p = parseInputs(varargin)
+            % Returns an input parser with the results as specified by
+            % varargin.
             p = inputParser;
             addOptional(p, 'Zi', 17e-3, @isnumeric)
             addOptional(p, 'socMin', 0.2, @isnumeric)
@@ -660,7 +695,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
                 tf = lfpBattery.commons.itfcmp(x, type);
             end
         end
-    end
+    end % Static, protected methods
     
     methods (Abstract)
         % GETNEWVOLTAGE: Returns the new voltage according to a current and a
