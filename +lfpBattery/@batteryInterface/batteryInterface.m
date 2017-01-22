@@ -505,7 +505,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             %                     and dambrowskiCounter for 'EO' or a custom
             %                     cycle counter that implements the
             %                     cycleCounter interface.
-            if nargin < 3
+            if nargin == 2
                 error('Not enough input arguments.')
             end
             p = lfpBattery.batteryInterface.parseInputs(varargin{:});
