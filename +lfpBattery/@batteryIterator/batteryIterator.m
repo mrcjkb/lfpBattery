@@ -71,6 +71,9 @@ classdef batteryIterator < lfpBattery.iterator
             end
         end % hasNext
         function reset(i)
+            while ~i.s.empty
+                i.s.pop;
+            end
             i.s.push(i.cObj.createIterator);
         end
     end
