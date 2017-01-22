@@ -487,7 +487,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             %SEE ALSO: lfpBattery.iterator
             %MTODO: Finish doc
             if nargin == 1
-                it = lfpBattery.batteryIterator(b.createIterator(b.El));
+                it = lfpBattery.batteryIterator(b.createIterator(b.El), b);
             else
                 it = lfpBattery.vIterator(el);
             end

@@ -27,20 +27,23 @@ classdef batteryIterator < lfpBattery.iterator
     %         January 2017
     properties (SetAccess = 'immutable', GetAccess = 'protected')
         s; % Stack that holds the object's items.
+        cObj; % Reference to the object that initially created the iterator
     end
     
     methods
-        function i = batteryIterator(it)
+        function i = batteryIterator(it, creatorObj)
             %BATTERYITERATOR: Creates an iterator.
             %
-            %Syntax: i = BATTERYITERATOR(it);
+            %Syntax: i = BATTERYITERATOR(it, creatorObj);
             %
             %Input arguments:
-            %it     - iterator object (must implement the iterator
-            %         interface)
+            %it         - iterator object (must implement the iterator
+            %               interface)
+            %creatorObj - reference to the object that created the iterator
             lfpBattery.commons.validateInterface(it, 'lfpBattery.iterator')
             i.s = lfpBattery.Stack;
             i.s.push(it)
+            i.cObj = creatorObj;
         end % constructor
         function obj = next(i)
             if i.hasNext
@@ -68,10 +71,7 @@ classdef batteryIterator < lfpBattery.iterator
             end
         end % hasNext
         function reset(i)
-            while ~i.s.empty
-                obj = i.s.pop;
-            end
-            i.s.push(obj)
+            i.s.push(i.cObj.createIterator);
         end
     end
     
