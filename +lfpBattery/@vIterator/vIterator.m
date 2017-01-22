@@ -1,32 +1,33 @@
-classdef scIterator < lfpBattery.iterator
-    %SCITERATOR iterator for the sortedCollection class and it's subclasses
+classdef vIterator < lfpBattery.iterator
+    %VITERATOR: Iterator for iterating through vectors using the
+    %lfpBattery.iterator interface.
     %
-    %SEE ALSO lfpBattery.iterator
+    %SEE ALSO: lfpBattery.iterator
     %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
-    %January 2017
+    %         January 2017
     
     properties (SetAccess = 'immutable', GetAccess = 'protected')
-      collection;  % The elements the iterator traverses through
+        collection;  % The elements the iterator traverses through
     end
     properties (Access = 'protected')
         ind = uint32(0);  % index of collection's next item
     end
     
     methods
-        function it = scIterator(scObj)
-            it.collection = scObj;
+        function it = vIterator(v)
+            it.collection = v;
         end
         function obj = next(it)
             if hasNext(it)
                 it.ind = it.ind + 1;
-                obj = it.collection.xydata(it.ind);
+                obj = it.collection(it.ind);
             else
                 obj = [];
             end
         end
         function tf = hasNext(it)
-            tf = numel(it.collection.xydata) > it.ind;
+            tf = numel(it.collection) > it.ind;
         end
         function reset(it)
             it.ind = 0;

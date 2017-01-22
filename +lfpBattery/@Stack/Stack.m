@@ -18,7 +18,9 @@ classdef Stack < handle
 %          January 2017
 
     properties %(Access = private)
-        storage = cell(1e3, 1); % Cell array to store the data in
+        % Cell array to store the data in
+        % (initialized with some reserved storage)
+        storage = cell(100, 1);
         idx = uint32(0); % Index of the top of the stack 
     end
     

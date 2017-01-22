@@ -150,6 +150,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
        % not. Set this flag to true if a batteryCell is added to a
        % composite branch, such as a parallelElement or a seriesElement
        hasCells = false;
+       isCell = false; % set this to true for cell objects, such as batteryCell.
     end
     methods
         function b = batteryInterface(varargin)
@@ -479,14 +480,17 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             b.findImax;
             b.refreshNominals;
         end
-        function it = createIterator(b)
+        function it = createIterator(b, el)
             %CREATEITERATOR: Returns an iterator for iterating through the
             %collection's battery cells.
             %
             %SEE ALSO: lfpBattery.iterator
             %MTODO: Finish doc
-            it = batteryIterator(b);
-            % MTODO: create batteryIterator & stack classes
+            if nargin == 1
+                it = lfpBattery.batteryIterator(b.createIterator(b.El));
+            else
+                it = lfpBattery.vIterator(el);
+            end
         end
         function initAgeModel(b, varargin)
             %INITAGEMODEL: Initializes the age model of a battery b.
