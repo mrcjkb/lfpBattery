@@ -2,7 +2,7 @@ classdef batteryCell < lfpBattery.batteryInterface
     %BATTERYCELL: Li-ion battery cell model based on fitted discharge curves.
     %
     % Syntax:   b = BATTERYCELL(Cn, Vn);
-    %           b = BATTERYCELL(Cn, Vn, 'OptionName', 'OptionValue');
+    %           b = BATTERYCELL(Cn, Vn, 'OptionName', OptionValue);
     %
     % Input arguments:
     % Cn            -    Nominal capacity in Ah (default: empty)

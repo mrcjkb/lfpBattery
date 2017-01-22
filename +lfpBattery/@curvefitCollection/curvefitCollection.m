@@ -1,4 +1,4 @@
-classdef curvefitCollection < lfpBattery.sortedFunctions
+classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
     %CURVEFITCOLLECTION sorted collection of curveFit objects. Uses
     %interplation to extract data between two curve fits according to z
     %value

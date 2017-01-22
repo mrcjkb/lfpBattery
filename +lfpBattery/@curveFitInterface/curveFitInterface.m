@@ -1,4 +1,4 @@
-classdef (Abstract) curveFitInterface < handle
+classdef (Abstract) curveFitInterface < matlab.mixin.Copyable 
     %CURVEFITINTERFACE Abstract interface for curve fitting classes.
     %
     %Creates a curve fit using either the lsqcurvefit

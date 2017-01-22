@@ -680,6 +680,12 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         function p = parseInputs(varargin)
             % Returns an input parser with the results as specified by
             % varargin.
+            p = lfpBattery.batteryInterface.bInputParser;
+            parse(p, varargin{:});
+        end
+        function p = bInputParser()
+            % Creates an input parser with optional inputs for all
+            % batteryInterface objects
             p = inputParser;
             addOptional(p, 'Zi', 17e-3, @isnumeric)
             addOptional(p, 'socMin', 0.2, @isnumeric)
@@ -696,7 +702,6 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             type = 'lfpBattery.batteryAgeModel';
             addOptional(p, 'ageModel', 'none', ...
                 @(x) lfpBattery.batteryInterface.validateAM(x, validModels, type))
-            parse(p, varargin{:});
         end
         function tf = validateAM(x, validModels, type)
             % validates age model & cycle counter inputs
