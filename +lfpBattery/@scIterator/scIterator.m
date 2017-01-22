@@ -1,6 +1,12 @@
 classdef scIterator < lfpBattery.iterator
     %SCITERATOR iterator for the sortedCollection class and it's subclasses
     %
+    %SCITERATOR Methods:
+    %    next    - Returns next object.
+    %    hasNext - Returns true if there is another object to iterate
+    %              through
+    %    reset   - Resets iterator to first object
+    %
     %SEE ALSO lfpBattery.iterator
     %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt

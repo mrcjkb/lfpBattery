@@ -2,6 +2,12 @@ classdef vIterator < lfpBattery.iterator
     %VITERATOR: Iterator for iterating through vectors using the
     %lfpBattery.iterator interface.
     %
+    %VITERATOR Methods:
+    %    next    - Returns next object.
+    %    hasNext - Returns true if there is another object to iterate
+    %              through
+    %    reset   - Resets iterator to first object
+    %
     %SEE ALSO: lfpBattery.iterator
     %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt

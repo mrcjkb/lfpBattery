@@ -2,6 +2,12 @@ classdef batteryIterator < lfpBattery.iterator
     %BATTERYITERATOR: Iterates through a composite battery object's
     %elements and returns the cells (leaf objects).
     %
+    %BATTERYITERATOR Methods:
+    %    next    - Returns next object.
+    %    hasNext - Returns true if there is another object to iterate
+    %              through
+    %    reset   - Resets iterator to first object
+    %
     %To create a batteryIterator object, use the battery's createIterator()
     %method.
     %
