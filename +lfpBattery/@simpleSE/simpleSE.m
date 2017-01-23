@@ -33,6 +33,8 @@ classdef simpleSE < lfpBattery.simpleCircuitElement
     %                     time step size.
     % addcurves         - Adds a collection of discharge curves or a cycle
     %                     life curve to the battery.
+    % getTopology       - Returns the number of parallel elements np and the
+    %                     number of elements in series ns in a battery object b.
     %
     %
     % SIMPLESE Properties:
