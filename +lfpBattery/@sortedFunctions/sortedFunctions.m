@@ -69,19 +69,19 @@ classdef (Abstract) sortedFunctions < lfpBattery.composite
             %CREATEITERATOR: Returns an iterator for the object it.
             %                Syntax: it = c.CREATEITERATOR;
             %SEE ALSO: lfpbattery.scIterator
-            it = lfpBattery.scIterator(c);
+            it = lfpBattery.scIterator(c.xydata);
         end
     end
     methods (Static, Access = 'protected')
         function minfunErr(c)
-           if c.minFuns == 1
-               error('At least 1 object must be added to the collection.')
-           else
-               error(['At least ', num2str(c.minFuns),' objects must be added to the collection.'])
-           end
+            if c.minFuns == 1
+                error('At least 1 object must be added to the collection.')
+            else
+                error(['At least ', num2str(c.minFuns),' objects must be added to the collection.'])
+            end
         end
         function noErr(~)
-           % empty function
+            % empty function
         end
     end
 end

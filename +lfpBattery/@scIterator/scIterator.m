@@ -1,5 +1,5 @@
 classdef scIterator < lfpBattery.iterator
-    %SCITERATOR iterator for the sortedCollection class and it's subclasses
+    %SCITERATOR iterator for the sortedFunctions class and it's subclasses
     %
     %SCITERATOR Methods:
     %    next    - Returns next object.
@@ -26,13 +26,13 @@ classdef scIterator < lfpBattery.iterator
         function obj = next(it)
             if hasNext(it)
                 it.ind = it.ind + 1;
-                obj = it.collection.xydata(it.ind);
+                obj = it.collection(it.ind);
             else
                 obj = [];
             end
         end
         function tf = hasNext(it)
-            tf = numel(it.collection.xydata) > it.ind;
+            tf = numel(it.collection) > it.ind;
         end
         function reset(it)
             it.ind = 0;

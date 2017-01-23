@@ -17,9 +17,12 @@ classdef batteryPack < lfpBattery.batteryInterface
     %                     time step size.
     % addcurves         - Adds a collection of discharge curves or a cycle
     %                     life curve to the battery.
+    % randomizeDC       - Slight randomization of each cell's discharge
+    %                     curve fits.
     %
     %
     % BATTERYPACK Properties:
+    % AgeModelLevel     - Level of the age model ('Cell or 'Pack')
     % C                 - Current capacity level in Ah.
     % Cbu               - Useable capacity in Ah.
     % Cd                - Discharge capacity in Ah (Cd = 0 if SoC = 1).
@@ -54,7 +57,9 @@ classdef batteryPack < lfpBattery.batteryInterface
     %           parallel cells in such a way that the pack's nominal voltage Vp
     %           and capacity Cp come as close as possible to the inputs Cp and Vp.
     %
-    %       b = BATTERYPACK(np, ns, Cc, Vc, 'Setup', 'Manual');
+    %       b = BATTERYPACK(np, ns, Cc, Vc);
+    %           np and ns must be integers for this syntax, otherwise the above syntax
+    %           is interpreted!
     %           Initializes a battery pack with the nominal cell voltae Vc and the
     %           nominal cell capacity Cc. The cells are arranged as ns strings of
     %           parallel elements with np parallel cells. The pack's nominal capacity
@@ -62,10 +67,18 @@ classdef batteryPack < lfpBattery.batteryInterface
     %           The pack's nominal voltage depends on the cell voltage Vc and on the
     %           number of elements per string ns.
     %
+    %       b = BATTERYPACK(np, ns, Cc, Vc, 'Setup', 'Manual');
+    %           Initializes a battery pack with the nominal cell voltae Vc and the
+    %           nominal cell capacity Cc. The cells are arranged as ns strings of
+    %           parallel elements with np parallel cells. The pack's nominal capacity
+    %           depends on the cell voltage Vc and on the number of parallel cells np.
+    %           The pack's nominal voltage depends on the cell voltage Vc and on the
+    %           number of elements per string ns.
+    %           np and ns can be any numerical data type using this syntax.
+    %
     %       b = BATTERYPACK(__, 'OptionName', OptionValue)
     %           Used for specifying additional options, which are described below.
     %           The option names must be specified as strings.
-    %
     %
     %Input arguments:
     %
@@ -73,8 +86,10 @@ classdef batteryPack < lfpBattery.batteryInterface
     %   Vp  -  Battery pack nominal voltage in V.
     %   Cc  -  Cell capacity (nominal) in Ah.
     %   Vc  -  Cell voltage (nominal) in V.
-    %   np  -  Number of elements per parallel element.
-    %   ns  -  Number of elements per string.
+    %   np  -  Number of elements per parallel element (must be an
+    %          integer if 'Setup' option is left out).
+    %   ns  -  Number of elements per string (must be an
+    %          integer if 'Setup' option is left out).
     %
     %
     %Additional Options:
@@ -149,6 +164,13 @@ classdef batteryPack < lfpBattery.batteryInterface
     %                             as a physical parameter. However, it is used
     %                             in the circuit elements to determine the
     %                             distribution of currents and voltages.
+    %                             Notes: 
+    %                                   - In order to use this option, the Statistics
+    %                                     and Machine Learning Toolbox is required.
+    %                                   - Due to the limitation using Zmin and Zmax, a
+    %                                     the mean or std may vary slightly from what was
+    %                                     set. To get an exact std and mean, Zmin must be
+    %                                     set to -Inf and Zmax must be set to Inf.
     %
     %   'Zgauss'                 - default: [0, Zi, Zi]
     %                            -> Vector for gaussian distribution of battery
@@ -222,6 +244,16 @@ classdef batteryPack < lfpBattery.batteryInterface
             %           parallel cells in such a way that the pack's nominal voltage Vp
             %           and capacity Cp come as close as possible to the inputs Cp and Vp.
             %
+            %       b = BATTERYPACK(np, ns, Cc, Vc);
+            %           np and ns must be integers for this syntax, otherwise the above syntax
+            %           is interpreted!
+            %           Initializes a battery pack with the nominal cell voltae Vc and the
+            %           nominal cell capacity Cc. The cells are arranged as ns strings of
+            %           parallel elements with np parallel cells. The pack's nominal capacity
+            %           depends on the cell voltage Vc and on the number of parallel cells np.
+            %           The pack's nominal voltage depends on the cell voltage Vc and on the
+            %           number of elements per string ns.
+            %
             %       b = BATTERYPACK(np, ns, Cc, Vc, 'Setup', 'Manual');
             %           Initializes a battery pack with the nominal cell voltae Vc and the
             %           nominal cell capacity Cc. The cells are arranged as ns strings of
@@ -229,6 +261,7 @@ classdef batteryPack < lfpBattery.batteryInterface
             %           depends on the cell voltage Vc and on the number of parallel cells np.
             %           The pack's nominal voltage depends on the cell voltage Vc and on the
             %           number of elements per string ns.
+            %           np and ns can be any numerical data type using this syntax.
             %
             %       b = BATTERYPACK(__, 'OptionName', OptionValue)
             %           Used for specifying additional options, which are described below.
@@ -240,8 +273,10 @@ classdef batteryPack < lfpBattery.batteryInterface
             %   Vp  -  Battery pack nominal voltage in V.
             %   Cc  -  Cell capacity (nominal) in Ah.
             %   Vc  -  Cell voltage (nominal) in V.
-            %   np  -  Number of elements per parallel element.
-            %   ns  -  Number of elements per string.
+            %   np  -  Number of elements per parallel element (must be an
+            %          integer if 'Setup' option is left out).
+            %   ns  -  Number of elements per string (must be an
+            %          integer if 'Setup' option is left out).
             %
             %Additional Options:
             %
@@ -326,9 +361,12 @@ classdef batteryPack < lfpBattery.batteryInterface
             %                            The mean is the value specified by the option
             %                            'Zi'. This setting is ignored if the 'ideal'
             %                            option is set to true.
-            %                            Note: In order to use this option, the Statistics
-            %                                  and Machine Learning Toolbox is
-            %                                  required.
+            %                            Notes: - In order to use this option, the Statistics
+            %                                     and Machine Learning Toolbox is required.
+            %                                   - Due to the limitation using Zmin and Zmax, a
+            %                                     the mean or std may vary slightly from what was
+            %                                     set. To get an exact std and mean, Zmin must be
+            %                                     set to -Inf and Zmax must be set to Inf.
             %
             %   'dCurves'                - default: 'none'
             %                            -> adds dischargeCurve object to the battery's
@@ -337,7 +375,6 @@ classdef batteryPack < lfpBattery.batteryInterface
             %   'ageCurve'               - default: 'none'
             %                            -> adds an age curve (e. g. a woehlerFit) to
             %                            the battery's cells.
-            
             import lfpBattery.*
             p = batteryInterface.bInputParser; % load default optargs
             % add additional optargs to parser
@@ -361,81 +398,91 @@ classdef batteryPack < lfpBattery.batteryInterface
             amL = p.Results.AgeModelLevel;
             am = p.Results.ageModel;
             cy = p.Results.cycleCounter;
-            if strcmp(amL, 'Cell')
-                if ~strcmp(am, 'none')
+            if strcmp(amL, 'Cell') % age model level: cell
+                if ~strcmp(am, 'none') % age model specified
                     cellAm = am; % cell age model arg
                     packAm = 'LowerLevel'; % pack age model arg
-                    cellCy = cy;
-                    packCy = 'auto';
+                    cellCy = cy; % cell cycle counter arg
+                    packCy = 'auto'; % pack cycle counter arg
                 else % no age model
                     cellAm = am;
                     packAm = am;
                     cellCy = 'auto';
                     packCy = 'auto';
                 end
-            else
+            else % age model level: Pack
                 cellAm = 'none';
                 packAm = am;
                 cellCy = 'auto';
                 packCy = cy;
             end
+            % Extract optional arguments
             sohIni = p.Results.sohIni;
             socIni = p.Results.socIni;
             socMin = p.Results.socMin;
             socMax = p.Results.socMax;
             etaBC = p.Results.etaBD;
             etaBD = p.Results.etaBD;
+            % These arguments are used by every sub-element (cells, circuit
+            % elements, etc.)
             commonArgs = {'sohIni', sohIni, 'socIni', socIni,...
                 'socMin', socMin, 'socMax', socMax, 'etaBC', etaBC, 'etaBD', etaBD};
-            % Initialize with superclass constructor
+            % Initialize common arguments using superclass constructor
             b@lfpBattery.batteryInterface('ageModel', packAm, 'cycleCounter', packCy, ...
                 commonArgs{:});
-            % Additional inputs
-            b.AgeModelLevel = p.Results.AgeModelLevel;
-            sp = strcmp(p.Results.Topology, 'SP');
-            pe = strcmp(p.Results.Equalization, 'Passive');
-            im = p.Results.ideal;
-            Zi = p.Results.Zi;
-            Zgauss = p.Results.Zgauss;
-            dC = p.Results.dCurves;
-            aC = p.Results.ageCurve;
-            if strcmp(p.Results.Setup, 'Auto') % automatic setup?
-                np = uint32(Cp ./ Cc); % number of parallel elements
-                ns = uint32(Vp ./ Vc); % number of series elements
-            else % user-defined setup
+            b.AgeModelLevel = amL; % set AgeModelLevel property
+            % Extract optional arguments and convert string arguments to logicals
+            sp = strcmp(p.Results.Topology, 'SP'); % SP (strings of parallel elements) or PS (parallel strings of cells)
+            pe = strcmp(p.Results.Equalization, 'Passive'); % passive or active equalization
+            im = p.Results.ideal; % simplified, ideal model?
+            Zi = p.Results.Zi; % internal impedance (mean if gauss)
+            Zgauss = p.Results.Zgauss; % Gaussian distribution of internal impedances
+            dC = p.Results.dCurves; % discharge curves ('none' by default)
+            aC = p.Results.ageCurve; % cycle life furve ('none' by default)
+            if isinteger(Cp) && isinteger(Vp) || strcmp(p.Results.Setup, 'Manual') % automatic setup?
+                % user-defined setup
                 np = uint32(Cp);
                 ns = uint32(Vp);
+            else 
+                % Estimate necessary config to get as close as possible to
+                % desired nominal capacity and desired nominal voltage
+                np = uint32(Cp ./ Cc); % number of parallel elements
+                ns = uint32(Vp ./ Vc); % number of series elements
             end
-            disp(['np = ', num2str(np)])
-            disp(['ns = ', num2str(ns)])
             % Initialize circuitry
+            % These arguments are used for the batteryCell objects
             cellArgs = [commonArgs, {'ageModel', cellAm, 'cycleCounter', cellCy, 'Zi', p.Results.Zi}];
-            if im % simple, ideal model
+            if im % simplified, ideal model
                 if sp % strings of parallel elements
                     b.addElements(simpleSE(simpleSP(batteryCell(Cc, Vc, cellArgs{:}), ns), np));
                 else % parallel strings of cells
                     b.addElements(simpleSP(simpleSE(batteryCel(Cc, Vc, cellArgs{:}), np), ns));
                 end
-            else % non-simplified model             MTODO: Finish this!
+            else % non-simplified model
                 if Zgauss(1) ~= 0 % Gaussian distribution of internal impedances?
-                    try
+                    try 
+                        % Get approx. gaussian distribution within limited
+                        % interval.
                         Zi = commons.norminvlim(rand(np.*ns, 1), Zi, Zgauss(1), Zgauss(2:3));
                     catch ME
-                        if license('test', 'statistics_toolbox')
+                        if license('test', 'statistics_toolbox') % statistics toolbox missing?
                             error('The Statistics toolbox is required in order to set a gaussian distribution for Zi.')
                         else
-                            rethrow(ME)
+                            rethrow(ME) % otherwise rethrow exception
                         end
                     end
-                else
+                else % No Gaussian distribution
                     Zi = repmat(Zi, np.*ns, 1);
                 end
+                % Define function handles pointing to wrapper objects
+                % (composite decorators), depending on the topology and
+                % equalization
                 if sp % strings of parallel elements
-                    outer = @parallelElement;
-                    outerN = np;
-                    innerN = ns;
+                    outer = @parallelElement; % function handle for outer wrapper
+                    outerN = np; % number of elements outer wrapper holds
+                    innerN = ns; % number of cells each inner wrapper holds
                     if pe % passive equalization
-                        inner = @seriesElementPE;
+                        inner = @seriesElementPE; % inner wrappers
                     else % active equalization
                         inner = @seriesElementAE;
                     end
@@ -449,7 +496,7 @@ classdef batteryPack < lfpBattery.batteryInterface
                         outer = @seriesElementAE;
                     end
                 end
-                % Set up circuitry
+                % Set up circuitry using function handles of wrappers
                 eo = outer(commonArgs{:}); % outer element
                 ct = uint32(0); % counter
                 for j = uint32(1):outerN
@@ -458,21 +505,23 @@ classdef batteryPack < lfpBattery.batteryInterface
                         ct = ct + 1;
                         cellArgs{end} = Zi(ct);
                         cell = batteryCell(Cc, Vc, cellArgs{:}); % cells
-                        ei.addElements(cell) % add cells to inner elements
+                        ei.addElements(cell) % add cells to inner wrappers
                     end
-                    eo.addElements(ei) % add inner elements to outer elements
+                    eo.addElements(ei) % wrap inner wrappers with outer wrapper
                 end
-                b.addElements(eo); % add outer element to battery pack
+                b.addElements(eo); % add outer wrapper to battery pack
             end
-            b.refreshNominals;
+            b.refreshNominals; % Retrieve nominal voltage and capacity from topology.
             % pass curve fits
-            if strcmp(dC, 'none')
+            if strcmp(dC, 'none') % warn if no discharge curves specified (default)
                 warning(['Battery pack initialized without discharge curve fits. ', ...
                     'Add curve fits to the model using this class''s addcurves() method. ', ...
                     'Attempting to use this model without discharge curve fits will result in an error.'])
-            else
+            else % If discharge curves were specified, add them to the battery cells.
                 b.addcurves(dC)
             end
+            % Do the same for age model curves if an age model was
+            % specified.
             if strcmp(aC, 'none') && ~strcmp(am, 'none')
                 warning(['Battery pack initialized without cycle life curve fits although an age model was specified. ', ...
                     'Add curve fits to the model using this class''s addcurves() method. ', ...
@@ -488,10 +537,11 @@ classdef batteryPack < lfpBattery.batteryInterface
             if strcmp(type, 'cycleLife') && strcmp(b.AgeModelLevel, 'Pack')
                 b.ageModel.wFit = d;
             else
+                % pass curve to all cells if discharge curve or cycle life
+                % curve and age model level is 'Pack'
                 b.pass2cells(@addcurves, d, type);
             end
         end
-        %% MTODO: Add randomizeDC method
         function addElements(b, e)
             % ADDELEMENTS: Adds elements to the batteryPack. An element can
             % be a batteryCell, a parallelElement, a stringElementAE, a

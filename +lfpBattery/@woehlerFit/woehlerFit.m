@@ -69,6 +69,7 @@ classdef woehlerFit < lfpBattery.curveFitInterface
         function set.x(d, params)
             assert(numel(params) == 2, 'Wrong number of params')
             d.px = params;
+            d.fit;
         end
         %% Dependet getters
         function params = get.x(d)

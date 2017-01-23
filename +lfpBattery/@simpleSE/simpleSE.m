@@ -35,6 +35,8 @@ classdef simpleSE < lfpBattery.simpleCircuitElement
     %                     life curve to the battery.
     % getTopology       - Returns the number of parallel elements np and the
     %                     number of elements in series ns in a battery object b.
+    % randomizeDC       - Slight randomization of the cell's discharge
+    %                     curve fits.
     %
     %
     % SIMPLESE Properties:

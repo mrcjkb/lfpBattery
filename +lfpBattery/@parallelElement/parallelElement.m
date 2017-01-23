@@ -46,6 +46,8 @@ classdef parallelElement < lfpBattery.batCircuitElement
     %                     life curve to the battery.
     % getTopology       - Returns the number of parallel elements np and the
     %                     number of elements in series ns in a battery object b.
+    % randomizeDC       - Slight randomization of each cell's discharge
+    %                     curve fits.
     %
     %
     % PARALLELELEMENT Properties:

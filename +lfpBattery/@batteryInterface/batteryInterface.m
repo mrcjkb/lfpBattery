@@ -552,6 +552,23 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             % Make sure battery, age model and cycle counter are linked
             b.addCounter(b.cyc)
         end % initAgeModel
+        function randomizeDC(b)
+            % RANDOMIZEDC: Iterates through each battery cell's discharge
+            % curve fit and resets the x parameters with randomly generated numbers,
+            % causing the curves to be re-fitted.
+            %
+            % WARNING: By default, only one curve fit handle is used for
+            % all the cells in a model to save memory. Calling this function
+            % creates a deep copy of the curve fit handle for each cell and
+            % could result in high memory usage.
+            %
+            % Calling this method on an object that holds only one cell has no effect.
+            it = b.createIterator;
+            while it.hasNext
+                cell = it.next;
+                cell.randomizeDC; % Pass on to each battery cell
+            end
+        end
         %% setters
         function set.socMin(b, s)
             assert(s >= 0 && s <= 1, 'socMin must be between 0 and 1')

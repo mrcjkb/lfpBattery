@@ -39,6 +39,8 @@ classdef batteryCell < lfpBattery.batteryInterface
     %                     time step size.
     % addcurves         - Adds a collection of discharge curves or a cycle
     %                     life curve to the battery.
+    % randomizedc       - Re-fits the discharge curve with a slight
+    %                     randomization of the initial x parameters.
     %
     %
     % BATTERYCELL Properties:
@@ -145,6 +147,21 @@ classdef batteryCell < lfpBattery.batteryInterface
         function [np, ns] = getTopology(b) %#ok<MANU>
             np = uint32(1);
             ns = uint32(1);
+        end
+        function randomizeDC(b)
+            % RANDOMIZEDC: Re-fits the discharge curve fits by
+            % creating deep copies, re-initializing the x parameters with
+            % random integers and replacing the curve fit collection of
+            % this battery cell with the re-fitted deep copy.
+            dc = copy(b.dC); % deep copy discharge curve collection
+            it = dc.createIterator;
+            while it.hasNext
+                dF = it.next; % individual curve fits
+                df = copy(dF); % create deep copy
+                df.x = randi(100, 3, 1); % reset fit by randomizing output
+                dc.add(df); % re-add to collection
+            end
+            b.dC = dc;
         end
         %% Methods handled by strategy objects
         function addcurves(b, d, type)
