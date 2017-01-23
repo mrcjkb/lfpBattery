@@ -28,7 +28,8 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable
     %   rmse -   root mean squared error
     %
     %CURVEFITINTERFACE Methods:
-    %   plotResults - plots the fitted curve.
+    %   plotResults   - plots the fitted curve.
+    %   getnumXparams - retrieve the number of x parameters
     %
     %CURVERFITINTERFACE Indexing:
     %       In order to retrieve the fit for a given value, use subsref
@@ -153,8 +154,7 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable
             else
                 builtin('subsref', d, S(1));
             end
-        end
-        
+        end % subsref overload
         function plotResults(d, varargin)
             %PLOTRESULTS: Compares a scatter of the raw data with the fit
             %in a figure window.
@@ -197,8 +197,18 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable
                 title(['rmse = ', num2str(d.rmse)])
                 grid on
             end
+        end % plotResults
+        function n = getnumXparams(d)
+            %GETNUMXPARAMS: Returns the number of x parameters required for
+            %a class that implements the curveFitInterface.
+            %
+            %Syntax: n = d.GETNUMXPARAMS;
+            %        n = GETNUMXPARAMS(d);
+            %
+            %d is the class that implements the curveFitInterface and n is
+            %the number of x parameters required for the curve fit.
+            n = numel(d.x);
         end
-        
         %% dependent setters
         function set.mode(d, str)
             validatestring(str, {'lsq', 'fmin', 'both'});

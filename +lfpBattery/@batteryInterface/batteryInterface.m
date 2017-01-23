@@ -21,7 +21,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         % iterations with the maxIterations property.
         % Reducing this number can decrease the simulation time, but can
         % also reduce the accuracy.
-        maxIterations = uint32(1e3); 
+        maxIterations = uint32(1e6); 
         % Tolerance for the power iteration in W.
         % Increasing this number can decrease the simulation time, but can
         % also reduce the accuracy of the power requests.

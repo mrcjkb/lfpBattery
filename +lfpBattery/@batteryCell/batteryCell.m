@@ -158,7 +158,7 @@ classdef batteryCell < lfpBattery.batteryInterface
             while it.hasNext
                 dF = it.next; % individual curve fits
                 df = copy(dF); % create deep copy
-                df.x = randi(100, 3, 1); % reset fit by randomizing output
+                df.x = randi(100, df.getnumXparams, 1); % reset fit by randomizing output
                 dc.add(df); % re-add to collection
             end
             b.dC = dc;
