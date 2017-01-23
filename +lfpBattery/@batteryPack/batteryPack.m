@@ -187,10 +187,16 @@ classdef batteryPack < lfpBattery.batteryInterface
 %                            internal impedances in Ohm. This setting is
 %                            ignored if the 'ideal' option is set to true.
 %                            
+%   'dCurves'                - default: 'none'
+%                            -> adds dischargeCurve object to the battery's
+%                            cells.
 %
-            
-            % load default optargs
-            p = lfpBattery.batteryInterface.bInputParser;
+%   'ageCurve'               - default: 'none'
+%                            -> adds an age curve (e. g. a woehlerFit) to
+%                            the battery's cells.
+
+            import lfpBattery.*
+            p = lfpBattery.batteryInterface.bInputParser; % load default optargs
             % add additional optargs to parser
             valid = {'Pack', 'Cell'};
             addOptional(p, 'AgeModelLevel', 'Pack', @(x) any(validatestring(x, valid)))
@@ -202,11 +208,51 @@ classdef batteryPack < lfpBattery.batteryInterface
             addOptional(p, 'SetUp', 'Auto', @(x) any(validatestring(x, valid)))
             addOptional(p, 'ideal', false, @islogical)
             addOptional(p, 'Zstd', 0, @isnumeric)
-            
+            addOptional(p, 'dCurves', 'none', @(x) lfpBattery.batteryPack.validateCurveOpt(x,...
+                'lfpBattery.curvefitCollection'))
+            addOptional(p, 'ageCurve', 'none', @(x) lfpBattery.batteryPack.validateCurveOpt(x,...
+                'lfpBattery.curveFitInterface'))
+            % parse inputs
             parse(p, varargin{:})
-            
+            % prepare age model and cycle counter params at pack/cell levels
+            amL = p.Results.AgeModelLevel;
+            am = p.Results.ageModel;
+            cy = p.Results.cycleCounter;
+            if strcmp(amL, 'Cell')
+                if ~strcmp(am, 'none')
+                    cellAm = am; % cell age model arg
+                    packAm = 'LowerLevel'; % pack age model arg
+                    cellCy = cy;
+                    packCy = 'auto';
+                else % no age model
+                    cellAm = am;
+                    packAm = am;
+                    cellCy = 'auto';
+                    packCy = 'auto';
+                end
+            else
+                cellAm = 'none';
+                packAm = am;
+                cellCy = 'auto';
+                packCy = cy;
+            end
+            sohIni = p.Results.sohIni;
+            socIni = p.Results.socIni;
+            socMin = p.Results.socMin;
+            socMax = p.Results.socMax;
+            commonArgs = {'sohIni', sohIni, 'socIni', socIni,...
+                'socMin', socMin, 'socMax', socMax};
+            % Initialize with superclass constructor
+            b@lfpBattery.batteryInterface('ageModel', packAm, 'cylceCounter', packCy, ...
+                commonArgs{:});
+            % Additional inputs
             b.AgeModelLevel = p.Results.AgeModelLevel;
-            
+            sp = strcmp(p.Results.Topology, 'SP');
+            pe = strcmp(p.Results.Equalization, 'Passive');
+            im = p.Results.ideal;
+            Zstd = p.Results.Zstd;
+            dC = p.Results.dCurves;
+            aC = p.Results.ageCurve;
             if strcmp(p.Results.SeUp, 'Auto') % automatic setup?
                 np = uint32(Cp ./ Cc); % number of parallel elements
                 ns = uint32(Vp ./ Vc); % number of series elements
@@ -215,9 +261,64 @@ classdef batteryPack < lfpBattery.batteryInterface
                 ns = uint32(Vp);
             end
             
+            if im % simple, ideal model
+                if sp % strings of parallel elements
+                    b.El = simpleSE(simpleSP(batteryCell(Cc, Vc, 'ageModel', cellAm, ...
+                        'cycleCounter', cellCy, 'Zi', p.Results.Zi, commonArgs{:}),...
+                        ns), np);
+                else % parallel strings of cells
+                    b.El = simpleSP(simpleSE(batteryCel(Cc, Vc, 'ageModel', cellAm, ...
+                        'cycleCounter', cellCy, 'Zi', p.Results.Zi, commonArgs{:}),...
+                        np), ns);
+                end
+            else % non-simplified model             MTODO: Finish this!
+                if sp % strings of parallel elements
+                    if pe % passive equalization
+                        for j = 1:uint32(np)
+                            for i = uint32(1):ns % initiate cells
+                                
+                            end
+                            % initiate parallel elements
+                        end
+                    else % active equalization
+                        
+                    end
+                else % parallel strings of cells
+                    if pe % passive equalization
+                        
+                    else % active equalization
+                        
+                    end
+                end
+            end
+            
+            % pass curve fits
+            if strcmp(dC, 'none')
+                warning(['Battery pack initialized without discharge curve fits.', ...
+                    'Add curve fits to the model using this class''s addcurves() method.', ...
+                    'Attempting to use this model without discharge curve fits will result in an error.'])
+            else
+                b.addcurves(dC)
+            end
+            if strcmp(aC, 'none') && ~strcmp(aM, 'none')
+                warning(['Battery pack initialized without cycle life curve fits although an age model was specified.', ...
+                    'Add curve fits to the model using this class''s addcurves() method.', ...
+                    'Attempting to use this model without cycle life curve fits will result in an error.'])
+            else
+                b.addcurves(aC, 'cycleLife')
+            end
+            
+            
         end % constructor
-        function addcurves(b, d)
-            b.pass2cells(@addcurves, d);
+        function addcurves(b, d, type)
+            if nargin < 3
+                type = 'discharge';
+            end
+            if strcmp(type, 'cycleLife') && strcmp(b.AgeModelLevel, 'Pack')
+                b.ageModel.wFit = d;
+            else
+                b.pass2cells(@addcurves, d, type);
+            end
         end
         %% MTODO: Add randomizeDC method
         function v = getNewVoltage(b, I, dt)
@@ -271,5 +372,12 @@ classdef batteryPack < lfpBattery.batteryInterface
             b.Imax = i;
         end
     end
+    
+    methods (Static, Access = 'protected')
+        function validateCurveOpt(x, validInterface)
+            if ~strcmp(x, 'none')
+                lfpBattery.commons.validateInterface(x, validInterface)
+            end
+        end
+    end
 end
-

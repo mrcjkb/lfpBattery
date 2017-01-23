@@ -1,4 +1,4 @@
-classdef simpleSE < lfpBattery.batCircuitElement
+classdef simpleSE < lfpBattery.simpleCircuitElement
     % SIMPLESE Simplified implementation of the seriesElement.
     % (There is no differentiation between active and passive equalization 
     % in this simplified model. This version assumes That all battery cells
@@ -91,6 +91,7 @@ classdef simpleSE < lfpBattery.batCircuitElement
             if ~obj.hasCells
                 error('Object being wrapped does not contain any cells.')
             end
+            b@lfpBattery.simpleCircuitElement(obj); % superclass constructor
             b.El = obj;
             b.nEl = double(n);
             b.findImax;

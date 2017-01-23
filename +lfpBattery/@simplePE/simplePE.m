@@ -1,4 +1,4 @@
-classdef simplePE < lfpBattery.batCircuitElement
+classdef simplePE < lfpBattery.simpleCircuitElement
     % SIMPLEPE Simplified implementation of the parallelElement. This
     % version assumes That all battery cells are exactly the same for
     % the purpose of shorter simulation times. This class can be used as a
@@ -89,11 +89,13 @@ classdef simplePE < lfpBattery.batCircuitElement
             if ~obj.hasCells
                 error('Object being wrapped does not contain any cells.')
             end
+            b@lfpBattery.simpleCircuitElement(obj); % superclass constructor
             b.El = obj;
             b.nEl = double(n);
             b.findImax;
             b.refreshNominals;
             b.hasCells = true;
+            
         end
         function v = getNewVoltage(b, I, dt)
             % split I equally across elements

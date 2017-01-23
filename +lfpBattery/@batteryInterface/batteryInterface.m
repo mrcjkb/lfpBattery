@@ -187,9 +187,6 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             b.soc = p.Results.socIni;
             b.eta_bc = p.Results.etaBC;
             b.eta_bd = p.Results.etaBD;
-            b.socMin = p.Results.socMin;
-            b.socMax = p.Results.socMax;
-            b.soc = p.Results.socIni;
             
             % initialize age model
             warning('off', 'all')
