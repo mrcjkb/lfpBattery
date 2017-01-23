@@ -86,6 +86,21 @@ classdef simplePE < lfpBattery.simpleCircuitElement
     
     methods
         function b = simplePE(obj, n)
+            % SIMPLEPE Simplified implementation of the parallelElement. This
+            % version assumes That all battery cells are exactly the same for
+            % the purpose of shorter simulation times. This class can be used as a
+            % decorator for the simpleSE, other simplePE and batteryCell objects.
+            %
+            %
+            % Syntax: b = SIMPLEPE(bObj, n);
+            %
+            %
+            % Input arguments:
+            % bObj        - Battery object that is being wrapped (Can be a
+            %               batteryCell, a simpleSE, another SIMPLEPE or a custom
+            %               class that implements the batCircuitElement
+            %               interface.
+            % n           - Number of elements ("copies" of bObj) in the circuit element b.
             if ~obj.hasCells
                 error('Object being wrapped does not contain any cells.')
             end
@@ -101,6 +116,11 @@ classdef simplePE < lfpBattery.simpleCircuitElement
             % split I equally across elements
             v = b.El.getNewVoltage(I./b.nEl, dt);
         end
+        function [np, ns] = getTopology(b)
+            [np, ns] = b.El.getTopology;
+            np = b.nEl .* np;
+        end
+        %% Setters & getters
         function set.V(b, v)
             % Pass v down
             b.El.V = v;

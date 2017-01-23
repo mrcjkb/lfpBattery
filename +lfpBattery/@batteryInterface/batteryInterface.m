@@ -460,8 +460,9 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             %         ADDELEMENTS(b, e1, e2, e3, .., en)
             %
             % Input arguments:
-            %   b        - the collection the elements are added to
-            %   e1,..,en - the elements being added to the collection
+            %   b        - The collection the elements are added to.
+            %   e1,..,en - The elements being added to the collection.
+            %              These can also be arrays of elements.
             %
             % Restrictions (that return error messages)
             % - batteryCells cannot add elements.
@@ -739,7 +740,18 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         % SEE ALSO: lfpBattery.curveFitInterface
         % lfpBattery.curvefitCollection lfpBattery.dischargeCurves
         % lfpBattery.dischargeFit lfpBattery.woehlerFit
-        addcurves(b, d, type); 
+        addcurves(b, d, type);
+        % GETTOPOLOGY: Returns the number of parallel elements np and the
+        % number of elements in series ns in a battery object b.
+        %
+        % Syntax:   [np, ns] = b.GETTOPOLOGY;
+        %           [np, ns] = GETTOPOLOGY(b);
+        %
+        % Note that this method does not account for uneven topologies
+        % e. g. a parallel element containin string elements with different
+        % numbers of cells. For each sub-element, the maximum number of
+        % cells is returned.
+        [np, ns] = getTopology(b);
     end % abstract methods
     
     methods (Abstract, Access = 'protected')

@@ -88,6 +88,23 @@ classdef simpleSE < lfpBattery.simpleCircuitElement
     
     methods
         function b = simpleSE(obj, n)
+            % SIMPLESE Simplified implementation of the seriesElement.
+            % (There is no differentiation between active and passive equalization
+            % in this simplified model. This version assumes That all battery cells
+            % are exactly the same for the purpose of shorter simulation times.
+            % This class can be used as a decorator for the simplePE, other simpleSE
+            % and batteryCell objects.
+            %
+            %
+            % Syntax: b = SIMPLESE(bObj, n);
+            %
+            %
+            % Input arguments:
+            % bObj        - Battery object that is being wrapped (Can be a
+            %               batteryCell, a simplePE, another SIMPLESE or a custom
+            %               class that implements the batCircuitElement
+            %               interface.
+            % n           - Number of elements ("copies" of bObj) in the circuit element b.
             if ~obj.hasCells
                 error('Object being wrapped does not contain any cells.')
             end
@@ -102,6 +119,11 @@ classdef simpleSE < lfpBattery.simpleCircuitElement
             % Voltage = number of elements times elements' voltage
             v = b.nEl .* b.El.getNewVoltage(I, dt);
         end
+        function [np, ns] = getTopology(b)
+            [np, ns] = b.El.getTopology;
+            ns = b.nEl .* ns;
+        end
+        %% Getters & setters
         function v = get.V(b)
             v = b.nEl .* b.El.V;
         end

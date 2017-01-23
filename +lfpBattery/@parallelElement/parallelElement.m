@@ -124,6 +124,11 @@ classdef parallelElement < lfpBattery.batCircuitElement
         function z = get.Zi(b)
             z = 1 ./ sum((1 ./ [b.El.Zi])); % 1/z_total = sum_i(1/z_i)
         end
+        function [np, ns] = getTopology(b)
+            [np, ns] = arrayfun(@(x) getTopology(x), b.El);
+            np = max(b.nEl .* np);
+            ns = max(ns);
+        end
     end
     
     methods (Access = 'protected')

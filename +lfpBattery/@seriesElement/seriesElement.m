@@ -30,6 +30,11 @@ classdef (Abstract) seriesElement < lfpBattery.batCircuitElement
         function z = get.Zi(b)
             z = sum([b.El.Zi]);
         end
+        function [np, ns] = getTopology(b)
+            [np, ns] = arrayfun(@(x) getTopology(x), b.El);
+            ns = max(b.nEl .* ns);
+            np = max(np);
+        end
     end
     
     methods (Access = 'protected')

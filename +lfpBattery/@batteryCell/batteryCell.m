@@ -142,6 +142,10 @@ classdef batteryCell < lfpBattery.batteryInterface
         function it = createIterator(~)
             it = lfpBattery.nullIterator;
         end
+        function [np, ns] = getTopology(b) %#ok<MANU>
+            np = uint32(1);
+            ns = uint32(1);
+        end
         %% Methods handled by strategy objects
         function addcurves(b, d, type)
             if nargin < 3
