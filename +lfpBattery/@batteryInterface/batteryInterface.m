@@ -35,18 +35,8 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         % also reduce the accuracy of the current limitation.
         iTol = 1e-3;
     end
-    properties (SetAccess = 'immutable')
-        % Efficiency when charging [0,..,1].
-        % Note: Set eta_bd to 1 if only a total efficiency is given.
-        eta_bc;
-        % Efficiency when discharging [0,..,1].
-        % Note: Set this property to 1 if only a total efficiency is given.
-        eta_bd;
-    end
-    properties (Dependent, SetAccess = 'immutable')
-        % Self discharge rate in 1/month [0,..,1] (default: 0)
-        % By default, the self-discharge of the batteries is neglected.
-        psd;
+    properties (Dependent, SetAccess = 'immutable', GetAccess = 'protected')
+        Psd; % self-discharge energy in W
     end
     properties (Abstract, Dependent, SetAccess = 'immutable')
         % Internal impedance in Ohm.
@@ -101,6 +91,15 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         % Note: If only a total efficiency is given, set the discharging
         % efficiency eta_bd to 1.
         Vn;
+        % Efficiency when charging [0,..,1].
+        % Note: Set eta_bd to 1 if only a total efficiency is given.
+        eta_bc;
+        % Efficiency when discharging [0,..,1].
+        % Note: Set this property to 1 if only a total efficiency is given.
+        eta_bd;
+        % Self discharge rate in 1/month [0,..,1] (default: 0)
+        % By default, the self-discharge of the batteries is neglected.
+        psd;
     end
     properties (Access = 'protected', Hidden)
         % Internal state of health.
@@ -127,7 +126,6 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         socLim; % SoC to limit charging/discharging to (depending on charging or discharging)
         hl; % property listener (observer) for ageModel SoH
         sl; % property listener (observer) for soc
-        Psd; % self-discharge energy in W
         % number of elements (in case of collection)
         % The data type is uint32
         nEl;
@@ -187,6 +185,8 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             b.soc = p.Results.socIni;
             b.eta_bc = p.Results.etaBC;
             b.eta_bd = p.Results.etaBD;
+            b.psd = p.Results.psd;
+            lfpBattery.commons.onezeroChk(b.psd, 'self-discharge rate')
             
             % initialize age model
             warning('off', 'all')
@@ -203,13 +203,14 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             %
             % Input arguments:
             % b     - battery object
-            % P     - Power in W
+            % P     - Power in W (positive for charging, negative for
+            %         discharging)
             % dt    - Size of time step in s
             % 
             % Output arguments:
-            % P     - Power that went into (positive) or came out of (negative) the battery.
-            %         The requested amount may be limited by the cells'
-            %         maximum current and the SoC limits.
+            % P     - DC power (in W) that was used to charge the battery (positive)
+            %         or DC power (in W) that was extracted from the
+            %         battery (negative).
             % V     - The resting voltage in V of the battery at the end of
             %         the time step.
             % I     - The current with which the battery was charged (positive) or discharged
@@ -218,22 +219,26 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             % set operator handles according to charge or discharge
             sd = false; % self-discharge flag
             if P > 0 % charge
-                P = b.eta_bc .* P; % limit by charging efficiency
+                eta = b.eta_bc; % limit by charging efficiency
                 b.reH = @gt; % greater than
                 b.seH = @ge; % greater than or equal to
                 b.socLim = b.socMax;
             else % discharge
                 if P == 0 % Set P to self-discharge power and limit soc to zero
+                    eta = 1; % Do not include efficiency for self-discharge
                     b.socLim = eps; % eps in case dambrowskiCounter is used for cycle counting
                     P = b.Psd;
                     sd = true;
                 else
-                    P = b.eta_bd .* P; % limit by discharging efficiency
+                    % limit by discharging efficiency (more power is
+                    % required to get the requested amount)
+                    eta = 1 ./ b.eta_bd; 
                     b.socLim = b.socMin;
                 end
                 b.reH = @lt; % less than
                 b.seH = @le; % less than or equal to
             end
+            P = eta .* P;
             P0 = P; % save initial request
             if b.socChk % call only if SoC limit has not already been reached
                 b.lastPr = P;
@@ -253,6 +258,13 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
                 [P, I, V] = b.nullRequest;
             end
             b.slTF = false; % set SoC limitation flag false
+            if sd % Do not return power if self discharge occured
+                P = 0;
+            else
+                % Return power required to charge the battery or respectively
+                % the power retrieved from discharging the battery
+                P = P ./ eta;
+            end
         end % powerRequest
         function [P, I, V, soc] = iteratePower(b, P, dt)
             %ITERATEPOWER: Iteration to determine new state given a certain power.
@@ -309,38 +321,40 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             % CURRENTREQUEST: Requests a current in A (positive for charging,
             % negative for discharging) from the battery.
             %
-            % Syntax: [P, V, I] = b.CURRENTREQUEST(P, dt);
-            %         [P, V, I] = CURRENTREQUEST(b, P, dt);
+            % Syntax: [P, V, I] = b.CURRENTREQUEST(I, dt);
+            %         [P, V, I] = CURRENTREQUEST(b, I, dt);
             %
             % Input arguments:
             % b     - battery object
-            % P     - Power in W
+            % I     - DC current in A (positive for charging, negative for
+            %         discharging)
             % dt    - Size of time step in s
             % 
             % Output arguments:
-            % P     - Power that went into (positive) or came out of (negative) the battery.
+            % P     - DC power in W that went into (positive) or came out of (negative) the battery.
             % V     - The resting voltage in V of the battery at the end of
             %         the time step.
-            % I     - The current with which the battery was charged (positive) or discharged
-            %         (negative) in A. The requested amount may be limited by the cells'
-            %         maximum current and the SoC limits.
+            % I     - The DC current in A which was used to charge (positive) the battery or
+            %         which was discharged (negative) from the battery.
             if I > 0 % charge
                 b.reH = @gt; % greater than
                 b.seH = @ge; % greater than or equal to
                 b.socLim = b.socMax;
-                I = b.eta_bc .* I; % limit by charging efficiency
+                eta = b.eta_bc; % limit: charging efficiency
             else
                 if I == 0
                     [P, V, I] = b.powerRequest(0, dt); % self-discharge is handled by powerRequest
                     return
                 else
                     b.socLim = b.socMin;
-                    I = b.eta_bd .* I; % limit by discharging efficiency
+                    % limit: discharging efficiency
+                    eta = 1 ./ b.eta_bd; % More required to retrieve request
                 end
                 b.reH = @lt; % less than
                 b.seH = @le; % less than or equal to
             end
             if b.socChk
+                I = I .* eta;
                 I0 = I; % save initial request
                 I = lfpBattery.commons.upperlowerlim(I, -b.Imax, b.Imax); % limit to max current
                 b.lastIr = I;
@@ -354,6 +368,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
                     b.charge(I .* dt ./ 3600) % charge with Q
                     b.refreshSoC; % re-calculates element-level SoC as a total
                 end
+                I = I ./ eta; % Return what was taken from the load or discharged
             else
                 [P, I, V] = b.nullRequest;
             end
@@ -597,10 +612,6 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         function set.iTol(b, tol)
             b.iTol = abs(tol);
         end
-        function set.psd(b, p)
-           lfpBattery.commons.onezeroChk(p, 'self-discharge rate')
-           b.Psd = - abs(p .* 1/(365.25.*86400./12) .* b.Cn ./ 3600 .* b.Vn); % 1/(month in seconds) * As * V = W
-        end
         %% getters
         function a = get.SoC(b)
             s = b.soc ./ b.SoH; % SoC according to max capacity
@@ -620,6 +631,9 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         end
         function s = get.SoH(b)
             s = b.sohPointer(b);
+        end
+        function p = get.Psd(b)
+           p = - abs(b.psd .* 1/(365.25.*86400./12) .* (b.Cn ./ 3600) .* b.Vn); % 1/(month in seconds) * As * V = W
         end
     end % public methods
     
@@ -709,6 +723,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             addOptional(p, 'sohIni', 1, @(x) ~lfpBattery.commons.ge1le0(x))
             addOptional(p, 'etaBC', 0.97, @isnumeric)
             addOptional(p, 'etaBD', 0.97, @isnumeric)
+            addOptional(p, 'psd', 0, @isnumeric)
             validModels = {'auto', 'dambrowski'};
             type = 'lfpBattery.cycleCounter';
             addOptional(p, 'cycleCounter', 'auto', ...

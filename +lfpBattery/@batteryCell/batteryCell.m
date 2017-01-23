@@ -15,6 +15,7 @@ classdef batteryCell < lfpBattery.batteryInterface
     % 'socIni'        -    Initial state of charge [0,..,1] (default: 0.2)
     % 'socMin'        -    Minimum state of charge (default: 0.2)
     % 'socMax'        -    Maximum state of charge (default: 1)
+    % 'psd'           -    Self-discharge in 1/month [0,..,1] (default: 0)
     % 'ageModel'      -    'none' (default), 'EO' (for event oriented
     %                      aging) or a custom age model that implements
     %                      the batteryAgeModel interface.

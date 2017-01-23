@@ -135,6 +135,9 @@ classdef batteryPack < lfpBattery.batteryInterface
     %                             resources during simulation, as only one cell
     %                             is used for calculations.
     %
+    %   'psd'                    - Self-discharge in 1/month [0,..,1] (default: 0)
+    %                             -> i. e. 0.01 for 1 %/month
+    %
     %   'socMax'                 - default: 1
     %                             -> Upper limit for the battery pack's state of
     %                             charge SoC.
@@ -423,10 +426,11 @@ classdef batteryPack < lfpBattery.batteryInterface
             socMax = p.Results.socMax;
             etaBC = p.Results.etaBD;
             etaBD = p.Results.etaBD;
+            psd = p.Results.psd;
             % These arguments are used by every sub-element (cells, circuit
             % elements, etc.)
             commonArgs = {'sohIni', sohIni, 'socIni', socIni,...
-                'socMin', socMin, 'socMax', socMax, 'etaBC', etaBC, 'etaBD', etaBD};
+                'socMin', socMin, 'socMax', socMax, 'etaBC', etaBC, 'etaBD', etaBD, 'psd', psd};
             % Initialize common arguments using superclass constructor
             b@lfpBattery.batteryInterface('ageModel', packAm, 'cycleCounter', packCy, ...
                 commonArgs{:});
@@ -454,9 +458,9 @@ classdef batteryPack < lfpBattery.batteryInterface
             cellArgs = [commonArgs, {'ageModel', cellAm, 'cycleCounter', cellCy, 'Zi', p.Results.Zi}];
             if im % simplified, ideal model
                 if sp % strings of parallel elements
-                    b.addElements(simpleSE(simpleSP(batteryCell(Cc, Vc, cellArgs{:}), ns), np));
+                    b.addElements(simpleSE(simplePE(batteryCell(Cc, Vc, cellArgs{:}), np), ns));
                 else % parallel strings of cells
-                    b.addElements(simpleSP(simpleSE(batteryCel(Cc, Vc, cellArgs{:}), np), ns));
+                    b.addElements(simplePE(simpleSE(batteryCel(Cc, Vc, cellArgs{:}), ns), np));
                 end
             else % non-simplified model
                 if Zgauss(1) ~= 0 % Gaussian distribution of internal impedances?

@@ -13,6 +13,7 @@ classdef (Abstract) simpleCircuitElement < lfpBattery.batCircuitElement
    
     methods
         function b = simpleCircuitElement(obj)
+            b@lfpBattery.batCircuitElement;
             b.soh = obj.soh;
             b.socMin = obj.socMin;
             b.socMax = obj.socMax;
