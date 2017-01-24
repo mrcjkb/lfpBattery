@@ -19,6 +19,8 @@ classdef batteryPack < lfpBattery.batteryInterface
     %                     life curve to the battery.
     % randomizeDC       - Slight randomization of each cell's discharge
     %                     curve fits.
+    % digitizeTool      - (static) Opens a GUI for digitizing discharge curves and
+    %                     cycle life curves.
     %
     %
     % BATTERYPACK Properties:
@@ -627,6 +629,13 @@ classdef batteryPack < lfpBattery.batteryInterface
         end
     end
     
+    methods (Static)
+        function digitizeTool
+            % DIGITIZETOOL: Opens a GUI for digitizing discharge curves and
+            % cycle life curves.
+            lfpBattery.digitizeTool;
+        end
+    end
     methods (Static, Access = 'protected')
         function validateCurveOpt(x, validInterface)
             if ~strcmp(x, 'none')
