@@ -24,7 +24,7 @@ classdef woehlerFit < lfpBattery.curveFitInterface
             %   d = WOEHLERFIT(N, DoD) 
             %           --> creates a fit for the function N(DoD)
             %
-            %   d = dischargeFit(V, C_dis, C, T, 'OptionName', 'OptionValue');
+            %   d = WOEHLERFIT(N, DoD, 'OptionName', 'OptionValue');
             %           --> custom initialization of curve fit params
             %
             %OptionName-OptionValue pairs:

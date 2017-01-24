@@ -6,16 +6,16 @@ classdef dischargeFit < lfpBattery.curveFitInterface
     %3: exponential drop at the end of the discharge curve
     %
     %Syntax:
-    %   d = dischargeFit(V, C_dis, C, T);
+    %   d = dischargeFit(V, C_dis, I, T);
     %           --> initialization of curve fit params with zeros
     %
-    %   d = dischargeFit(V, C_dis, C, T, 'OptionName', 'OptionValue');
+    %   d = dischargeFit(V, C_dis, I, T, 'OptionName', 'OptionValue');
     %           --> custom initialization of curve fit params
     %
     %Input arguments:
     %   V:              Voltage (V) = f(C_dis) (from data sheet)
     %   C_dis:          Discharge capacity (Ah) (from data sheet)
-    %   C:              C-Rate at which curve was measured
+    %   I:              Current (A) at which curve was measured
     %   T:              Temperature (K) at which curve was mearured
     %
     %OptionName-OptionValue pairs:
@@ -115,6 +115,7 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             if nargin < 4
                 error('Not enough input arguments')
             end
+            C_dis(C_dis <= 0) = 0.01; % discharge fit not defined for zero
             cdmax = max(C_dis);
             rawx = C_dis ./ cdmax; % Conversion to depth of discharge
             rawy = V;
