@@ -71,7 +71,9 @@ classdef digitizeTool < handle
             obj.list.setFont(fnt);
             obj.list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             obj.list.setSelectedIndex(0)
-            obj.list.setToolTipText('Selects the type of curve that will be fitted.')
+            obj.list.setToolTipText(['<html>Selects the type of curve that will be fitted.<br>', ...
+                'A discharge curve is a curve of voltage vs. discharge capacity.<br>',...
+                'A cycle life curve is a curve of cycles to failure vs. depth of discharge.</html>");'])
             [~, container] = javacomponent(obj.list);
             container.Units = 'normalized';
             container.Position = [0.7940    0.7    0.1708    0.0684];
@@ -437,13 +439,14 @@ classdef digitizeTool < handle
                 msgStr{4} = ' ';
                 msgStr{5} = 'RIGHT click, when done.';
                 hInfo.setText(['<html>INFO<br><br>', msgStr{1},'<br><br>', msgStr{3}, '<br><br>', msgStr{5}, '</html>");'])
-                if numsets == 1
-                    titleStr = 'Ready to extract data set';
-                else
-                    titleStr = ['Ready to extract data set' ,num2str(si),' of ',...
-                        num2str(numsets),'.'];
-                end
-                uiwait(msgbox(msgStr,titleStr,'warn','modal'));
+% Removed this, as it gets annoying over time
+%                 if numsets == 1
+%                     titleStr = 'Ready to extract data set';
+%                 else
+%                     titleStr = ['Ready to extract data set' ,num2str(si),' of ',...
+%                         num2str(numsets),'.'];
+%                 end
+%                 uiwait(msgbox(msgStr,titleStr,'warn','modal'));
                 drawnow
                 %numberformat = '%6.2f';
                 nXY = [];
