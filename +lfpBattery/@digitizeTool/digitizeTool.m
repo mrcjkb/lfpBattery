@@ -19,6 +19,10 @@ classdef digitizeTool < handle
         fit;
         ImgData;
     end
+    properties (Hidden)
+        list;
+        externalControl = false;
+    end
     properties (Hidden, Access = 'protected')
         mainframe;
         axes1;
@@ -27,7 +31,6 @@ classdef digitizeTool < handle
         sendbutton;
         varname;
         selectbutton;
-        list;
         xLabel;
         yLabel;
         Oxdata;
@@ -558,7 +561,9 @@ classdef digitizeTool < handle
             obj.selectbutton.setEnabled(true)
             obj.resetbutton.setEnabled(true)
             obj.sendbutton.setEnabled(false)
-            obj.list.setEnabled(true)
+            if ~obj.externalControl
+                obj.list.setEnabled(true)
+            end
             obj.varname.setText('varName')
             obj.axesreset();
             ylabel('')
