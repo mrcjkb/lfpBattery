@@ -167,6 +167,13 @@ classdef simplePE < lfpBattery.simpleCircuitElement
         function c = dummyCharge(b, Q)
             c = b.nEl .* b.El.dummyCharge(Q ./ b.nEl);
         end
+        % gpuCompatible methods
+        function setsubProp(obj, fn, val)
+            obj.(fn) = val;
+        end
+        function val = getsubProp(obj, fn)
+            val = obj.(fn);
+        end
     end
 end
 

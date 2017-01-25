@@ -48,10 +48,7 @@ classdef dischargeFit < lfpBattery.curveFitInterface
     %   e. g. 
     %       cF = [cF1; cF2; cF3]; % array of DISCHARGEFIT objects
     %       y = cF(x); % y is a 3x1 vector
-    %   NOTE: This vectorized approach may be faster than using a loop in
-    %   some cases (like on gpuArrays). However, in other cases, a loop may
-    %   be faster.
-    %       In order to retrieve a DISCHARGEFIT handle from an array of DISCHARGEFIT
+    %   In order to retrieve a DISCHARGEFIT handle from an array of DISCHARGEFIT
     %   handles, use subsref indexing with ().
     %
     % Authors:  Marc Jakobi, Festus Anyangbe, Marc Schmidt,
@@ -228,6 +225,17 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             % limit output to raw data
             v = lfpBattery.commons.upperlowerlim(d.f(d.px, DoD), d.yylim(1), d.yylim(2));
         end
+        % gpuCompatible methods
+        % These methods are currently unsupported and may be removed in a
+        % future version.
+        %{
+        function setsubProp(obj, fn, val)
+            obj.(fn) = val;
+        end
+        function val = getsubProp(obj, fn)
+            val = obj.(fn);
+        end
+        %}
     end
 end
 

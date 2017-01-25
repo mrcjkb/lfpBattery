@@ -38,8 +38,9 @@ classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
             %Syntax: y = INTERP(z, x);  Returns y for the the coordinates
             %                           [z, x]
             feval(c.errHandler, c); % make sure there are enough functions in the collection
-            % interpolate with available curve fit returns at x
-            y = interp1(c.z, c.xydata{x}, z, c.interpMethod);
+            % interpolate with available curve fit returns at 
+            xx = arrayfun(@(f) f(x), c.xydata);
+            y = interp1(c.z, xx, z, c.interpMethod);
             % use commented out code below to limit y to curve fits in a
             % subclass
 %             y = lfpBattery.commons.upperlowerlim(...
@@ -77,6 +78,16 @@ classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
                 tmp = c.xydata(i);
                 plotResults(tmp, false, varargin{:});
             end
+        end
+    end
+    
+    methods (Access = 'protected')
+        % gpuCompatible methods
+        function setsubProp(obj, fn, val)
+            obj.(fn) = val;
+        end
+        function val = getsubProp(obj, fn)
+            val = obj.(fn);
         end
     end
     

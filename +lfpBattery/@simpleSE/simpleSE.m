@@ -169,6 +169,13 @@ classdef simpleSE < lfpBattery.simpleCircuitElement
             b.Vn = b.nEl .* b.El.Vn;
             b.Cn = b.El.Cn;
         end 
+        % gpuCompatible methods
+        function setsubProp(obj, fn, val)
+            obj.(fn) = val;
+        end
+        function val = getsubProp(obj, fn)
+            val = obj.(fn);
+        end
     end
 end
 

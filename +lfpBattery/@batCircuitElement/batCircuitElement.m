@@ -27,6 +27,17 @@ classdef (Abstract) batCircuitElement < lfpBattery.batteryInterface
         function c = dummyCharge(b, Q)
             c = arrayfun(@(x) dummyCharge(x, Q), b.El);
         end
+        % gpuCompatible methods
+        % These methods are currently unsupported and may be removed in a
+        % future version.
+        %{
+        function setsubProp(obj, fn, val)
+            obj.(fn) = val;
+        end
+        function val = getsubProp(obj, fn)
+            val = obj.(fn);
+        end
+        %}
     end
     
     methods (Abstract, Access = 'protected')

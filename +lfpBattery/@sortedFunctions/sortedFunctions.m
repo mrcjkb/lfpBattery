@@ -1,4 +1,4 @@
-classdef (Abstract) sortedFunctions < lfpBattery.composite
+classdef (Abstract) sortedFunctions < lfpBattery.composite %& lfpBattery.gpuCompatible
     %SORTEDFUNCTIONS Abstract class for storing functions of x and y, each with
     %a single z value.
     %
@@ -72,6 +72,21 @@ classdef (Abstract) sortedFunctions < lfpBattery.composite
             it = lfpBattery.scIterator(c.xydata);
         end
     end
+    
+    methods (Access = 'protected')
+        % gpuCompatible methods
+        % These methods are currently unsupported and may be removed in a
+        % future version.
+        %{
+        function setsubProp(obj, fn, val)
+            obj.(fn) = val;
+        end
+        function val = getsubProp(obj, fn)
+            val = obj.(fn);
+        end
+        %}
+    end
+    
     methods (Static, Access = 'protected')
         function minfunErr(c)
             if c.minFuns == 1

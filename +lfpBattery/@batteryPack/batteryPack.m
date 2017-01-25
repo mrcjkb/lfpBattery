@@ -652,6 +652,21 @@ classdef batteryPack < lfpBattery.batteryInterface
             lfpBattery.bpackGUI;
         end
     end
+    
+    methods (Access = 'protected')
+        % gpuCompatible methods
+        % These methods are currently unsupported and may be removed in a
+        % future version.
+        %{
+        function setsubProp(obj, fn, val)
+            obj.(fn) = val;
+        end
+        function val = getsubProp(obj, fn)
+            val = obj.(fn);
+        end
+        %}
+    end
+    
     methods (Static, Access = 'protected')
         function validateCurveOpt(x, validInterface)
             if ~strcmp(x, 'none')

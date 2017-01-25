@@ -1,4 +1,4 @@
-classdef (Abstract) curveFitInterface < matlab.mixin.Copyable 
+classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuCompatible
     %CURVEFITINTERFACE Abstract interface for curve fitting classes.
     %
     %Creates a curve fit using either the lsqcurvefit
@@ -39,10 +39,7 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable
     %   e. g. 
     %       cF = [cF1; cF2; cF3]; % array of curve fit objects
     %       y = cF(x); % y is a 3x1 vector
-    %   NOTE: This vectorized approach may be faster than using a loop in
-    %   some cases (like on gpuArrays). However, in other cases, a loop may
-    %   be faster.
-    %       In order to retrieve a curve fit handle from an array of curve
+    %   In order to retrieve a curve fit handle from an array of curve
     %   fit handles, use subsref indexing with ().
     %
     %SEE ALSO: lfpBattery.curvefitCollection, lfpBattery.dischargeCurves
@@ -140,12 +137,12 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable
             if strcmp(S(1).type, '()') && numel(d) == 1
                 v = d.fiteval(S);
             elseif numel(d) > 1
-                if strcmp(S(1).type, '{}')
-                    S(1).type = '()';
-                    v = arrayfun(@(x) subsref(x, S), d);
-                elseif strcmp(S(1).type, '()')
+                if strcmp(S(1).type, '()')
                     S(1).type = '()';
                     v = builtin('subsref', d, S(1));
+                elseif strcmp(S(1).type, '{}')
+                    S(1).type = '()';
+                    v = arrayfun(@(x) subsref(x, S), d);
                 else
                     error('Unexpected MATLAB expression.')
                 end
@@ -267,6 +264,17 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable
             % limit y data
             v = lfpBattery.commons.upperlowerlim(d.f(d.px, sub), d.yylim(1), d.yylim(2));
         end
+        % gpuCompatible methods
+        % These methods are currently unsupported and may be removed in a
+        % future version.
+        %{
+        function setsubProp(obj, fn, val)
+            obj.(fn) = val;
+        end
+        function val = getsubProp(obj, fn)
+            val = obj.(fn);
+        end
+        %}
     end
     
 end

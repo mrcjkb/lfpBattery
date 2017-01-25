@@ -229,6 +229,17 @@ classdef batteryCell < lfpBattery.batteryInterface
             % sohCalc always points to internal soh for batteryCell
             s = b.soh;
         end
+        % gpuCompatible methods
+        % These methods are currently unsupported and may be removed in a
+        % future version.
+        %{
+        function setsubProp(obj, fn, val)
+            obj.(fn) = val;
+        end
+        function val = getsubProp(obj, fn)
+            val = obj.(fn);
+        end
+        %}
     end
 end
 

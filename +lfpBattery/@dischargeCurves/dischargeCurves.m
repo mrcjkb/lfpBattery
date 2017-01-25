@@ -116,6 +116,17 @@ classdef dischargeCurves < lfpBattery.curvefitCollection
             d.Imin = min(d.z);
             d.Imax = max(d.z);
         end
+        % gpuCompatible methods
+        % These methods are currently unsupported and may be removed in a
+        % future version.
+        %{
+        function setsubProp(obj, fn, val)
+            obj.(fn) = val;
+        end
+        function val = getsubProp(obj, fn)
+            val = obj.(fn);
+        end
+        %}
     end
 end
 

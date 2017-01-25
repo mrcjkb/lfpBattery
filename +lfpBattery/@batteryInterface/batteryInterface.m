@@ -1,4 +1,4 @@
-classdef (Abstract) batteryInterface < lfpBattery.composite & lfpBattery.gpuCompatible
+classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCompatible
     %BATTERYINTERFACE: Abstract class / interface for creating battery
     %models. This is the common interface for batteryPacks, batteryCells,
     %seriesElements, parallelElements, simpleSE and simplePE, ...
@@ -703,12 +703,17 @@ classdef (Abstract) batteryInterface < lfpBattery.composite & lfpBattery.gpuComp
             I = 0;
             V = b.V;
         end
+        % gpuCompatible methods
+        % These methods are currently unsupported and may be removed in a
+        % future version.
+        %{
         function setsubProp(obj, fn, val)
             obj.(fn) = val;
         end
         function val = getsubProp(obj, fn)
             val = obj.(fn);
         end
+        %}
     end
     
     methods (Static, Access = 'protected')
