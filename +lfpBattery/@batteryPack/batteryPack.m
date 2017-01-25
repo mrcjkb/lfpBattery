@@ -20,7 +20,9 @@ classdef batteryPack < lfpBattery.batteryInterface
     % randomizeDC       - Slight randomization of each cell's discharge
     %                     curve fits.
     % digitizeTool      - (static) Opens a GUI for digitizing discharge curves and
-    %                     cycle life curves.
+    %                     cycle life curves (requires JAVA).
+    % gui               - (static) Opens a GUI for creating a batteryPack model.
+    %                     (requires JAVA)
     %
     %
     % BATTERYPACK Properties:
@@ -81,6 +83,8 @@ classdef batteryPack < lfpBattery.batteryInterface
     %       b = BATTERYPACK(__, 'OptionName', OptionValue)
     %           Used for specifying additional options, which are described below.
     %           The option names must be specified as strings.
+    %
+    %       BATTERYPACK.GUI starts a GUI for creating a BATTERYPACK object (requires JAVA).
     %
     %Input arguments:
     %
@@ -169,13 +173,7 @@ classdef batteryPack < lfpBattery.batteryInterface
     %                             as a physical parameter. However, it is used
     %                             in the circuit elements to determine the
     %                             distribution of currents and voltages.
-    %                             Notes: 
-    %                                   - In order to use this option, the Statistics
-    %                                     and Machine Learning Toolbox is required.
-    %                                   - Due to the limitation using Zmin and Zmax, a
-    %                                     the mean or std may vary slightly from what was
-    %                                     set. To get an exact std and mean, Zmin must be
-    %                                     set to -Inf and Zmax must be set to Inf.
+    %                                   
     %
     %   'Zgauss'                 - default: [0, Zi, Zi]
     %                            -> Vector for gaussian distribution of battery
@@ -187,9 +185,14 @@ classdef batteryPack < lfpBattery.batteryInterface
     %                            The mean is the value specified by the option
     %                            'Zi'. This setting is ignored if the 'ideal'
     %                            option is set to true.
-    %                            Note: In order to use this option, the Statistics
+    %                            Notes: 
+    %                                - In order to use this option, the Statistics
     %                                  and Machine Learning Toolbox is
     %                                  required.
+    %                                - Due to the limitation using Zmin and Zmax, a
+    %                                  the mean or std may vary slightly from what was
+    %                                  set. To get an exact std and mean, Zmin must be
+    %                                  set to -Inf and Zmax must be set to Inf.
     %
     %   'dCurves'                - default: 'none'
     %                            -> adds dischargeCurve object to the battery's
@@ -271,6 +274,9 @@ classdef batteryPack < lfpBattery.batteryInterface
             %       b = BATTERYPACK(__, 'OptionName', OptionValue)
             %           Used for specifying additional options, which are described below.
             %           The option names must be specified as strings.
+            %
+            %       BATTERYPACK.GUI starts a GUI for creating a BATTERYPACK object.
+            %
             %
             %Input arguments:
             %
@@ -436,7 +442,11 @@ classdef batteryPack < lfpBattery.batteryInterface
             % Initialize common arguments using superclass constructor
             b@lfpBattery.batteryInterface('ageModel', packAm, 'cycleCounter', packCy, ...
                 commonArgs{:});
-            b.AgeModelLevel = amL; % set AgeModelLevel property
+            if strcmp(am, 'none') % correct age model level
+                b.AgeModelLevel = 'no age model';
+            else
+                b.AgeModelLevel = amL; % set AgeModelLevel property
+            end
             % Extract optional arguments and convert string arguments to logicals
             sp = strcmp(p.Results.Topology, 'SP'); % SP (strings of parallel elements) or PS (parallel strings of cells)
             pe = strcmp(p.Results.Equalization, 'Passive'); % passive or active equalization
@@ -541,12 +551,17 @@ classdef batteryPack < lfpBattery.batteryInterface
                 type = 'discharge';
             end
             if strcmp(type, 'cycleLife') && strcmp(b.AgeModelLevel, 'Pack')
-                b.ageModel.wFit = d;
+                if ~strcmp(b.AgeModelLevel, 'no age model')
+                    b.ageModel.wFit = d;
+                else
+                    error('No age model specified this battery pack.')
+                end
             else
                 % pass curve to all cells if discharge curve or cycle life
                 % curve and age model level is 'Pack'
                 b.pass2cells(@addcurves, d, type);
             end
+            b.findImax;
         end
         function addElements(b, e)
             % ADDELEMENTS: Adds elements to the batteryPack. An element can
@@ -581,9 +596,8 @@ classdef batteryPack < lfpBattery.batteryInterface
             [np, ns] = b.El.getTopology;
         end
         %% getters & setters
-        function set.V(b, v) %#ok<INUSD>
-            % Cannot protect SetAcces any other way due to shared interface.
-            error('Cannot set read-only property V in batteryPack.')
+        function set.V(b, v)
+            b.El.V = deal(v);
         end
         function v = get.V(b)
             v = b.El.V;
@@ -634,6 +648,10 @@ classdef batteryPack < lfpBattery.batteryInterface
             % DIGITIZETOOL: Opens a GUI for digitizing discharge curves and
             % cycle life curves.
             lfpBattery.digitizeTool;
+        end
+        function GUI
+            % GUI: Opens a GUI for creating a batteryPack model.
+            lfpBattery.bpackGUI;
         end
     end
     methods (Static, Access = 'protected')

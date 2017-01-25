@@ -2,6 +2,13 @@ classdef commons
     %COMMONS: Class for commonly used static functions
     
     methods (Static)
+        function javaGUIchk
+            if ~usejava('awt')
+                error('java.awt is required to run this tool.')
+            elseif ~usejava('swing')
+                error('javax.swing is required to run this tool.')
+            end
+        end
         function onezeroChk(var, varName)
             % ONEZEROCHK: Returns an error if the variable var with varName
             % is not in the interval [0,..1]

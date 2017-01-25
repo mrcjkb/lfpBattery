@@ -22,14 +22,14 @@ classdef digitizeTool < handle
     properties (Hidden)
         list;
         externalControl = false;
+        sendbutton;
+        varname;
+        mainframe;
     end
     properties (Hidden, Access = 'protected')
-        mainframe;
         axes1;
         Information;
         resetbutton;
-        sendbutton;
-        varname;
         selectbutton;
         xLabel;
         yLabel;
@@ -41,11 +41,7 @@ classdef digitizeTool < handle
     end
     methods
         function obj = digitizeTool()
-            if ~usejava('awt')
-                error('java.awt is required to run this tool.')
-            elseif ~usejava('swing')
-                error('javax.swing is required to run this tool.')
-            end
+            lfpBattery.commons.javaGUIchk
             import lfpBattery.* javax.swing.* java.awt.*
             %% Create figure
             obj.mainframe = figure('Tag', 'mainframe', 'NumberTitle', 'off', 'Name', 'lfpBattery digitizer and curve fit tool',...
@@ -536,9 +532,9 @@ classdef digitizeTool < handle
             end
             jObj.setBusyText('Done!');
             jObj.stop;
+            delete(c)
             obj.sendbutton.setEnabled(true);
             obj.resetbutton.setEnabled(true);
-            delete(c)
         end %selectbutton callback
         
         function sendbutton_Callback(obj, ~, ~) %#ok<*INUSD>
