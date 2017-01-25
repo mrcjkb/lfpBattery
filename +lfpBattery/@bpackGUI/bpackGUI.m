@@ -290,8 +290,6 @@ classdef bpackGUI < handle
             h = handle(jt, 'CallbackProperties');
             h.KeyTypedCallback = @b.validMatName;
             javacomponent(jt, [], uu);
-            b.Zi{i} = jt;
-            b.Zi{i}.setToolTipText(tooltips{i})
             end % constructor
             function switchSetup(b, ~, ~)
             if b.jcb1.getSelectedIndex == 1
