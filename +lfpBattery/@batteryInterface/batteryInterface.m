@@ -1,4 +1,4 @@
-classdef (Abstract) batteryInterface < lfpBattery.composite
+classdef (Abstract) batteryInterface < lfpBattery.composite & lfpBattery.gpuCompatible
     %BATTERYINTERFACE: Abstract class / interface for creating battery
     %models. This is the common interface for batteryPacks, batteryCells,
     %seriesElements, parallelElements, simpleSE and simplePE, ...
@@ -635,16 +635,6 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         function p = get.Psd(b)
            p = - abs(b.psd .* 1/(365.25.*86400./12) .* (b.Cn ./ 3600) .* b.Vn); % 1/(month in seconds) * As * V = W
         end
-        function b = gpuArray(b)
-            % GPUARRAY: Converts b to an object that is compatible with CUDA GPU computations.
-            % Syntax: GPUARRAY(b);
-            %     b = GPUARRAY(b);
-            %
-            % SEE ALSO: gpuArray
-%             b.Psd = gpuArray(b.Ps
-%             b.Zi = gpuArray(b.Zi);
-%             b.
-        end
     end % public methods
     
     methods (Access = 'protected')
@@ -712,6 +702,12 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
             P = 0;
             I = 0;
             V = b.V;
+        end
+        function setsubProp(obj, fn, val)
+            obj.(fn) = val;
+        end
+        function val = getsubProp(obj, fn)
+            val = obj.(fn);
         end
     end
     
