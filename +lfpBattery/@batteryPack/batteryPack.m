@@ -653,7 +653,7 @@ classdef batteryPack < lfpBattery.batteryInterface
         end
     end
     
-    methods (Access = 'protected')
+%     methods (Access = 'protected')
         % gpuCompatible methods
         % These methods are currently unsupported and may be removed in a
         % future version.
@@ -665,7 +665,7 @@ classdef batteryPack < lfpBattery.batteryInterface
             val = obj.(fn);
         end
         %}
-    end
+%     end
     
     methods (Static, Access = 'protected')
         function validateCurveOpt(x, validInterface)

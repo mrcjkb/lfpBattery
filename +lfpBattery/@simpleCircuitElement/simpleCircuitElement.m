@@ -21,6 +21,10 @@ classdef (Abstract) simpleCircuitElement < lfpBattery.batCircuitElement
             b.eta_bc = obj.eta_bc;
             b.eta_bd = obj.eta_bd;
         end
+        function addcurves(b, d, type)
+            b.El.addcurves(d, type)
+            b.findImax
+        end
     end
 end
 

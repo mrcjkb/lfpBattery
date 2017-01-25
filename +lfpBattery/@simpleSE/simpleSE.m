@@ -149,7 +149,7 @@ classdef simpleSE < lfpBattery.simpleCircuitElement
     
     methods (Access = 'protected')
         function i = findImax(b)
-            i = b.El.Imax;
+            i = b.El.findImax;
             b.Imax = i;
         end
         function charge(b, Q)

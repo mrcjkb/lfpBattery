@@ -112,7 +112,6 @@ classdef simplePE < lfpBattery.simpleCircuitElement
             b.findImax;
             b.refreshNominals;
             b.hasCells = true;
-            
         end
         function v = getNewVoltage(b, I, dt)
             % split I equally across elements
@@ -146,7 +145,7 @@ classdef simplePE < lfpBattery.simpleCircuitElement
     
     methods (Access = 'protected')
         function i = findImax(b)
-            i = b.nEl .* b.El.Imax;
+            i = b.nEl .* b.El.findImax;
             b.Imax = i;
         end
         function charge(b, Q)
