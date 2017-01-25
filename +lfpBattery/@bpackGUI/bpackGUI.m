@@ -397,6 +397,7 @@ classdef bpackGUI < handle
             delete(c)
         end
         function loadACDemo(b, ~, ~)
+            import lfpBattery.*
             try
                 msg = 'Load demo cycle life curv fit?';
                 btn = questdlg(msg, ...
@@ -514,6 +515,7 @@ classdef bpackGUI < handle
                     else
                         aML = 'Cell';
                     end
+                    aM = 'EO';
                 else
                     aML = 'Pack'; % default age model level
                 end
