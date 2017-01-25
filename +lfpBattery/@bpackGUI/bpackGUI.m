@@ -31,10 +31,36 @@ classdef bpackGUI < handle
                 'Units', 'normalized',...
                 'MenuBar','none', 'WindowStyle', 'normal', ...
                 'Color', [1 1 1]);
-            b.f.Position(3) = 2.*b.f.Position(3);
+            b.f.Position(3) = 2 .* b.f.Position(3);
+            b.f.Position(4) = 1.2 .* b.f.Position(4);
             movegui(b.f, 'center')
-            layout = uiflowcontainer('v0', 'Units', 'norm', 'Position', [.05, .05, .9, .9], 'parent', b.f, ...
-                'FlowDirection', 'LeftToRight', 'BackgroundColor', [1 1 1]);
+            mainlayout = uiflowcontainer('v0', 'Units', 'norm', 'Position', [.05, .05, .9, .9], 'parent', b.f, ...
+                'FlowDirection', 'TopDown', 'BackgroundColor', [1 1 1]);
+            %% Title container
+            title = uiflowcontainer('V0', 'parent', mainlayout, 'FlowDirection', 'LeftToRight', ...
+                'BackgroundColor', [1 1 1]);
+            title.HeightLimits = [10, 60];
+            logo = uiflowcontainer('v0', 'parent', title, 'FlowDirection', 'LeftToRight', ...
+                'BackgroundColor', [1 1 1]);
+            % TU logo
+            str = commons.getHtmlImage('tulogo.png', 'height', '46', 'width', '90');
+            jl = JLabel; jl.setText(str)
+            jl.setVerticalAlignment(1)
+            jl.setOpaque(true);
+            jl.setBackground(Color.white);
+            javacomponent(jl, [], logo);
+            % Authors
+            str = ['<html><div align="right">batteryPack GUI v.1.0<br>Marc Jakobi, Festus Angangbe, Marc Schmidt',...
+                '<br>TU Berlin, 2017</div>'];
+            jl = JLabel; jl.setText(str)
+            jl.setVerticalAlignment(1)
+            jl.setHorizontalAlignment(SwingConstants.RIGHT)
+            jl.setOpaque(true);
+            jl.setBackground(Color.white);
+            javacomponent(jl, [], logo);
+            %% Main layout
+            layout = uiflowcontainer('v0', 'parent', mainlayout, 'FlowDirection', 'LeftToRight', ...
+                'BackgroundColor', [1 1 1]);
             hc = uiflowcontainer('v0', 'parent', layout, 'FlowDirection', 'BottomUp');
             % Cell and pack voltages and capacities
             labels = {'<html>Cell capacity<br>in Ah:</html>")', '<html>Cell voltage<br>in V:</html>")', ...
@@ -96,7 +122,8 @@ classdef bpackGUI < handle
             javacomponent(des, [], u);
             b.jcbEQ = JComboBox({'active', 'passive'});
             b.jcbEQ.setSelectedIndex(1)
-            b.jcbEQ.setToolTipText('In the simplified model, passive equalization is not possible.')
+            b.jcbEQ.setToolTipText(b.multiline('The balancing of voltage and capacity accross string elements.', ...
+                'In the simplified model, passive equalization is not possible.'))
             javacomponent(b.jcbEQ, [], u);
             % charging and discharging efficiencies
             labels = {'<html>Charging<br>efficiency:</html>', '<html>Discharging<br>efficiency:</html>")'};
@@ -174,8 +201,9 @@ classdef bpackGUI < handle
             des.setVerticalAlignment(1)
             javacomponent(des, [], u);
             b.topology = JComboBox({'SP', 'PS'});
-            b.topology.setToolTipText(b.multiline('SP: String of parallel elements', ...
-                'PS: Parallel strings of cells.'))
+            str = [commons.getHtmlImage('topologies.png'), ...
+                'The topology may influence the equalization.'];
+            b.topology.setToolTipText(str)
             javacomponent(b.topology, [], u);
             % Zi & Zgauss
             jl = JLabel; jl.setText('<html>Internal impedance in &#937</html>')

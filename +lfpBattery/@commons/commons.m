@@ -404,6 +404,48 @@ classdef commons
                 varargout{3} = xup;
             end
         end % norminvlim
+        function str = getHtmlImage(resource, varargin)
+            % GETHTMLIMAGE: Retrieves the HTML string for an image.
+            % Used by the GUI tools of this package.
+            % Syntax: str = getHtmlImage(resource, 'OptionName', 'OptionValue');
+            %
+            % e. g. str = getHtmlImage('image.png', 'height', '100', ...
+            %           'width', '100');
+            p = inputParser;
+            addOptional(p, 'height', 'auto')
+            addOptional(p, 'width', 'auto')
+            parse(p, varargin{:})
+            h = p.Results.height;
+            w = p.Results.width;
+            [path, ~] = fileparts(fileparts(which('lfpBatteryTests')));
+            path = fullfile(path, 'Resources', resource);
+            path = strrep(['file:/', path], '\', '/');
+            if nargin < 2
+                str = ['<html><img src="', path, '"><br>'];
+            else
+                if ~strcmp(h, 'auto') && ~strcmp(w, 'auto')
+                    str = ['<html><img src="', path, '"', ...
+                        'height = "', h, '"', ...
+                        'width = "', w, '"><br>'];
+                elseif ~strcmp(h, 'auto')
+                    str = ['<html><img src="', path, '"', ...
+                        'height = "', h, '"><br>'];
+                else
+                    str = ['<html><img src="', path, '"', ...
+                        'width = "', w, '"><br>'];
+                end
+            end
+        end % getHtmlImage
+        function redComponent(jb)
+            % REDCOMPONENT: colors a java component TU red
+            import lfpBattery.* java.awt.*
+            jb.setOpaque(true);
+            col = const.logo .* 255;
+            jb.setBackground(Color(int32(col(1)), int32(col(2)), int32(col(3))));
+            jb.setContentAreaFilled(false)
+            jb.setForeground(Color.WHITE);
+            jb.setBorderPainted(false);
+        end
     end % methods
 end
 
