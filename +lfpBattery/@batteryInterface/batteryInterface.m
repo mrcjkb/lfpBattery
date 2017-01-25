@@ -35,10 +35,10 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         % also reduce the accuracy of the current limitation.
         iTol = 1e-3;
     end
-    properties (Dependent, SetAccess = 'immutable', GetAccess = 'protected')
+    properties (Dependent, Access = 'protected')
         Psd; % self-discharge energy in W
     end
-    properties (Abstract, Dependent, SetAccess = 'immutable')
+    properties (Abstract, Dependent, SetAccess = 'protected')
         % Internal impedance in Ohm.
         % The internal impedance is currently not used as a physical
         % parameter. However, it is used in the circuit elements
@@ -634,6 +634,16 @@ classdef (Abstract) batteryInterface < lfpBattery.composite
         end
         function p = get.Psd(b)
            p = - abs(b.psd .* 1/(365.25.*86400./12) .* (b.Cn ./ 3600) .* b.Vn); % 1/(month in seconds) * As * V = W
+        end
+        function b = gpuArray(b)
+            % GPUARRAY: Converts b to an object that is compatible with CUDA GPU computations.
+            % Syntax: GPUARRAY(b);
+            %     b = GPUARRAY(b);
+            %
+            % SEE ALSO: gpuArray
+%             b.Psd = gpuArray(b.Ps
+%             b.Zi = gpuArray(b.Zi);
+%             b.
         end
     end % public methods
     

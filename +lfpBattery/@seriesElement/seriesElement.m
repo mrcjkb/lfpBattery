@@ -11,7 +11,7 @@ classdef (Abstract) seriesElement < lfpBattery.batCircuitElement
     %
     %Authors: Marc Jakobi, Festus Anynagbe, Marc Schmidt
     %         January 2017
-    properties (Dependent, SetAccess = 'immutable')
+    properties (Dependent, SetAccess = 'protected')
         % Internal impedance in Ohm.
         % The internal impedance is currently not used as a physical
         % parameter. However, it is used in the circuit elements

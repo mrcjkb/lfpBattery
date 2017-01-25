@@ -84,6 +84,12 @@ classdef batteryCell < lfpBattery.batteryInterface
         V; % Resting voltage / V
     end
     properties (Dependent, SetAccess = 'protected')
+        % Internal impedance in Ohm.
+        % The internal impedance is currently not used as a physical
+        % parameter. However, it is used in the circuit elements
+        % (seriesElement/parallelElement) to determine the distribution
+        % of currents and voltages.
+        Zi;
         % Discharge capacity in Ah (Cd = 0 if SoC = 1).
         % The discharge capacity is given by the nominal capacity Cn and
         % the current capacity C at SoC.
@@ -91,14 +97,6 @@ classdef batteryCell < lfpBattery.batteryInterface
         Cd;
         % Current capacity level in Ah.
         C;
-    end
-    properties (Dependent, SetAccess = 'immutable')
-        % Internal impedance in Ohm.
-        % The internal impedance is currently not used as a physical
-        % parameter. However, it is used in the circuit elements
-        % (seriesElement/parallelElement) to determine the distribution
-        % of currents and voltages.
-        Zi;
     end
     
     methods
