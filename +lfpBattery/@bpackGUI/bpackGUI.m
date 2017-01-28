@@ -518,6 +518,7 @@ classdef bpackGUI < handle
                     aML = 'Pack'; % default age model level
                 end
                 EQ = char(b.jcbEQ.getItemAt(b.jcbEQ.getSelectedIndex));
+                EQ(1) = upper(EQ(1));
                 eta_bc = str2double(char(b.eta{1}.getText));
                 eta_bd = str2double(char(b.eta{2}.getText));
                 psd = str2double(char(b.psd.getText)); %#ok<PROPLC>

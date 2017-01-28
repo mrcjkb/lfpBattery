@@ -407,8 +407,8 @@ classdef batteryPack < lfpBattery.batteryInterface
             amL = p.Results.AgeModelLevel;
             am = p.Results.ageModel;
             cy = p.Results.cycleCounter;
-            if strcmp(amL, 'Cell') % age model level: cell
-                if ~strcmp(am, 'none') % age model specified
+            if strcmpi(amL, 'Cell') % age model level: cell
+                if ~strcmpi(am, 'none') % age model specified
                     cellAm = am; % cell age model arg
                     packAm = 'LowerLevel'; % pack age model arg
                     cellCy = cy; % cell cycle counter arg
@@ -440,20 +440,20 @@ classdef batteryPack < lfpBattery.batteryInterface
             % Initialize common arguments using superclass constructor
             b@lfpBattery.batteryInterface('ageModel', packAm, 'cycleCounter', packCy, ...
                 commonArgs{:});
-            if strcmp(am, 'none') % correct age model level
+            if strcmpi(am, 'none') % correct age model level
                 b.AgeModelLevel = 'no age model';
             else
                 b.AgeModelLevel = amL; % set AgeModelLevel property
             end
             % Extract optional arguments and convert string arguments to logicals
-            sp = strcmp(p.Results.Topology, 'SP'); % SP (strings of parallel elements) or PS (parallel strings of cells)
-            pe = strcmp(p.Results.Equalization, 'Passive'); % passive or active equalization
+            sp = strcmpi(p.Results.Topology, 'SP'); % SP (strings of parallel elements) or PS (parallel strings of cells)
+            pe = strcmpi(p.Results.Equalization, 'Passive'); % passive or active equalization
             im = p.Results.ideal; % simplified, ideal model?
             Zi = p.Results.Zi; % internal impedance (mean if gauss)
             Zgauss = p.Results.Zgauss; % Gaussian distribution of internal impedances
             dC = p.Results.dCurves; % discharge curves ('none' by default)
             aC = p.Results.ageCurve; % cycle life furve ('none' by default)
-            if isinteger(Cp) && isinteger(Vp) || strcmp(p.Results.Setup, 'Manual') % automatic setup?
+            if isinteger(Cp) && isinteger(Vp) || strcmpi(p.Results.Setup, 'Manual') % automatic setup?
                 % user-defined setup
                 np = uint32(Cp);
                 ns = uint32(Vp);
@@ -527,7 +527,7 @@ classdef batteryPack < lfpBattery.batteryInterface
             end
             b.refreshNominals; % Retrieve nominal voltage and capacity from topology.
             % pass curve fits
-            if strcmp(dC, 'none') % warn if no discharge curves specified (default)
+            if strcmpi(dC, 'none') % warn if no discharge curves specified (default)
                 warning(['Battery pack initialized without discharge curve fits. ', ...
                     'Add curve fits to the model using this class''s addcurves() method. ', ...
                     'Attempting to use this model without discharge curve fits will result in an error.'])
@@ -536,11 +536,11 @@ classdef batteryPack < lfpBattery.batteryInterface
             end
             % Do the same for age model curves if an age model was
             % specified.
-            if strcmp(aC, 'none') && ~strcmp(am, 'none')
+            if strcmpi(aC, 'none') && ~strcmpi(am, 'none')
                 warning(['Battery pack initialized without cycle life curve fits although an age model was specified. ', ...
                     'Add curve fits to the model using this class''s addcurves() method. ', ...
                     'Attempting to use this model without cycle life curve fits will result in an error.'])
-            elseif ~strcmp(aC, 'none')
+            elseif ~strcmpi(aC, 'none')
                 b.addcurves(aC, 'cycleLife')
             end
         end % constructor
@@ -548,8 +548,8 @@ classdef batteryPack < lfpBattery.batteryInterface
             if nargin < 3
                 type = 'discharge';
             end
-            if strcmp(type, 'cycleLife') && strcmp(b.AgeModelLevel, 'Pack')
-                if ~strcmp(b.AgeModelLevel, 'no age model')
+            if strcmpi(type, 'cycleLife') && strcmpi(b.AgeModelLevel, 'Pack')
+                if ~strcmpi(b.AgeModelLevel, 'no age model')
                     b.ageModel.wFit = d;
                 else
                     error('No age model specified this battery pack.')
@@ -669,7 +669,7 @@ classdef batteryPack < lfpBattery.batteryInterface
     
     methods (Static, Access = 'protected')
         function validateCurveOpt(x, validInterface)
-            if ~strcmp(x, 'none')
+            if ~strcmpi(x, 'none')
                 lfpBattery.commons.validateInterface(x, validInterface)
             end
         end

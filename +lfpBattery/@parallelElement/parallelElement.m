@@ -140,12 +140,29 @@ classdef parallelElement < lfpBattery.batCircuitElement
             b.Imax = i;
         end
         function charge(b, Q)
-            % Pass equal amount of discharge capacity to each element
-            % to account for self-balancing nature of parallel config
-            q = 1 ./ double(b.nEl) .* Q;
-            charge@lfpBattery.batCircuitElement(b, q)
-            % MTODO: Set according to proportions, then get V proportions
-            % and charge again according to V proportions
+            % Simulate self-balancing nature of parallel config
+            q = b.getZProportions .* Q; % Spread charge according to internal impedances
+            if any(q ~= q(1)) % Is there a difference in the impedances?
+                % simulate self-balancing of charge with intermediate SoC
+                % variations
+                b.chargeLoop(q) % charge sub-elements
+                c = [b.El.C]; % resulting capacities
+                % balancing: q = charge required for each cell to reach mean
+                % SoC
+                q = mean(c) - c;
+                b.chargeLoop(q) % charge cells
+            else
+                % simpler self-balancing (pass equal amount of charge to
+                % each cell --> no intermediate SoC variations)
+                q = Q ./ double(b.nEl);
+                charge@lfpBattery.batCircuitElement(b, q)
+            end
+        end
+        function chargeLoop(b, qv)
+            % Loop over each element and charge with a vector of charges
+            for i = uint32(1):b.nEl
+                b.El(i).charge(qv(i))
+            end
         end
         function p = getZProportions(b)
             % lowest impedance --> highest current
