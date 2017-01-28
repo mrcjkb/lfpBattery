@@ -144,6 +144,8 @@ classdef parallelElement < lfpBattery.batCircuitElement
             % to account for self-balancing nature of parallel config
             q = 1 ./ double(b.nEl) .* Q;
             charge@lfpBattery.batCircuitElement(b, q)
+            % MTODO: Set according to proportions, then get V proportions
+            % and charge again according to V proportions
         end
         function p = getZProportions(b)
             % lowest impedance --> highest current

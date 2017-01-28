@@ -529,7 +529,7 @@ classdef bpackGUI < handle
                 topology = char(b.topology.getItemAt(b.topology.getSelectedIndex)); %#ok<PROPLC>
                 Zi = str2double(char(b.Zi{1}.getText)); %#ok<PROPLC>
                 Zgauss = [0, Zi, Zi]; %#ok<PROPLC>
-                if ~license('test', 'statistics_toolbox')
+                if license('test', 'statistics_toolbox')
                     for i = 2:3
                         Zgauss(i-1) = str2double(char(b.Zi{i}.getText));
                     end
