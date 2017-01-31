@@ -22,8 +22,8 @@ w.plotResults
 close gcf
 a3 = eoAgeModel(c, w);
 % test subsref overload
-w2 = woehlerFit(DoDN-5, N);
-w3 = woehlerFit(DoDN-10, N);
+w2 = woehlerFit(DoDN + 0.1, N);
+w3 = woehlerFit(DoDN + 0.2, N);
 wa = [w; w2; w3];
 assert(isequal(numel(wa{0}), 3), 'Subsref overload problem.');
 
@@ -38,7 +38,7 @@ end
 tol = 1e-04;
 assert(isequal(a.SoH, 1), 'ageModel should not be applied in eoAgeModel without fit function.')
 assert(abs(a2.SoH - 0.9049) <= tol, 'unexpected aging behaviour for eoAgeModel with nlinfit.')
-assert(abs(a3.SoH - 0.9018) <= tol, 'unexpected aging behaviour for eoAgeModel with woehlerFit.')
+assert(abs(a3.SoH - 0.9057) <= tol, 'unexpected aging behaviour for eoAgeModel with woehlerFit.')
 
 %%
 disp('age model tests passed')

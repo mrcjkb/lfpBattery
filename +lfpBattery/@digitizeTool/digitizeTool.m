@@ -189,8 +189,8 @@ classdef digitizeTool < handle
                             error('cancelled')
                     end % switch OriginButton
                     % Prompt user for X- & Y- values at origin
-                    prompt={['Abscissa (', obj.yLabel ,') at origin:'] ,...
-                        ['Ordinate (', obj.xLabel, ') at origin:'],...
+                    prompt={['Abscissa (', obj.xLabel ,') at origin:'] ,...
+                        ['Ordinate (', obj.yLabel, ') at origin:'],...
                         'Repeat selection? (Y/N)'};
                     if strcmp(obj.selectbutton.getText,'Choose image...')
                         def={'0','0','N'};
@@ -233,8 +233,7 @@ classdef digitizeTool < handle
             ct = 0;
             while chk
                 try
-                    % Define X-axis
-                    msg = ['Select a coordinate on the abscissa (', obj.yLabel, ') with the left mouse button.'];
+                    msg = ['Select a coordinate on the abscissa (', obj.xLabel, ') with the left mouse button.'];
                     hInfo.setText(['<html>INFO<br><br>', msg, '</html>");'])
                     XLimButton = questdlg(...
                         msg, ...
@@ -251,9 +250,9 @@ classdef digitizeTool < handle
                         case 'Cancel'
                             ct = 7;
                             error('cancelled')
-                    end % switch XLimButton
+                    end
                     % Prompt user for XLim value
-                    msg = [obj.yLabel, ' at the selected coordinate:'];
+                    msg = [obj.xLabel, ' at the selected coordinate:'];
                     hInfo.setText(['<html>INFO<br><br>', msg, '</html>");'])
                     prompt={msg;...
                         'Repeat? (Y/N)'};
@@ -288,7 +287,22 @@ classdef digitizeTool < handle
                 end
             end
             %scale x axis
-            scalefactorXdata = XAxisXdata - OriginXYdata(1);
+            Xtype = questdlg(...
+                'Axis scaling (X)', ...
+                'Walkthrough', ...
+                'LINEAR','LOGARITHMIC','CANCEL','LINEAR');
+            drawnow
+            switch Xtype
+                case 'LINEAR'
+                    logx = false;
+                    scalefactorXdata = XAxisXdata - OriginXYdata(1);
+                case 'LOGARITHMIC'
+                    logx = true;
+                    scalefactorXdata = log10(XAxisXdata/OriginXYdata(1));
+                case 'CANCEL'
+                    cancelandreset(obj);
+                    return
+            end
             % Rotate image if necessary
             % note image file line 1 is at top
             th = atan((XAxisYpixels-Yopixels)/(XAxisXpixels-Xopixels));
@@ -299,7 +313,7 @@ classdef digitizeTool < handle
             ct = 0;
             while chk
                 try
-                    msg = ['Select a coordinate on the ordinate (', obj.xLabel, ') with the left mouse button.'];
+                    msg = ['Select a coordinate on the ordinate (', obj.yLabel, ') with the left mouse button.'];
                     hInfo.setText(['<html>INFO<br><br>', msg, '</html>");'])
                     YLimButton = questdlg(...
                         msg, ...
@@ -317,7 +331,7 @@ classdef digitizeTool < handle
                             ct = 7;
                     end
                     % Prompt user for YLim value
-                    msg = [obj.xLabel, ' at the selected coordinate:'];
+                    msg = [obj.yLabel, ' at the selected coordinate:'];
                     hInfo.setText(['<html>INFO<br><br>', msg, '</html>");'])
                     prompt={msg,...
                         'Repeat? (Y/N)'};
@@ -351,8 +365,21 @@ classdef digitizeTool < handle
                 end
             end
             % Determine Y-axis scaling
+            Ytype = questdlg('Axis scaling (Y)', ...
+                'Walkthrough', ...
+                'LINEAR','LOGARITHMIC','CANCEL','LINEAR');
             drawnow
-            scalefactorYdata = YAxisYdata - OriginXYdata(2);
+            switch Ytype
+                case 'LINEAR'
+                    logy = false;
+                    scalefactorYdata = YAxisYdata - OriginXYdata(2);
+                case 'LOGARITHMIC'
+                    logy = true;
+                    scalefactorYdata = log10(YAxisYdata/OriginXYdata(2));
+                case 'CANCEL'
+                    cancelandreset(obj);
+                    return
+            end
             % Complete rotation matrix definition as necessary
             delxyx = rotmat*[(XAxisXpixels-Xopixels);(XAxisYpixels-Yopixels)];
             delxyy = rotmat*[(YAxisXpixels-Xopixels);(YAxisYpixels-Yopixels)];
@@ -461,9 +488,17 @@ classdef digitizeTool < handle
                         delYpoint = xy(2);
                         msgStr{3} = 'Correction with the MIDDLE mouse button.';
                         hInfo.setText(['<html>INFO<br><br>', msgStr{1},'<br><br>', msgStr{3}, '<br><br>', msgStr{5}, '</html>");'])
-                        x = OriginXYdata(1) + delXpoint/delXcal*scalefactorXdata;
-                        y = OriginXYdata(2) + delYpoint/delYcal*scalefactorYdata;
-                        n = n+1;
+                        if logx
+                            x = OriginXYdata(1) .* 10 .^ (delXpoint ./ delXcal .* scalefactorXdata);
+                        else
+                            x = OriginXYdata(1) + delXpoint ./ delXcal .* scalefactorXdata;
+                        end
+                        if logy
+                            y = OriginXYdata(2) .* 10 .^ (delYpoint ./ delYcal .* scalefactorYdata);
+                        else
+                            y = OriginXYdata(2) + delYpoint ./ delYcal .* scalefactorYdata;
+                        end
+                        n = n + 1;
                         xpt(n) = x; %#ok<*AGROW>
                         ypt(n) = y;
                         ng = ng+1;
@@ -522,12 +557,12 @@ classdef digitizeTool < handle
             if obj.type == 0
                 obj.fit = dischargeCurves;
                 for si = 1:numsets
-                    df = dischargeFit(obj.ImgData(si).x, obj.ImgData(si).y, obj.ImgData(si).I, obj.ImgData(si).T);
+                    df = dischargeFit(obj.ImgData(si).y, obj.ImgData(si).x, obj.ImgData(si).I, obj.ImgData(si).T);
                     obj.fit.add(df);
                 end
                 obj.fit.plotResults
             else
-                obj.fit = woehlerFit(obj.ImgData(1).y, obj.ImgData(1).x); %(N, DoD)
+                obj.fit = woehlerFit(obj.ImgData(1).x, obj.ImgData(1).y); %(N, DoD)
                 obj.fit.plotResults(true)
             end
             jObj.setBusyText('Done!');
