@@ -74,8 +74,8 @@ classdef woehlerFit < lfpBattery.curveFitInterface
             %PLOTRESULTS: Compares a scatter of the raw data with the fit
             %in a figure window.
             plotResults@lfpBattery.curveFitInterface(d); % Call superclas plot method
-            ylabel('\itDoD')
-            xlabel('Cycles to failure \itN')
+            xlabel('\itDoD')
+            ylabel('Cycles to failure \itN')
         end
         %% Dependent setters
         function set.x(d, params)
