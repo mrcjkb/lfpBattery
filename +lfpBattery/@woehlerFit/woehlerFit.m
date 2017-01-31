@@ -15,24 +15,27 @@ classdef woehlerFit < lfpBattery.curveFitInterface
     end
     
     methods
-        function d = woehlerFit(N, DoDN, varargin)
-            %WOEHLERFIT creates a fit object for a woehler curve
-            %according to the function N(DoD) = p1 * DoD ^ (-p2)
+        function d = woehlerFit(DoDN, N, varargin)
+            %WOEHLERFIT creates a fit object for a cycles to failure vs. DoD curve
+            %according to the function:
+            %
+            % N(DoD) = x0 + x1 * exp(-x2*DoD) + x3 * exp(-x4*DoD)
+            %
             %N is the number of cycles to failure at a constant depth of discharge
             %DoD.
             %
-            %   d = WOEHLERFIT(N, DoD) 
+            %   d = WOEHLERFIT(DoD, N) 
             %           --> creates a fit for the function N(DoD)
             %
-            %   d = WOEHLERFIT(N, DoD, 'OptionName', 'OptionValue');
+            %   d = WOEHLERFIT(DoD, N, 'OptionName', 'OptionValue');
             %           --> custom initialization of curve fit params
             %
             %OptionName-OptionValue pairs:
             %
             %   'x0'            Initial params for fit functions.
-            %                   default: zeros(2, 1)
+            %                   default: zeros(5, 1)
             %
-            %   x0 = [p1; p2]
+            %   x0 = [a0; a1; a2; a3; a4]
             %
             %
             %   'mode'          Function used for fitting curves
@@ -43,7 +46,7 @@ classdef woehlerFit < lfpBattery.curveFitInterface
             if nargin < 2
                 error('Not enough input arguments.')
             end
-            x0 = [10.^7, 1.691];
+            x0 = zeros(5,1);
             % Optional inputs
             p = inputParser;
             addOptional(p, 'x0', x0, @(x) (isnumeric(x) & numel(x) == 2));
@@ -53,7 +56,16 @@ classdef woehlerFit < lfpBattery.curveFitInterface
             % Main inputs
             rawy = DoDN;
             rawx = N;
-            f = @(x, xx)(x(1).*xx.^(-x(2))); % Exponential model function 
+            % Fit according to Naumann et. al. - Betriebsabhaengige
+            % Kostenrechnung von Energiespeichern (not applied)
+%             f = @(x, xx)(x(1).*xx.^(-x(2))); % Exponential model function
+            % Fit according to A Battery Life Prediction Method for Hybrid
+            % Power Applications (NREL) (not applied)
+%             f = @(x, xx) (x(2).*(1./xx).*exp(x(1).*(1-1./xx)));
+            % Fit according to Bindner et. al. - Lifetime Modelling of Lead Acid Batteries
+            % Also seems to work for Li-ion curves (better than the above
+            % two fits)
+            f = @(x, xx) (x(1) + x(2) .* exp(-x(3).*xx) + x(4) .* exp(-x(5).*xx));
             d = d@lfpBattery.curveFitInterface(f, rawx, rawy, varargin{:}); % Superclass constructor
             d.xxlim = [0, inf]; % set boundaries
         end

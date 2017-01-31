@@ -54,7 +54,11 @@ classdef eoAgeModel < lfpBattery.batteryAgeModel
         function addAging(a, src, ~)
             % ADDAGING adds to the battery's age every time a cycleCounter
             % object (or subclass) notifies about a new cycle.
-            a.Ac = a.Ac + sum(src.cDoC ./ a.wFit(src.cDoC));
+            % The aging is calculated according to the formula:
+            %
+            % Ac = Ac + sum(number_of_cycles_at_DoC_i / ...
+            %    number_of_cycles_to_failure_at_DoC_i)
+            a.Ac = a.Ac + sum(1 ./ a.wFit(src.cDoC));
         end
     end
 end

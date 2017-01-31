@@ -527,7 +527,7 @@ classdef digitizeTool < handle
                 end
                 obj.fit.plotResults
             else
-                obj.fit = woehlerFit(obj.ImgData(1).x, obj.ImgData(1).y); %(N, DoD)
+                obj.fit = woehlerFit(obj.ImgData(1).y, obj.ImgData(1).x); %(N, DoD)
                 obj.fit.plotResults(true)
             end
             jObj.setBusyText('Done!');

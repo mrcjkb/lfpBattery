@@ -17,15 +17,15 @@ beta = [10.^7, 1.691];
 N1 = nlinfit(DoDN,N,modelfun,beta);
 cfit = @(x)(N1(1).*x.^(-N1(2)));
 a2 = eoAgeModel(c, cfit);
-w = woehlerFit(N, DoDN);
+w = woehlerFit(DoDN, N);
 w.plotResults
 close gcf
 a3 = eoAgeModel(c, w);
 % test subsref overload
-w2 = woehlerFit(N, DoDN-5);
-w3 = woehlerFit(N, DoDN-10);
+w2 = woehlerFit(DoDN-5, N);
+w3 = woehlerFit(DoDN-10, N);
 wa = [w; w2; w3];
-assert(isequal(wa{0}, [inf; inf; inf]), 'Subsref overload problem.');
+assert(isequal(numel(wa{0}), 3), 'Subsref overload problem.');
 
 cDoC = [];
 for i = uint64(2):uint64(numel(soc))
@@ -37,8 +37,8 @@ for i = uint64(2):uint64(numel(soc))
 end
 tol = 1e-04;
 assert(isequal(a.SoH, 1), 'ageModel should not be applied in eoAgeModel without fit function.')
-assert(abs(a2.SoH - 0.9624) <= tol, 'unexpected aging behaviour for eoAgeModel with nlinfit.')
-assert(abs(a3.SoH - 0.9580) <= tol, 'unexpected aging behaviour for eoAgeModel with woehlerFit.')
+assert(abs(a2.SoH - 0.9049) <= tol, 'unexpected aging behaviour for eoAgeModel with nlinfit.')
+assert(abs(a3.SoH - 0.9018) <= tol, 'unexpected aging behaviour for eoAgeModel with woehlerFit.')
 
 %%
 disp('age model tests passed')
