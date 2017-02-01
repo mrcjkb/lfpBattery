@@ -219,7 +219,7 @@ classdef dischargeFit < lfpBattery.curveFitInterface
     methods (Access = 'protected')
         function v = fiteval(d, S)
             % Overload of curveFitInterface's fiteval function
-            C_dis = S(1).subs{1};
+            C_dis = S.subs{1};
             % conversion to DoD and limitation to 0 and 1
             DoD = lfpBattery.commons.upperlowerlim(C_dis ./ d.Cdmax, 0, 1);
             % limit output to raw data

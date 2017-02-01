@@ -39,7 +39,14 @@ classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
             %                           [z, x]
             feval(c.errHandler, c); % make sure there are enough functions in the collection
             % interpolate with available curve fit returns at 
-            xx = arrayfun(@(f) f(x), c.xydata);
+            nEl = uint32(numel(c.xydata));
+            xx = zeros(nEl, 1);
+            for i = uint32(1):nEl
+                tmp = c.xydata(i);
+                xx(i) = tmp(x);
+            end
+            % Old version of getin xx (slower on CPU)
+%             xx = arrayfun(@(f) f(x), c.xydata);
             y = interp1(c.z, xx, z, c.interpMethod);
             % use commented out code below to limit y to curve fits in a
             % subclass

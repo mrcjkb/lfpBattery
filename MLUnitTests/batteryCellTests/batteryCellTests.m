@@ -13,12 +13,12 @@ dt = 60;
 %% Charge and discharge with current and SoC limiting tests
 b.powerRequest(-10, dt);
 assert(abs(b.SoC - 0.2) < 1e-10, 'Unexpected lower SoC limitation.')
-P = b.powerRequest(500, dt);
-assert(P < 100, 'Unexpected current limitation.')
+[~, ~, I] = b.powerRequest(500, dt);
+assert(abs(I - b.Imax) <= b.pTol, 'Unexpected current limitation.')
 for i = 1:100
     b.powerRequest(60, dt);
 end
-assert(isequal(b.SoC, 1), 'Unexpected upper SoC limitation')
+assert(abs(b.SoC - 1) <= b.sTol, 'Unexpected upper SoC limitation')
 
 %% Init batteryCell with ageModel
 batteryCell(3.5, 3.2, 'ageModel', 'EO');

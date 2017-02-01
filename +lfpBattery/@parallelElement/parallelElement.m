@@ -108,7 +108,13 @@ classdef parallelElement < lfpBattery.batCircuitElement
             % split I across elements according to their internal
             % impedance
             p = b.getZProportions;
-            v = mean(arrayfun(@(x, y) getNewVoltage(x, y, dt), b.El, I .* p(:)));
+            v = 0;
+            for i = uint32(1):b.nEl
+                v = v + b.El(i).getNewVoltage(I * p(i), dt);
+            end
+            v = v / double(b.nEl);
+            % old version (slower on CPU)
+%             v = mean(arrayfun(@(x, y) getNewVoltage(x, y, dt), b.El, I .* p(:)));
         end
         function set.V(b, v)
             % Pass v on to all elements to account for self-balancing

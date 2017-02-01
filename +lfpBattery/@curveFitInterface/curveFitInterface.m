@@ -134,22 +134,24 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
         end
         % Override of subsref (indexing) function
         function v = subsref(d, S)
-            if strcmp(S(1).type, '()') && numel(d) == 1
+            ty = S.type;
+            nd = numel(d);
+            if strcmp(ty, '()') && nd == 1
                 v = d.fiteval(S);
-            elseif numel(d) > 1
-                if strcmp(S(1).type, '()')
-                    S(1).type = '()';
-                    v = builtin('subsref', d, S(1));
-                elseif strcmp(S(1).type, '{}')
-                    S(1).type = '()';
+            elseif nd > 1
+                if strcmp(ty, '()')
+                    S.type = '()';
+                    v = builtin('subsref', d, S);
+                elseif strcmp(ty, '{}')
+                    S.type = '()';
                     v = arrayfun(@(x) subsref(x, S), d);
                 else
                     error('Unexpected MATLAB expression.')
                 end
             elseif nargout == 1
-                v = builtin('subsref', d, S(1));
+                v = builtin('subsref', d, S);
             else
-                builtin('subsref', d, S(1));
+                builtin('subsref', d, S);
             end
         end % subsref overload
         function plotResults(d, varargin)
@@ -260,7 +262,7 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
             %retrieving fit data is used.
             
             % limit x data
-            sub = lfpBattery.commons.upperlowerlim(S(1).subs{1}, d.xxlim(1), d.xxlim(2));
+            sub = lfpBattery.commons.upperlowerlim(S.subs{1}, d.xxlim(1), d.xxlim(2));
             % limit y data
             v = lfpBattery.commons.upperlowerlim(d.f(d.px, sub), d.yylim(1), d.yylim(2));
         end
