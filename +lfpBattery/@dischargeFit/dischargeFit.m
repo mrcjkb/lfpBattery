@@ -109,11 +109,11 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             cdmax = max(C_dis);
             rawx = C_dis ./ cdmax; % Conversion to depth of discharge
             rawy = V;
-            f = @(x, xdata)(x(1) - (lfpBattery.const.R .* Temp) ... % Nernst
-                ./ (lfpBattery.const.z_Li .* lfpBattery.const.F) ...
-                .* log(xdata./(1-xdata)) + x(2) .* xdata + x(3)) ...
-                + ((x(4) + (x(5) + x(4).*x(6)) .* xdata) .* exp(-x(6) .* xdata)) ... % exponential drop at the beginning of the discharge curve
-                + (x(7) .* exp(-x(8) .* xdata) + x(9)); % exponential drop at the end of the discharge curve
+            f = @(x, xdata)(x(1) - (lfpBattery.const.R * Temp) ... % Nernst
+                / (lfpBattery.const.z_Li * lfpBattery.const.F) ...
+                * log(xdata./(1-xdata)) + x(2) * xdata + x(3)) ...
+                + ((x(4) + (x(5) + x(4) * x(6)) * xdata) .* exp(-x(6) * xdata)) ... % exponential drop at the beginning of the discharge curve
+                + (x(7) * exp(-x(8) * xdata) + x(9)); % exponential drop at the end of the discharge curve
             x0 = zeros(9, 1);
             % Optional inputs
             p = inputParser;
@@ -210,11 +210,10 @@ classdef dischargeFit < lfpBattery.curveFitInterface
         end
     end
     methods (Access = 'protected')
-        function v = fiteval(d, S)
+        function v = fiteval(d, C_dis)
             % Overload of curveFitInterface's fiteval function
-            C_dis = S.subs{1};
             % conversion to DoD and limitation to 0 and 1
-            DoD = lfpBattery.commons.upperlowerlim(C_dis ./ d.Cdmax, 0, 1);
+            DoD = lfpBattery.commons.upperlowerlim(C_dis / d.Cdmax, 0, 1);
             % limit output to raw data
             v = lfpBattery.commons.upperlowerlim(d.f(d.px, DoD), d.yylim(1), d.yylim(2));
         end

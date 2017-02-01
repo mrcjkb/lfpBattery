@@ -122,7 +122,7 @@ classdef parallelElement < lfpBattery.batCircuitElement
             [b.El.V] = deal(v);
         end
         function v = get.V(b)
-            v = mean([b.El.V]);
+            v = sum([b.El.V]) / double(b.nEl);
         end
         function c = get.Cd(b)
             c = sum([b.El.Cd]);
@@ -131,7 +131,11 @@ classdef parallelElement < lfpBattery.batCircuitElement
             c = sum([b.El.C]);
         end
         function z = get.Zi(b)
-            z = 1 ./ sum((1 ./ [b.El.Zi])); % 1/z_total = sum_i(1/z_i)
+            persistent cache;
+            if isempty(cache)
+                cache = 1 ./ sum((1 ./ [b.El.Zi])); % 1/z_total = sum_i(1/z_i)
+            end
+            z = cache;
         end
         function [np, ns] = getTopology(b)
             [np, ns] = arrayfun(@(x) getTopology(x), b.El);
@@ -146,9 +150,13 @@ classdef parallelElement < lfpBattery.batCircuitElement
             b.Imax = i;
         end
         function charge(b, Q)
+            persistent cache;
             % Simulate self-balancing nature of parallel config
             q = b.getZProportions .* Q; % Spread charge according to internal impedances
-            if any(q ~= q(1)) % Is there a difference in the impedances?
+            if isempty(cache)
+                cache = any(q ~= q(1));
+            end
+            if  cache % Is there a difference in the impedances?
                 % simulate self-balancing of charge with intermediate SoC
                 % variations
                 b.chargeLoop(q) % charge sub-elements
@@ -171,17 +179,21 @@ classdef parallelElement < lfpBattery.batCircuitElement
             end
         end
         function p = getZProportions(b)
-            % lowest impedance --> highest current
-            zv = [b.El.Zi]; % vector of internal impedances
-            p = zv ./ sum(zv);
-            p = (1./p) ./ sum(1./p);
+            persistent cache;
+            if isempty(cache)
+                % lowest impedance --> highest current
+                zv = [b.El.Zi]; % vector of internal impedances
+                cache = zv ./ sum(zv);
+                cache = (1./cache) ./ sum(1./cache);
+            end
+            p = cache;
         end
         function refreshNominals(b)
             b.Vn = mean([b.El.Vn]);
             b.Cn = sum([b.El.Cn]);
         end 
         function s = sohCalc(b)
-            s =  mean([b.El.SoH]);
+            s =  sum([b.El.SoH]) / double(b.nEl);
         end
         function c = dummyCharge(b, Q)
             q = 1 ./ double(b.nEl) .* Q;

@@ -33,7 +33,11 @@ classdef (Abstract) seriesElement < lfpBattery.batCircuitElement
 %             v = sum(arrayfun(@(x) getNewVoltage(x, I, dt), b.El));
         end
         function z = get.Zi(b)
-            z = sum([b.El.Zi]);
+            persistent cache
+            if isempty(cache)
+                cache = sum([b.El.Zi]);
+            end
+            z = cache;
         end
         function [np, ns] = getTopology(b)
             [np, ns] = arrayfun(@(x) getTopology(x), b.El);
@@ -49,8 +53,12 @@ classdef (Abstract) seriesElement < lfpBattery.batCircuitElement
         end
         function p = getZProportions(b)
             % lowest impedance --> lowest voltage
-            zv = [b.El.Zi]; % vector of internal impedances
-            p = zv ./ sum(zv);
+            persistent cache
+            if isempty(cache)
+                zv = [b.El.Zi]; % vector of internal impedances
+                cache = zv ./ sum(zv);
+            end
+            p = cache;
         end
     end
     

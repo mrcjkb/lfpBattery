@@ -25,7 +25,12 @@ classdef (Abstract) batCircuitElement < lfpBattery.batteryInterface
             arrayfun(@(x) charge(x, Q), b.El)
         end
         function c = dummyCharge(b, Q)
-            c = arrayfun(@(x) dummyCharge(x, Q), b.El);
+            c = zeros(b.nEl, 1);
+            for i = uint32(1):b.nEl
+                c(i) = b.El(i).dummyCharge(Q);
+            end
+            % Old version (Slower on CPU):
+%             c = arrayfun(@(x) dummyCharge(x, Q), b.El);
         end
         % gpuCompatible methods
         % These methods are currently unsupported and may be removed in a

@@ -137,7 +137,7 @@ classdef batteryCell < lfpBattery.batteryInterface
             b.isCell = true; % always false for batteryCell
         end % constructor
         function [v, cd] = getNewVoltage(b, I, dt)
-            cd = b.Cd - I .* dt ./ 3600;
+            cd = b.Cd - I * dt / 3600;
             v = b.dC.interp(I, cd);
         end
         function it = createIterator(~)

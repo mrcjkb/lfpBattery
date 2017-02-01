@@ -37,15 +37,24 @@ classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
             %multiple curveFits.
             %Syntax: y = INTERP(z, x);  Returns y for the the coordinates
             %                           [z, x]
+            persistent cache;
             feval(c.errHandler, c); % make sure there are enough functions in the collection
-            % interpolate with available curve fit returns at 
-            nEl = uint32(numel(c.xydata));
-            xx = zeros(nEl, 1);
-            for i = uint32(1):nEl
-                tmp = c.xydata{i};
-                xx(i) = tmp(x);
+            if isempty(cache) || ~isequal(cache{4}, z) || ~isequal(cache{2}, x)
+                cache{4} = z;
+                if ~isequal(cache{2}, x)
+                    cache{2} = x;
+                    % interpolate with available curve fit returns at
+                    nEl = uint32(numel(c.xydata));
+                    xx = zeros(nEl, 1);
+                    for i = uint32(1):nEl
+                        tmp = c.xydata{i};
+                        xx(i) = tmp(x);
+                    end
+                    cache{1} = xx;
+                end
+                cache{3} = interp1(c.z, cache{1}, z, c.interpMethod);
             end
-            y = interp1(c.z, xx, z, c.interpMethod);
+            y = cache{3};
             % use commented out code below to limit y to curve fits in a
             % subclass
 %             y = lfpBattery.commons.upperlowerlim(...

@@ -232,13 +232,13 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
                 else
                     % limit by discharging efficiency (more power is
                     % required to get the requested amount)
-                    eta = 1 ./ b.eta_bd; 
+                    eta = 1 / b.eta_bd; 
                     b.socLim = b.socMin;
                 end
                 b.reH = @lt; % less than
                 b.seH = @le; % less than or equal to
             end
-            P = eta .* P;
+            P = eta * P;
             P0 = P; % save initial request
             if b.socChk % call only if SoC limit has not already been reached
                 b.lastPr = P;
@@ -251,7 +251,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
                     [P, I, V] = b.nullRequest;
                 else
                     b.V = V;
-                    b.charge(I .* dt ./ 3600) % charge with Q
+                    b.charge(I * dt / 3600) % charge with Q
                     b.refreshSoC; % re-calculates element-level SoC as a total
                 end
             else
@@ -263,7 +263,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             else
                 % Return power required to charge the battery or respectively
                 % the power retrieved from discharging the battery
-                P = P ./ eta;
+                P = P / eta;
             end
         end % powerRequest
         function [P, I, V, soc] = iteratePower(b, P, dt)
@@ -287,9 +287,9 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             if isempty(V_curr)
                 V_curr = b.V;
             end
-            I = P ./ V_curr;
+            I = P / V_curr;
             V = b.getNewVoltage(I, dt);
-            Pit = I .* mean([V_curr; V]);
+            Pit = I * sum([V_curr; V]) / 2;
             err = b.lastPr - Pit;
             if abs(err) > b.pTol && b.pct < b.maxIterations
                 b.pct = b.pct + 1;
@@ -299,20 +299,20 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             end
             if abs(I) > b.Imax + b.iTol % Limit power according to max current using recursion
                 b.pct = 0;
-                P = sign(I) .* b.Imax .* mean([V_curr; V]);
+                P = sign(I) * b.Imax * sum([V_curr; V]) / 2;
                 b.lastPr = P;
                 [P, I, V] = b.iteratePower(P, dt);
             end
             b.pct = 0;
-            newC = b.dummyCharge(I .* dt ./ 3600);
-            soc = newC ./ b.Cn;
+            newC = b.dummyCharge(I * dt / 3600);
+            soc = newC / b.Cn;
             if P ~= 0 % Limit power according to SoC using recursion
                 [limitReached, err] = b.socLimChk(soc);
                 if limitReached
                     b.sct = b.sct + 1;
                     b.slTF = true; % indicate that SoC limiting is active to prevent switching the sign of the power
                     % correct power request
-                    P = b.lastPr + err .* b.lastPr;
+                    P = b.lastPr + err * b.lastPr;
                     b.lastPr = P;
                     [P, I, V, soc] = b.iteratePower(P, dt);
                 end
@@ -352,13 +352,13 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
                 else
                     b.socLim = b.socMin;
                     % limit: discharging efficiency
-                    eta = 1 ./ b.eta_bd; % More required to retrieve request
+                    eta = 1 / b.eta_bd; % More required to retrieve request
                 end
                 b.reH = @lt; % less than
                 b.seH = @le; % less than or equal to
             end
             if b.socChk
-                I = I .* eta;
+                I = I * eta;
                 I0 = I; % save initial request
                 I = lfpBattery.commons.upperlowerlim(I, -b.Imax, b.Imax); % limit to max current
                 b.lastIr = I;
@@ -367,12 +367,12 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
                     [P, I, V] = b.nullRequest;
                 else
                     V = b.getNewVoltage(I, dt);
-                    P = I .* mean([b.V; V]);
+                    P = I * sum([b.V; V]) / 2;
                     b.V = V;
-                    b.charge(I .* dt ./ 3600) % charge with Q
+                    b.charge(I * dt / 3600) % charge with Q
                     b.refreshSoC; % re-calculates element-level SoC as a total
                 end
-                I = I ./ eta; % Return what was taken from the load or discharged
+                I = I / eta; % Return what was taken from the load or discharged
             else
                 [P, I, V] = b.nullRequest;
             end
@@ -393,14 +393,14 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             % Output arguments:
             % I      -   Actual charge (+) or discharge (-) current in A
             % soc    -   State of charge [0,..,1]
-            newC = b.dummyCharge(I .* dt ./ 3600);
-            soc = newC ./ b.Cn;
+            newC = b.dummyCharge(I * dt / 3600);
+            soc = newC / b.Cn;
             [limitReached, err] = b.socLimChk(soc);
             if limitReached
                 b.sct = b.sct + 1;
                 b.slTF = true; % indicate that SoC limiting is active to prevent switching the sign of the power
                 % correct current request
-                I = b.lastIr + err .* b.lastIr;
+                I = b.lastIr + err * b.lastIr;
                 b.lastIr = I;
                 [I, soc] = b.iterateCurrent(I, dt);
             end
@@ -601,8 +601,8 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             assert(s <= 1, 'soc_max cannot be greater than 1')
             assert(s > b.socMin, 'soc_max cannot be smaller than or equal to soc_min')
             % Limit socMax by SoH
-            b.soc_max = s .* b.SoH;
-            b.cyc.socMax = s .* b.SoH;
+            b.soc_max = s * b.SoH;
+            b.cyc.socMax = s * b.SoH;
         end
         function set.maxIterations(b, n)
             b.maxIterations = uint32(max(1, n));
@@ -618,14 +618,14 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
         end
         %% getters
         function a = get.SoC(b)
-            s = b.soc ./ b.SoH; % SoC according to max capacity
+            s = b.soc / b.SoH; % SoC according to max capacity
             a = lfpBattery.commons.upperlowerlim(s, 0, b.socMax);
         end
         function a = get.Cbu(b) % useable capacity after aging
             a = (b.soc_max - b.soc_min) .* b.Cn;
         end
         function a = get.socMax(b)
-            a = b.soc_max ./ b.SoH;
+            a = b.soc_max / b.SoH;
         end
         function a = get.socMin(b)
             a = b.soc_min;
@@ -637,7 +637,11 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             s = b.sohPointer(b);
         end
         function p = get.Psd(b)
-           p = - abs(b.psd .* 1/(365.25.*86400./12) .* (b.Cn ./ 3600) .* b.Vn); % 1/(month in seconds) * As * V = W
+            persistent cache
+            if isempty(cache)
+                cache = - abs(b.psd * 1/(365.25*86400/12) * (b.Cn / 3600) * b.Vn); % 1/(month in seconds) * As * V = W
+            end
+           p = cache;
         end
     end % public methods
     
@@ -651,7 +655,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
         end
         function s = refreshSoC(b)
             % REFRESHSOC: Re-calculates the SoC
-            s = b.C ./ b.Cn;
+            s = b.C / b.Cn;
             b.soc = s;
         end
         function addElement(b, element)

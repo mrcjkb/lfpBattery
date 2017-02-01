@@ -21,11 +21,6 @@ w = woehlerFit(DoDN, N);
 w.plotResults
 close gcf
 a3 = eoAgeModel(c, w);
-% test subsref overload
-w2 = woehlerFit(DoDN + 0.1, N);
-w3 = woehlerFit(DoDN + 0.2, N);
-wa = [w; w2; w3];
-assert(isequal(numel(wa{0}), 3), 'Subsref overload problem.');
 
 cDoC = [];
 for i = uint64(2):uint64(numel(soc))

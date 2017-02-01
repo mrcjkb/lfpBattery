@@ -127,8 +127,14 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
         end
         % Override of subsref (indexing) function
         function v = subsref(d, S)
+            persistent cache;
             if strcmp(S.type, '()')
-                v = d.fiteval(S);
+                sub = S.subs{1};
+                if isempty(cache) || ~isequal(cache{2}, sub)
+                    cache{1} = d.fiteval(S.subs{1});
+                    cache{2} = sub;
+                end
+                v = cache{1};
             elseif nargout == 1
                 v = builtin('subsref', d, S);
             else
@@ -238,12 +244,11 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
                 d.px = fminsearch(fun, d.px, d.fmsoptions);
             end
         end
-        function v = fiteval(d, S)
+        function v = fiteval(d, sub)
             %FITEVAL: Called by subsref if appropriate indexing for
             %retrieving fit data is used.
-            
             % limit x data
-            sub = lfpBattery.commons.upperlowerlim(S.subs{1}, d.xxlim(1), d.xxlim(2));
+            sub = lfpBattery.commons.upperlowerlim(sub, d.xxlim(1), d.xxlim(2));
             % limit y data
             v = lfpBattery.commons.upperlowerlim(d.f(d.px, sub), d.yylim(1), d.yylim(2));
         end

@@ -102,10 +102,10 @@ classdef seriesElementAE < lfpBattery.seriesElement
             v = sum([b.El.V]);
         end
         function c = get.Cd(b)
-            c = mean([b.El.Cd]);
+            c = sum([b.El.Cd]) / double(b.nEl);
         end
         function c = get.C(b)
-            c = mean([b.El.C]);
+            c = sum([b.El.C]) / double(b.nEl);
         end
         function set.V(b, v)
             % Pass v on to all elements equally to account for balancing
@@ -119,10 +119,10 @@ classdef seriesElementAE < lfpBattery.seriesElement
             b.Cn = mean([b.El.Cn]);
         end 
         function s = sohCalc(b)
-            s = mean([b.El.SoH]); 
+            s = sum([b.El.SoH]) / double(b.nEl); 
         end
         function c = dummyCharge(b, Q)
-            c = mean(dummyCharge@lfpBattery.seriesElement(b, Q));
+            c = sum(dummyCharge@lfpBattery.seriesElement(b, Q)) / double(b.nEl);
         end
     end
     

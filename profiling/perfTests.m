@@ -7,10 +7,10 @@ load(fullfile(p, 'profileBat00.mat'))
 warning('on', 'all')
 profile off
 profile on
+% tic
 profilePR(bat);
+% toc
 profile off
 profile report
-% assert(isequal(bat.V, V), 'Behaviour changed.')
 
 end
-

@@ -72,7 +72,7 @@ classdef nrelcFit < lfpBattery.cycleCurveFit
             numParams = 3;
             % Fit according to A Battery Life Prediction Method for Hybrid
             % Power Applications (NREL)
-            f = @(x, xx) (x(2).*(1./xx).*exp(x(1).*(1-1./xx)));
+            f = @(x, xx) (x(2) * (1/xx) .* exp(x(1) * (1 - 1/xx)));
             d@lfpBattery.cycleCurveFit(f, numParams, DoDN, N, varargin{:});
         end
     end

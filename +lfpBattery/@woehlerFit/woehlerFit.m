@@ -65,7 +65,7 @@ classdef woehlerFit < lfpBattery.cycleCurveFit
             numParams = 2;
             % Fit according to Naumann et. al. - Betriebsabhaengige
             % Kostenrechnung von Energiespeichern (not applied)
-            f = @(x, xx)(x(1).*xx.^(-x(2))); % Exponential model function
+            f = @(x, xx)(x(1) * xx.^(-x(2))); % Exponential model function
             d@lfpBattery.cycleCurveFit(f, numParams, DoDN, N, varargin{:});
         end
     end

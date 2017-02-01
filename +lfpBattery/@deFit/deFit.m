@@ -70,7 +70,7 @@ classdef deFit < lfpBattery.cycleCurveFit
             numParams = 5;
             % Fit according to Bindner et. al. - Lifetime Modelling of Lead Acid Batteries
             % Also seems to work for Li-ion curves
-            f = @(x, xx) (x(1) + x(2) .* exp(-x(3).*xx) + x(4) .* exp(-x(5).*xx));
+            f = @(x, xx) (x(1) + x(2) * exp(-x(3) * xx) + x(4) * exp(-x(5) * xx));
             d@lfpBattery.cycleCurveFit(f, numParams, DoDN, N, varargin{:});
         end
     end
