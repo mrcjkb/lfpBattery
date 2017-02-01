@@ -34,13 +34,6 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
     %CURVERFITINTERFACE Indexing:
     %       In order to retrieve the fit for a given value, use subsref
     %   indexing with (), e.g. y = cF(x);
-    %       In order to retrieve the fit for an array of curve fits, use
-    %   subsref indexing with {}.
-    %   e. g. 
-    %       cF = [cF1; cF2; cF3]; % array of curve fit objects
-    %       y = cF(x); % y is a 3x1 vector
-    %   In order to retrieve a curve fit handle from an array of curve
-    %   fit handles, use subsref indexing with ().
     %
     %SEE ALSO: lfpBattery.curvefitCollection, lfpBattery.dischargeCurves
     %
@@ -134,20 +127,8 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
         end
         % Override of subsref (indexing) function
         function v = subsref(d, S)
-            ty = S.type;
-            nd = numel(d);
-            if strcmp(ty, '()') && nd == 1
+            if strcmp(S.type, '()')
                 v = d.fiteval(S);
-            elseif nd > 1
-                if strcmp(ty, '()')
-                    S.type = '()';
-                    v = builtin('subsref', d, S);
-                elseif strcmp(ty, '{}')
-                    S.type = '()';
-                    v = arrayfun(@(x) subsref(x, S), d);
-                else
-                    error('Unexpected MATLAB expression.')
-                end
             elseif nargout == 1
                 v = builtin('subsref', d, S);
             else

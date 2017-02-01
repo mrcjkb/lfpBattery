@@ -36,10 +36,6 @@ d3.plotResults
 d4 = dischargeFit(V, C_d, I, Temp, 'mode', 'fmin');
 d4.plotResults
 close gcf
-%% test subsref overload
-da = [d; d2; d3; d4];
-assert(isequal(size(da{100}), size(da)), 'unexpected subsref behaviour.');
-assert(isequal(size(da(1)), [1 1]), 'unexpexted subsref behaviour.');
 
 %% switch modes
 d2.mode = 'fmin';

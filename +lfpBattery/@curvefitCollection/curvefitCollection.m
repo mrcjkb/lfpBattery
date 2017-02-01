@@ -5,7 +5,7 @@ classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
     %
     %CURVEFITCOLLECTION Properties:
     %
-    %   xydata - curve fit objects (should implement curveFitInterface)
+    %   xydata - cell array of curve fit objects (should implement curveFitInterface)
     %   z      - z data at which the respective curve measurements were
     %            recorded (i. e. temperature, current,...)
     %
@@ -42,11 +42,8 @@ classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
             nEl = uint32(numel(c.xydata));
             xx = zeros(nEl, 1);
             for i = uint32(1):nEl
-                tmp = c.xydata(i);
-                xx(i) = tmp(x);
+                xx(i) = c.xydata{i}(x);
             end
-            % Old version of getin xx (slower on CPU)
-%             xx = arrayfun(@(f) f(x), c.xydata);
             y = interp1(c.z, xx, z, c.interpMethod);
             % use commented out code below to limit y to curve fits in a
             % subclass
@@ -75,14 +72,14 @@ classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
             %   SoCx (logical)      - Scale x axis as SoC instead of discharge capacity for discharge curves (default: false)
             figure;
             hold on
-            tmp = c.xydata(1);
+            tmp = c.xydata{1};
             plotResults(tmp, false, varargin{:});
             if nargin < 3
                 legend('raw data', 'fits', 'Location', 'Best')
             end
             grid on
             for i = 2:numel(c.xydata)
-                tmp = c.xydata(i);
+                tmp = c.xydata{i};
                 plotResults(tmp, false, varargin{:});
             end
         end

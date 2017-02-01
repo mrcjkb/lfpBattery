@@ -32,15 +32,15 @@ classdef (Abstract) sortedFunctions < lfpBattery.composite %& lfpBattery.gpuComp
             %If an object cf with the same z coordinate exists, the
             %existing one is replaced.
             if isempty(c.xydata) % object initialization
-               c.xydata = d;
+               c.xydata{1} = d;
                c.z = d.z;
             else
                 try % if another sortedCollection is added, add all the elements of sortedCollection
                     for i = 1:numel(d.xydata)
-                        c.add(d.xydata(i))
+                        c.add(d.xydata{i})
                     end
                 catch
-                    c.xydata = [d; c.xydata]; % append new data to beginning
+                    c.xydata = [{d}; c.xydata]; % append new data to beginning
                     [c.z, i, ~] = unique([d.z; c.z]); % append z to beginning and remove double occurences
                     c.xydata = c.xydata(i); % remove double occurences from fits
                     [c.z, i] = sort([c.z]); % sort z data

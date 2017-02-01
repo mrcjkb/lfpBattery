@@ -43,13 +43,6 @@ classdef dischargeFit < lfpBattery.curveFitInterface
     % DISCHARGEFIT Indexing:
     %       In order to retrieve the fit for a given value, use subsref
     %   indexing with (), e.g. y = cF(x);
-    %       In order to retrieve the fit for an array of DISCHARGEFIT objects, use
-    %   subsref indexing with {}.
-    %   e. g. 
-    %       cF = [cF1; cF2; cF3]; % array of DISCHARGEFIT objects
-    %       y = cF(x); % y is a 3x1 vector
-    %   In order to retrieve a DISCHARGEFIT handle from an array of DISCHARGEFIT
-    %   handles, use subsref indexing with ().
     %
     % Authors:  Marc Jakobi, Festus Anyangbe, Marc Schmidt,
     % December 2016
