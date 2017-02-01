@@ -42,7 +42,8 @@ classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
             nEl = uint32(numel(c.xydata));
             xx = zeros(nEl, 1);
             for i = uint32(1):nEl
-                xx(i) = c.xydata{i}(x);
+                tmp = c.xydata{i};
+                xx(i) = tmp(x);
             end
             y = interp1(c.z, xx, z, c.interpMethod);
             % use commented out code below to limit y to curve fits in a

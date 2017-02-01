@@ -265,7 +265,6 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
                 % the power retrieved from discharging the battery
                 P = P ./ eta;
             end
-            clear b.iteratePower % clear cache
         end % powerRequest
         function [P, I, V, soc] = iteratePower(b, P, dt)
             %ITERATEPOWER: Iteration to determine new state given a certain power.
@@ -320,6 +319,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             end
             b.sct = 0;
             b.slTF = false;
+            clear V_curr
         end % iteratePower
         function [P, V, I] = currentRequest(b, I, dt)
             % CURRENTREQUEST: Requests a current in A (positive for charging,
