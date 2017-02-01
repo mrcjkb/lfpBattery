@@ -22,7 +22,11 @@ classdef (Abstract) batCircuitElement < lfpBattery.batteryInterface
             i = arrayfun(@(x) findImax(x), b.El);
         end
         function charge(b, Q)
-            arrayfun(@(x) charge(x, Q), b.El)
+            for i = uint32(1):b.nEl
+                b.El(i).charge(Q)
+            end
+            % Old version
+%             arrayfun(@(x) charge(x, Q), b.El)
         end
         function c = dummyCharge(b, Q)
             c = zeros(b.nEl, 1);

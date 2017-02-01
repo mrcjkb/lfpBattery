@@ -38,7 +38,7 @@ classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
             %Syntax: y = INTERP(z, x);  Returns y for the the coordinates
             %                           [z, x]
             persistent cache;
-            feval(c.errHandler, c); % make sure there are enough functions in the collection
+%             feval(c.errHandler, c); % make sure there are enough functions in the collection
             if isempty(cache) || ~isequal(cache{4}, z) || ~isequal(cache{2}, x)
                 cache{4} = z;
                 if ~isequal(cache{2}, x)

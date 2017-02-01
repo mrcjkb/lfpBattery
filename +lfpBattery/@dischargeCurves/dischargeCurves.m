@@ -94,7 +94,7 @@ classdef dischargeCurves < lfpBattery.curvefitCollection
             %limited to the dischargeCurve's maximum and minimum current
             %recordings (property: z)
             persistent cache;
-            feval(d.errHandler, d); % make sure there are enough functions in the collection
+%             feval(d.errHandler, d); % make sure there are enough functions in the collection
             if isempty(cache) || cache(3) ~= C || cache(2) ~= I
                 cache(3) = C;
                 cache(2) = I;

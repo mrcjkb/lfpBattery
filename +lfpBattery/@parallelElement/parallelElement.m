@@ -152,7 +152,7 @@ classdef parallelElement < lfpBattery.batCircuitElement
         function charge(b, Q)
             persistent cache;
             % Simulate self-balancing nature of parallel config
-            q = b.getZProportions .* Q; % Spread charge according to internal impedances
+            q = b.getZProportions * Q; % Spread charge according to internal impedances
             if isempty(cache)
                 cache = any(q ~= q(1));
             end
@@ -163,7 +163,7 @@ classdef parallelElement < lfpBattery.batCircuitElement
                 c = [b.El.C]; % resulting capacities
                 % balancing: q = charge required for each cell to reach mean
                 % SoC
-                q = mean(c) - c;
+                q = sum(c) / double(b.nEl) - c; % mean
                 b.chargeLoop(q) % charge cells
             else
                 % simpler self-balancing (pass equal amount of charge to
