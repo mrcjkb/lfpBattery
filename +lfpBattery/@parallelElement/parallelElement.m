@@ -112,9 +112,7 @@ classdef parallelElement < lfpBattery.batCircuitElement
             for i = uint32(1):b.nEl
                 v = v + b.El(i).getNewVoltage(I * p(i), dt);
             end
-            v = v / double(b.nEl);
-            % old version (slower on CPU)
-%             v = mean(arrayfun(@(x, y) getNewVoltage(x, y, dt), b.El, I .* p(:)));
+            v = v * b.rnEl;
         end
         function set.V(b, v)
             % Pass v on to all elements to account for self-balancing
@@ -122,7 +120,7 @@ classdef parallelElement < lfpBattery.batCircuitElement
             [b.El.V] = deal(v);
         end
         function v = get.V(b)
-            v = sum([b.El.V]) / double(b.nEl);
+            v = sum([b.El.V]) * b.rnEl;
         end
         function c = get.Cd(b)
             c = sum([b.El.Cd]);
@@ -163,18 +161,17 @@ classdef parallelElement < lfpBattery.batCircuitElement
                 c = [b.El.C]; % resulting capacities
                 % balancing: q = charge required for each cell to reach mean
                 % SoC
-                q = sum(c) / double(b.nEl) - c; % mean
+                q = sum(c) * b.rnEl - c; % mean
                 b.chargeLoop(q) % charge cells
             else
                 % simpler self-balancing (pass equal amount of charge to
                 % each cell --> no intermediate SoC variations)
-                q = Q ./ double(b.nEl);
-                charge@lfpBattery.batCircuitElement(b, q)
+                charge@lfpBattery.batCircuitElement(b, Q * b.rnEl)
             end
         end
         function chargeLoop(b, qv)
             % Loop over each element and charge with a vector of charges
-            for i = uint32(1):b.nEl
+            for i = 1:b.nEl
                 b.El(i).charge(qv(i))
             end
         end
@@ -189,15 +186,14 @@ classdef parallelElement < lfpBattery.batCircuitElement
             p = cache;
         end
         function refreshNominals(b)
-            b.Vn = mean([b.El.Vn]);
+            b.Vn = sum([b.El.Vn]) * b.rnEl;
             b.Cn = sum([b.El.Cn]);
         end 
         function s = sohCalc(b)
             s =  sum([b.El.SoH]) / double(b.nEl);
         end
         function c = dummyCharge(b, Q)
-            q = 1 ./ double(b.nEl) .* Q;
-            c = sum(dummyCharge@lfpBattery.batCircuitElement(b, q));
+            c = sum(dummyCharge@lfpBattery.batCircuitElement(b, 1 * b.rnEl * Q));
         end
     end
     

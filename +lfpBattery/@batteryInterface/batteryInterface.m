@@ -129,6 +129,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
         % number of elements (in case of collection)
         % The data type is uint32
         nEl;
+        rnEl; % reciprocal of nEl as double
         % Elements (parallelELement, seriesElement or batteryCell objects)
         El;
         Cdi; % for storing Cd property in batteryCell
@@ -149,6 +150,9 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
        % composite branch, such as a parallelElement or a seriesElement
        hasCells = false;
        isCell = false; % set this to true for cell objects, such as batteryCell.
+    end
+    properties (Hidden, Constant, GetAccess = 'protected')
+        secsToHours = 1 / 3600;
     end
     methods
         function b = batteryInterface(varargin)
@@ -251,7 +255,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
                     [P, I, V] = b.nullRequest;
                 else
                     b.V = V;
-                    b.charge(I * dt / 3600) % charge with Q
+                    b.charge(I * dt * b.secsToHours) % charge with Q
                     b.refreshSoC; % re-calculates element-level SoC as a total
                 end
             else
@@ -289,7 +293,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             end
             I = P / V_curr;
             V = b.getNewVoltage(I, dt);
-            Pit = I * sum([V_curr; V]) / 2;
+            Pit = I * sum([V_curr; V]) * 0.5;
             err = b.lastPr - Pit;
             if abs(err) > b.pTol && b.pct < b.maxIterations
                 b.pct = b.pct + 1;
@@ -299,12 +303,12 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             end
             if abs(I) > b.Imax + b.iTol % Limit power according to max current using recursion
                 b.pct = 0;
-                P = sign(I) * b.Imax * sum([V_curr; V]) / 2;
+                P = sign(I) * b.Imax * sum([V_curr; V]) * 0.5;
                 b.lastPr = P;
                 [P, I, V] = b.iteratePower(P, dt);
             end
             b.pct = 0;
-            newC = b.dummyCharge(I * dt / 3600);
+            newC = b.dummyCharge(I * dt * b.secsToHours);
             soc = newC / b.Cn;
             if P ~= 0 % Limit power according to SoC using recursion
                 [limitReached, err] = b.socLimChk(soc);
@@ -367,9 +371,9 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
                     [P, I, V] = b.nullRequest;
                 else
                     V = b.getNewVoltage(I, dt);
-                    P = I * sum([b.V; V]) / 2;
+                    P = I * sum([b.V; V]) * 0.5;
                     b.V = V;
-                    b.charge(I * dt / 3600) % charge with Q
+                    b.charge(I * dt * b.secsToHours) % charge with Q
                     b.refreshSoC; % re-calculates element-level SoC as a total
                 end
                 I = I / eta; % Return what was taken from the load or discharged
@@ -393,7 +397,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             % Output arguments:
             % I      -   Actual charge (+) or discharge (-) current in A
             % soc    -   State of charge [0,..,1]
-            newC = b.dummyCharge(I * dt / 3600);
+            newC = b.dummyCharge(I * dt * b.secsToHours);
             soc = newC / b.Cn;
             [limitReached, err] = b.socLimChk(soc);
             if limitReached
@@ -682,7 +686,8 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             if isa(b, 'lfpBattery.batteryPack')
                 b.El = element;
             else
-                b.nEl = uint32(sum(b.nEl) + 1); % sum() in case nEl is empty
+                b.nEl = uint32(sum(b.nEl) + 1); % sum() in case dnEl is empty
+                b.rnEl = 1 / double(b.nEl);
                 if isempty(b.El) || isstruct(b.El) % in case El's properties were addressed already
                     b.El = element;
                 else

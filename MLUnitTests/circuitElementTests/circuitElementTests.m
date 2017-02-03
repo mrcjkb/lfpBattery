@@ -56,7 +56,7 @@ B = [B(1:3); B(4:6); B(7:9)];
 assert(abs(s.SoC - (1 - s.Cd ./ s.Cn)) < tol, 'SPP: unexpected SoC')
 assert(isequal(s.Cn, min([sum([B(1,:).Cn]); sum([B(2,:).Cn]); sum([B(3,:).Cn])])), 'SPP: unexpected nominal capacity')
 assert(isequal(s.Cd, min([sum([B(1,:).Cd]); sum([B(2,:).Cd]); sum([B(3,:).Cd])])), 'SPP: unexpected discharge capacity')
-assert(isequal(s.Vn, sum([mean([B(1,:).Vn]); mean([B(2,:).Vn]); mean([B(3,:).Vn])])), 'SPP: unexpected nominal voltage')
+assert(abs(s.Vn - sum([mean([B(1,:).Vn]); mean([B(2,:).Vn]); mean([B(3,:).Vn])])) < tol, 'SPP: unexpected nominal voltage')
 
 chargeDischargeTest(s, 'SPP', 100)
 
@@ -74,7 +74,7 @@ B = [B(1:3); B(4:6); B(7:9)];
 
 assert(abs(s.SoC - (1 - s.Cd ./ s.Cn)) < tol, 'SPA: unexpected SoC')
 assert(isequal(s.Cn, mean([sum([B(1,:).Cn]); sum([B(2,:).Cn]); sum([B(3,:).Cn])])), 'SPA: unexpected nominal capacity')
-assert(isequal(s.Vn, sum([mean([B(1,:).Vn]); mean([B(2,:).Vn]); mean([B(3,:).Vn])])), 'SPA: unexpected nominal voltage')
+assert(abs(s.Vn - sum([mean([B(1,:).Vn]); mean([B(2,:).Vn]); mean([B(3,:).Vn])])) < tol, 'SPA: unexpected nominal voltage')
 
 chargeDischargeTest(s, 'SPA', 100)
 
@@ -92,7 +92,7 @@ B = [B(1) B(4) B(7); B(2) B(5) B(8); B(3) B(6) B(9)];
 
 assert(abs(p.SoC - (1 - p.Cd ./ p.Cn)) < tol, 'PSP: unexpected SoC')
 assert(isequal(p.Cn, sum([min([B(:,1).Cn]); min([B(:,2).Cn]); min([B(:,3).Cn])])), 'PSP: unexpected nominal capacity')
-assert(isequal(p.Vn, mean([sum([B(:,1).Vn]); sum([B(:,2).Vn]); sum([B(:,3).Vn])])), 'PSP: unexpected nominal voltage')
+assert(abs(p.Vn - mean([sum([B(:,1).Vn]); sum([B(:,2).Vn]); sum([B(:,3).Vn])])) < tol, 'PSP: unexpected nominal voltage')
 chargeDischargeTest(p, 'PSP', 100)
 
 
@@ -110,7 +110,7 @@ B = [B(1) B(4) B(7); B(2) B(5) B(8); B(3) B(6) B(9)];
 
 assert(abs(p.SoC - (1 - p.Cd ./ p.Cn)) < tol, 'PSA: unexpected SoC')
 assert(isequal(p.Cn, sum([mean([B(:,1).Cn]); mean([B(:,2).Cn]); mean([B(:,3).Cn])])), 'PSA: unexpedced nominal capacity')
-assert(isequal(p.Vn, mean([sum([B(:,1).Vn]); sum([B(:,2).Vn]); sum([B(:,3).Vn])])), 'PSA: unexpected nominal voltage')
+assert(abs(p.Vn - mean([sum([B(:,1).Vn]); sum([B(:,2).Vn]); sum([B(:,3).Vn])])) < tol, 'PSA: unexpected nominal voltage')
 chargeDischargeTest(p, 'PSA', 100)
 
 

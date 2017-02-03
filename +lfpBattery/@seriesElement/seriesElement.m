@@ -26,11 +26,9 @@ classdef (Abstract) seriesElement < lfpBattery.batCircuitElement
         end
         function v = getNewVoltage(b, I, dt)
             v = 0;
-            for i = uint32(1):b.nEl
+            for i = 1:b.nEl
                 v = v + b.El(i).getNewVoltage(I, dt);
             end
-            % old version (slower on CPU):
-%             v = sum(arrayfun(@(x) getNewVoltage(x, I, dt), b.El));
         end
         function z = get.Zi(b)
             persistent cache

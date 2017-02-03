@@ -102,27 +102,27 @@ classdef seriesElementAE < lfpBattery.seriesElement
             v = sum([b.El.V]);
         end
         function c = get.Cd(b)
-            c = sum([b.El.Cd]) / double(b.nEl);
+            c = sum([b.El.Cd]) * b.rnEl;
         end
         function c = get.C(b)
-            c = sum([b.El.C]) / double(b.nEl);
+            c = sum([b.El.C]) * b.rnEl;
         end
         function set.V(b, v)
             % Pass v on to all elements equally to account for balancing
-            [b.El.V] = deal(v ./ double(b.nEl));
+            [b.El.V] = deal(v * b.rnEl);
         end
     end
     
     methods (Access = 'protected')
         function refreshNominals(b)
             b.Vn = sum([b.El.Vn]);
-            b.Cn = mean([b.El.Cn]);
+            b.Cn = sum([b.El.Cn]) * b.rnEl;
         end 
         function s = sohCalc(b)
-            s = sum([b.El.SoH]) / double(b.nEl); 
+            s = sum([b.El.SoH]) * b.rnEl; 
         end
         function c = dummyCharge(b, Q)
-            c = sum(dummyCharge@lfpBattery.seriesElement(b, Q)) / double(b.nEl);
+            c = sum(dummyCharge@lfpBattery.seriesElement(b, Q)) * b.rnEl;
         end
     end
     
