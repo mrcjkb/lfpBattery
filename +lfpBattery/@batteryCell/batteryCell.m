@@ -194,7 +194,7 @@ classdef batteryCell < lfpBattery.batteryInterface
             c = b.Cdi;
         end
         function c = get.C(b)
-            c = b.Cn - b.Cd;
+            c = b.Cn - b.Cdi;
         end
         function set.Zi(b, z)
             b.zi = z;
