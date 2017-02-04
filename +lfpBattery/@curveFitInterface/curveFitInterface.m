@@ -61,6 +61,7 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
         xxlim  = [-inf, inf]; % upper & lower limits for x data
         yylim = [-inf, inf]; % upper & lower limits for y data
         cache = cell(2, 1);
+        func; % Function handle with set params
     end
     properties (Hidden, GetAccess = 'protected', SetAccess = 'immutable')
         f; % Fit function Handle
@@ -170,7 +171,7 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
                 scatter(xf.*d.rawX, yf.*d.rawY, 'filled', 'MarkerFaceColor', lfpBattery.const.red)
             end
             if ~nfd
-                plot(xf.*xdata, yf.*d.f(d.px, xdata), 'Color', lfpBattery.const.green, ...
+                plot(xf.*xdata, yf.*d.func(xdata), 'Color', lfpBattery.const.green, ...
                     'LineWidth', 2)
             end
             if newfig
@@ -238,6 +239,7 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
                 fun = @(x) d.sseval(x, d.f(x, d.rawX(1:end-1)), d.rawY(1:end-1));
                 d.px = fminsearch(fun, d.px, d.fmsoptions);
             end
+            d.refreshFunc;
         end
         function v = fiteval(d, sub)
             %FITEVAL: Called by subsref if appropriate indexing for
@@ -245,7 +247,7 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
             % limit x data
             sub = lfpBattery.commons.upperlowerlim(sub, d.xxlim(1), d.xxlim(2));
             % limit y data
-            v = lfpBattery.commons.upperlowerlim(d.f(d.px, sub), d.yylim(1), d.yylim(2));
+            v = lfpBattery.commons.upperlowerlim(d.func(sub), d.yylim(1), d.yylim(2));
         end
         % gpuCompatible methods
         % These methods are currently unsupported and may be removed in a
@@ -259,6 +261,10 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
         end
         %}
     end
-    
+    methods (Abstract, Access = 'protected')
+        % Creates the function handle with fixed params.
+        % For better performance than function handle with 2 inputs
+        refreshFunc(d);
+    end
 end
 

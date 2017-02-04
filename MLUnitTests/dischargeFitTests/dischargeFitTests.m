@@ -12,11 +12,10 @@ Ea = 0.01;
 Eb = 0.22;
 Aex = 0.1;
 Bex = -0.9;
-Cex = 0.1;
 x0 = -3;
 v0 = 1400;
 delta = 260;
-x0 = [E0; Ea; Eb; Aex; Bex; Cex; x0; v0; delta];
+x0 = [E0; Ea; Eb; x0; v0; delta; Aex; Bex];
 
 %% Args
 Temp = const.T_room;

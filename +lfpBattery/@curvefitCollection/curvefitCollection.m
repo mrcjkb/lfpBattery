@@ -41,7 +41,8 @@ classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
             %Syntax: y = INTERP(z, x);  Returns y for the the coordinates
             %                           [z, x]
 %             feval(c.errHandler, c); % make sure there are enough functions in the collection
-            if c.cache{4} ~= z || c.cache{2} ~= x
+            if ~isequal(c.cache{4}, z) || ~isequal(c.cache{2}, x)
+                % NOTE: ~= does not work if cache is empty
                 c.cache{4} = z;
                 c.cache{2} = x;
                 % interpolate with available curve fit returns at

@@ -21,15 +21,15 @@ classdef dischargeFit < lfpBattery.curveFitInterface
     %OptionName-OptionValue pairs:
     %
     %   'x0'            Initial params for fit functions.
-    %                   default: zeros(9, 1)
+    %                   default: zeros(8, 1)
     %
-    %   x0 = [E0; Ea; Eb; Aex; Bex; Cex; x0; v0; delta] with:
+    %   x0 = [E0; Ea; Eb; x0; v0; delta; Aex; Bex] with:
     %
     %   E0, Ea, Eb:     Parameters for Nernst fit (initial estimations)
-    %   Aex, Bex, Cex:  Parameters for fit of exponential drop at
-    %                   the end of the curve (initial estimations)
     %   x0, v0, delta:  Parameters for fit of exponential drop at
     %                   the beginning of the curve (initial estimations)
+    %   Aex, Bex:       Parameters for fit of exponential drop at
+    %                   the end of the curve (initial estimations)
     %
     %   'mode'          Function used for fitting curves
     %                   'lsq' (default) - lsqcurvefit
@@ -50,17 +50,20 @@ classdef dischargeFit < lfpBattery.curveFitInterface
     properties (Dependent)
         x;  % 3 fit parameters for f
         xs; % 3 fit parameters for fs
-        xe; % 3 fit parameters for fe
+        xe; % 2 fit parameters for fe
     end
     properties (Dependent, SetAccess = 'protected')
         dV_mean; % mean difference in voltage between fit and raw data
         dV_max; % max difference in voltage between fit and raw data
     end
-    properties (Dependent, Hidden, SetAccess = 'protected', GetAccess = 'protected')
+    properties (Dependent, Hidden, Access = 'protected')
        Cd_raw; % x data (raw discharge capacity) of initial fit curve
     end
     properties (Hidden, GetAccess = 'protected', SetAccess = 'immutable')
         Cdmax; % maximum of discharge capacity (used for conversion between dod & C_dis)
+    end
+    properties (SetAccess = 'protected')
+        T; % Temperature at which curve was recorded
     end
     methods
         % Constructor
@@ -87,15 +90,15 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             %OptionName-OptionValue pairs:
             %
             %   'x0'            Initial params for fit functions.
-            %                   default: zeros(9, 1)
+            %                   default: zeros(8, 1)
             %
-            %   x0 = [E0; Ea; Eb; Aex; Bex; Cex; x0; v0; delta] with:
+            %   x0 = [E0; Ea; Eb; x0; v0; delta; Aex; Bex] with:
             %
             %   E0, Ea, Eb:     Parameters for Nernst fit (initial estimations)
-            %   Aex, Bex, Cex:  Parameters for fit of exponential drop at
-            %                   the end of the curve (initial estimations)
             %   x0, v0, delta:  Parameters for fit of exponential drop at
             %                   the beginning of the curve (initial estimations)
+            %   Aex, Bex:       Parameters for fit of exponential drop at
+            %                   the end of the curve (initial estimations)
             %
             %   'mode'          Function used for fitting curves
             %                   'lsq'           - lsqcurvefit
@@ -111,17 +114,18 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             rawy = V;
             f = @(x, xdata)(x(1) - (lfpBattery.const.R * Temp) ... % Nernst
                 / (lfpBattery.const.z_Li * lfpBattery.const.F) ...
-                * log(xdata./(1-xdata)) + x(2) * xdata + x(3)) ...
-                + ((x(4) + (x(5) + x(4) * x(6)) * xdata) .* exp(-x(6) * xdata)) ... % exponential drop at the beginning of the discharge curve
-                + (x(7) * exp(-x(8) * xdata) + x(9)); % exponential drop at the end of the discharge curve
-            x0 = zeros(9, 1);
+                * log(xdata./(1-xdata)) + x(2) * xdata + x(3) ...
+                + (x(4) + (x(5) + x(4) * x(6)) * xdata) .* exp(-x(6) * xdata) ... % exponential drop at the beginning of the discharge curve
+                + x(7) * exp(-x(8) * xdata)); % exponential drop at the end of the discharge curve
+            x0 = zeros(8, 1);
             % Optional inputs
             p = inputParser;
-            addOptional(p, 'x0', x0, @(x) (isnumeric(x) & numel(x) == 9));
+            addOptional(p, 'x0', x0, @(x) (isnumeric(x) & numel(x) == 8));
             addOptional(p, 'mode', 'both');
             parse(p, varargin{:})
             varargin = [{'x0', p.Results.x0}, varargin];
             d = d@lfpBattery.curveFitInterface(f, rawx, rawy, I, varargin{:}); % Superclass constructor
+            d.T = Temp;
             d.Cdmax = cdmax;
             d.xxlim = [0, cdmax];
             d.yylim = [min(V), max(V)]; % limit output to raw data
@@ -184,8 +188,8 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             d.fit;
         end
         function set.xe(d, params)
-            assert(numel(params) == 3, 'Wrong number of params')
-            d.px(7:9) = params(:);
+            assert(numel(params) == 2, 'Wrong number of params')
+            d.px(7:8) = params(:);
             d.fit;
         end
         
@@ -197,7 +201,7 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             params = d.px(4:6);
         end
         function params = get.xe(d)
-            params = d.px(7:9);
+            params = d.px(7:8);
         end
         function e = get.dV_mean(d)
             e = mean(d.e_tot);
@@ -215,7 +219,14 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             % conversion to DoD and limitation to 0 and 1
             DoD = lfpBattery.commons.upperlowerlim(C_dis / d.Cdmax, 0, 1);
             % limit output to raw data
-            v = lfpBattery.commons.upperlowerlim(d.f(d.px, DoD), d.yylim(1), d.yylim(2));
+            v = lfpBattery.commons.upperlowerlim(d.func(DoD), d.yylim(1), d.yylim(2));
+        end
+        function refreshFunc(d)
+            d.func = @(xdata)(d.px(1) - (lfpBattery.const.R * d.T) ... % Nernst
+                / (lfpBattery.const.z_Li * lfpBattery.const.F) ...
+                * log(xdata./(1-xdata)) + d.px(2) * xdata + d.px(3) ...
+                + (d.px(4) + (d.px(5) + d.px(4) * d.px(6)) * xdata) .* exp(-d.px(6) * xdata) ... % exponential drop at the beginning of the discharge curve
+                + d.px(7) * exp(-d.px(8) * xdata)); % exponential drop at the end of the discharge curve
         end
         % gpuCompatible methods
         % These methods are currently unsupported and may be removed in a

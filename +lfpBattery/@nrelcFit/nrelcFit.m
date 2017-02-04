@@ -76,6 +76,10 @@ classdef nrelcFit < lfpBattery.cycleCurveFit
             d@lfpBattery.cycleCurveFit(f, numParams, DoDN, N, varargin{:});
         end
     end
-    
+    methods (Access = 'protected')
+        function refreshFunc(d)
+            d.func = @(xx) (d.px(2) * (1/xx) .* exp(d.px(1) * (1 - 1/xx)));
+        end
+    end
 end
 
