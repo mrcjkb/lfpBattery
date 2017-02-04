@@ -51,14 +51,17 @@ classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
                     xx(i) = c.xydata{i}(x);
                 end
                 c.cache{1} = xx;
-                c.cache{3} = interp1(c.z, c.cache{1}, z, c.interpMethod);
+                % griddedInterpolant = built-in function used by interp1
+                % (faster than interp1, but skips sanity checks)
+                % NOTE: If MathWorks changes the builtin method used in
+                % interp1, change this
+                F = griddedInterpolant(c.z, c.cache{1}, c.interpMethod);
+                c.cache{3} = F(z);
             end
             y = c.cache{3};
             % use commented out code below to limit y to curve fits in a
             % subclass
-%             y = lfpBattery.commons.upperlowerlim(...
-%                 interp1(c.z, c.xydata{x}, z, c.interpMethod, 'extrap'), ...
-%                 min(c.y), max(c.y));
+%             y = lfpBattery.commons.upperlowerlim(c.cache{3}, max(c.y));
         end
         function add(c, d)
             %ADD: Adds a curve fit object cf to a collection c.
