@@ -7,9 +7,10 @@ classdef (Abstract) sortedFunctions < lfpBattery.composite %& lfpBattery.gpuComp
     properties
        z; % Sorted vector holding 3rd dimension of curveFit objects 
     end
-    properties (Access = 'protected')
+    properties (Hidden, Access = 'protected')
         xydata; % Array of curve fits that implement the curveFitInterface
         errHandler = @lfpBattery.sortedFunctions.minfunErr; % function handle for handling errors in case of operation attempt
+        nEl; % number of elements in the collection
     end
     properties (Abstract, Access = 'protected')
         minFuns; % Minimum number of functions permitted
@@ -47,6 +48,7 @@ classdef (Abstract) sortedFunctions < lfpBattery.composite %& lfpBattery.gpuComp
                     c.xydata = c.xydata(i); % rearrange fits accordingly
                 end
             end
+            c.nEl = uint32(numel(c.xydata));
             if numel(c.z) >= c.minFuns % set error handler to do nothing
                 c.errHandler = @lfpBattery.sortedFunctions.noErr;
             end

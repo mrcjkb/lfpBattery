@@ -19,6 +19,9 @@ classdef (Abstract) seriesElement < lfpBattery.batCircuitElement
         % of currents and voltages.
         Zi;
     end
+    properties (Hidden, Access = 'protected')
+        ecache = cell(2, 1);
+    end
     
     methods
         function b = seriesElement(varargin)
@@ -31,15 +34,14 @@ classdef (Abstract) seriesElement < lfpBattery.batCircuitElement
             end
         end
         function z = get.Zi(b)
-            persistent cache
-            if isempty(cache)
-                cache = sum([b.El.Zi]);
+            if isempty(b.ecache{1})
+                b.ecache{1} = sum([b.El.Zi]);
             end
-            z = cache;
+            z = b.ecache{1};
         end
         function [np, ns] = getTopology(b)
             [np, ns] = arrayfun(@(x) getTopology(x), b.El);
-            ns = max(b.nEl .* ns);
+            ns = max(b.nEl * ns);
             np = max(np);
         end
     end
@@ -51,12 +53,11 @@ classdef (Abstract) seriesElement < lfpBattery.batCircuitElement
         end
         function p = getZProportions(b)
             % lowest impedance --> lowest voltage
-            persistent cache
-            if isempty(cache)
+            if isempty(b.ecache{2})
                 zv = [b.El.Zi]; % vector of internal impedances
-                cache = zv ./ sum(zv);
+                b.ecache{2} = zv / sum(zv);
             end
-            p = cache;
+            p = b.ecache{2};
         end
     end
     

@@ -99,6 +99,9 @@ classdef parallelElement < lfpBattery.batCircuitElement
         % Current capacity level in Ah.
         C;
     end
+    properties  (Hidden, Access = 'protected')
+        ecache = cell(3,1);
+    end
     
     methods
         function b = parallelElement(varargin)
@@ -129,15 +132,14 @@ classdef parallelElement < lfpBattery.batCircuitElement
             c = sum([b.El.C]);
         end
         function z = get.Zi(b)
-            persistent cache;
-            if isempty(cache)
-                cache = 1 ./ sum((1 ./ [b.El.Zi])); % 1/z_total = sum_i(1/z_i)
+            if isempty(b.ecache{1})
+                b.ecache{1} = 1 / sum((1 ./ [b.El.Zi])); % 1/z_total = sum_i(1/z_i)
             end
-            z = cache;
+            z = b.ecache{1};
         end
         function [np, ns] = getTopology(b)
             [np, ns] = arrayfun(@(x) getTopology(x), b.El);
-            np = max(b.nEl .* np);
+            np = max(b.nEl * np);
             ns = max(ns);
         end
     end
@@ -148,13 +150,12 @@ classdef parallelElement < lfpBattery.batCircuitElement
             b.Imax = i;
         end
         function charge(b, Q)
-            persistent cache;
             % Simulate self-balancing nature of parallel config
             q = b.getZProportions * Q; % Spread charge according to internal impedances
-            if isempty(cache)
-                cache = any(q ~= q(1));
+            if isempty(b.ecache{2})
+                b.ecache{2} = any(q ~= q(1));
             end
-            if  cache % Is there a difference in the impedances?
+            if  b.ecache{2} % Is there a difference in the impedances?
                 % simulate self-balancing of charge with intermediate SoC
                 % variations
                 b.chargeLoop(q) % charge sub-elements
@@ -176,14 +177,13 @@ classdef parallelElement < lfpBattery.batCircuitElement
             end
         end
         function p = getZProportions(b)
-            persistent cache;
-            if isempty(cache)
+            if isempty(b.ecache{3})
                 % lowest impedance --> highest current
                 zv = [b.El.Zi]; % vector of internal impedances
-                cache = zv ./ sum(zv);
-                cache = (1./cache) ./ sum(1./cache);
+                b.ecache{3} = zv ./ sum(zv);
+                b.ecache{3} = (1./b.ecache{3}) ./ sum(1./b.ecache{3});
             end
-            p = cache;
+            p = b.ecache{3};
         end
         function refreshNominals(b)
             b.Vn = sum([b.El.Vn]) * b.rnEl;

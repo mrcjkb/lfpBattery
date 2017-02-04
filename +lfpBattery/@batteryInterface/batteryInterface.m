@@ -137,6 +137,9 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
         % @sohPoint points to internal SoH
         % @sohCalc retrieves SoH from subelements
         sohPointer = @sohPoint;
+        % cache(1) = V_curr in iteratePower
+        % cache(2) = self-discharge
+        cache = cell(2, 1);
     end
     properties (SetObservable, Hidden, SetAccess = 'protected')
         % State of charge (handled internally) This soc can be slightly
@@ -287,13 +290,12 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             % I      -   Charge (+) or discharge (-) current in A
             % V      -   Resting voltage in V
             % soc    -   State of charge [0,..,1]
-            persistent V_curr; % Cache voltage
-            if isempty(V_curr)
-                V_curr = b.V;
+            if isempty(b.cache{1})
+                b.cache{1} = b.V;
             end
-            I = P / V_curr;
+            I = P / b.cache{1};
             V = b.getNewVoltage(I, dt);
-            Pit = I * sum([V_curr; V]) * 0.5;
+            Pit = I * sum([b.cache{1}; V]) * 0.5;
             err = b.lastPr - Pit;
             if abs(err) > b.pTol && b.pct < b.maxIterations
                 b.pct = b.pct + 1;
@@ -303,7 +305,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             end
             if abs(I) > b.Imax + b.iTol % Limit power according to max current using recursion
                 b.pct = 0;
-                P = sign(I) * b.Imax * sum([V_curr; V]) * 0.5;
+                P = sign(I) * b.Imax * sum([b.cache{1}; V]) * 0.5;
                 b.lastPr = P;
                 [P, I, V] = b.iteratePower(P, dt);
             end
@@ -323,7 +325,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             end
             b.sct = 0;
             b.slTF = false;
-            clear V_curr
+            b.cache{1} = []; % clear cache
         end % iteratePower
         function [P, V, I] = currentRequest(b, I, dt)
             % CURRENTREQUEST: Requests a current in A (positive for charging,
@@ -641,11 +643,10 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             s = b.sohPointer(b);
         end
         function p = get.Psd(b)
-            persistent cache
-            if isempty(cache)
-                cache = - abs(b.psd * 1/(365.25*86400/12) * (b.Cn / 3600) * b.Vn); % 1/(month in seconds) * As * V = W
+            if isempty(b.cache{2})
+                b.cache{2} = - abs(b.psd * 1/(365.25*86400/12) * (b.Cn / 3600) * b.Vn); % 1/(month in seconds) * As * V = W
             end
-           p = cache;
+           p = b.cache{2};
         end
     end % public methods
     

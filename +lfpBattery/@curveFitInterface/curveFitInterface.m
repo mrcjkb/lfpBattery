@@ -55,11 +55,12 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
     properties (Dependent, Hidden, SetAccess = 'protected', GetAccess = 'protected')
         e_tot; % total differences
     end
-    properties (Hidden, GetAccess = 'protected', SetAccess = 'protected')
+    properties (Hidden, Access = 'protected')
         px; % parameters for fit function handle
         fmin; % true for fminsearch, false for lsqcurvefit
         xxlim  = [-inf, inf]; % upper & lower limits for x data
         yylim = [-inf, inf]; % upper & lower limits for y data
+        cache = cell(2, 1);
     end
     properties (Hidden, GetAccess = 'protected', SetAccess = 'immutable')
         f; % Fit function Handle
@@ -127,14 +128,8 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
         end
         % Override of subsref (indexing) function
         function v = subsref(d, S)
-            persistent cache;
             if strcmp(S.type, '()')
-                sub = S.subs{1};
-                if isempty(cache) || ~isequal(cache{2}, sub)
-                    cache{1} = d.fiteval(S.subs{1});
-                    cache{2} = sub;
-                end
-                v = cache{1};
+                v = d.fiteval(S.subs{1});
             elseif nargout == 1
                 v = builtin('subsref', d, S);
             else

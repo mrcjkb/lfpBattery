@@ -28,6 +28,9 @@ classdef dischargeCurves < lfpBattery.curvefitCollection
         Imin; % minimum current
         Imax; % maximum current
     end
+    properties (Hidden, Access = 'protected')
+        dcache;
+    end
     
     methods
         function d = dischargeCurves(varargin)
@@ -93,16 +96,15 @@ classdef dischargeCurves < lfpBattery.curvefitCollection
             %currents leads to bad results at a low SoC, the current is
             %limited to the dischargeCurve's maximum and minimum current
             %recordings (property: z)
-            persistent cache;
 %             feval(d.errHandler, d); % make sure there are enough functions in the collection
-            if isempty(cache) || cache(3) ~= C || cache(2) ~= I
-                cache(3) = C;
-                cache(2) = I;
+            if isempty(d.dcache) || d.dcache(3) ~= C || d.dcache(2) ~= I
+                d.dcache(3) = C;
+                d.dcache(2) = I;
                 I = lfpBattery.commons.upperlowerlim(abs(I), d.Imin, d.Imax);
                 % abs(I) is used for discharge curves
-                cache(1) = d.interp@lfpBattery.curvefitCollection(I, C);
+                d.dcache(1) = d.interp@lfpBattery.curvefitCollection(I, C);
             end
-            v = cache(1);
+            v = d.dcache(1);
         end
         function add(d, cf)
             %ADD: Adds a curve fit object cf to a dischargeCurve object d.
