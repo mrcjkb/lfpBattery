@@ -651,6 +651,9 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
     end % public methods
     
     methods (Access = 'protected')
+        function setVoltage(b, v)
+            b.V = v;
+        end
         function updateSoH(b, ~, event)
             % UPDATESOH: Updates the SoH. This method is called when
             % notified by a batteryAgeModel.

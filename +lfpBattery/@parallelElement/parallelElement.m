@@ -180,7 +180,7 @@ classdef parallelElement < lfpBattery.batCircuitElement
             if isempty(b.ecache{3})
                 % lowest impedance --> highest current
                 zv = [b.El.Zi]; % vector of internal impedances
-                b.ecache{3} = zv ./ sum(zv);
+                b.ecache{3} = zv' ./ sum(zv);
                 b.ecache{3} = (1./b.ecache{3}) ./ sum(1./b.ecache{3});
             end
             p = b.ecache{3};

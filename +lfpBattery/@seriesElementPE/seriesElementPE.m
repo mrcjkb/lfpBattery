@@ -115,7 +115,7 @@ classdef seriesElementPE < lfpBattery.seriesElement
         function set.V(b, v)
             % set voltages according to proportions of internal impedances
             p = b.getZProportions;
-            v = v * p(:);
+            v = v * p;
             for i = uint32(1):b.nEl
                 b.El(i).V = v(i);
             end

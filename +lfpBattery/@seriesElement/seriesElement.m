@@ -55,7 +55,7 @@ classdef (Abstract) seriesElement < lfpBattery.batCircuitElement
             % lowest impedance --> lowest voltage
             if isempty(b.ecache{2})
                 zv = [b.El.Zi]; % vector of internal impedances
-                b.ecache{2} = zv / sum(zv);
+                b.ecache{2} = zv' / sum(zv);
             end
             p = b.ecache{2};
         end
