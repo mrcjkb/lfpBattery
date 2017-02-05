@@ -47,8 +47,9 @@ classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
                 c.cache{2} = x;
                 % interpolate with available curve fit returns at
                 xx = zeros(c.nEl, 1);
+                xydat = c.xydata;
                 for i = 1:c.nEl
-                    xx(i) = c.xydata{i}(x);
+                    xx(i) = xydat{i}(x);
                 end
                 c.cache{1} = xx;
                 % griddedInterpolant = built-in function used by interp1
