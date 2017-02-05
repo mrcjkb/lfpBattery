@@ -71,7 +71,8 @@ classdef woehlerFit < lfpBattery.cycleCurveFit
     end
     methods (Access = 'protected')
         function y = func(d, xx)
-            y = d.px(1) * xx.^(-d.px(2));
+            params = d.px;
+            y = params(1) * xx.^(-params(2));
         end
     end
 end

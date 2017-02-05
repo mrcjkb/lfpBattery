@@ -78,7 +78,8 @@ classdef nrelcFit < lfpBattery.cycleCurveFit
     end
     methods (Access = 'protected')
         function y = func(d, xx)
-            y = d.px(2) * (1/xx) .* exp(d.px(1) * (1 - 1/xx));
+            params = d.px;
+            y = params(2) * (1/xx) .* exp(params(1) * (1 - 1/xx));
         end
     end
 end

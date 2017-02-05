@@ -45,19 +45,26 @@ classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
                 % NOTE: ~= does not work if cache is empty
                 c.cache{4} = z;
                 c.cache{2} = x;
-                % interpolate with available curve fit returns at
-                xx = zeros(c.nEl, 1);
                 xydat = c.xydata;
-                for i = 1:c.nEl
-                    xx(i) = xydat{i}(x);
+                cz = c.z;
+                chk = z == cz;
+                if any(chk) % No need to interpolate
+                    c.cache{3} = xydat{chk}(x);
+                else
+                    % interpolate with available curve fit returns at
+                    %                 xx = zeros(c.nEl, 1);
+                    xx = zeros(c.nEl, 1);
+                    for i = 1:c.nEl
+                        xx(i) = xydat{i}(x);
+                    end
+                    c.cache{1} = xx;
+                    % griddedInterpolant = built-in function used by interp1
+                    % (faster than interp1, but skips sanity checks)
+                    % NOTE: If MathWorks changes the builtin method used in
+                    % interp1, change this
+                    F = griddedInterpolant(cz, xx, c.interpMethod);
+                    c.cache{3} = F(z);
                 end
-                c.cache{1} = xx;
-                % griddedInterpolant = built-in function used by interp1
-                % (faster than interp1, but skips sanity checks)
-                % NOTE: If MathWorks changes the builtin method used in
-                % interp1, change this
-                F = griddedInterpolant(c.z, c.cache{1}, c.interpMethod);
-                c.cache{3} = F(z);
             end
             y = c.cache{3};
             % use commented out code below to limit y to curve fits in a

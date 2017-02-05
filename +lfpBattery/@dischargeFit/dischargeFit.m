@@ -125,6 +125,8 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             parse(p, varargin{:})
             varargin = [{'x0', p.Results.x0}, varargin];
             d = d@lfpBattery.curveFitInterface(f, rawx, rawy, I, varargin{:}); % Superclass constructor
+            d.px(9) = (lfpBattery.const.R * Temp) ... % Factor at beginning of Nernst equation
+                / (lfpBattery.const.z_Li * lfpBattery.const.F);
             d.T = Temp;
             d.Cdmax = cdmax;
             d.xxlim = [0, cdmax];
@@ -218,15 +220,16 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             % Overload of curveFitInterface's fiteval function
             % conversion to DoD and limitation to 0 and 1
             DoD = lfpBattery.commons.upperlowerlim(C_dis / d.Cdmax, 0, 1);
+            v = d.func(DoD);
             % limit output to raw data
-            v = lfpBattery.commons.upperlowerlim(d.func(DoD), d.yylim(1), d.yylim(2));
+            v = lfpBattery.commons.upperlowerlim(v, d.yylim(1), d.yylim(2));
         end
         function v = func(d, DoD)
-            v = d.px(1) - (lfpBattery.const.R * d.T) ... % Nernst
-                / (lfpBattery.const.z_Li * lfpBattery.const.F) ...
-                * log(DoD./(1-DoD)) + d.px(2) * DoD + d.px(3) ...
-                + (d.px(4) + (d.px(5) + d.px(4) * d.px(6)) * DoD) .* exp(-d.px(6) * DoD) ... % exponential drop at the beginning of the discharge curve
-                + d.px(7) * exp(-d.px(8) * DoD); % exponential drop at the end of the discharge curve
+            params = d.px; % reduces property access
+            v = params(1) - params(9) ... % Nernst
+                * log(DoD./(1-DoD)) + params(2) * DoD + params(3) ...
+                + (params(4) + (params(5) + params(4) * params(6)) * DoD) .* exp(-params(6) * DoD) ... % exponential drop at the beginning of the discharge curve
+                + params(7) * exp(-params(8) * DoD); % exponential drop at the end of the discharge curve
         end
         % gpuCompatible methods
         % These methods are currently unsupported and may be removed in a

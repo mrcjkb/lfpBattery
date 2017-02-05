@@ -30,11 +30,10 @@ classdef bpackGUI < handle
                 'IntegerHandle', 'off',...
                 'Units', 'normalized',...
                 'MenuBar','none', 'WindowStyle', 'normal', ...
-                'Color', [1 1 1], 'Visible', 'off');
+                'Color', [1 1 1], 'Visible', 'off', 'Tag', 'bpackGUI');
             b.f.Position(3) = 2.2 .* b.f.Position(3);
             b.f.Position(4) = 1.2 .* b.f.Position(4);
             movegui(b.f, 'center')
-            b.f.Visible = 'on';
             mainlayout = uiflowcontainer('v0', 'Units', 'norm', 'Position', [.05, .05, .9, .9], 'parent', b.f, ...
                 'FlowDirection', 'TopDown', 'BackgroundColor', [1 1 1]);
             %% Title container
@@ -291,6 +290,7 @@ classdef bpackGUI < handle
             h = handle(jt, 'CallbackProperties');
             h.KeyTypedCallback = @b.validMatName;
             javacomponent(jt, [], uu);
+            b.f.Visible = 'on';
             end % constructor
             function switchSetup(b, ~, ~)
             if b.jcb1.getSelectedIndex == 1

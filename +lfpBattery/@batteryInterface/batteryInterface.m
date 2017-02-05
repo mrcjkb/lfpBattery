@@ -821,5 +821,5 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
         s = sohCalc(b); % Determines the SoH
         c = dummyCharge(b, Q); % returns the new capacity after charge/discharge without altering the object's properties
     end
-end
+end 
 

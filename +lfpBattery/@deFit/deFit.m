@@ -76,7 +76,8 @@ classdef deFit < lfpBattery.cycleCurveFit
     end
     methods (Access = 'protected')
         function y = func(d, xx)
-            y = d.px(1) + d.px(2) * exp(-d.px(3) * xx) + d.px(4) * exp(-d.px(5) * xx);
+            params = d.px;
+            y = params(1) + params(2) * exp(-params(3) * xx) + params(4) * exp(-params(5) * xx);
         end
     end
 end

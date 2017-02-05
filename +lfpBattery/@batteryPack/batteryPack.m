@@ -674,4 +674,4 @@ classdef batteryPack < lfpBattery.batteryInterface
             end
         end
     end
-end
+end 

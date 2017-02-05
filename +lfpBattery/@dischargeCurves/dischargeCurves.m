@@ -29,7 +29,7 @@ classdef dischargeCurves < lfpBattery.curvefitCollection
         Imax; % maximum current
     end
     properties (Hidden, Access = 'protected')
-        dcache;
+        dcache = inf(3, 1);
     end
     
     methods
@@ -97,7 +97,7 @@ classdef dischargeCurves < lfpBattery.curvefitCollection
             %limited to the dischargeCurve's maximum and minimum current
             %recordings (property: z)
 %             feval(d.errHandler, d); % make sure there are enough functions in the collection
-            if isempty(d.dcache) || d.dcache(3) ~= C || d.dcache(2) ~= I
+            if d.dcache(3) ~= C || d.dcache(2) ~= I
                 d.dcache(3) = C;
                 d.dcache(2) = I;
                 I = lfpBattery.commons.upperlowerlim(abs(I), d.Imin, d.Imax);
