@@ -2,22 +2,22 @@ classdef bpackGUI < handle
     %BPACKGUI: Opens a GUI for initializing batteryPack models. 
     
     properties
-        f; % figure handle
+        f@matlab.ui.Figure; % figure handle
         jcb1; % JComboBox for setup
-        cpL = cell(6,1); % cell and pack voltage /capacity labels
-        cpE = cell(6,1); % cell and pack voltage / capacity edits
+        cpL@cell vector = cell(6,1); % cell and pack voltage /capacity labels
+        cpE@cell vector = cell(6,1); % cell and pack voltage / capacity edits
         jcbA; % JComboBox for age model
         jcbEQ; % JComboBox for equalization
-        eta = cell(2, 1); % JTextPanes for charging and discharging efficiencies
+        eta@cell vector = cell(2, 1); % JTextPanes for charging and discharging efficiencies
         simple; % JCheckBox for simplified model
         psd; % Self-discharge rate
-        soc = cell(3, 1); % ini, min, max
+        soc@cell vector = cell(3, 1); % ini, min, max
         soh; % initial state of health
         topology;
-        Zi = cell(4, 1); % mean, std, min, max
+        Zi@cell vector = cell(4, 1); % mean, std, min, max
         dC = 'none'; % discharge curve
-        wF = 'none'; % woehler fit
-        wfButton = cell(2, 1);
+        wF = 'none'; % cycle life fit
+        wfButton@cell vector = cell(2, 1);
         varname;
     end
     

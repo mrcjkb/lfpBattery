@@ -48,22 +48,22 @@ classdef dischargeFit < lfpBattery.curveFitInterface
     % December 2016
     
     properties (Dependent)
-        x;  % 3 fit parameters for f
-        xs; % 3 fit parameters for fs
-        xe; % 2 fit parameters for fe
+        x@double vector;  % 3 fit parameters for f
+        xs@double vector; % 3 fit parameters for fs
+        xe@double vector; % 2 fit parameters for fe
     end
     properties (Dependent, SetAccess = 'protected')
-        dV_mean; % mean difference in voltage between fit and raw data
-        dV_max; % max difference in voltage between fit and raw data
+        dV_mean@double scalar; % mean difference in voltage between fit and raw data
+        dV_max@double scalar; % max difference in voltage between fit and raw data
     end
     properties (Dependent, Hidden, Access = 'protected')
-       Cd_raw; % x data (raw discharge capacity) of initial fit curve
+       Cd_raw@double vector; % x data (raw discharge capacity) of initial fit curve
     end
     properties (Hidden, GetAccess = 'protected', SetAccess = 'immutable')
-        Cdmax; % maximum of discharge capacity (used for conversion between dod & C_dis)
+        Cdmax@double scalar; % maximum of discharge capacity (used for conversion between dod & C_dis)
     end
     properties (SetAccess = 'protected')
-        T; % Temperature at which curve was recorded
+        T@double scalar; % Temperature at which curve was recorded
     end
     methods
         % Constructor

@@ -17,10 +17,10 @@ classdef (Abstract) seriesElement < lfpBattery.batCircuitElement
         % parameter. However, it is used in the circuit elements
         % (seriesElement/parallelElement) to determine the distribution
         % of currents and voltages.
-        Zi;
+        Zi@double scalar;
     end
     properties (Hidden, Access = 'protected')
-        ecache = cell(2, 1);
+        ecache@cell vector = cell(2, 1);
     end
     
     methods

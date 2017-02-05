@@ -17,7 +17,7 @@ classdef digitizeTool < handle
     % lfpBattery.dischargeCurves
     properties
         fit;
-        ImgData;
+        ImgData@struct;
     end
     properties (Hidden)
         list;
@@ -27,17 +27,17 @@ classdef digitizeTool < handle
         mainframe;
     end
     properties (Hidden, Access = 'protected')
-        axes1;
+        axes1@matlab.graphics.axis.Axes;
         Information;
         resetbutton;
         selectbutton;
-        xLabel;
-        yLabel;
-        Oxdata;
-        Oydata;
-        xdef = 0;
-        ydef = 0;
-        type; % 0 for discharge curves, 1 for woehler fit
+        xLabel@char vector;
+        yLabel@char vector;
+        Oxdata@double scalar;
+        Oydata@double scalar;
+        xdef@double scalar = 0;
+        ydef@double scalar = 0;
+        type@uint8 scalar; % 0 for discharge curves, 1 for woehler fit
     end
     methods
         function obj = digitizeTool()

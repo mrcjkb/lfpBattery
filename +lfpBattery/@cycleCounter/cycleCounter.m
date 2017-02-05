@@ -42,16 +42,16 @@ classdef (Abstract) cycleCounter < handle
     %         November 2016
     
     properties (SetAccess = 'protected', Hidden)
-        cDoC; % cycle - depth of cycle histogram
+        cDoC@double vector; % cycle - depth of cycle histogram
     end % public properties
     properties (GetAccess = 'protected', Hidden = true)
-        socMax; % maximum allowed soc
+        socMax@double scalar; % maximum allowed soc
     end
-    properties (Access = 'protected')
-        currCycle; % current SoC profile between two socMax
-        ct = int32(1); % counter for "intelligent indexing"
-        soc0; % last soc
-    end % hidden properties
+    properties (Hidden, Access = 'protected')
+        currCycle@double vector; % current SoC profile between two socMax
+        ct@uint32 scalar = 1; % counter for "intelligent indexing"
+        soc0@double scalar; % last soc
+    end
     events
         NewCycle; % Notifies listeners that a new full cycle has started and that a new cDoC histogram has been calculated for the current cycle.
     end
@@ -112,7 +112,7 @@ classdef (Abstract) cycleCounter < handle
                     c.count; % count cycles
                     % reset SoC
                     c.currCycle = c.currCycle * 0;
-                    c.ct = int32(1);
+                    c.ct = 1;
                     c.currCycle(1) = c.socMax;
                     if ~isempty(c.cDoC) % make sure algorithm didn't count the same cycles twice
                         notify(c, 'NewCycle'); % notify listeners about new full cycle being reached
@@ -181,6 +181,7 @@ classdef (Abstract) cycleCounter < handle
             end
             % Only return unique values (faster than built-in unique
             % function)
+            % NOTE: Revert to using unique() if this causes issues
             a = sort([1; imax(:); Nt]);
             imax = a([true; diff(a) ~= 0]);
 %             imax = unique([1; imax(:); Nt]); % Old version

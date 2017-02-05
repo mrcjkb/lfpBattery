@@ -83,16 +83,16 @@ classdef seriesElementPE < lfpBattery.seriesElement
     %         January 2017
     
     properties (Dependent)
-        V; % Resting voltage / V
+        V@double scalar; % Resting voltage / V
     end
     properties (Dependent, SetAccess = 'protected')
         % Discharge capacity in Ah (Cd = 0 if SoC = 1).
         % The discharge capacity is given by the nominal capacity Cn and
         % the current capacity C at SoC.
         % Cd = Cn - C
-        Cd;
+        Cd@double scalar;
         % Current capacity level in Ah.
-        C;
+        C@double scalar;
     end
     
     methods

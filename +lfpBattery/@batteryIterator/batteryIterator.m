@@ -32,8 +32,8 @@ classdef batteryIterator < lfpBattery.iterator
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
     %         January 2017
     properties (SetAccess = 'immutable', GetAccess = 'protected')
-        s; % Stack that holds the object's items.
-        cObj; % Reference to the object that initially created the iterator
+        s@lfpBattery.Stack; % Stack that holds the object's items.
+        cObj@lfpBattery.batteryInterface; % Reference to the object that initially created the iterator
     end
     
     methods

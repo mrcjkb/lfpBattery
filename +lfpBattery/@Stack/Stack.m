@@ -20,8 +20,8 @@ classdef Stack < handle
     properties %(Access = private)
         % Cell array to store the data in
         % (initialized with some reserved storage)
-        storage = cell(100, 1);
-        idx = uint32(0); % Index of the top of the stack 
+        storage@cell vector = cell(100, 1);
+        idx@uint32 scalar = 0; % Index of the top of the stack 
     end
     
     methods

@@ -7,11 +7,13 @@ classdef (Abstract) batteryAgeModel < handle
     %         December 2016
     
     properties
-        eolSoH; % SoH at which end of life is reached.
+        eolSoH@double scalar; % SoH at which end of life is reached.
     end
     properties (Hidden, GetAccess = 'protected')
-        % woehlerFit object or function handle (must implement the curveFitInterface)
+        % woehlerFit object or function handle or other curve fit object (must implement the curveFitInterface)
         % of a cycles to failure = f(DoC) curve.
+        % SEE ALSO: lfpBattery.woehlerFit lfpBattery.deFit
+        % lfpBattery.nrelcFit
         wFit;
     end
     properties (SetObservable, SetAccess = 'private')
@@ -25,16 +27,16 @@ classdef (Abstract) batteryAgeModel < handle
         %                   notified of the SoH change.
         % Subcalsses cannot set this property and should set the Age (Ac
         % property instead), which is equal to 1-SoH.
-        SoH;
+        SoH@double scalar;
     end
     properties (Dependent, SetAccess = 'protected')
-        Ac; % Total age loss [0..1] = 1-SoH
+        Ac@double scalar; % Total age loss [0..1] = 1-SoH
     end
     properties (Dependent)
         % Age at which end of life is reached [0..1]
         % e. g. 0.2 for an end of life at an age of 20 %
         % or at an SoH of 80 %, respectively.
-        eolAc;
+        eolAc@double scalar;
     end
     properties (Access = 'protected')
        lh; % Event listener (observer) 

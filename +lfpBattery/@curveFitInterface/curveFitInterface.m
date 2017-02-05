@@ -41,40 +41,40 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
     %         December 2017
     
     properties (SetAccess = 'immutable')
-       z; % z-data of fitted curve. (i. e. the current at which the curve was recorded)
+       z@double scalar; % z-data of fitted curve. (i. e. the current at which the curve was recorded)
     end
     properties (Dependent)
-        mode; % function used for fitting ('fmin' for fminsearch or 'lsq' for lsqcurvefit)
+        mode@char vector; % function used for fitting ('fmin' for fminsearch or 'lsq' for lsqcurvefit)
     end
     properties (Abstract, Dependent)
-       x; % parameters for fit function
+       x@double vector; % parameters for fit function
     end
     properties (Dependent, SetAccess = 'protected')
-        rmse; % root mean squared error
+        rmse@double scalar; % root mean squared error
     end
     properties (Dependent, Hidden, SetAccess = 'protected', GetAccess = 'protected')
-        e_tot; % total differences
+        e_tot@double vector; % total differences
     end
     properties (Hidden, Access = 'protected')
-        px; % parameters for fit function handle
-        fmin; % true for fminsearch, false for lsqcurvefit
-        xxlim  = [-inf, inf]; % upper & lower limits for x data
-        yylim = [-inf, inf]; % upper & lower limits for y data
-        cache = cell(2, 1);
-%         func; % Function handle with set params
+        px@double vector; % parameters for fit function handle
+        fmin@uint8 scalar; % 1 for fminsearch, 2 for lsqcurvefit, 3 for both
+        xxlim@double vector  = [-inf, inf]; % upper & lower limits for x data
+        yylim@double vector = [-inf, inf]; % upper & lower limits for y data
+        cache@cell vector = cell(2, 1);
     end
     properties (Hidden, GetAccess = 'protected', SetAccess = 'immutable')
-        f; % Fit function Handle
-        rawX; % raw x data of initial fit curve
-        rawY; % raw y data of initial fit curve
+        f@function_handle; % Fit function Handle
+        rawX@double vector; % raw x data of initial fit curve
+        rawY@double vector; % raw y data of initial fit curve
     end
     properties (Constant, Hidden, GetAccess = 'protected')
-        sseval = @(x, fdata, ydata) sum((ydata - fdata).^2); % calculation of sum squared error
-        fmsoptions = optimset('Algorithm','levenberg-marquardt', ... % fminsearch options
+        sseval@function_handle = @(x, fdata, ydata) sum((ydata - fdata).^2); % calculation of sum squared error
+        fmsoptions@struct = optimset('Algorithm','levenberg-marquardt', ... % fminsearch options
             'Display', 'off', ...
             'MaxFunEvals', 1e10, ... 
             'MaxIter', 1e10);
-        lsqoptions = optimoptions('lsqcurvefit', 'Algorithm', 'levenberg-marquardt',... % lsqcurvefit options
+        lsqoptions@optim.options.Lsqcurvefit = optimoptions('lsqcurvefit', ... % lsqcurvefit options
+            'Algorithm', 'levenberg-marquardt',...
             'Display', 'off', ...
             'FiniteDifferenceType', 'central', ... % should be more precise than 'forward'
             'FunctionTolerance', 1e-12, ...
@@ -195,17 +195,17 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
         function set.mode(d, str)
             validatestring(str, {'lsq', 'fmin', 'both'});
             if ~strcmp(d.mode, str)
-                if strcmp(str, 'fmin')
-                    d.fmin = 1;
-                elseif strcmp(str, 'lsq')
-                    d.fmin = 2;
-                else
-                    d.fmin = 3;
+                switch str
+                    case 'fmin'
+                        d.fmin = 1;
+                    case 'lsq'
+                        d.fmin = 2;
+                    otherwise
+                        d.fmin = 3;
                 end
             end
             d.fit;
         end
-        
         %% dependent getters
         function m = get.mode(d)
            if d.fmin == 1
@@ -239,7 +239,6 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
                 fun = @(x) d.sseval(x, d.f(x, d.rawX(1:end-1)), d.rawY(1:end-1));
                 d.px = fminsearch(fun, d.px, d.fmsoptions);
             end
-%             d.refreshFunc;
         end
         function v = fiteval(d, sub)
             %FITEVAL: Called by subsref if appropriate indexing for

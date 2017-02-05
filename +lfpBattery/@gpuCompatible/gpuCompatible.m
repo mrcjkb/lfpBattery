@@ -11,7 +11,7 @@ classdef (Abstract) gpuCompatible < handle
     %
     %SEE ALSO: gpuArray
     properties (Access = 'protected')
-        isgpuObject = false;
+        isgpuObject@logical scalar = false;
     end
     methods
         function obj = gpuArray(obj)

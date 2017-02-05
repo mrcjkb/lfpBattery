@@ -5,15 +5,15 @@ classdef (Abstract) sortedFunctions < lfpBattery.composite %& lfpBattery.gpuComp
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt, January 2017
     
     properties
-       z; % Sorted vector holding 3rd dimension of curveFit objects 
+       z@double vector; % Sorted vector holding 3rd dimension of curveFit objects 
     end
     properties (Hidden, Access = 'protected')
-        xydata; % Array of curve fits that implement the curveFitInterface
-        errHandler = @lfpBattery.sortedFunctions.minfunErr; % function handle for handling errors in case of operation attempt
-        nEl; % number of elements in the collection
+        xydata@cell vector; % Array of curve fits that implement the curveFitInterface
+        errHandler@function_handle = @lfpBattery.sortedFunctions.minfunErr; % function handle for handling errors in case of operation attempt
+        nEl@uint32 scalar; % number of elements in the collection
     end
     properties (Abstract, Access = 'protected')
-        minFuns; % Minimum number of functions permitted
+        minFuns@uint32 scalar; % Minimum number of functions permitted
     end
     methods
         function c = sortedFunctions(varargin)

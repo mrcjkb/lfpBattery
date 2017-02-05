@@ -214,10 +214,10 @@ classdef batteryPack < lfpBattery.batteryInterface
     %          lfpBattery.batteryAgeModel lfpBattery.eoAgeModel
     %          lfpBattery.dambrowskiCounter lfpBattery.cycleCounter
     properties (SetAccess = 'protected')
-        AgeModelLevel;
+        AgeModelLevel@char vector;
     end
     properties (Dependent)
-        V; % Resting voltage of the battery pack in V
+        V@double scalar; % Resting voltage of the battery pack in V
     end
     properties (Dependent, SetAccess = 'protected')
         % Internal impedance of the battery pack in Ohm.
@@ -225,18 +225,18 @@ classdef batteryPack < lfpBattery.batteryInterface
         % parameter. However, it is used in the circuit elements
         % (seriesElement/parallelElement) to determine the distribution
         % of currents and voltages.
-        Zi;
+        Zi@double scalar;
         % Discharge capacity in Ah (Cd = 0 if SoC = 1).
         % The discharge capacity is given by the nominal capacity Cn and
         % the current capacity C at SoC.
         % Cd = Cn - C
-        Cd;
+        Cd@double scalar;
         % Current capacity level in Ah.
-        C;
+        C@double scalar;
     end
     properties (SetAccess = 'protected')
-       nP; % number of parallel elements
-       nS; % number of elements in series
+       nP@uint32 scalar; % number of parallel elements
+       nS@uint32 scalar; % number of elements in series
     end
     
     methods

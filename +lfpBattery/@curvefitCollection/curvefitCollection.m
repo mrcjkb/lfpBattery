@@ -21,10 +21,10 @@ classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
     %         January 2017
     
     properties (Abstract)
-        interpMethod; % Method for interpolation (see interp1)
+        interpMethod@char vector; % Method for interpolation (see interp1)
     end
     properties (Hidden, Access = 'protected')
-        cache = cell(4, 1);
+        cache@cell vector = cell(4, 1);
     end
     
     methods

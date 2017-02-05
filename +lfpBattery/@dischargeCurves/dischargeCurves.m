@@ -21,15 +21,15 @@ classdef dischargeCurves < lfpBattery.curvefitCollection
     %         January 2017
     
     properties
-        interpMethod = 'spline';
+        interpMethod@char vector = 'spline';
     end
     properties (Access = 'protected')
-        minFuns = 3; % Minimum number of functions permitted
-        Imin; % minimum current
-        Imax; % maximum current
+        minFuns@uint32 scalar = 3; % Minimum number of functions permitted
+        Imin@double scalar; % minimum current
+        Imax@double scalar; % maximum current
     end
     properties (Hidden, Access = 'protected')
-        dcache;
+        dcache@double vector;
     end
     
     methods

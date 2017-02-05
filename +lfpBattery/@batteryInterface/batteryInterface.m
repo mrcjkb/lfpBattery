@@ -21,22 +21,22 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
         % iterations with the maxIterations property.
         % Reducing this number can decrease the simulation time, but can
         % also reduce the accuracy.
-        maxIterations = uint32(1e6); 
+        maxIterations@uint32 scalar = 1e6; 
         % Tolerance for the power iteration in W.
         % Increasing this number can decrease the simulation time, but can
         % also reduce the accuracy of the power requests.
-        pTol = 1e-3; 
+        pTol@double scalar = 1e-3; 
         % Tolerance for SoC limitation iteration.
         % Increasing this number can decrease the simulation time, but can
         % also reduce the accuracy of the SoC limitation.
-        sTol = 1e-6;
+        sTol@double scalar = 1e-6;
         % Tolerance for current limitation iteration in A.
         % Increasing this number can decrease the simulation time, but can
         % also reduce the accuracy of the current limitation.
-        iTol = 1e-3;
+        iTol@double scalar = 1e-3;
     end
     properties (Dependent, Access = 'protected')
-        Psd; % self-discharge energy in W
+        Psd@double scalar; % self-discharge energy in W
     end
     properties (Abstract, Dependent, SetAccess = 'protected')
         % Internal impedance in Ohm.
@@ -44,118 +44,117 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
         % parameter. However, it is used in the circuit elements
         % (seriesElement/parallelElement) to determine the distribution
         % of currents and voltages.
-        Zi;
-    end
-    properties (Dependent, SetAccess = 'protected')
-        SoH; % State of health [0,..,1]
-        % State of charge [0,..,1].
-        % In this model, the SoC is fraction between the current capacity
-        % and the nominal capacity. SoC = C ./ Cn. Capacity loss due to
-        % aging is not included in the SoC calculation.
-        SoC;
-        % Useable capacity in Ah.
-        % This property takes into account aging effects (if an aging model
-        % is used) and the SoC limitation.
-        Cbu;
+        Zi@double scalar;
     end
     properties (Abstract, Dependent, SetAccess = 'protected')
         % Discharge capacity in Ah (Cd = 0 if SoC = 1).
         % The discharge capacity is given by the nominal capacity Cn and
         % the current capacity C at SoC.
         % Cd = Cn - C
-        Cd;
+        Cd@double scalar;
         % Current capacity level in Ah.
-        C;
+        C@double scalar;
     end
     properties (Abstract, Dependent)
-        V; % Resting voltage in V
+        V@double scalar; % Resting voltage in V
+    end
+    properties (Dependent, SetAccess = 'protected')
+        SoH@double scalar; % State of health [0,..,1]
+        % State of charge [0,..,1].
+        % In this model, the SoC is fraction between the current capacity
+        % and the nominal capacity. SoC = C ./ Cn. Capacity loss due to
+        % aging is not included in the SoC calculation.
+        SoC@double scalar;
+        % Useable capacity in Ah.
+        % This property takes into account aging effects (if an aging model
+        % is used) and the SoC limitation.
+        Cbu@double scalar;
     end
     properties (Dependent)
         % Max SoC (default: 1)
         % In some cases it may make sense to limit the SoC in order to
         % reduce aging effects.
-        socMax;
+        socMax@double scalar;
         % Min SoC (default: 0.2)
         % In some cases it may make sense to limit the SoC in order to
         % reduce aging effects.
         % Note: If a current that was not fitted is used, the accuracy
         % of the voltage interpolation is drastically reduced at SoCs 
         % below 0.1 or 0.2, depending on the current.
-        socMin;
+        socMin@double scalar;
     end
     properties (SetAccess = 'protected')
-        Imax = 0; % maximum current in A (determined from cell discharge curves)
-        Cn; % Nominal (or average) capacity in Ah
+        Imax@double scalar = 0; % maximum current in A (determined from cell discharge curves)
+        Cn@double scalar; % Nominal (or average) capacity in Ah
         % Nominal (or average) voltage in V
         % Efficiency when charging [0,..,1].
         % Note: If only a total efficiency is given, set the discharging
         % efficiency eta_bd to 1.
-        Vn;
+        Vn@double scalar;
         % Efficiency when charging [0,..,1].
         % Note: Set eta_bd to 1 if only a total efficiency is given.
-        eta_bc;
+        eta_bc@double scalar;
         % Efficiency when discharging [0,..,1].
         % Note: Set this property to 1 if only a total efficiency is given.
-        eta_bd;
+        eta_bd@double scalar;
         % Self discharge rate in 1/month [0,..,1] (default: 0)
         % By default, the self-discharge of the batteries is neglected.
-        psd;
+        psd@double scalar;
     end
     properties (Access = 'protected', Hidden)
         % Internal state of health.
         % If the age model is connected directly to the object, SoH points
         % to the internal soh. Otherwise, the SoH is calculated according to
         % the sub-elements' idividual states of health.
-        soh; 
-        cyc; % cycleCounter object
-        ageModel; % batteryAgeModel object
-        soc_max; % internal soc_max is lower than external socMax if SoH < 1
+        soh@double scalar; 
+        cyc@lfpBattery.cycleCounter; % cycleCounter object
+        ageModel@lfpBattery.batteryAgeModel; % batteryAgeModel object
+        soc_max@double scalar; % internal soc_max is lower than external socMax if SoH < 1
         % If the external socMin is set to zero, the internal soc_min is set
         % to eps in case a dambrowskiCounter is used for cycle counting
-        soc_min;
+        soc_min@double scalar;
         % true/false variable for limitation of SoC in recursive iteration.
         % This is set to true when SoC limitation is active, otherwise
         % false.
-        slTF = false;
-        pct = uint32(0); % counter for power iteration
-        sct = uint32(0); % counter for soc limiting iteration
-        lastPr = 0; % last power request (for handling powerIteration through recursion)
-        lastIr = 0; % last current request (for handling currentIteration through recursion)
-        reH; % function handle: @gt for charging and @lt for discharging
-        seH; % function handle: @ge for charging and @le for discharging
-        socLim; % SoC to limit charging/discharging to (depending on charging or discharging)
+        slTF@logical scalar = false;
+        pct@uint32 scalar = 0; % counter for power iteration
+        sct@uint32 scalar = 0; % counter for soc limiting iteration
+        lastPr@double scalar = 0; % last power request (for handling powerIteration through recursion)
+        lastIr@double scalar = 0; % last current request (for handling currentIteration through recursion)
+        reH@function_handle; % function handle: @gt for charging and @lt for discharging
+        seH@function_handle; % function handle: @ge for charging and @le for discharging
+        socLim@double scalar; % SoC to limit charging/discharging to (depending on charging or discharging)
         hl; % property listener (observer) for ageModel SoH
         sl; % property listener (observer) for soc
         % number of elements (in case of collection)
-        % The data type is uint32
-        nEl;
-        rnEl; % reciprocal of nEl as double
+        nEl@uint32 scalar;
+        rnEl@double scalar; % reciprocal of nEl as double
         % Elements (parallelELement, seriesElement or batteryCell objects)
-        El;
-        Cdi; % for storing Cd property in batteryCell
+        El@lfpBattery.batteryInterface;
+        Cdi@double scalar; % for storing Cd property in batteryCell
         % function handle for method to determine SoH
         % @sohPoint points to internal SoH
         % @sohCalc retrieves SoH from subelements
-        sohPointer = @sohPoint;
+        sohPointer@function_handle = @sohPoint;
         % cache(1) = V_curr in iteratePower
         % cache(2) = self-discharge
-        cache = cell(2, 1);
+        cache@cell vector = cell(2, 1);
     end
     properties (SetObservable, Hidden, SetAccess = 'protected')
         % State of charge (handled internally) This soc can be slightly
         % higher or lower than the public SoC property, due to the error
         % tolerances of the SoC limitation.
-        soc;
+        soc@double scalar;
     end
     properties (Hidden, SetAccess = 'protected')
        % true/false flag to indicate whether circuit element has cells or
        % not. Set this flag to true if a batteryCell is added to a
        % composite branch, such as a parallelElement or a seriesElement
-       hasCells = false;
-       isCell = false; % set this to true for cell objects, such as batteryCell.
+       hasCells@logical scalar = false;
+       isCell@logical scalar = false; % set this to true for cell objects, such as batteryCell.
     end
     properties (Hidden, Constant, GetAccess = 'protected')
-        secsToHours = 1 / 3600;
+        secsToHours@double scalar = 1 / 3600;
     end
     methods
         function b = batteryInterface(varargin)
@@ -608,7 +607,9 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             assert(s > b.socMin, 'soc_max cannot be smaller than or equal to soc_min')
             % Limit socMax by SoH
             b.soc_max = s * b.SoH;
-            b.cyc.socMax = s * b.SoH;
+            if ~isempty(b.cyc)
+                b.cyc.socMax = s * b.SoH;
+            end
         end
         function set.maxIterations(b, n)
             b.maxIterations = uint32(max(1, n));

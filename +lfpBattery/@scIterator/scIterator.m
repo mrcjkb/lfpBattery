@@ -13,10 +13,10 @@ classdef scIterator < lfpBattery.iterator
     %January 2017
     
     properties (SetAccess = 'immutable', GetAccess = 'protected')
-      collection;  % The elements the iterator traverses through
+      collection@lfpBattery.sortedFunctions;  % The elements the iterator traverses through
     end
     properties (Access = 'protected')
-        ind = uint32(0);  % index of collection's next item
+        ind@uint32 scalar = 0;  % index of collection's next item
     end
     
     methods

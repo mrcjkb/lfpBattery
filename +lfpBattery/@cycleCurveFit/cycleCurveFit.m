@@ -5,7 +5,7 @@ classdef cycleCurveFit < lfpBattery.curveFitInterface
     %         January 2017
     
     properties (Dependent)
-        x; % fit function parameters
+        x@double vector; % fit function parameters
     end
     methods
         function d = cycleCurveFit(f, numParams, DoDN, N, varargin)

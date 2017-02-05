@@ -17,7 +17,7 @@ classdef vIterator < lfpBattery.iterator
         collection;  % The elements the iterator traverses through
     end
     properties (Access = 'protected')
-        ind = uint32(0);  % index of collection's next item
+        ind@uint32 scalar = 0;  % index of collection's next item
     end
     
     methods

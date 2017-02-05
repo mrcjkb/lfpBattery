@@ -14,7 +14,7 @@ classdef dummyCycleCounter < lfpBattery.cycleCounter
         end
         function update(d, ~)
         end
-        function count(d)
+        function count(d) %#ok<MANU>
         end
     end
     methods (Access = 'protected')
