@@ -111,7 +111,7 @@ classdef (Abstract) cycleCounter < handle
                     % Make sure counting is correct
                     c.count; % count cycles
                     % reset SoC
-                    c.currCycle = c.currCycle.*0;
+                    c.currCycle = c.currCycle * 0;
                     c.ct = int32(1);
                     c.currCycle(1) = c.socMax;
                     if ~isempty(c.cDoC) % make sure algorithm didn't count the same cycles twice
@@ -179,7 +179,11 @@ classdef (Abstract) cycleCounter < handle
                     imax(end+1) = Nt;
                 end
             end
-            imax = unique([1; imax(:); Nt]);
+            % Only return unique values (faster than built-in unique
+            % function)
+            a = sort([1; imax(:); Nt]);
+            imax = a([true; diff(a) ~= 0]);
+%             imax = unique([1; imax(:); Nt]); % Old version
         end % iMaxima
     end % protected methods
 end % of classdef

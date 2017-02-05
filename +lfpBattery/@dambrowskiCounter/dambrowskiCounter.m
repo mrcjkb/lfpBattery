@@ -82,24 +82,23 @@ classdef dambrowskiCounter < lfpBattery.cycleCounter
                 %% Determination of same SoC before and after maxima
                 ipe = zeros(size(imax), 'int32'); % i_prior_equality - indexes of values of prior equality
                 ise = ipe; % i_subsequent_equality - indexes of values of subsequent equality
-                maxRows = numel(imax);
-                kpe = ones(1,1,'int32'); % prior equality counter
-                kse = ones(1,1,'int32'); % subsequent equality counter
+                kpe = ones(1, 1, 'int32'); % prior equality counter
+                kse = ones(1, 1, 'int32'); % subsequent equality counter
                 % sums of the virtual time stamps of minima in pre-cycles
                 % Repeated values of Pmsums/Smsums are shared local minima.
-                Pmsums = zeros(maxRows, 1, 'int32'); % P: prior equality
+                Pmsums = zeros(nmax, 1, 'int32'); % P: prior equality
                 Smsums = Pmsums; % S: subsequent equality
                 % sizes of the intervals
-                Pintsizes = zeros(maxRows, 1, 'int32');
+                Pintsizes = zeros(nmax, 1, 'int32');
                 Sintsizes = Pintsizes;
                 % extrema of pre-cycles
-                Pmax = zeros(maxRows, 1);
+                Pmax = zeros(nmax, 1);
                 Pmin = Pmax;
                 Smax = Pmax;
                 Smin = Pmax;
-                for i = int32(1):int32(numel(imax))
+                for i = int32(1):nmax
                     % index of last maximum equal to or larger than current maximum
-                    im = imax(1:max(1,i-1));
+                    im = imax(1:max(1, i-1));
                     st = find(SoC(im) >= SoC(imax(i))); % starting index
                     if isempty(st) % start from position 1 if no prior equality point found
                         st = 1;
@@ -119,12 +118,12 @@ classdef dambrowskiCounter < lfpBattery.cycleCounter
                         kpe = kpe + 1; % increment counter
                     end
                     % index of next maximum equal to or larger than current maximum
-                    im = imax(min(nmax,i+1):end);
+                    im = imax(min(nmax, i+1):end);
                     en = im(find(SoC(im) >= SoC(imax(i)), 1));
-                    warning('off','all')
+                    warning('off', 'all')
                     tmp1 = SoC(imax(i)) - SoC(imax(i)+1:en);
                     tmp2 = find(tmp1 >= 0);
-                    warning('on','all')
+                    warning('on', 'all')
                     % Condition: SoC(t) <= SoC(t1) for all t1 <= t <= t2
                     if  ~isempty(tmp2)
                         ise(i) = imax(i) + int32(tmp2(max(1, numel(tmp2)-1)));
@@ -156,25 +155,28 @@ classdef dambrowskiCounter < lfpBattery.cycleCounter
                 i1 = min(kpe-1, kse-1); % kpe-1 == numel(Pmsums); kse-1 == numel(Smsums)
                 i2 = max(kpe-1, kse-1);
                 for i = int32(1):i1
-                    idx = ismember(Pmsums, Pmsums(i));
+                    % NOTE: ismembc is undocumented. Replace with ismember
+                    % if the Matlab stops supporting this function. The
+                    % second input must be sorted.
+                    idx = ismembc(Pmsums, Pmsums(i));
                     if Pintsizes(i) == max(Pintsizes(idx))
                         filter1(i) = true;
                     end
-                    idx = ismember(Smsums, Smsums(i));
+                    idx = ismembc(Smsums, Smsums(i));
                     if Sintsizes(i) == max(Sintsizes(idx))
                         filter2(i) = true;
                     end
                 end
                 if kpe-1 > kse-1
                     for i = i1+1:i2
-                        idx = ismember(Pmsums, Pmsums(i));
+                        idx = ismembc(Pmsums, Pmsums(i));
                         if Pintsizes(i) == max(Pintsizes(idx))
                             filter1(i) = true;
                         end
                     end
                 elseif kpe-1 < kse-1
                     for i = i1+1:i2
-                        idx = ismember(Smsums,Smsums(i));
+                        idx = ismembc(Smsums,Smsums(i));
                         if Sintsizes(i) == max(Sintsizes(idx))
                             filter2(i) = true;
                         end
@@ -190,7 +192,7 @@ classdef dambrowskiCounter < lfpBattery.cycleCounter
                 allmax = [Pmax; Smax]; allmin = [Pmin; Smin];
                 filter3 = false(size(allmSums));
                 for i = int32(1):int32(numel(allmSums))
-                    idx = ismember(allmSums, allmSums(i));
+                    idx = ismembc(allmSums, allmSums(i));
                     if allintsizes(i) == max(allintsizes(idx))
                         filter3(i) = true;
                         allintsizes(i) = allintsizes(i) + 1; % to exclude same size PE & SE
