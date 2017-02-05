@@ -61,7 +61,7 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
         xxlim  = [-inf, inf]; % upper & lower limits for x data
         yylim = [-inf, inf]; % upper & lower limits for y data
         cache = cell(2, 1);
-        func; % Function handle with set params
+%         func; % Function handle with set params
     end
     properties (Hidden, GetAccess = 'protected', SetAccess = 'immutable')
         f; % Fit function Handle
@@ -239,7 +239,7 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
                 fun = @(x) d.sseval(x, d.f(x, d.rawX(1:end-1)), d.rawY(1:end-1));
                 d.px = fminsearch(fun, d.px, d.fmsoptions);
             end
-            d.refreshFunc;
+%             d.refreshFunc;
         end
         function v = fiteval(d, sub)
             %FITEVAL: Called by subsref if appropriate indexing for
@@ -262,9 +262,9 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
         %}
     end
     methods (Abstract, Access = 'protected')
-        % Creates the function handle with fixed params.
-        % For better performance than function handle with 2 inputs
-        refreshFunc(d);
+        % Implements the function with the fitted params.
+        % (Faster than using an anonymous function handle)
+        y = func(d);
     end
 end
 

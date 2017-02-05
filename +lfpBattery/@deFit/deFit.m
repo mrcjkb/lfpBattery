@@ -75,8 +75,8 @@ classdef deFit < lfpBattery.cycleCurveFit
         end
     end
     methods (Access = 'protected')
-        function refreshFunc(d)
-            d.func = @(xx) (d.px(1) + d.px(2) * exp(-d.px(3) * xx) + d.px(4) * exp(-d.px(5) * xx));
+        function y = func(d, xx)
+            y = d.px(1) + d.px(2) * exp(-d.px(3) * xx) + d.px(4) * exp(-d.px(5) * xx);
         end
     end
 end

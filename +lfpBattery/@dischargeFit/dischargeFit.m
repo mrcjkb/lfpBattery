@@ -221,12 +221,12 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             % limit output to raw data
             v = lfpBattery.commons.upperlowerlim(d.func(DoD), d.yylim(1), d.yylim(2));
         end
-        function refreshFunc(d)
-            d.func = @(xdata)(d.px(1) - (lfpBattery.const.R * d.T) ... % Nernst
+        function v = func(d, DoD)
+            v = d.px(1) - (lfpBattery.const.R * d.T) ... % Nernst
                 / (lfpBattery.const.z_Li * lfpBattery.const.F) ...
-                * log(xdata./(1-xdata)) + d.px(2) * xdata + d.px(3) ...
-                + (d.px(4) + (d.px(5) + d.px(4) * d.px(6)) * xdata) .* exp(-d.px(6) * xdata) ... % exponential drop at the beginning of the discharge curve
-                + d.px(7) * exp(-d.px(8) * xdata)); % exponential drop at the end of the discharge curve
+                * log(DoD./(1-DoD)) + d.px(2) * DoD + d.px(3) ...
+                + (d.px(4) + (d.px(5) + d.px(4) * d.px(6)) * DoD) .* exp(-d.px(6) * DoD) ... % exponential drop at the beginning of the discharge curve
+                + d.px(7) * exp(-d.px(8) * DoD); % exponential drop at the end of the discharge curve
         end
         % gpuCompatible methods
         % These methods are currently unsupported and may be removed in a
