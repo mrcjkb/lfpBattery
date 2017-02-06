@@ -180,6 +180,7 @@ classdef digitizeTool < handle
                         case 'OK'
                             drawnow
                             [Xopixels,Yopixels] = ginput(1);
+                            x_p = get(0, 'PointerLocation');
                             inp = line(Xopixels,Yopixels,...
                                 'Marker', 'o', 'Color', const.green, 'MarkerSize', 14);
                             inp2 = line(Xopixels,Yopixels,...
@@ -242,7 +243,9 @@ classdef digitizeTool < handle
                     switch XLimButton
                         case 'OK'
                             drawnow
+                            hL = addlistener(obj.mainframe, 'WindowMouseMotion', @(x, y) digitizeTool.lockPointer(x_p, 'y'));
                             [XAxisXpixels,XAxisYpixels] = ginput(1);
+                            delete(hL)
                             inp = line(XAxisXpixels,XAxisYpixels,...
                                 'Marker','*','Color', const.green,'MarkerSize',14);
                             inp2 = line(XAxisXpixels,XAxisYpixels,...
@@ -322,7 +325,9 @@ classdef digitizeTool < handle
                     switch YLimButton
                         case 'OK'
                             drawnow
+                            hL = addlistener(obj.mainframe, 'WindowMouseMotion', @(x, y) digitizeTool.lockPointer(x_p, 'x'));
                             [YAxisXpixels,YAxisYpixels] = ginput(1);
+                            delete(hL)
                             inp = line(YAxisXpixels,YAxisYpixels,...
                                 'Marker','*','Color',const.green,'MarkerSize',14);
                             inp2 = line(YAxisXpixels,YAxisYpixels,...
@@ -609,6 +614,42 @@ classdef digitizeTool < handle
             set(obj.axes1,'YTick',[])
             set(obj.axes1,'Color',[1 1 1])
             set(obj.axes1,'ColorOrder',lfpBattery.const.corpDesign)
+        end
+        
+    end
+    
+    methods (Static)
+        function lockPointer(xp, axis)
+            %LOCKPOINTER: Add this to a listener for a figure's 'WindowMouseMotion'
+            %event to lock the cursor horizontally or vertically.
+            %
+            %Syntax: setPointer(xp, axis)
+            %
+            %xp:    pointer pixel position of format [x, y]
+            %axis:  'x' to lock to vertical line (locks x position)
+            %       'y' to lock to horizontal line (locks y position)
+            %
+            %Usage example:
+            % fig = figure;
+            % ax = axes;
+            % [xx(2), yy(2)] = ginput(1);
+            % x_p = get(0, 'PointerLocation');
+            % % other code
+            % hL = addlistener(fig,'WindowMouseMotion', @(x, y) digitizeTool.lockPointer(x_p, 'x'));
+            % [xx(1), yy(1)] = ginput(1);
+            % delete(hL)
+            %
+            %Author: Marc Jakobi, 07. February 2017
+            if strcmp(axis, 'x')
+                ind = 1;
+            elseif strcmp(axis, 'y')
+                ind = 2;
+            else
+                error('Second argument must be ''x'' or ''y''.')
+            end
+            x = get(0, 'PointerLocation');
+            x(ind) = xp(ind);
+            set(0, 'PointerLocation', x);
         end
     end
 end
