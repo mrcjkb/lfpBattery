@@ -119,22 +119,22 @@ classdef simpleSE < lfpBattery.simpleCircuitElement
         end
         function v = getNewVoltage(b, I, dt)
             % Voltage = number of elements times elements' voltage
-            v = b.nEl .* b.El.getNewVoltage(I, dt);
+            v = b.nEl * b.El.getNewVoltage(I, dt);
         end
         function [np, ns] = getTopology(b)
             [np, ns] = b.El.getTopology;
-            ns = b.nEl .* ns;
+            ns = b.nEl * ns;
         end
         %% Getters & setters
         function v = get.V(b)
-            v = b.nEl .* b.El.V;
+            v = b.nEl * b.El.V;
         end
         function set.V(b, v)
             % share voltages evenly across elements
-            b.El.V = v ./ b.nEl;
+            b.El.V = v / b.nEl;
         end
         function z = get.Zi(b)
-            z = b.nEl .* b.El.Zi;
+            z = b.nEl * b.El.Zi;
         end
         function c = get.Cd(b)
             c = b.El.Cd;
@@ -154,10 +154,10 @@ classdef simpleSE < lfpBattery.simpleCircuitElement
         end
         function charge(b, Q)
             % Pass equal amount of discharge capacity to each element
-            b.El.charge(1 ./ b.nEl .* Q);
+            b.El.charge(1 / b.nEl * Q);
         end
         function p = getZProportions(b)
-            p = ones(b.nEl, 1) ./ b.nEl;
+            p = ones(b.nEl, 1) / b.nEl;
         end
         function c = dummyCharge(b, Q)
             c = b.El.dummyCharge(Q);
@@ -166,7 +166,7 @@ classdef simpleSE < lfpBattery.simpleCircuitElement
             s = b.El.SoH;
         end
         function refreshNominals(b)
-            b.Vn = b.nEl .* b.El.Vn;
+            b.Vn = b.nEl * b.El.Vn;
             b.Cn = b.El.Cn;
         end 
         % gpuCompatible methods
