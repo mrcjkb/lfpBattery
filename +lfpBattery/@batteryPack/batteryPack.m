@@ -479,7 +479,7 @@ classdef batteryPack < lfpBattery.batteryInterface
                         % interval.
                         Zi = commons.norminvlim(rand(np.*ns, 1), Zi, Zgauss(1), Zgauss(2:3));
                     catch ME
-                        if license('test', 'statistics_toolbox') % statistics toolbox missing?
+                        if ~license('test', 'statistics_toolbox') % statistics toolbox missing?
                             error('The Statistics toolbox is required in order to set a gaussian distribution for Zi.')
                         else
                             rethrow(ME) % otherwise rethrow exception
