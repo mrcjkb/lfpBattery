@@ -52,7 +52,6 @@ classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
                     c.cache{3} = xydat{chk}(x);
                 else
                     % interpolate with available curve fit returns at
-                    %                 xx = zeros(c.nEl, 1);
                     xx = zeros(c.nEl, 1);
                     for i = 1:c.nEl
                         xx(i) = xydat{i}(x);
