@@ -21,6 +21,18 @@ classdef cccvFit < lfpBattery.curveFitInterface
     %   points of the curve to validate that the correspondece is
     %   in fact linear.
     %
+    %CCCVFIT Properties:
+    %   soc0    -   state of charge at the beginning of the CV phase
+    %   iMax0   -   maximum current in A during the CC phase
+    %   rmse    -   root mean squared error
+    %
+    %CCCVFIT Methods:
+    %   plotResults   - plots the fitted curve.
+    %
+    %CCCVFIT Indexing:
+    %       In order to retrieve the fit for a given value, use subsref
+    %   indexing with (), e.g. y = c(x);
+    %
     %Notes:
     %   This class inherits from the curveFitInterface class for the sake
     %   of the common methods. However, attempting to access some of the 
@@ -34,7 +46,7 @@ classdef cccvFit < lfpBattery.curveFitInterface
     
     properties
         soc0; % state of charge at the beginning of the CV phase.
-        iMax0; % Maximum current in A during the CC phase.
+        iMax0; % maximum current in A during the CC phase.
     end
     properties (Hidden, GetAccess = 'protected', SetAccess = 'immutable')
         socMax = 1; % maximum state of charge at the end of the CV phase.
