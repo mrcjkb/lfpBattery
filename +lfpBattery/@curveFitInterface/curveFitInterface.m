@@ -130,9 +130,9 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
             if strcmp(S(1).type, '()')
                 v = d.fiteval(S(1).subs{1});
             elseif nargout == 1
-                v = builtin('subsref', d, S);
+                v = builtin('subsref', d, S(1));
             else
-                builtin('subsref', d, S);
+                builtin('subsref', d, S(1));
             end
         end % subsref overload
         function plotResults(d, varargin)

@@ -220,10 +220,9 @@ classdef bpackGUI < handle
             u = uiflowcontainer('v0', 'parent', hc, 'FlowDirection', 'LeftToRight');
             txt = {'Mean:', b.multiline('Standard', 'deviation:'), 'Minimum:', 'Maximum:'};
             def = {'17e-3', '0', '17e-3', '17e-3'};
-            tt = 'If a gaussian distribution is set, it should be limited to realistic values.';
-            tooltips = {'The proportions of the internal impedances of the cells are used to determine voltage and current distributions.', ...
+            tooltips = b.multiline('The proportions of the internal impedances of the cells are used to determine voltage and current distributions.', ...
                 'In order to define a standard distribution, the statistics toolbox is required.', ...
-                tt, tt};
+                'If a gaussian distribution is set, it should be limited to realistic values.');
             for i = 1:4
                 uu =  uiflowcontainer('v0', 'parent', u, 'FlowDirection', 'TopDown');
                 jl = JLabel; jl.setText(txt{i})
@@ -233,7 +232,7 @@ classdef bpackGUI < handle
                 jt.setText(def{i})
                 javacomponent(jt, [], uu);
                 b.Zi{i} = jt;
-                b.Zi{i}.setToolTipText(tooltips{i})
+                b.Zi{i}.setToolTipText(tooltips)
             end
             if ~license('test', 'statistics_toolbox')
                 for i = 2:3
@@ -247,6 +246,9 @@ classdef bpackGUI < handle
             hc = uiflowcontainer('v0', 'parent', layout, 'FlowDirection', 'TopDown');
             jl = JLabel; jl.setText('Discharge curve fits:')
             jl.setHorizontalAlignment(0)
+            str = [commons.getHtmlImage('dcurves_qualitative.png'), ...
+                'A discharge curve plots the voltage against the discharge capacity.'];
+            jl.setToolTipText(str)
             javacomponent(jl, [], hc);
             u = uiflowcontainer('v0', 'parent', hc, 'FlowDirection', 'LeftToRight');
             jb = JButton('Load demo data');
@@ -262,6 +264,7 @@ classdef bpackGUI < handle
             %% cccv curve fits
             jl = JLabel; jl.setText('CCCV curve fits:')
             jl.setHorizontalAlignment(0)
+            
             javacomponent(jl, [], hc);
             u = uiflowcontainer('v0', 'parent', hc, 'FlowDirection', 'LeftToRight');
             jb = JButton('Load demo data');
@@ -277,6 +280,9 @@ classdef bpackGUI < handle
             %% Age model curve fits
             jl = JLabel; jl.setText('Cycle life curve fits:')
             jl.setHorizontalAlignment(0)
+            str = [commons.getHtmlImage('wfit_qualitative.png'), ...
+                'A cycle life curve plots the number of cycles to failure against the depth of cycle (DoC).'];
+            jl.setToolTipText(str)
             javacomponent(jl, [], hc);
             u = uiflowcontainer('v0', 'parent', hc, 'FlowDirection', 'LeftToRight');
             jb = JButton('Load demo data');
@@ -486,6 +492,7 @@ classdef bpackGUI < handle
            dtool.varname.setEnabled(0)
            dtool.list.setSelectedIndex(index)
            dtool.list.setEnabled(0)
+           dtool.setState
            dtool.mainframe.CloseRequestFcn = 'uiresume; closereq';
            % block current figure
            [c, jObj] = b.pauseGUI('Running curve fit tool...');

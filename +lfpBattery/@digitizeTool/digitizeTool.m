@@ -140,11 +140,31 @@ classdef digitizeTool < handle
         function aquiringInfoUpdate(obj, msgStr)
             obj.hInfo.setText(['<html>INFO<br><br>', msgStr{1},'<br><br>', msgStr{2}, '<br><br>', msgStr{3}, '</html>");'])
         end
+        function setState(obj, src, ~)
+            import lfpBattery.*
+            if nargin < 2
+                src = obj.list;
+            end
+            ind = src.getSelectedIndex;
+            obj.state = obj.states{ind + 1};
+            switch ind
+                case 0
+                    str = [commons.getHtmlImage('dcurves_qualitative.png'), ...
+                        'Selects the type of curve that will be fitted.<br>', ...
+                    'A discharge curve plots the voltage against the discharge capacity.'];
+                case 1
+                    str = [commons.getHtmlImage('wfit_qualitative.png'), ...
+                        'Selects the type of curve that will be fitted.<br>', ...
+                        'A discharge curve plots the voltage against the discharge capacity.'];
+                otherwise
+                    str = ['A CCCV curve contains 3 curves over the charging time: The current, the voltage and the SoC.<br>', ...
+                        'The current and SoC curves are required for the CCCV curve fit in order to generate a function<br>', ...
+                        'Imax = f(SoC)'];
+            end
+            src.setToolTipText(str)
+        end
     end
     methods (Access = 'protected')
-        function setState(obj, src, ~)
-            obj.state = obj.states{src.getSelectedIndex + 1};
-        end
         function selectbutton_Callback(obj, ~, ~)
             import lfpBattery.*
             try
