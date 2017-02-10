@@ -216,7 +216,7 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
            end
         end
         function e = get.e_tot(d)
-            e = d.f(d.px, d.rawX(1:end-1)) - d.rawY(1:end-1);
+            e = d.func(d.rawX(1:end-1)) - d.rawY(1:end-1);
         end
         function r = get.rmse(d)
             % fit errors
