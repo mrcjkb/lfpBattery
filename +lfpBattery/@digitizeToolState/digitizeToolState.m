@@ -2,7 +2,12 @@ classdef (Abstract) digitizeToolState < handle
     %DIGITIZETOOLSTATE: Abstract class for implementing the State design
     %pattern in the digitizeTool class. Any state that is added to the tool
     %must implement this interface.
-    
+    %
+    %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
+    %         February 2017
+    %
+    %SEE ALSO: lfpBattery.digitizeTool lfpBattery.digitizeToolDC
+    %lfpBattery.digitizeToolCL lfpBattery.digitizeToolCCCV
     properties (Abstract)
         xLabel;
         yLabel;

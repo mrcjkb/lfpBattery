@@ -1,6 +1,12 @@
 classdef digitizeToolDC < lfpBattery.digitizeToolState
     %DIGITIZETOOLDC digitizeTool State object for discharge curve
     %digitizing and fitting.
+    %
+    %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
+    %         February 2017
+    %
+    %SEE ALSO: lfpBattery.digitizeTool lfpBattery.digitizeToolState
+    %lfpBattery.digitizeToolCL lfpBattery.digitizeToolCCCV
     
     properties
         xLabel = 'discharge capacity in Ah';

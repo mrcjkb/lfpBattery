@@ -1,6 +1,12 @@
 classdef digitizeToolCL < lfpBattery.digitizeToolState
     %DIGITIZETOOLCL digitizeTool State object for cycle life curve
     %digitizing and fitting.
+    %
+    %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
+    %         February 2017
+    %
+    %SEE ALSO: lfpBattery.digitizeTool lfpBattery.digitizeToolState
+    %lfpBattery.digitizeToolDC lfpBattery.digitizeToolCCCV
     
     properties
         xLabel = 'depth of discharge';

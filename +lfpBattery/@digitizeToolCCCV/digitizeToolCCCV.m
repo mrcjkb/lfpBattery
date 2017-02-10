@@ -1,6 +1,12 @@
 classdef digitizeToolCCCV < lfpBattery.digitizeToolState
     %DIGITIZETOOLCCCV digitizeTool State object for CCCV (constant current
     %constant voltage charge curve digitizing and fitting.
+    %
+    %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
+    %         February 2017
+    %
+    %SEE ALSO: lfpBattery.digitizeTool lfpBattery.digitizeToolState lfpBattery.digitizeToolDC
+    %lfpBattery.digitizeToolCL 
     properties
         xLabel = 'state of charge';
         yLabel = 'maximum current in A';
