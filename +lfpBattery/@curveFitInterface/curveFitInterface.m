@@ -60,8 +60,6 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
         fmin; % true for fminsearch, false for lsqcurvefit
         xxlim  = [-inf, inf]; % upper & lower limits for x data
         yylim = [-inf, inf]; % upper & lower limits for y data
-        cache = cell(2, 1);
-%         func; % Function handle with set params
     end
     properties (Hidden, GetAccess = 'protected', SetAccess = 'immutable')
         f; % Fit function Handle
@@ -239,7 +237,6 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
                 fun = @(x) d.sseval(x, d.f(x, d.rawX(1:end-1)), d.rawY(1:end-1));
                 d.px = fminsearch(fun, d.px, d.fmsoptions);
             end
-%             d.refreshFunc;
         end
         function v = fiteval(d, sub)
             %FITEVAL: Called by subsref if appropriate indexing for
