@@ -57,7 +57,7 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
     end
     properties (Hidden, Access = 'protected')
         px; % parameters for fit function handle
-        fmin; % true for fminsearch, false for lsqcurvefit
+        fmin; % 1 for fminsearch, 2 for lsqcurvefit, 3 for both
         xxlim  = [-inf, inf]; % upper & lower limits for x data
         yylim = [-inf, inf]; % upper & lower limits for y data
     end
@@ -191,6 +191,7 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
         end
         %% dependent setters
         function set.mode(d, str)
+            d.setModeErrorHandler
             validatestring(str, {'lsq', 'fmin', 'both'});
             if ~strcmp(d.mode, str)
                 if strcmp(str, 'fmin')
@@ -262,6 +263,11 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
         % Implements the function with the fitted params.
         % (Faster than using an anonymous function handle)
         y = func(d);
+    end
+    methods (Static, Access = 'protected')
+        function setModeErrorHandler
+            % Does nothing by default;
+        end
     end
 end
 
