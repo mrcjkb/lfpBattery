@@ -22,7 +22,7 @@ classdef cycleCurveFit < lfpBattery.curveFitInterface
             % Main inputs
             rawx = DoDN;
             rawy = N;
-            d = d@lfpBattery.curveFitInterface(f, rawx, rawy, varargin{:}); % Superclass constructor
+            d = d@lfpBattery.curveFitInterface(f, rawx, rawy, [], varargin{:}); % Superclass constructor
             d.xxlim = [0, inf]; % set boundaries 
         end
         function plotResults(d)
