@@ -381,13 +381,13 @@ classdef bpackGUI < handle
             s = [s, '</html>");'];
         end
         function loadDCDemo(b, ~, ~)
+            [c, jObj] = b.pauseGUI('Loading data...');
             try
                 msg = 'Load demo discharge curve fits?';
                 btn = questdlg(msg, ...
                     'Input', ...
                     'OK','Cancel','OK');
                 if strcmp(btn, 'OK')
-                    [c, jObj] = b.pauseGUI('Loading data...');
                     [p, ~] = fileparts(fileparts(which('lfpBatteryTests')));
                     load(fullfile(p, 'MLUnitTests', 'batteryCellTests', 'dcCurves.mat'))
                     b.dC = d;
@@ -405,13 +405,13 @@ classdef bpackGUI < handle
         end
         function loadACDemo(b, ~, ~)
             import lfpBattery.*
+            [c, jObj] = b.pauseGUI('Loading data...');
             try
                 msg = 'Load demo cycle life curv fit?';
                 btn = questdlg(msg, ...
                     'Input', ...
                     'OK','Cancel','OK');
                 if strcmp(btn, 'OK')
-                    [c, jObj] = b.pauseGUI('Loading data...');
                     [p, ~] = fileparts(fileparts(which('lfpBatteryTests')));
                     load(fullfile(p, 'MLUnitTests', 'ageModelTests', 'testInputs.mat'))
                     b.wF = woehlerFit(N, DoDN);
