@@ -262,7 +262,7 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
     methods (Abstract, Access = 'protected')
         % Implements the function with the fitted params.
         % (Faster than using an anonymous function handle)
-        y = func(d);
+        y = func(d, x);
     end
     methods (Static, Access = 'protected')
         function setModeErrorHandler
