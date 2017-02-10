@@ -84,7 +84,7 @@ classdef cccvFit < lfpBattery.curveFitInterface
                 c.socMax = socMax;
             end
             c.yylim = [0, inf];
-            c.xxlim = [0, 1];
+            c.xxlim = [soc(1), c.socMax];
             c.iMax0 = iMax(1);
             c.soc0 = soc(1);
             c.px = param;
@@ -117,6 +117,7 @@ classdef cccvFit < lfpBattery.curveFitInterface
             end
             xlabel('SoC')
             ylabel('Maximum current / A')
+            xlim([c.soc0, c.socMax])
         end
         function set.x(c, ~)
             c.propNonSettable('x')

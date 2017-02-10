@@ -197,13 +197,13 @@ classdef digitizeTool < handle
             obj.errCt = 0;
             chk = true;
             while chk
-%                 try
+                try
                     chk = obj.state.getXAxisXdata;
-%                 catch
+                catch
                     if obj.cancelOrError
                         return
                     end
-%                 end
+                end
             end
             obj.errCt = 0;
             % Define Y-axis

@@ -73,9 +73,6 @@ classdef digitizeToolDC < lfpBattery.digitizeToolState
                 f.add(df);
             end
         end
-        function plotResults(obj)
-            obj.dTool.fit.plotResults;
-        end
     end
 end
 

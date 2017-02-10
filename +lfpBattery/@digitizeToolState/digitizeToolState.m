@@ -114,7 +114,7 @@ classdef (Abstract) digitizeToolState < handle
             msg = [obj.xLabel, ' at the selected coordinate:'];
             obj.dTool.hInfo.setText(['<html>INFO<br><br>', msg, '</html>");'])
             prompt = {msg; 'Repeat? (Y/N)'};
-            def = {'3', 'N'};
+            def = {'1', 'N'};
             dlgTitle = 'User input';
             answer = inputdlg(prompt, dlgTitle, 1, def);
             if (isempty(char(answer{:})) == 1)
@@ -157,7 +157,7 @@ classdef (Abstract) digitizeToolState < handle
             msg = [obj.yLabel, ' at the selected coordinate:'];
             obj.dTool.hInfo.setText(['<html>INFO<br><br>', msg, '</html>");'])
             prompt = {msg, 'Repeat? (Y/N)'};
-            def = {'3', 'N'};
+            def = {'1', 'N'};
             dlgTitle = 'User input';
             answer=inputdlg(prompt, dlgTitle, 1, def);
             if (isempty(char(answer{:})) == 1)
@@ -251,9 +251,11 @@ classdef (Abstract) digitizeToolState < handle
             end
             chk = true;
         end % cancelRequest
+        function plotResults(obj)
+            obj.dTool.fit.plotResults(true)
+        end % plotResults
     end
     methods (Abstract)
         f = createFit(obj, numsets);
-        plotResults(obj);
     end
 end

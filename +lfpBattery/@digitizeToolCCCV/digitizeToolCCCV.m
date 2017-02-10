@@ -3,7 +3,7 @@ classdef digitizeToolCCCV < lfpBattery.digitizeToolState
     %constant voltage charge curve digitizing and fitting.
     properties
         xLabel = 'state of charge';
-        yLabel = 'maximum current';
+        yLabel = 'maximum current in A';
     end
     properties (Access = 'protected')
         aqmarker2;
@@ -73,7 +73,8 @@ classdef digitizeToolCCCV < lfpBattery.digitizeToolState
             end
             obj.msgStr{1} = 'Select the respective data point on the SOC curve with the LEFT mouse button.';
             obj.msgStr{2} = 'Correction with the MIDDLE mouse button.';
-            obj.msgStr{3} = '';
+            obj.msgStr{3} = ['Note: Only the point at the beginning of the CV phase is needed for fitting.', ...
+                ' However, more points can be selected for the purpose of validating the linear fit results.'];
             obj.dTool.aquiringInfoUpdate(obj.msgStr)
             chk = true;
             while chk
@@ -89,9 +90,8 @@ classdef digitizeToolCCCV < lfpBattery.digitizeToolState
                 if n > 0
                     delete(hL)
                 end
-                % MTODO: Sort out deletion of aqmarkers
                 if buttonNumber == 1
-                    obj.aqmarker2(n) = line(x, y, 'Marker','.','Color', obj.colors(cct, :), 'MarkerSize', 12);
+                    obj.aqmarker2(n) = line(x, y, 'Marker','.','Color', obj.colors(cct + 1, :), 'MarkerSize', 12);
                     xy = obj.rotmat * [(x - obj.Xopixels); (y - obj.Yopixels)];
                     % Convert pixel Y data to X data for fit
                     delXpoint = xy(2) ./ obj.delXcal .* obj.scalefactorXdata;
@@ -124,12 +124,9 @@ classdef digitizeToolCCCV < lfpBattery.digitizeToolState
         function t = get.T(obj) %#ok<MANU>
             t = [];
         end
-        function f = createFit(obj, ~) %#ok<INUSD>
-%             import lfpBattery.*
-            % MTODO: Implement fit class
-            f = [];
-        end
-        function plotResults(obj)
+        function f = createFit(obj, ~)
+            import lfpBattery.*
+            f = cccvFit(obj.dTool.ImgData(1).x, obj.dTool.ImgData(1).y);
         end
     end
     methods (Static)
