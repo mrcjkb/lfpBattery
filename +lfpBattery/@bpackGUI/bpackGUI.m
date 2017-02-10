@@ -43,21 +43,21 @@ classdef bpackGUI < handle
             title.HeightLimits = [10, 60];
             logo = uiflowcontainer('v0', 'parent', title, 'FlowDirection', 'LeftToRight', ...
                 'BackgroundColor', [1 1 1]);
-            % TU logo
+            %% TU logo
             str = commons.getHtmlImage('tulogo.png', 'height', '46', 'width', '90');
             jl = JLabel; jl.setText(str)
             jl.setVerticalAlignment(1)
             jl.setOpaque(true);
             jl.setBackground(Color.white);
             javacomponent(jl, [], logo);
-            % EET logo
+            %% EET logo
             str = commons.getHtmlImage('EETlogo.png', 'height', '46', 'width', '90');
             jl = JLabel; jl.setText(str)
             jl.setVerticalAlignment(1)
             jl.setOpaque(true);
             jl.setBackground(Color.white);
             javacomponent(jl, [], logo);
-            % Authors
+            %% Authors
             str = ['<html><div align="right">batteryPack GUI v.1.0<br>Marc Jakobi, Festus Angangbe, Marc Schmidt',...
                 '<br>TU Berlin, 2017</div>'];
             jl = JLabel; jl.setText(str)
@@ -70,7 +70,7 @@ classdef bpackGUI < handle
             layout = uiflowcontainer('v0', 'parent', mainlayout, 'FlowDirection', 'LeftToRight', ...
                 'BackgroundColor', [1 1 1]);
             hc = uiflowcontainer('v0', 'parent', layout, 'FlowDirection', 'BottomUp');
-            % Cell and pack voltages and capacities
+            %% Cell and pack voltages and capacities
             labels = {'<html>Cell capacity<br>in Ah:</html>")', '<html>Cell voltage<br>in V:</html>")', ...
                 '<html>Pack capacity<br>in Ah:</html>")', '<html>Pack voltage<br>in V:</html>")', ...
                 '<html>Number of<br>parallel cells:</html>")', '<html>Number of<br>cells in series:</html>")'};
@@ -100,7 +100,7 @@ classdef bpackGUI < handle
                 h.KeyTypedCallback = @b.calcCV;
                 b.cpE{i}.setEnabled(false)
             end
-            % set-up 'Auto' or 'Manual'
+            %% set-up 'Auto' or 'Manual'
             b.jcb1 = JComboBox({b.multiline('Auto setup', 'based on pack size'), 'Manual setup'});
             javacomponent(b.jcb1, [], hc);
             b.jcb1.setToolTipText(['<html>Auto setup based on pack size:<br>', ...
@@ -110,7 +110,7 @@ classdef bpackGUI < handle
                 'The pack''s nominal voltage and capacity are calculated accordingly.</html>");'])
             h = handle(b.jcb1, 'CallbackProperties');
             h.ActionPerformedCallback = @b.switchSetup;
-            % age model
+            %% age model
             hc = uiflowcontainer('v0', 'parent', layout, 'FlowDirection', 'TopDown');
             u = uiflowcontainer('v0', 'parent', hc, 'FlowDirection', 'LeftToRight');
             des = JLabel; des.setText('Age model:')
@@ -123,7 +123,7 @@ classdef bpackGUI < handle
             javacomponent(b.jcbA, [], u);
             h = handle(b.jcbA, 'CallbackProperties');
             h.ActionPerformedCallback = @b.ageModelChange;
-            % Equalization
+            %% Equalization
             u = uiflowcontainer('v0', 'parent', hc, 'FlowDirection', 'LeftToRight');
             des = JLabel; des.setText('Equalization:')
             des.setVerticalAlignment(1)
@@ -133,7 +133,7 @@ classdef bpackGUI < handle
             b.jcbEQ.setToolTipText(b.multiline('The balancing of voltage and capacity accross string elements.', ...
                 'In the simplified model, passive equalization is not possible.'))
             javacomponent(b.jcbEQ, [], u);
-            % charging and discharging efficiencies
+            %% charging and discharging efficiencies
             labels = {'<html>Charging<br>efficiency:</html>', '<html>Discharging<br>efficiency:</html>")'};
             tooltip = 'Please insert a value between 0 and 1.';
             def = {'0.97', '0.97'};
@@ -151,7 +151,7 @@ classdef bpackGUI < handle
                 h.KeyTypedCallback = @b.lim01;
                 b.eta{i}.setToolTipText(tooltip)
             end
-            %self-discharge rate
+            %% self-discharge rate
             u = uiflowcontainer('v0', 'parent', hc, 'FlowDirection', 'LeftToRight');
             txt = b.multiline('Self-discharge rate','in 1/month:');
             jl = JLabel; jl.setText(txt)
@@ -164,7 +164,7 @@ classdef bpackGUI < handle
             h = handle(jt, 'CallbackProperties');
             h.KeyTypedCallback = @b.lim01;
             b.psd.setToolTipText('If the self-discharge rate is 1 % per month, set this value to 0.01.')
-            % SoC
+            %% SoC
             jl = JLabel; jl.setText('State of charge SoC')
             jl.setHorizontalAlignment(0)
             javacomponent(jl, [], hc);
@@ -187,10 +187,10 @@ classdef bpackGUI < handle
                 h.KeyTypedCallback = @b.lim01;
                 b.psd.setToolTipText(tooltips{i})
             end
-            % Checkbox for simplified model
+            %% Checkbox for simplified model
             b.simple = JCheckBox('Simplified model', false);
             javacomponent(b.simple, [], hc);
-            % SoH
+            %% SoH
             hc = uiflowcontainer('v0', 'parent', layout, 'FlowDirection', 'TopDown');
             u = uiflowcontainer('v0', 'parent', hc, 'FlowDirection', 'LeftToRight');
             jl = JLabel; jl.setText(b.multiline('State of health','SoH:'))
@@ -203,7 +203,7 @@ classdef bpackGUI < handle
             b.soh.setToolTipText(b.multiline('The state of health SoH at the beginning of the simulation.',...
                 'If no age model is selected, this property can still be set.', ...
                 'Must be a value between 0 and 1'))
-            % Topology
+            %% Topology
             u = uiflowcontainer('v0', 'parent', hc, 'FlowDirection', 'LeftToRight');
             des = JLabel; des.setText('Topology:')
             des.setVerticalAlignment(1)
@@ -213,7 +213,7 @@ classdef bpackGUI < handle
                 'The topology may influence the equalization.'];
             b.topology.setToolTipText(str)
             javacomponent(b.topology, [], u);
-            % Zi & Zgauss
+            %% Zi & Zgauss
             jl = JLabel; jl.setText('<html>Internal impedance in &#937</html>')
             jl.setHorizontalAlignment(0)
             javacomponent(jl, [], hc);
@@ -243,7 +243,7 @@ classdef bpackGUI < handle
             % set callbacks
             h = handle(b.simple, 'CallbackProperties');
             h.ActionPerformedCallback = @b.simplify;
-            % Discharge Curve fits
+            %% Discharge Curve fits
             hc = uiflowcontainer('v0', 'parent', layout, 'FlowDirection', 'TopDown');
             jl = JLabel; jl.setText('Discharge curve fits:')
             jl.setHorizontalAlignment(0)
@@ -259,7 +259,22 @@ classdef bpackGUI < handle
             javacomponent(jb, [], u);
             h = handle(jb, 'CallbackProperties');
             h.ActionPerformedCallback = @b.startDCFitTool;
-            % Age model curve fits
+            %% cccv curve fits
+            jl = JLabel; jl.setText('CCCV curve fits:')
+            jl.setHorizontalAlignment(0)
+            javacomponent(jl, [], hc);
+            u = uiflowcontainer('v0', 'parent', hc, 'FlowDirection', 'LeftToRight');
+            jb = JButton('Load demo data');
+            jb.setToolTipText('Loads a demo CCCV curve fit (maximum current as a function of the SoC).')
+            javacomponent(jb, [], u);
+            h = handle(jb, 'CallbackProperties');
+            h.ActionPerformedCallback = @b.loadCCCVDemo;
+            jb = JButton(b.multiline('Start digitize', 'and fit tool'));
+            jb.setToolTipText('Starts a tool for digitizing images and fitting the CCCV charge curves.')
+            javacomponent(jb, [], u);
+            h = handle(jb, 'CallbackProperties');
+            h.ActionPerformedCallback = @b.startCCCVFitTool;
+            %% Age model curve fits
             jl = JLabel; jl.setText('Cycle life curve fits:')
             jl.setHorizontalAlignment(0)
             javacomponent(jl, [], hc);
@@ -278,7 +293,7 @@ classdef bpackGUI < handle
             javacomponent(jb, [], u);
             h = handle(jb, 'CallbackProperties');
             h.ActionPerformedCallback = @b.startACFitTool;
-            % Send to workspace button
+            %% Send to workspace button
             jl = JLabel; jl.setText('Build')
             jl.setHorizontalAlignment(0)
             javacomponent(jl, [], hc);
@@ -403,11 +418,34 @@ classdef bpackGUI < handle
             end
             delete(c)
         end
+        function loadCCCVDemo(b, ~, ~)
+            [c, jObj] = b.pauseGUI('Loading data...');
+            try
+                msg = 'Load demo CCCV curve fit?';
+                btn = questdlg(msg, ...
+                    'Input', ...
+                    'OK','Cancel','OK');
+                if strcmp(btn, 'OK')
+                    [p, ~] = fileparts(fileparts(which('lfpBatteryTests')));
+                    load(fullfile(p, 'Resources', 'cccvfit.mat', 'c'))
+                    b.cC = c;
+                    jObj.setBusyText('Success!');
+                    jObj.stop;
+                    pause(1)
+                end
+            catch ME
+                warning(ME.message)
+                jObj.setBusyText('Failed!');
+                jObj.stop;
+                pause(1)
+            end
+            delete(c)
+        end
         function loadACDemo(b, ~, ~)
             import lfpBattery.*
             [c, jObj] = b.pauseGUI('Loading data...');
             try
-                msg = 'Load demo cycle life curv fit?';
+                msg = 'Load demo cycle life curve fit?';
                 btn = questdlg(msg, ...
                     'Input', ...
                     'OK','Cancel','OK');
@@ -428,62 +466,50 @@ classdef bpackGUI < handle
             delete(c)
         end
         function startDCFitTool(b, ~, ~)
-            import lfpBattery.*
-            dtool = digitizeTool;
-            dtool.externalControl = true;
-            dtool.sendbutton.setText('Save data')
-            dtool.varname.setText([])
-            dtool.varname.setEnabled(0)
-            dtool.list.setSelectedIndex(0)
-            dtool.list.setEnabled(0)
-            h = handle(dtool.sendbutton, 'CallbackProperties');
-            h.ActionPerformedCallback = 'uiresume';
-            dtool.mainframe.CloseRequestFcn = 'uiresume; closereq';
-            % block current figure
-            [c, jObj] = b.pauseGUI('Running curve fit tool...');
-            uiwait
-            try
-                commons.validateInterface(fit, 'lfpBattery.curvefitCollection')
-                b.dC = d.fit;
-                jObj.setBusyText('Success!');
-                jObj.stop;
-                pause(1)
-            catch ME
-                warning(ME.message)
-                jObj.setBusyText('Failed!');
-                jObj.stop;
-                pause(1)
-            end
-            delete(c)
+            b.dC = b.startCurvefitTool(0, b.dC);
+        end
+        function startCCCVFitTool(b, ~, ~)
+            b.cC = b.startCurvefitTool(2, b.cC);
         end
         function startACFitTool(b, ~, ~)
-            import lfpBattery.*
-            dtool = digitizeTool;
-            dtool.externalControl = true;
-            dtool.sendbutton.setText('Save data')
-            dtool.varname.setText([])
-            dtool.varname.setEnabled(0)
-            dtool.list.setSelectedIndex(1)
-            dtool.list.setEnabled(0)
-            h = handle(dtool.sendbutton, 'CallbackProperties');
-            h.ActionPerformedCallback = 'uiresume';
-            dtool.mainframe.CloseRequestFcn = 'uiresume; closereq';
-            % block current figure
-            [c, jObj] = b.pauseGUI('Running curve fit tool...');
-            uiwait
-            try
-                commons.validateInterface(fit, 'lfpBattery.curvefitCollection')
-                b.wF = d.fit;
-                jObj.setBusyText('Success!');
-                jObj.stop;
-                pause(1)
-            catch ME
-                warning(ME.message)
-                jObj.setBusyText('Failed!');
-                jObj.stop;
-                pause(1)
-            end
-            delete(c)
+            b.wF = b.startCurvefitTool(1, b.wF);
+        end
+        function fit = startCurvefitTool(b, index, currFit)
+           %0: discharge curves
+           %1: woehler curve
+           %2: cccv curve
+           import lfpBattery.*
+           dtool = digitizeTool;
+           dtool.externalControl = true;
+           dtool.sendbutton.setText('Save data')
+           dtool.varname.setText([])
+           dtool.varname.setEnabled(0)
+           dtool.list.setSelectedIndex(index)
+           dtool.list.setEnabled(0)
+           dtool.mainframe.CloseRequestFcn = 'uiresume; closereq';
+           % block current figure
+           [c, jObj] = b.pauseGUI('Running curve fit tool...');
+           uiwait
+           try
+               fit = dtool.fit;
+               if isempty(fit)
+                   error('Cancelled.')
+               end
+               jObj.setBusyText('Success!');
+               jObj.stop;
+               pause(1)
+           catch ME
+               if ~strcmp(ME.message, 'Cancelled.')
+                   warning(ME.message)
+                   jObj.setBusyText('Failed!')
+               else
+                   jObj.setBusyText('Cancelled.')
+               end
+               fit = currFit;
+               jObj.stop;
+               pause(1)
+           end
+           delete(c)
         end
         function [c, jObj] = pauseGUI(b, str)
             iconsClassName = 'com.mathworks.widgets.BusyAffordance$AffordanceSize';
