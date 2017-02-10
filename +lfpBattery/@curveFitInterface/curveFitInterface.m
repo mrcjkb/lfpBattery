@@ -127,8 +127,8 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
         end
         % Override of subsref (indexing) function
         function v = subsref(d, S)
-            if strcmp(S.type, '()')
-                v = d.fiteval(S.subs{1});
+            if strcmp(S(1).type, '()')
+                v = d.fiteval(S(1).subs{1});
             elseif nargout == 1
                 v = builtin('subsref', d, S);
             else

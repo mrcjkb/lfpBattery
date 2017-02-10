@@ -36,6 +36,9 @@ classdef cccvFit < lfpBattery.curveFitInterface
         soc0; % state of charge at the beginning of the CV phase.
         iMax0; % Maximum current in A during the CC phase.
     end
+    properties (Hidden, GetAccess = 'protected', SetAccess = 'immutable')
+        socMax = 1; % maximum state of charge at the end of the CV phase.
+    end
     properties (Dependent)
        x; % parameters for fit function (not used by this subclass)
     end
@@ -73,6 +76,35 @@ classdef cccvFit < lfpBattery.curveFitInterface
             c.iMax0 = iMax(1);
             c.soc0 = soc(1);
             c.px = param;
+        end
+        function plotResults(c, newfig, varargin)
+            %PLOTRESULTS: Compares a scatter of the raw data with the fit
+            %into the current figure window.
+            %PLOTRESULTS(true) plots figure into a new figure window
+            %PLOTRESULTS(newfig, 'OptionName', 'OptionValue') plots results
+            %with additional options. Setting newfig to true plots results
+            %in a new figure.
+            %
+            %Options:
+            %   noRawData (logical) - don't scatter raw data (default: false)
+            %   noFitData (logical) - don't scatter fit data (default: false)
+            if nargin < 2
+                newfig = false;
+            end
+            % Limit input options of plotResults
+            p = inputParser;
+            addOptional(p, 'noRawData', false, @islogical)
+            addOptional(p, 'noFitData', false, @islogical)
+            parse(p, varargin{:})
+            c.plotResults@lfpBattery.curveFitInterface('newfig', newfig, varargin{:})
+            if ~p.Results.noFitData
+                hold on
+                soc = linspace(c.soc0, c.socMax, 1000)';
+                plot(soc, c.func(soc), 'Color', lfpBattery.const.green, ...
+                    'LineWidth', 2)
+            end
+            xlabel('SoC')
+            ylabel('Maximum current / A')
         end
         function set.x(c, ~)
             c.propNonSettable('x')
