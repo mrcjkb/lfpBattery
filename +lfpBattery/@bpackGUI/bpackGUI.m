@@ -17,6 +17,7 @@ classdef bpackGUI < handle
         Zi = cell(4, 1); % mean, std, min, max
         dC = 'none'; % discharge curve
         wF = 'none'; % woehler fit
+        cC = 'none'; % cccv curve
         wfButton = cell(2, 1);
         varname;
     end
@@ -44,6 +45,13 @@ classdef bpackGUI < handle
                 'BackgroundColor', [1 1 1]);
             % TU logo
             str = commons.getHtmlImage('tulogo.png', 'height', '46', 'width', '90');
+            jl = JLabel; jl.setText(str)
+            jl.setVerticalAlignment(1)
+            jl.setOpaque(true);
+            jl.setBackground(Color.white);
+            javacomponent(jl, [], logo);
+            % EET logo
+            str = commons.getHtmlImage('EETlogo.png', 'height', '46', 'width', '90');
             jl = JLabel; jl.setText(str)
             jl.setVerticalAlignment(1)
             jl.setOpaque(true);
