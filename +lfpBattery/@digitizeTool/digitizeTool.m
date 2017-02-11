@@ -57,18 +57,35 @@ classdef digitizeTool < handle
                 'FontSize', 14, 'Tag', 'axes1', 'Color', [1 1 1], 'XTick', [], 'YTick', []);
             obj.axes1.Position = [0.034 0.057 0.717 0.902];
             obj.axes1.OuterPosition = [-0.074 -0.041 0.904 1.065];
-            %             obj.axes1.CreateFcn = @(obj.selectbutton,eventdata)ICdigitizer('axes1_CreateFcn',obj.selectbutton,eventdata,guidata(obj.selectbutton));
-            % hInfo text box
             uifc1 = uiflowcontainer('v0', 'Units', 'norm', 'Position', [0.7940    0.057    0.1708    0.902], 'parent', obj.mainframe, ...
-                'FlowDirection', 'BottomUp', 'BackgroundColor', [1 1 1]);
-            
-            uifc = uiflowcontainer('v0', 'parent', uifc1, ...
-                'FlowDirection', 'BottomUp', 'BackgroundColor', [1 1 1]);
+                'FlowDirection', 'TopDown', 'BackgroundColor', [1 1 1]);
+            %% title
+            title = uiflowcontainer('v0', 'parent', uifc1, 'FlowDirection', 'LeftToRight', ...
+                'BackgroundColor', [1 1 1]);
+            % TU logo
+            str = commons.getHtmlImage('tulogo.png', 'height', '46', 'width', '90');
+            jl = JLabel; jl.setText(str)
+            jl.setVerticalAlignment(1)
+            jl.setOpaque(true);
+            jl.setBackground(Color.white);
+            javacomponent(jl, [], title);
+            % EET logo
+            str = commons.getHtmlImage('EETlogo.png', 'height', '46', 'width', '90');
+            jl = JLabel; jl.setText(str)
+            jl.setVerticalAlignment(1)
+            jl.setOpaque(true);
+            jl.setBackground(Color.white);
+            javacomponent(jl, [], title);
+            %% hInfo text box
             obj.hInfo = JLabel;
             obj.hInfo.setText('<html>INFO<br><br>Select curve fit type and choose file...</html>");')
             obj.hInfo.setVerticalAlignment(1)
             obj.hInfo.setFont(fnt);
             javacomponent(obj.hInfo,[], uifc1);
+            title.HeightLimits = [10, 60];
+            %% Controls
+            uifc = uiflowcontainer('v0', 'parent', uifc1, ...
+                'FlowDirection', 'BottomUp', 'BackgroundColor', [1 1 1]);
             % list
             obj.list = JList({'discharge curves', 'cycle life curve', 'CCCV curve'});
             obj.list.setFont(fnt);
