@@ -264,7 +264,11 @@ classdef bpackGUI < handle
             %% cccv curve fits
             jl = JLabel; jl.setText('CCCV curve fits:')
             jl.setHorizontalAlignment(0)
-            
+            str = [commons.getHtmlImage('cccv_qualitative.png'), ...
+                        'A CCCV curve contains 3 curves over the charging time: The current, the voltage and the SoC.<br>', ...
+                        'The current and SoC curves are required for the CCCV curve fit in order to generate a function<br>', ...
+                        'Imax = f(SoC)'];
+            jl.setToolTipText(str)
             javacomponent(jl, [], hc);
             u = uiflowcontainer('v0', 'parent', hc, 'FlowDirection', 'LeftToRight');
             jb = JButton('Load demo data');
