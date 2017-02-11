@@ -43,7 +43,7 @@ classdef commons
             % Use this function just like the builtin ZEROS function, but
             % place a variable that is a gpuArray if run on a CUDA-enabled
             % GPU as the first argument.
-            % 
+            %
             % Syntax: x = ZEROS(chk);
             %         x = ZEROS(chk, n);
             %         x = ZEROS(chk, sz1,...,szN);
@@ -69,7 +69,7 @@ classdef commons
             % Use this function just like the builtin ONES function, but
             % place a variable that is a gpuArray if run on a CUDA-enabled
             % GPU as the first argument.
-            % 
+            %
             % Syntax: x = ONES(chk);
             %         x = ONES(chk, n);
             %         x = ONES(chk, sz1,...,szN);
@@ -95,7 +95,7 @@ classdef commons
             % Use this function just like the builtin NAN function, but
             % place a variable that is a gpuArray if run on a CUDA-enabled
             % GPU as the first argument.
-            % 
+            %
             % Syntax: x = NAN(chk);
             %         x = NAN(chk, n);
             %         x = NAN(chk, sz1,...,szN);
@@ -121,7 +121,7 @@ classdef commons
             % Use this function just like the builtin RAND function, but
             % place a variable that is a gpuArray if run on a CUDA-enabled
             % GPU as the first argument.
-            % 
+            %
             % Syntax: x = RAND(chk);
             %         x = RAND(chk, n);
             %         x = RAND(chk, sz1,...,szN);
@@ -445,6 +445,176 @@ classdef commons
             jb.setContentAreaFilled(false)
             jb.setForeground(Color.WHITE);
             jb.setBorderPainted(false);
+        end
+        function [pathname, filename] = uigetimage(title, defPath)
+            %UIGETIMAGE: Open file dialog box with preview for bitmap images.
+            %
+            %Syntax:
+            %   fullpath = UIGETIMAGE(title);
+            %   fullpath = UIGETIMAGE(title, defPath);
+            %   [pathname, filename] = UIGETIMAGE(title);
+            %   [pathname, filename] = UIGETIMAGE(title, defPath);
+            %
+            %Input arguments (optional):
+            %
+            %   title       - string containing the title of the dialog box.
+            %                 (default: 'Select file')
+            %   defPath     - string containing the default folder
+            %                 (default: pwd)
+            %
+            %Output arguments:
+            %
+            %   fullpath    - string containing the name and the path of the
+            %                 file selected. If the user presses Cancel, it is
+            %                 set to 0.
+            %   pathname    - string containing the path of the file selected
+            %                 in the dialog box.  If the user presses Cancel,
+            %                 it is set to 0.
+            %   filename    - string containing the name of the file selected
+            %                 in the dialog box. If the user presses Cancel,
+            %                 it is set to 0.
+            %
+            %SEE ALSO: uigetfile
+            %
+            %Author: Marc Jakobi, February 2017
+            %This function uses modified code from Yair Altman's uigetfile_with_preview
+            %https://de.mathworks.com/matlabcentral/fileexchange/60074-uigetfile-with-preview-gui-dialog-window-with-a-preview-panel
+            import javax.swing.* com.mathworks.mwswing.*
+            if nargin < 1
+                title = 'Select file';
+            end
+            if nargin < 2
+                defPath = pwd;
+            end
+            % Prepare dialog box
+            d = dialog('Name', title, 'Visible', 'off');
+            % d.Units = 'normalized';
+            % d.Position = [0.3170    0.0938    0.3660    0.7813];
+            d.Position = [0, 0, 700, 650];
+            movegui(d, 'center')
+            d.Visible = 'on';
+            % Add JFileChooser object
+            jfc = JFileChooser;
+            hjfc = javacomponent(jfc, [0, 300, 700, 350], d);
+            hjfc.setCurrentDirectory(java.io.File(defPath));
+            drawnow;
+            % Add file types
+            filterSpec = {'All supported file types (*.jpg,*.tif,*.tiff,*.gif,*.png,*.bmp)', ...
+                {'jpg'; 'tif'; 'tiff'; 'gif'; 'png'; 'bmp'}; ...
+                'JPEG files (*.jpg,*.jpeg)', ...
+                {'jpg'; 'jpeg'}; ...
+                'TIFF filles (*.tif,*.tiff)', ...
+                {'tif'; 'tiff'}; ...
+                'GIF files (*.gif)', ...
+                {'gif'}; ...
+                'PNG files (*.png)', ...
+                {'png'}; ...
+                'Bitmap files (*.bmp)', ...
+                {'bmp'}};
+            hjfc.setAcceptAllFileFilterUsed(false);
+            for i = 1:size(filterSpec, 1)
+                ext = regexprep(filterSpec{i, 2} ,'^.*\*?\.','');
+                extFilter = FileExtensionFilter(filterSpec{i, 1}, ext, false, true);
+                javaMethodEDT('addChoosableFileFilter', hjfc, extFilter);
+            end
+            % Prepare the preview panel
+            hprev = uipanel('parent', d, 'title', 'Preview', 'units', 'pixel', ...
+                'Position', [10, 10, 680, 280]);
+            % % ax = axes('Parent', hprev, 'units', 'norm', 'LooseInset', [0 0 0 0]);
+            % ax.YTick = [];
+            % ax.XTick = [];
+            % ax.Box = 'off';
+            % Prepare the figure callbacks
+            hjfc.PropertyChangeCallback  = {@lfpBattery.commons.PreviewCallback, hprev};
+            hjfc.ActionPerformedCallback = {@lfpBattery.commons.ActionPerformedCallback, d};
+            % Key-typed callback
+            try
+                hFn = handle(hjfc.getComponent(2).getComponent(2).getComponent(2).getComponent(1), 'CallbackProperties');
+                hFn.KeyTypedCallback = {@KeyTypedCallback, hjfc};
+            catch
+                % maybe the file-chooser editbox changed location
+            end
+            uiwait(d);
+            % We get here if the figure is either deleted or Cancel/Open were pressed
+            if ishghandle(d)
+                % Open were clicked
+                pathname = getappdata(d, 'selectedFile');
+                close(d);
+                if nargout > 1
+                    [pathname, filename, ext] = fileparts(pathname);
+                    filename = [filename, ext];
+                end
+            else  % figure was deleted/closed
+                pathname = 0;
+                if nargout > 1
+                    filename = 0;
+                end
+            end
+        end  % uigetimage
+        
+        function PreviewCallback(hjfc, ~, hprev)
+            % Preview callback function for uigetimage
+            persistent nameCache;
+            persistent imCache;
+            persistent cIdx;
+            if isempty(nameCache)
+                nameCache = cell(100, 1);
+                imCache = nameCache;
+                cIdx = 0;
+            end
+            try
+                % Get the selected file
+                filename = char(hjfc.getSelectedFile);
+                if isempty(filename) || ~exist(filename,'file')
+                    return;  % bail out
+                end
+                hObjs = findall(hprev);
+                hObjs = setdiff(hObjs, findall(hprev, 'string', get(hprev,'title')));  % keep the title
+                hObjs = setdiff(hObjs, hprev);
+                delete(hObjs);
+                ax = axes('Parent', hprev, 'units', 'norm', 'LooseInset', [0 0 0 0]);
+                tf = ismember(nameCache(1:cIdx), filename);
+                if any(tf)
+                    im = imCache{tf};
+                else
+                    im = imread(filename);
+                    cIdx = cIdx + 1;
+                    if cIdx > 100
+                        cIdx = 1;
+                    end
+                    imCache{cIdx} = im;
+                    nameCache{cIdx} = filename;
+                end
+                imshow(im, 'Parent', ax, 'InitialMagnification', 'fit');
+            catch ME
+                warning(ME.message)
+                % Never mind - bail out...
+            end
+        end  % PreviewCallback
+        
+        function ActionPerformedCallback(hjfc, eventData, d)
+            % Callback for uigetimage
+            switch char(eventData.getActionCommand)
+                case 'CancelSelection'
+                    close(d);
+                case 'ApproveSelection'
+                    files = cellfun(@char, cell(hjfc.getSelectedFiles), 'uniform', 0);
+                    if isempty(files)
+                        files = char(hjfc.getSelectedFile);
+                    end
+                    setappdata(d,'selectedFile', files);
+                    uiresume(d);
+            end
+        end  % ActionPerformedCallback
+        
+        % Key-types callback in the file-name editbox
+        function KeyTypedCallback(hEditbox, ~, hjFileChooser)
+            text = char(get(hEditbox, 'Text'));
+            [wasFound, ~, ~, folder] = regexp(text,'(.*[:\\/])');
+            if wasFound
+                % This will silently fail if folder does not exist
+                hjFileChooser.setCurrentDirectory(java.io.File(folder));
+            end
         end
     end % methods
 end
