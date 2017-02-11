@@ -109,7 +109,7 @@ classdef simplePE < lfpBattery.simpleCircuitElement
             b@lfpBattery.simpleCircuitElement(obj); % superclass constructor
             b.El = obj;
             b.nEl = double(n);
-            b.findImax;
+            b.findImaxD;
             b.refreshNominals;
             b.hasCells = true;
         end
@@ -120,6 +120,21 @@ classdef simplePE < lfpBattery.simpleCircuitElement
         function [np, ns] = getTopology(b)
             [np, ns] = b.El.getTopology;
             np = b.nEl * np;
+        end
+        function charge(b, Q)
+            % Pass equal amount of discharge capacity to each element
+            % to account for self-balancing nature of parallel config
+            b.El.charge(1 / b.nEl * Q);
+        end
+        function c = dummyCharge(b, Q)
+            c = b.nEl * b.El.dummyCharge(Q / b.nEl);
+        end
+        function addElements(varargin)
+            error('addElements is not supported for simplePE objects. The element is passed in the constructor.')
+        end
+        function i = findImaxD(b)
+            i = b.nEl * b.El.findImaxD;
+            b.ImaxD = i;
         end
         %% Setters & getters
         function set.V(b, v)
@@ -138,21 +153,9 @@ classdef simplePE < lfpBattery.simpleCircuitElement
         function z = get.Zi(b)
             z = 1 / (b.nEl / b.El.Zi); % 1/z_total = sum_i(1/z_i)
         end
-        function addElements(varargin)
-            error('addElements is not supported for simplePE objects. The element is passed in the constructor.')
-        end
     end
     
     methods (Access = 'protected')
-        function i = findImax(b)
-            i = b.nEl * b.El.findImax;
-            b.Imax = i;
-        end
-        function charge(b, Q)
-            % Pass equal amount of discharge capacity to each element
-            % to account for self-balancing nature of parallel config
-            b.El.charge(1 / b.nEl * Q);
-        end
         function p = getZProportions(b)
             p = ones(b.nEl, 1) / b.nEl;
         end
@@ -162,9 +165,6 @@ classdef simplePE < lfpBattery.simpleCircuitElement
         end 
         function s = sohCalc(b)
             s = b.El.SoH;
-        end
-        function c = dummyCharge(b, Q)
-            c = b.nEl * b.El.dummyCharge(Q / b.nEl);
         end
         % gpuCompatible methods
         function setsubProp(obj, fn, val)

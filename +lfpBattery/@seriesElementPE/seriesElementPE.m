@@ -99,6 +99,9 @@ classdef seriesElementPE < lfpBattery.seriesElement
         function b = seriesElementPE(varargin)
             b@lfpBattery.seriesElement(varargin{:})
         end
+        function c = dummyCharge(b, Q)
+            c = min(dummyCharge@lfpBattery.seriesElement(b, Q));
+        end
         function v = get.V(b)
             v = sum([b.El.V]);
         end
@@ -129,9 +132,6 @@ classdef seriesElementPE < lfpBattery.seriesElement
         end 
         function s = sohCalc(b)
             s = min([b.El.SoH]); 
-        end
-        function c = dummyCharge(b, Q)
-            c = min(dummyCharge@lfpBattery.seriesElement(b, Q));
         end
     end
 end

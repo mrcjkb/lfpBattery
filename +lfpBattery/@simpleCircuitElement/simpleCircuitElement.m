@@ -23,7 +23,7 @@ classdef (Abstract) simpleCircuitElement < lfpBattery.batCircuitElement
         end
         function addcurves(b, d, type)
             b.El.addcurves(d, type)
-            b.findImax
+            b.findImaxD
         end
     end
 end

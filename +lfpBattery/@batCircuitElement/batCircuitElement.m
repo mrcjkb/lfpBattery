@@ -13,29 +13,28 @@ classdef (Abstract) batCircuitElement < lfpBattery.batteryInterface
         function addcurves(b, d, type)
             % pass on to all elements
             arrayfun(@(x) addcurves(x, d, type), b.El)
-            b.findImax;
-        end
-    end
-    
-    methods (Access = 'protected')
-        function i = findImax(b)
-            i = arrayfun(@(x) findImax(x), b.El);
+            b.findImaxD;
         end
         function charge(b, Q)
             for i = uint32(1):b.nEl
                 b.El(i).charge(Q)
             end
-            % Old version
-%             arrayfun(@(x) charge(x, Q), b.El)
         end
         function c = dummyCharge(b, Q)
             c = zeros(b.nEl, 1);
             for i = uint32(1):b.nEl
                 c(i) = b.El(i).dummyCharge(Q);
             end
-            % Old version (Slower on CPU):
-%             c = arrayfun(@(x) dummyCharge(x, Q), b.El);
         end
+        function i = findImaxD(b)
+            i = zeros(b.nEl, 1);
+            for ind = 1:b.nEl
+                i(ind) = b.El.findImaxD;
+            end
+        end
+    end
+    
+%     methods (Access = 'protected')
         % gpuCompatible methods
         % These methods are currently unsupported and may be removed in a
         % future version.
@@ -47,7 +46,7 @@ classdef (Abstract) batCircuitElement < lfpBattery.batteryInterface
             val = obj.(fn);
         end
         %}
-    end
+%     end
     
     methods (Abstract, Access = 'protected')
         p = getZProportions(b); % get proportions of impedances

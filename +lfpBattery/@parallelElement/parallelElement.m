@@ -142,13 +142,6 @@ classdef parallelElement < lfpBattery.batCircuitElement
             np = max(b.nEl * np);
             ns = max(ns);
         end
-    end
-    
-    methods (Access = 'protected')
-        function i = findImax(b)
-            i = sum(findImax@lfpBattery.batCircuitElement(b));
-            b.Imax = i;
-        end
         function charge(b, Q)
             % Simulate self-balancing nature of parallel config
             q = b.getZProportions * Q; % Spread charge according to internal impedances
@@ -170,6 +163,16 @@ classdef parallelElement < lfpBattery.batCircuitElement
                 charge@lfpBattery.batCircuitElement(b, Q * b.rnEl)
             end
         end
+        function c = dummyCharge(b, Q)
+            c = sum(dummyCharge@lfpBattery.batCircuitElement(b, 1 * b.rnEl * Q));
+        end
+        function i = findImaxD(b)
+            i = sum(findImaxD@lfpBattery.batCircuitElement(b));
+            b.ImaxD = i;
+        end
+    end
+    
+    methods (Access = 'protected')
         function chargeLoop(b, qv)
             % Loop over each element and charge with a vector of charges
             for i = 1:b.nEl
@@ -191,9 +194,6 @@ classdef parallelElement < lfpBattery.batCircuitElement
         end 
         function s = sohCalc(b)
             s =  sum([b.El.SoH]) / double(b.nEl);
-        end
-        function c = dummyCharge(b, Q)
-            c = sum(dummyCharge@lfpBattery.batCircuitElement(b, 1 * b.rnEl * Q));
         end
     end
     

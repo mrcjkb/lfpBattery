@@ -44,13 +44,13 @@ classdef (Abstract) seriesElement < lfpBattery.batCircuitElement
             ns = max(b.nEl * ns);
             np = max(np);
         end
+        function i = findImaxD(b)
+            i = min(findImaxD@lfpBattery.batCircuitElement(b));
+            b.ImaxD = i;
+        end
     end
     
     methods (Access = 'protected')
-        function i = findImax(b)
-            i = min(findImax@lfpBattery.batCircuitElement(b));
-            b.Imax = i;
-        end
         function p = getZProportions(b)
             % lowest impedance --> lowest voltage
             if isempty(b.ecache{2})

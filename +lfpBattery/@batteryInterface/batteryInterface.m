@@ -84,7 +84,8 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
         socMin;
     end
     properties (SetAccess = 'protected')
-        Imax = 0; % maximum current in A (determined from cell discharge curves)
+        ImaxD = 0; % maximum discharging current in A (determined from cell discharge curves)
+        ImaxC = 0; % maximum charging current in A (determined from cell CCCV curves)
         Cn; % Nominal (or average) capacity in Ah
         % Nominal (or average) voltage in V
         % Efficiency when charging [0,..,1].
@@ -102,6 +103,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
         psd;
     end
     properties (Access = 'protected', Hidden)
+        Imax; % Maximum current (dependent on charging or discharging)
         % Internal state of health.
         % If the age model is connected directly to the object, SoH points
         % to the internal soh. Otherwise, the SoH is calculated according to
@@ -366,7 +368,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             if b.socChk
                 I = I * eta;
                 I0 = I; % save initial request
-                I = lfpBattery.commons.upperlowerlim(I, -b.Imax, b.Imax); % limit to max current
+                I = lfpBattery.commons.upperlowerlim(I, -b.ImaxD, b.ImaxC); % limit to max current
                 b.lastIr = I;
                 I = b.iterateCurrent(I, dt);
                 if sign(I) ~= sign(I0)
@@ -500,7 +502,8 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
                     b.addElement(el(j))
                 end
             end
-            b.findImax;
+            b.findImaxD;
+            b.findImaxC;
             b.refreshNominals;
         end
         function it = createIterator(b, el)
@@ -812,17 +815,21 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
         % numbers of cells. For each sub-element, the maximum number of
         % cells is returned.
         [np, ns] = getTopology(b);
+        charge(b, Q); % For dis/charging a certain capacity Q in Ah
+        c = dummyCharge(b, Q); % returns the new capacity after charge/discharge without altering the object's properties
+        % determins the maximum discharging current according to the discharge curves and the topology
+        % 
+        % Syntax: i = b.findImaxD;
+        i = findImaxD(b);
+        % determins the maximum charging current according to the cccv curve and the topology
+        % 
+        % Syntax: i = b.findImaxC;
+        i = findImaxC(b);
     end % abstract methods
     
     methods (Abstract, Access = 'protected')
-        % determins the maximum current according to the discharge curves and/or the topology
-        % 
-        % Syntax: i = b.findImax;
-        i = findImax(b);
-        charge(b, Q); % For dis/charging a certain capacity Q in Ah
         refreshNominals(b); % Refresh nominal voltage and capacity (called whenever a new element is added)
         s = sohCalc(b); % Determines the SoH
-        c = dummyCharge(b, Q); % returns the new capacity after charge/discharge without altering the object's properties
     end
 end 
 

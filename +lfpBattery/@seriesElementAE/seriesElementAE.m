@@ -98,6 +98,9 @@ classdef seriesElementAE < lfpBattery.seriesElement
         function b = seriesElementAE(varargin)
             b@lfpBattery.seriesElement(varargin{:})
         end
+        function c = dummyCharge(b, Q)
+            c = sum(dummyCharge@lfpBattery.seriesElement(b, Q)) * b.rnEl;
+        end
         function v = get.V(b)
             v = sum([b.El.V]);
         end
@@ -120,9 +123,6 @@ classdef seriesElementAE < lfpBattery.seriesElement
         end 
         function s = sohCalc(b)
             s = sum([b.El.SoH]) * b.rnEl; 
-        end
-        function c = dummyCharge(b, Q)
-            c = sum(dummyCharge@lfpBattery.seriesElement(b, Q)) * b.rnEl;
         end
     end
     

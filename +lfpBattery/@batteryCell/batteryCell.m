@@ -162,6 +162,13 @@ classdef batteryCell < lfpBattery.batteryInterface
             end
             b.dC = dc;
         end
+        function charge(b, Q)
+            b.Cdi = b.Cdi - Q;
+            b.refreshSoC;
+        end
+        function c = dummyCharge(b, Q)
+            c = b.C + Q;
+        end
         %% Methods handled by strategy objects
         function addcurves(b, d, type)
             if nargin < 3
@@ -181,7 +188,17 @@ classdef batteryCell < lfpBattery.batteryInterface
             elseif strcmp(type, 'cycleLife')
                 b.ageModel.wFit = d; % MTODO: Implement tests for this
             end
-            b.findImax();
+            b.findImaxD();
+        end
+        function i = findImaxD(b)
+            if ~isempty(b.dC)
+                b.Imax = max(b.dC.z);
+            else
+                b.Imax = 0;
+            end
+            if nargout > 0
+                i = b.Imax;
+            end
         end
         %% Getters & setters
         function v = get.V(b)
@@ -205,25 +222,8 @@ classdef batteryCell < lfpBattery.batteryInterface
     end
     
     methods (Access = 'protected')
-        function i = findImax(b)
-            if ~isempty(b.dC)
-                b.Imax = max(b.dC.z);
-            else
-                b.Imax = 0;
-            end
-            if nargout > 0
-                i = b.Imax;
-            end
-        end
         function refreshNominals(b)   %#ok<MANU> Method not needed
             warning('refreshNominals() should not be called on a batteryCell.')
-        end
-        function charge(b, Q)
-            b.Cdi = b.Cdi - Q;
-            b.refreshSoC;
-        end
-        function c = dummyCharge(b, Q)
-            c = b.C + Q;
         end
         function s = sohCalc(b)
             % sohCalc always points to internal soh for batteryCell

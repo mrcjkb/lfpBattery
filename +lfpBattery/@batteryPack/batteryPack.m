@@ -559,7 +559,7 @@ classdef batteryPack < lfpBattery.batteryInterface
                 % curve and age model level is 'Pack'
                 b.pass2cells(@addcurves, d, type);
             end
-            b.findImax;
+            b.findImaxD;
         end
         function addElements(b, e)
             % ADDELEMENTS: Adds elements to the batteryPack. An element can
@@ -593,6 +593,16 @@ classdef batteryPack < lfpBattery.batteryInterface
         function [np, ns] = getTopology(b)
             [np, ns] = b.El.getTopology;
         end
+        function charge(b, Q)
+            b.El.charge(Q)
+        end
+        function c = dummyCharge(b, Q)
+            c = b.El.dummyCharge(Q);
+        end
+        function i = findImaxD(b)
+            i = b.El.findImaxD;
+            b.Imax = i;
+        end
         %% getters & setters
         function set.V(b, v)
             b.El.V = deal(v);
@@ -622,22 +632,12 @@ classdef batteryPack < lfpBattery.batteryInterface
             end
         end
         % Abstract methods passed on to El handle
-        function charge(b, Q)
-            b.El.charge(Q)
-        end
-        function c = dummyCharge(b, Q)
-            c = b.El.dummyCharge(Q);
-        end
         function refreshNominals(b)
             b.Vn = b.El.Vn;
             b.Cn = b.El.Cn;
         end
         function s = sohCalc(b)
             s = b.El.SoH;
-        end
-        function i = findImax(b)
-            i = b.El.findImax;
-            b.Imax = i;
         end
     end
     

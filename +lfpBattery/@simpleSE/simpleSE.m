@@ -113,7 +113,7 @@ classdef simpleSE < lfpBattery.simpleCircuitElement
             b@lfpBattery.simpleCircuitElement(obj); % superclass constructor
             b.El = obj;
             b.nEl = double(n);
-            b.findImax;
+            b.findImaxD;
             b.refreshNominals;
             b.hasCells = true;
         end
@@ -124,6 +124,20 @@ classdef simpleSE < lfpBattery.simpleCircuitElement
         function [np, ns] = getTopology(b)
             [np, ns] = b.El.getTopology;
             ns = b.nEl * ns;
+        end
+        function charge(b, Q)
+            % Pass equal amount of discharge capacity to each element
+            b.El.charge(1 / b.nEl * Q);
+        end
+        function c = dummyCharge(b, Q)
+            c = b.El.dummyCharge(Q);
+        end
+        function addElements(varargin)
+            error('addElements is not supported for simpleSE objects. The element is passed in the constructor.')
+        end
+        function i = findImaxD(b)
+            i = b.El.findImaxD;
+            b.ImaxD = i;
         end
         %% Getters & setters
         function v = get.V(b)
@@ -142,25 +156,11 @@ classdef simpleSE < lfpBattery.simpleCircuitElement
         function c = get.C(b)
             c = b.El.C;
         end
-        function addElements(varargin)
-            error('addElements is not supported for simpleSE objects. The element is passed in the constructor.')
-        end
     end
     
     methods (Access = 'protected')
-        function i = findImax(b)
-            i = b.El.findImax;
-            b.Imax = i;
-        end
-        function charge(b, Q)
-            % Pass equal amount of discharge capacity to each element
-            b.El.charge(1 / b.nEl * Q);
-        end
         function p = getZProportions(b)
             p = ones(b.nEl, 1) / b.nEl;
-        end
-        function c = dummyCharge(b, Q)
-            c = b.El.dummyCharge(Q);
         end
         function s = sohCalc(b)
             s = b.El.SoH;
