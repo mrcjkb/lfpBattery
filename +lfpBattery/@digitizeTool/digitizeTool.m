@@ -47,7 +47,8 @@ classdef digitizeTool < handle
                 'IntegerHandle', 'off',...
                 'Units', 'normalized',...
                 'OuterPosition', [0.0490    0.0972    0.9260    0.8389],...
-                'MenuBar','none', 'WindowStyle', 'normal');
+                'MenuBar','none', 'WindowStyle', 'normal');%, ...
+%                 'Color', [1 1 1 1]);
             obj.mainframe.CloseRequestFcn = @obj.deleteObj;
             fnt = Font('Helvetica', Font.PLAIN, 13);
             %% Create UI data and axes
@@ -58,13 +59,16 @@ classdef digitizeTool < handle
             obj.axes1.OuterPosition = [-0.074 -0.041 0.904 1.065];
             %             obj.axes1.CreateFcn = @(obj.selectbutton,eventdata)ICdigitizer('axes1_CreateFcn',obj.selectbutton,eventdata,guidata(obj.selectbutton));
             % hInfo text box
+            uifc1 = uiflowcontainer('v0', 'Units', 'norm', 'Position', [0.7940    0.057    0.1708    0.902], 'parent', obj.mainframe, ...
+                'FlowDirection', 'BottomUp', 'BackgroundColor', [1 1 1]);
+            
+            uifc = uiflowcontainer('v0', 'parent', uifc1, ...
+                'FlowDirection', 'BottomUp', 'BackgroundColor', [1 1 1]);
             obj.hInfo = JLabel;
             obj.hInfo.setText('<html>INFO<br><br>Select curve fit type and choose file...</html>");')
             obj.hInfo.setVerticalAlignment(1)
             obj.hInfo.setFont(fnt);
-            [~, container] = javacomponent(obj.hInfo);
-            container.Units = 'normalized';
-            container.Position = [0.7940    0.075    0.1708    0.5];
+            javacomponent(obj.hInfo,[], uifc1);
             % list
             obj.list = JList({'discharge curves', 'cycle life curve', 'CCCV curve'});
             obj.list.setFont(fnt);
@@ -86,28 +90,25 @@ classdef digitizeTool < handle
                 'Imax = f(SoC)'])
             h = handle(obj.list, 'CallbackProperties');
             h.ValueChangedCallback = @obj.setState;
-            [~, container] = javacomponent(obj.list);
-            container.Units = 'normalized';
-            container.Position = [0.7940    0.7    0.1708    0.0684];
+            javacomponent(obj.list, [], uifc);
             % reset button
             obj.resetbutton = JButton;
             obj.resetbutton.setText('Reset');
             obj.resetbutton.setFont(fnt);
             obj.resetbutton.setToolTipText('Clears all data and resets this tool.')
-            [~, container] = javacomponent(obj.resetbutton);
-            container.Units = 'normalized';
-            container.Position = [0.7940    0.7846    0.1708    0.0484];
+            javacomponent(obj.resetbutton, [], uifc);
             rsb = handle(obj.resetbutton, 'CallbackProperties');
             set(rsb, 'ActionPerformedCallback', @obj.resetbutton_Callback)
+            % container for send button and variable name
+            toWsp = uiflowcontainer('v0', 'parent', uifc, 'FlowDirection', 'LeftToRight', ...
+                'BackgroundColor', [1 1 1]);
             % send button
             obj.sendbutton = JButton;
             obj.sendbutton.setText('To workspace');
             obj.sendbutton.setEnabled(false);
             obj.sendbutton.setFont(fnt);
             obj.sendbutton.setToolTipText('Send the curve fit and raw data to the workspace.')
-            [~, container] = javacomponent(obj.sendbutton);
-            container.Units = 'normalized';
-            container.Position = [0.7940    0.8423    0.085    0.0484];
+            javacomponent(obj.sendbutton, [], toWsp);
             rsb = handle(obj.sendbutton, 'CallbackProperties');
             set(rsb, 'ActionPerformedCallback', @obj.sendbutton_Callback)
             % variable name
@@ -115,17 +116,13 @@ classdef digitizeTool < handle
             obj.varname.setFont(fnt);
             obj.varname.setText('varName')
             obj.varname.setToolTipText('The variable name of the struct that is sent to the workspace.')
-            [~, container] = javacomponent(obj.varname);
-            container.Units = 'normalized';
-            container.Position = [0.88    0.8423    0.0854    0.0484];
+            javacomponent(obj.varname, [], toWsp);
             % select button
             obj.selectbutton = JButton;
             obj.selectbutton.setText('Choose image...');
             obj.selectbutton.setFont(fnt);
             obj.selectbutton.setToolTipText('Choose an image (e. g. a screenshot of a curve a data sheet). Clicking here starts the digitizing walkthrough once an image is selected.')
-            [~, container] = javacomponent(obj.selectbutton);
-            container.Units = 'normalized';
-            container.Position = [0.7940    0.9    0.1708    0.0484];
+            javacomponent(obj.selectbutton, [], uifc);
             rsb = handle(obj.selectbutton, 'CallbackProperties');
             set(rsb, 'ActionPerformedCallback', @obj.selectbutton_Callback)
             % save gui data in figure
