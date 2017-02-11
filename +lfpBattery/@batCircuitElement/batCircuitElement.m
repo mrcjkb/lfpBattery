@@ -14,6 +14,7 @@ classdef (Abstract) batCircuitElement < lfpBattery.batteryInterface
             % pass on to all elements
             arrayfun(@(x) addcurves(x, d, type), b.El)
             b.findImaxD;
+            b.findImaxC;
         end
         function charge(b, Q)
             for i = uint32(1):b.nEl
@@ -30,6 +31,12 @@ classdef (Abstract) batCircuitElement < lfpBattery.batteryInterface
             i = zeros(b.nEl, 1);
             for ind = 1:b.nEl
                 i(ind) = b.El.findImaxD;
+            end
+        end
+        function i = findImaxC(b)
+            i = zeros(b.nEl, 1);
+            for ind = 1:b.nEl
+                i(ind) = b.El.findImaxC;
             end
         end
     end

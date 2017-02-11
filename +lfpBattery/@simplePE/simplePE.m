@@ -136,6 +136,10 @@ classdef simplePE < lfpBattery.simpleCircuitElement
             i = b.nEl * b.El.findImaxD;
             b.ImaxD = i;
         end
+        function i = findImaxC(b)
+            i = b.nEl * b.El.findImaxC;
+            b.ImaxC = i;
+        end
         %% Setters & getters
         function set.V(b, v)
             % Pass v down

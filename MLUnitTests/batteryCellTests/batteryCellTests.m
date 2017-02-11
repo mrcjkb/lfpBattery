@@ -14,7 +14,7 @@ dt = 60;
 b.powerRequest(-10, dt);
 assert(abs(b.SoC - 0.2) < 1e-10, 'Unexpected lower SoC limitation.')
 [~, ~, I] = b.powerRequest(500, dt);
-assert(abs(I - b.Imax) <= b.pTol, 'Unexpected current limitation.')
+assert(abs(I - b.ImaxC) <= b.iTol, 'Unexpected current limitation.')
 for i = 1:100
     b.powerRequest(60, dt);
 end

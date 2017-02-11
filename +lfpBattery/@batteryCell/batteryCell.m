@@ -77,6 +77,7 @@ classdef batteryCell < lfpBattery.batteryInterface
     
     properties (Access = 'protected');
         dC; % curvefitCollection (dischargeCurves object)
+        cC; % cccvFit (constant current, constant voltage curve fit)
         Vi; % for storing dependent V property
         zi; % for storing dependent Zi property
     end
@@ -185,19 +186,35 @@ classdef batteryCell < lfpBattery.batteryInterface
                 else % add d if dC exists already
                     b.dC.add(d)
                 end
+                b.findImaxD;
             elseif strcmp(type, 'cycleLife')
                 b.ageModel.wFit = d; % MTODO: Implement tests for this
+            elseif strcmp(type, 'charge')
+                b.cC = d;
+                b.findImaxC;
             end
-            b.findImaxD();
         end
         function i = findImaxD(b)
             if ~isempty(b.dC)
-                b.Imax = max(b.dC.z);
+                b.ImaxD = max(b.dC.z);
             else
-                b.Imax = 0;
+                b.ImaxD = 0;
             end
             if nargout > 0
-                i = b.Imax;
+                i = b.ImaxD;
+            end
+        end
+        function i = findImaxC(b)
+            if ~isempty(b.cC)
+                % get ImaxC from charge curve according to SoC of cell
+                b.ImaxC = b.cC(b.SoC);
+            else
+                % If no charge curve is used, limit according to discharge
+                % curves
+                b.ImaxC = b.findImaxD;
+            end
+            if nargout > 0
+                i = b.ImaxC;
             end
         end
         %% Getters & setters

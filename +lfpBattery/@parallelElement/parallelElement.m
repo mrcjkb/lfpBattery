@@ -170,6 +170,10 @@ classdef parallelElement < lfpBattery.batCircuitElement
             i = sum(findImaxD@lfpBattery.batCircuitElement(b));
             b.ImaxD = i;
         end
+        function i = findImaxC(b)
+            i = sum(findImaxC@lfpBattery.batCircuitElement(b));
+            b.ImaxC = i;
+        end
     end
     
     methods (Access = 'protected')

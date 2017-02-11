@@ -560,6 +560,7 @@ classdef batteryPack < lfpBattery.batteryInterface
                 b.pass2cells(@addcurves, d, type);
             end
             b.findImaxD;
+            b.findImaxC;
         end
         function addElements(b, e)
             % ADDELEMENTS: Adds elements to the batteryPack. An element can
@@ -601,7 +602,11 @@ classdef batteryPack < lfpBattery.batteryInterface
         end
         function i = findImaxD(b)
             i = b.El.findImaxD;
-            b.Imax = i;
+            b.ImaxD = i;
+        end
+        function i = findImaxC(b)
+            i = b.El.findImaxC;
+            b.ImaxC = i;
         end
         %% getters & setters
         function set.V(b, v)
