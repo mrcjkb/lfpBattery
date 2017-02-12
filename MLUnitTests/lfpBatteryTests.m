@@ -9,6 +9,7 @@ function lfpBatteryTests(test)
 %'batteryCell'
 %'circuitElement'
 %'simpleCircuit'
+%'cccv'
 
 %% Parse inputs
 thandles = {@cycleCounterTests, @ageModelTests, @dischargeFitTests, @curvefitCollectionTests, ...
