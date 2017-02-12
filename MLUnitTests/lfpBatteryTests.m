@@ -12,7 +12,7 @@ function lfpBatteryTests(test)
 
 %% Parse inputs
 thandles = {@cycleCounterTests, @ageModelTests, @dischargeFitTests, @curvefitCollectionTests, ...
-    @batteryCellTests, @circuitElementTests, @simpleCircuitTests};
+    @batteryCellTests, @circuitElementTests, @simpleCircuitTests, @cccvTests};
 TTF = true(numel(thandles), 1);
 if nargin > 0
     TTF = ~TTF;
@@ -31,6 +31,8 @@ if nargin > 0
             TTF(6) = true;
         case 'simpleCircuit'
             TTF(7) = true;
+        case 'cccv'
+            TTF(8) = true;
         otherwise
             error([test, 'is not a valid input argument.'])
     end
