@@ -1,12 +1,13 @@
-function [ output_args ] = simpleCircuitTests( input_args )
+function simpleCircuitTests
 %SIMPLECIRCUITTESTS For testing the simple circuit implementation (assuming
 %perfect congruence between cells)
 
 import lfpBattery.*
 load(fullfile(pwd, 'MLUnitTests', 'batteryCellTests', 'dcCurves.mat'))
+load(fullfile(pwd, 'Resources', 'cccvfit.mat'))
 
 %%
-b = initBatteries(d);
+b = initBatteries(d, c);
 b = b(1);
 ps = simplePE(simpleSE(b, 3), 3); % parallel strings of cells
 

@@ -21,6 +21,7 @@ for i = 1:3
 end
 d.interp(1, 1500); % error handling should work now
 d.remove(raw(i).I);
+% Note: Error handling was removed for performance increase
 % try
 %     chk = 'error handling failure';
 %     d.interp(0.9, 1500);

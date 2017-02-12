@@ -1,4 +1,4 @@
-function [b] = initBatteries(d, c);
+function [b] = initBatteries(d, c)
 % d = dischargeCurves object
 import lfpBattery.*
 for i = 1:3

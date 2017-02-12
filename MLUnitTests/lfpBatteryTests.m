@@ -24,7 +24,7 @@ if nargin > 0
             TTF(2) = true;
         case 'dischargeFit'
             TTF(3) = true;
-        case 'curvefitCollections'
+        case 'curvefitCollection'
             TTF(4) = true;
         case 'batteryCell'
             TTF(5) = true;

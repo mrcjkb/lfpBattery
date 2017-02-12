@@ -130,9 +130,9 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
             if strcmp(S(1).type, '()')
                 v = d.fiteval(S(1).subs{1});
             elseif nargout == 1
-                v = builtin('subsref', d, S(1));
+                v = builtin('subsref', d, S);
             else
-                builtin('subsref', d, S(1));
+                builtin('subsref', d, S);
             end
         end % subsref overload
         function plotResults(d, varargin)
@@ -173,7 +173,9 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
                     'LineWidth', 2)
             end
             if newfig
-                legend('raw data', 'fit', 'Location', 'Best')
+                if ~nrd && ~nfd
+                    legend('raw data', 'fit', 'Location', 'Best')
+                end
                 title(['rmse = ', num2str(d.rmse)])
                 grid on
             end
@@ -231,12 +233,13 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
             if d.fmin == 1 % fminsearch
                 fun = @(x) d.sseval(x, d.f(x, d.rawX(1:end-1)), d.rawY(1:end-1));
                 d.px = fminsearch(fun, d.px, d.fmsoptions);
-            elseif d.fmin == 2 % lsqcurvefit
+            else
+                % lsqcurvefit
                 d.px = lsqcurvefit(d.f, d.px, d.rawX(1:end-1), d.rawY(1:end-1), [], [], d.lsqoptions);
-            else % both (lsq, then fmin)
-                d.px = lsqcurvefit(d.f, d.px, d.rawX(1:end-1), d.rawY(1:end-1), [], [], d.lsqoptions);
-                fun = @(x) d.sseval(x, d.f(x, d.rawX(1:end-1)), d.rawY(1:end-1));
-                d.px = fminsearch(fun, d.px, d.fmsoptions);
+            	if d.fmin == 3 %#ok<ALIGN> % both (lsq, then fmin)
+                    fun = @(x) d.sseval(x, d.f(x, d.rawX(1:end-1)), d.rawY(1:end-1));
+                    d.px = fminsearch(fun, d.px, d.fmsoptions);
+                end
             end
         end
         function v = fiteval(d, sub)

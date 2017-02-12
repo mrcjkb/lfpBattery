@@ -109,12 +109,13 @@ classdef simplePE < lfpBattery.simpleCircuitElement
             b.El = obj;
             b.nEl = double(n);
             b.findImaxD;
+            b.findImaxC;
             b.refreshNominals;
             b.hasCells = true;
         end
         function v = getNewVoltage(b, I, dt)
             % split I equally across elements
-            v = b.El.getNewVoltage(I / b.rnEl, dt);
+            v = b.El.getNewVoltage(I / b.nEl, dt);
         end
         function [np, ns] = getTopology(b)
             [np, ns] = b.El.getTopology;

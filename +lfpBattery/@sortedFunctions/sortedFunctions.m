@@ -65,6 +65,7 @@ classdef (Abstract) sortedFunctions < lfpBattery.composite %& lfpBattery.gpuComp
                 if numel(c.z) < c.minFuns % set error handler to return error
                     c.errHandler = @lfpBattery.sortedFunctions.minfunErr;
                 end
+                c.nEl = c.nEl - 1;
             end
         end
         function it = createIterator(c)

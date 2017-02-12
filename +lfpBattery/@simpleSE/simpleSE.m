@@ -113,6 +113,7 @@ classdef simpleSE < lfpBattery.simpleCircuitElement
             b.El = obj;
             b.nEl = double(n);
             b.findImaxD;
+            b.findImaxC;
             b.refreshNominals;
             b.hasCells = true;
         end
