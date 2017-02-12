@@ -117,6 +117,10 @@ classdef digitizeToolCCCV < lfpBattery.digitizeToolState
                 end
             end
         end % getXYpoint
+        function rotmatDef(obj)
+            delxyx = rotmatDef@lfpBattery.digitizeToolState(obj);
+            obj.delXcal = delxyx(2); % Extract data in y direction
+        end
         function deleteMarkers(obj, n)
             try delete(obj.aqmarker(n)); catch; end
             try delete(obj.aqmarker2(n)); catch; end

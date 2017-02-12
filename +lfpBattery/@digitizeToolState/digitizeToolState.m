@@ -179,13 +179,19 @@ classdef (Abstract) digitizeToolState < handle
             end
             obj.scalefactorYdata = obj.YAxisYdata - obj.OriginXYdata(2);
         end % getYAxisYdata
-        function rotmatDef(obj)
+        function [delXYX, delXYY] = rotmatDef(obj)
             delxyx = obj.rotmat * [(obj.XAxisXpixels - obj.Xopixels); ...
                 (obj.XAxisYpixels - obj.Yopixels)];
             delxyy = obj.rotmat * [(obj.YAxisXpixels - obj.Xopixels); ...
                 (obj.YAxisYpixels - obj.Yopixels)];
-            obj.delXcal = delxyx(2); % Extract data in y direction
+            obj.delXcal = delxyx(1);
             obj.delYcal = delxyy(2);
+            if nargout > 0
+                delXYX = delxyx;
+            end
+            if nargout > 1
+                delXYY = delxyy;
+            end
         end
         function [x, y, acquiring, n, addData] = getXYpoint(obj, n, cct)
             [x,y, buttonNumber] = ginput(1);

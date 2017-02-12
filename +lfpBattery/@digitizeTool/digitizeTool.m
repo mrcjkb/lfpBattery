@@ -31,6 +31,7 @@ classdef digitizeTool < handle
     properties (Hidden, Access = 'protected')
         axes1;
         resetbutton;
+        plotbutton;
         selectbutton;
         states; % Cell array holding the state objects
         state; % state object that handles the fit methods
@@ -107,12 +108,24 @@ classdef digitizeTool < handle
             h = handle(obj.list, 'CallbackProperties');
             h.ValueChangedCallback = @obj.setState;
             javacomponent(obj.list, [], uifc);
+            % container for reset button and plot button
+            c = uiflowcontainer('v0', 'parent', uifc, 'FlowDirection', 'LeftToRight', ...
+                'BackgroundColor', [1 1 1]);
+            % plot button
+            obj.plotbutton = JButton;
+            obj.plotbutton.setText('Plot results');
+            obj.plotbutton.setFont(fnt);
+            obj.plotbutton.setToolTipText('Plots the digitized data and the curve fit.')
+            obj.plotbutton.setEnabled(false);
+            javacomponent(obj.plotbutton, [], c);
+            plb = handle(obj.plotbutton, 'CallbackProperties');
+            set(plb, 'ActionPerformedCallback', @obj.plotResults)
             % reset button
             obj.resetbutton = JButton;
             obj.resetbutton.setText('Reset');
             obj.resetbutton.setFont(fnt);
             obj.resetbutton.setToolTipText('Clears all data and resets this tool.')
-            javacomponent(obj.resetbutton, [], uifc);
+            javacomponent(obj.resetbutton, [], c);
             rsb = handle(obj.resetbutton, 'CallbackProperties');
             set(rsb, 'ActionPerformedCallback', @obj.resetbutton_Callback)
             % container for send button and variable name
@@ -282,7 +295,7 @@ classdef digitizeTool < handle
                 obj.ImgData(si).x = xpt;
                 obj.ImgData(si).y = ypt;
             end
-            %% Update UD
+            %% Update data
             obj.hInfo.setText('Validation...')
             iconsClassName = 'com.mathworks.widgets.BusyAffordance$AffordanceSize';
             iconsSizeEnums = javaMethod('values',iconsClassName);
@@ -296,14 +309,27 @@ classdef digitizeTool < handle
             c.Position = [0.7940    0.075    0.1708    0.5];
             jObj.start;
             pause(0.1)
-            obj.fit = obj.state.createFit(numsets);
-            obj.state.plotResults;
+            try
+                obj.fit = obj.state.createFit(numsets);
+                obj.plotbutton.setEnabled(true);
+            catch ME
+                warning(ME.message)
+                waitfor(msgbox('Creating curve fit failed. Send data to workspace to debug.', 'Fit failed.', 'error'))
+            end
             jObj.setBusyText('Done!');
             jObj.stop;
+            pause(1)
             delete(c)
             obj.sendbutton.setEnabled(true);
             obj.resetbutton.setEnabled(true);
         end %selectbutton callback
+        function plotResults(obj, ~, ~)
+            try 
+                obj.state.plotResults;
+            catch
+                
+            end
+        end
         function deleteObj(obj, ~, ~)
             delete(obj);
             closereq;
@@ -339,6 +365,7 @@ classdef digitizeTool < handle
         end % resetbutton_Callback
         
         function obj = cancelandreset(obj)
+            obj.plotbutton.setEnabled(false);
             obj.selectbutton.setEnabled(true)
             obj.resetbutton.setEnabled(true)
             obj.sendbutton.setEnabled(false)
