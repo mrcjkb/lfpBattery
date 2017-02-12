@@ -26,7 +26,7 @@ classdef scIterator < lfpBattery.iterator
         function obj = next(it)
             if hasNext(it)
                 it.ind = it.ind + 1;
-                obj = it.collection(it.ind);
+                obj = it.collection{it.ind};
             else
                 obj = [];
             end
