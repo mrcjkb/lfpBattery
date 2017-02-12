@@ -129,8 +129,8 @@ classdef dischargeFit < lfpBattery.curveFitInterface
                 / (lfpBattery.const.z_Li * lfpBattery.const.F);
             d.T = Temp;
             d.Cdmax = cdmax;
-            d.xxlim = [0, cdmax];
-            d.yylim = [min(V), max(V)]; % limit output to raw data
+            d.xxlim = [0; cdmax];
+            d.yylim = [min(V); max(V)]; % limit output to raw data
         end
         function plotResults(d, newfig, varargin)
             %PLOTRESULTS: Compares a scatter of the raw data with the fit

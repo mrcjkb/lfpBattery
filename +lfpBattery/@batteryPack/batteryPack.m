@@ -586,6 +586,9 @@ classdef batteryPack < lfpBattery.batteryInterface
             [b.nP, b.nS] = e.getTopology;
             b.El = e;
             b.nEl = uint32(1);
+            % Update maximum currents
+            b.findImaxC;
+            b.findImaxD;
         end
         function v = getNewVoltage(b, I, dt)
             v = b.El.getNewVoltage(I, dt);

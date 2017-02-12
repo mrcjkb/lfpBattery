@@ -151,8 +151,8 @@ classdef batteryCell < lfpBattery.batteryInterface
             cd = b.Cd - I * dt * b.secsToHours;
             v = b.dC.interp(I, cd);
         end
-        function it = createIterator(~)
-            it = lfpBattery.nullIterator;
+        function it = createIterator(b)
+            it = lfpBattery.nullIterator(b);
         end
         function [np, ns] = getTopology(b) %#ok<MANU>
             np = uint32(1);
@@ -207,7 +207,6 @@ classdef batteryCell < lfpBattery.batteryInterface
                 else % add d if dC exists already
                     b.dC.add(d)
                 end
-                b.findImaxD;
             elseif strcmp(type, 'cycleLife')
                 b.ageModel.wFit = d; % MTODO: Implement tests for this
             elseif strcmp(type, 'charge')
@@ -216,31 +215,41 @@ classdef batteryCell < lfpBattery.batteryInterface
                 if b.SoC > b.socCV
                     b.clBMS = true; % charge limiting BMS flag
                 end
-                b.findImaxC;
             end
+            b.findImaxD;
+            b.findImaxC;
         end
         function i = findImaxD(b)
-            if ~isempty(b.dC)
-                b.ImaxD = max(b.dC.z);
+            d = [b.dC];
+            nB = numel(b);
+            if numel(d) == nB
+                i = max([d.z]);
             else
-                b.ImaxD = 0;
+                if isempty(d)
+                    i = zeros(1, numel(b));
+                else
+                    i = [max([d.z]), zeros(1, nB - numel(d))];
+                end
             end
-            if nargout > 0
-                i = b.ImaxD;
+            for ind = 1:nB
+                b(ind).ImaxD = i(ind);
             end
         end
         function i = findImaxC(b)
-            if ~isempty(b.cC)
-                % get ImaxC from charge curve according to SoC of cell
-                b.ImaxC = b.cC(b.SoC);
+            d = [b.cC];
+            nB = numel(b);
+            if numel(d) == nB
+                i = d([b.SoC]);
             else
-                % If no charge curve is used, limit according to discharge
-                % curves
-                b.ImaxC = b.findImaxD;
+                if isempty(d)
+                    i = zeros(1, nB - numel(d));
+                else
+                    i = [d([b.SoC]), zeros(1, nB - numel(d))];
+                end
             end
-            if nargout > 0
-                i = b.ImaxC;
-            end
+            for ind = 1:nB
+                b(ind).ImaxC = i(ind);
+            end        
         end
         %% Getters & setters
         function v = get.V(b)

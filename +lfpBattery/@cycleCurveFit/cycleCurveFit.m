@@ -23,7 +23,8 @@ classdef cycleCurveFit < lfpBattery.curveFitInterface
             rawx = DoDN;
             rawy = N;
             d = d@lfpBattery.curveFitInterface(f, rawx, rawy, [], varargin{:}); % Superclass constructor
-            d.xxlim = [0, inf]; % set boundaries 
+            d.xxlim = [0; inf]; % set boundaries
+            d.yylim = [0; inf];
         end
         function plotResults(d, varargin)
             %PLOTRESULTS: Compares a scatter of the raw data with the fit

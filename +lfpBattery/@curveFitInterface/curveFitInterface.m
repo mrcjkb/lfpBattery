@@ -55,11 +55,11 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
     properties (Dependent, Hidden, SetAccess = 'protected', GetAccess = 'protected')
         e_tot; % total differences
     end
-    properties (Hidden, Access = 'protected')
+    properties %(Hidden, Access = 'protected')
         px; % parameters for fit function handle
         fmin; % 1 for fminsearch, 2 for lsqcurvefit, 3 for both
-        xxlim  = [-inf, inf]; % upper & lower limits for x data
-        yylim = [-inf, inf]; % upper & lower limits for y data
+        xxlim  = [-inf; inf]; % upper & lower limits for x data
+        yylim = [-inf; inf]; % upper & lower limits for y data
     end
     properties (Hidden, GetAccess = 'protected', SetAccess = 'immutable')
         f; % Fit function Handle
@@ -243,9 +243,11 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
             %FITEVAL: Called by subsref if appropriate indexing for
             %retrieving fit data is used.
             % limit x data
-            sub = lfpBattery.commons.upperlowerlim(sub, d.xxlim(1), d.xxlim(2));
+            xl = [d.xxlim];
+            yl = [d.yylim];
+            sub = lfpBattery.commons.upperlowerlim(sub, xl(1,:), xl(2,:));
             % limit y data
-            v = lfpBattery.commons.upperlowerlim(d.func(sub), d.yylim(1), d.yylim(2));
+            v = lfpBattery.commons.upperlowerlim(d.func(sub), yl(1,:), yl(2,:));
         end
         % gpuCompatible methods
         % These methods are currently unsupported and may be removed in a

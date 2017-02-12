@@ -83,8 +83,8 @@ classdef cccvFit < lfpBattery.curveFitInterface
             if nargin > 2
                 c.socMax = socMax;
             end
-            c.yylim = [0, inf];
-            c.xxlim = [soc(1), c.socMax];
+            c.yylim = [0; inf];
+            c.xxlim = [soc(1); c.socMax];
             c.iMax0 = iMax(1);
             c.soc0 = soc(1);
             c.px = param;
@@ -129,7 +129,7 @@ classdef cccvFit < lfpBattery.curveFitInterface
     
     methods (Access = 'protected')
         function imax = func(c, soc)
-            imax = c.px * (1 - soc);
+            imax = [c.px] .* (1 - soc);
         end
         function fit(c) %#ok<MANU>
             % overload fit function to do nothing

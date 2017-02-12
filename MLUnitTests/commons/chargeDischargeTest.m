@@ -5,7 +5,7 @@ for i = 1:nCharge
     P = b.powerRequest(100, 60);
 end
 assert(isequal(P, 0), [config, ': Unexpected charging behaviour (Power)'])
-assert(abs(b.SoC - 1) < tol, [config, ': Unexpected charging behaviour (SoC)'])
+assert(0.95 - b.SoC < tol, [config, ': Unexpected charging behaviour (SoC)'])
 for i = 1:nCharge
     P = b.powerRequest(-100, 60);
 end

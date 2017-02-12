@@ -3,10 +3,11 @@ function circuitElementTests
 %various battery cell topologies
 import lfpBattery.*
 load(fullfile(pwd, 'MLUnitTests', 'batteryCellTests', 'dcCurves.mat'))
+load(fullfile(pwd, 'Resources', 'cccvfit.mat'))
 tol = 1e-10;
 
 %% parallelElement tests
-b = initBatteries(d);
+b = initBatteries(d, c);
 p = parallelElement('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
 B = b(1:3);
 p.addElements(B);
@@ -20,7 +21,7 @@ assert(isequal(p.V, mean([B.V])), 'parallelElement: unexpected voltage')
 p.powerRequest(30, 60);
 
 %% seriesElementPE tests
-b = initBatteries(d);
+b = initBatteries(d, c);
 B = [b(1); b(4); b(7)];
 s = seriesElementPE('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
 s.addElements(B)
@@ -31,7 +32,7 @@ assert(isequal(s.Cd, min([B.Cd])), 'seriesElementPE: unexpected discharge capaci
 assert(abs(s.V - sum([B.V])) < tol, 'seriesElementPE: unexpected voltage')
 
 %% seriesElementAE tests
-b = initBatteries(d);
+b = initBatteries(d, c);
 B = [b(1); b(4); b(7)];
 s = seriesElementAE('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
 s.addElements(B)
@@ -42,7 +43,7 @@ assert(isequal(s.Cd, mean([B.Cd])), 'seriesElementPE: unexpected discharge capac
 assert(abs(s.V - sum([B.V])) < tol, 'seriesElementPE: unexpected voltage')
 
 %% String of parallel cells with passive equalization (SPP)
-B = initBatteries(d);
+B = initBatteries(d, c);
 p = parallelElement('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
 p.addElements(B(1:3))
 p2 = parallelElement('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
@@ -61,7 +62,7 @@ assert(abs(s.Vn - sum([mean([B(1,:).Vn]); mean([B(2,:).Vn]); mean([B(3,:).Vn])])
 chargeDischargeTest(s, 'SPP', 100)
 
 %% String of parallel cells with active equalization (SPA)
-B = initBatteries(d);
+B = initBatteries(d, c);
 p = parallelElement('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
 p.addElements(B(1:3));
 p2 = parallelElement('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
@@ -79,7 +80,7 @@ assert(abs(s.Vn - sum([mean([B(1,:).Vn]); mean([B(2,:).Vn]); mean([B(3,:).Vn])])
 chargeDischargeTest(s, 'SPA', 100)
 
 %% Parallel strings of cells with passive equalization (PSP)
-B = initBatteries(d);
+B = initBatteries(d, c);
 s = seriesElementPE('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
 s.addElements(B(1:3))
 s2 = seriesElementPE('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
@@ -93,11 +94,11 @@ B = [B(1) B(4) B(7); B(2) B(5) B(8); B(3) B(6) B(9)];
 assert(abs(p.SoC - (1 - p.Cd ./ p.Cn)) < tol, 'PSP: unexpected SoC')
 assert(isequal(p.Cn, sum([min([B(:,1).Cn]); min([B(:,2).Cn]); min([B(:,3).Cn])])), 'PSP: unexpected nominal capacity')
 assert(abs(p.Vn - mean([sum([B(:,1).Vn]); sum([B(:,2).Vn]); sum([B(:,3).Vn])])) < tol, 'PSP: unexpected nominal voltage')
-chargeDischargeTest(p, 'PSP', 100)
+chargeDischargeTest(p, 'PSP', 300)
 
 
 %% Parallel strings of cells with active equalization (PSA)
-B = initBatteries(d);
+B = initBatteries(d, c);
 s = seriesElementAE('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
 s.addElements(B(1:3))
 s2 = seriesElementAE('socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
@@ -111,7 +112,7 @@ B = [B(1) B(4) B(7); B(2) B(5) B(8); B(3) B(6) B(9)];
 assert(abs(p.SoC - (1 - p.Cd ./ p.Cn)) < tol, 'PSA: unexpected SoC')
 assert(isequal(p.Cn, sum([mean([B(:,1).Cn]); mean([B(:,2).Cn]); mean([B(:,3).Cn])])), 'PSA: unexpedced nominal capacity')
 assert(abs(p.Vn - mean([sum([B(:,1).Vn]); sum([B(:,2).Vn]); sum([B(:,3).Vn])])) < tol, 'PSA: unexpected nominal voltage')
-chargeDischargeTest(p, 'PSA', 100)
+chargeDischargeTest(p, 'PSA', 300)
 
 
 %%

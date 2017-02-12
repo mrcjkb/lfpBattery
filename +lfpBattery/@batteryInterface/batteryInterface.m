@@ -139,6 +139,8 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
         % cache(2) = self-discharge
         cache = cell(2, 1);
         clBMS = false; % Logical flag for whether BMS is active for charge current limiting
+        cvL = cell(1, 1); % cell array of event listeners (observers) for batteryCell's CV event
+        ccL = cell(1, 1); % cell array of event listeners (observers) for batteryCell's CC event
     end
     properties (SetObservable, Hidden, SetAccess = 'protected')
         % State of charge (handled internally) This soc can be slightly
@@ -227,6 +229,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             if P > 0 % charge
                 if b.clBMS % charge limitation
                     b.findImaxC;
+                    b.clBMS = false;
                 end
                 b.Imax = b.ImaxC;
                 eta = b.eta_bc; % limit by charging efficiency
@@ -355,6 +358,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             if I > 0 % charge
                 if b.clBMS % charge limitation
                     b.findImaxC;
+                    b.clBMS = false;
                 end
                 b.reH = @gt; % greater than
                 b.seH = @ge; % greater than or equal to
@@ -655,6 +659,15 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             end
            p = b.cache{2};
         end
+        function clearCCCVlisteners(b)
+            % Deletes the CC and CV event listeners
+            for i = 1:numel(b.cvL)
+                try delete(b.cvL{i}); catch; end
+                try delete(b.ccL{i}); catch; end
+            end
+            b.cvL = cell(1, 1);
+            b.ccL = cell(1, 1);
+        end
     end % public methods
     
     methods (Access = 'protected')
@@ -704,8 +717,21 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
                 else
                     b.El(b.nEl, 1) = element;
                 end
+                element.clearCCCVlisteners;
+                it = element.createIterator;
+                while it.hasNext
+                    bat = it.next;
+                    b.cvL{end+1, 1} = addlistener(bat, 'CV', @b.setClBMSflag);
+                    b.ccL{end+1, 1} = addlistener(bat, 'CC', @b.setClBMSflag);
+                end
             end
             b.hasCells = true;
+        end
+        function setClBMSflag(b, ~, ~)
+            % SETCLBMSFLAG: Sets the clBMS flag to true, causing the charge
+            % limitation to be re-calculated in the next charging time
+            % step.
+            b.clBMS = true;
         end
         function s = sohPoint(b)
             % points to the internal SoC

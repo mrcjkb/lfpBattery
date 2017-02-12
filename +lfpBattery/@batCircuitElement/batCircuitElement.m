@@ -28,16 +28,12 @@ classdef (Abstract) batCircuitElement < lfpBattery.batteryInterface
             end
         end
         function i = findImaxD(b)
-            i = zeros(b.nEl, 1);
-            for ind = 1:b.nEl
-                i(ind) = b.El.findImaxD;
-            end
+            el = b.El;
+            i = el.findImaxD;
         end
         function i = findImaxC(b)
-            i = zeros(b.nEl, 1);
-            for ind = 1:b.nEl
-                i(ind) = b.El.findImaxC;
-            end
+            el = b.El;
+            i = el.findImaxC;
         end
     end
     
