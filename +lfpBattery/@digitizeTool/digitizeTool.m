@@ -335,17 +335,23 @@ classdef digitizeTool < handle
             closereq;
         end
         function tf = cancelOrError(obj)
-            obj.errCt = obj.errCt + 1;
-            if obj.errCt > 5
-                tf = true;
-                cancelandreset(obj);
-                if obj.errCt == 8
-                    waitfor(msgbox('Cancelled.','CANCELLED','error'))
+            try
+                obj.errCt = obj.errCt + 1;
+                if obj.errCt > 5
+                    tf = true;
+                    cancelandreset(obj);
+                    if obj.errCt == 8
+                        waitfor(msgbox('Cancelled.','CANCELLED','error'))
+                    else
+                        waitfor(msgbox('Error!','ERROR','error'))
+                    end
                 else
-                    waitfor(msgbox('Error!','ERROR','error'))
+                    tf = false;
                 end
-            else
-                tf = false;
+            catch
+                % User closed figure and deleted object while selecting
+                % data
+                tf = true;
             end
         end
         function sendbutton_Callback(obj, ~, ~) %#ok<*INUSD>
