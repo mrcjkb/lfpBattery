@@ -55,7 +55,7 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
     properties (Dependent, Hidden, SetAccess = 'protected', GetAccess = 'protected')
         e_tot; % total differences
     end
-    properties %(Hidden, Access = 'protected')
+    properties (Hidden, Access = 'protected')
         px; % parameters for fit function handle
         fmin; % 1 for fminsearch, 2 for lsqcurvefit, 3 for both
         xxlim  = [-inf; inf]; % upper & lower limits for x data
