@@ -222,7 +222,8 @@ classdef dischargeFit < lfpBattery.curveFitInterface
             DoD = lfpBattery.commons.upperlowerlim(C_dis / d.Cdmax, 0, 1);
             v = d.func(DoD);
             % limit output to raw data
-            v = lfpBattery.commons.upperlowerlim(v, d.yylim(1), d.yylim(2));
+            yl = d.yylim;
+            v = lfpBattery.commons.upperlowerlim(v, yl(1,:), yl(2,:));
         end
         function v = func(d, DoD)
             params = d.px; % reduces property access
