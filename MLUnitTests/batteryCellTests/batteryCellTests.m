@@ -4,17 +4,18 @@ function batteryCellTests
 
 import lfpBattery.*
 load(fullfile(pwd, 'MLUnitTests', 'batteryCellTests', 'dcCurves.mat'))
-
+load(fullfile(pwd, 'Resources', 'cccvfit.mat'))
 %% Initialization
 b = batteryCell(3.5, 3.2, 'socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
 b.addcurves(d)
+b.addcurves(c, 'charge')
 dt = 60;
 
 %% Charge and discharge with current and SoC limiting tests
 b.powerRequest(-10, dt);
 assert(abs(b.SoC - 0.2) < 1e-10, 'Unexpected lower SoC limitation.')
 [~, ~, I] = b.powerRequest(500, dt);
-assert(abs(I - b.ImaxC) <= b.iTol, 'Unexpected current limitation.')
+assert(isequal(I, b.ImaxC), 'Unexpected current limitation.')
 for i = 1:100
     b.powerRequest(60, dt);
 end

@@ -64,7 +64,6 @@ classdef batteryCell < lfpBattery.batteryInterface
     %                     and iterateCurrent() methods.
     % pTol              - Tolerance for the power iteration in W.
     % sTol              - Tolerance for SoC limitation iteration.
-    % iTol              - Tolerance for current limitation iteration in A.
     %
     %SEE ALSO: lfpBattery.batteryPack
     %          lfpBattery.batCircuitElement lfpBattery.seriesElement
@@ -75,11 +74,13 @@ classdef batteryCell < lfpBattery.batteryInterface
     %Authors: Marc Jakobi, Festus Anynagbe, Marc Schmidt
     %         January 2017
     
-    properties (Access = 'protected');
+    properties (Hidden, Access = 'protected');
         dC; % curvefitCollection (dischargeCurves object)
         cC; % cccvFit (constant current, constant voltage curve fit)
         Vi; % for storing dependent V property
         zi; % for storing dependent Zi property
+        socCV = inf; % state of charge at which the CV phase begins
+        cvFlag = false; % flag that indicates wheter cell is in CV phase of charging
     end
     properties (Dependent)
         V; % Resting voltage / V
@@ -98,6 +99,15 @@ classdef batteryCell < lfpBattery.batteryInterface
         Cd;
         % Current capacity level in Ah.
         C;
+    end
+    
+    events
+        % Indicates that the batteryPack BMS needs to re-calculate the maximum current
+        % for the constant voltage phase of charging
+        CV;
+        % Indicates that the batteryPack BMS needs to re-calculate the maximum current
+        % for the constant current phase of charging
+        CC;
     end
     
     methods
@@ -131,7 +141,7 @@ classdef batteryCell < lfpBattery.batteryInterface
             p = lfpBattery.batteryInterface.parseInputs(varargin{:});
             b.Zi = p.Results.Zi;
             b.Cn = Cn;
-            b.Cdi = (1 - b.soc) .* b.Cn;
+            b.Cdi = (1 - b.soc) * b.Cn;
             b.Vn = Vn;
             b.V = b.Vn;
             b.hasCells = true; % always true for batteryCell
@@ -166,6 +176,17 @@ classdef batteryCell < lfpBattery.batteryInterface
         function charge(b, Q)
             b.Cdi = b.Cdi - Q;
             b.refreshSoC;
+            if b.SoC > b.socCV % Constant voltage phase?
+                b.clBMS = true; % set clBMS flag on cell level in case single cell is being simulated
+                b.cvFlag = true; % set flag to indicate cell is in constant voltage phase
+                % Notify Battery pack that BMS needs to activate charge
+                % limiting for next time step
+                notify(b, 'CV')
+            elseif b.cvFlag && b.SoC <= b.socCV % Exiting constant voltage phase through discharge?
+                b.clBMS = true;
+                b.cvFlag = false;
+                notify(b, 'CC')
+            end
         end
         function c = dummyCharge(b, Q)
             c = b.C + Q;
@@ -191,6 +212,10 @@ classdef batteryCell < lfpBattery.batteryInterface
                 b.ageModel.wFit = d; % MTODO: Implement tests for this
             elseif strcmp(type, 'charge')
                 b.cC = d;
+                b.socCV = d.soc0; % SoC threshold for charge limiting
+                if b.SoC > b.socCV
+                    b.clBMS = true; % charge limiting BMS flag
+                end
                 b.findImaxC;
             end
         end

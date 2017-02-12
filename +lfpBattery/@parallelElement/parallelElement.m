@@ -71,7 +71,6 @@ classdef parallelElement < lfpBattery.batCircuitElement
     %                     and iterateCurrent() methods.
     % pTol              - Tolerance for the power iteration in W.
     % sTol              - Tolerance for SoC limitation iteration.
-    % iTol              - Tolerance for current limitation iteration in A.
     %
     %SEE ALSO: lfpBattery.batteryPack lfpBattery.batteryCell
     %          lfpBattery.batCircuitElement lfpBattery.seriesElement

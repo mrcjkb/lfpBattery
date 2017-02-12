@@ -30,10 +30,6 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
         % Increasing this number can decrease the simulation time, but can
         % also reduce the accuracy of the SoC limitation.
         sTol = 1e-6;
-        % Tolerance for current limitation iteration in A.
-        % Increasing this number can decrease the simulation time, but can
-        % also reduce the accuracy of the current limitation.
-        iTol = 1e-3;
     end
     properties (Dependent, Access = 'protected')
         Psd; % self-discharge energy in W
@@ -142,6 +138,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
         % cache(1) = V_curr in iteratePower
         % cache(2) = self-discharge
         cache = cell(2, 1);
+        clBMS = false; % Logical flag for whether BMS is active for charge current limiting
     end
     properties (SetObservable, Hidden, SetAccess = 'protected')
         % State of charge (handled internally) This soc can be slightly
@@ -228,11 +225,16 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             % set operator handles according to charge or discharge
             sd = false; % self-discharge flag
             if P > 0 % charge
+                if b.clBMS % charge limitation
+                    b.findImaxC;
+                end
+                b.Imax = b.ImaxC;
                 eta = b.eta_bc; % limit by charging efficiency
                 b.reH = @gt; % greater than
                 b.seH = @ge; % greater than or equal to
                 b.socLim = b.socMax;
             else % discharge
+                b.Imax = b.ImaxD;
                 if P == 0 % Set P to self-discharge power and limit soc to zero
                     eta = 1; % Do not include efficiency for self-discharge
                     b.socLim = eps; % eps in case dambrowskiCounter is used for cycle counting
@@ -305,11 +307,13 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             else
                 P = b.lastPr;
             end
-            if abs(I) > b.Imax + b.iTol % Limit power according to max current using recursion
-                b.pct = 0;
-                P = sign(I) * b.Imax * sum([b.cache{1}; V]) * 0.5;
-                b.lastPr = P;
-                [P, I, V] = b.iteratePower(P, dt);
+            % Limit power according to max current using recursion
+            if abs(I) > b.Imax
+                I = lfpBattery.commons.upperlowerlim(-b.ImaxD, b.ImaxC, I);
+                b.lastIr = I;
+                I = b.iterateCurrent(I, dt);
+                V = b.getNewVoltage(I, dt);
+                P = I * sum([b.cache{1}; V]) * 0.5;
             end
             b.pct = 0;
             newC = b.dummyCharge(I * dt * b.secsToHours);
@@ -349,6 +353,9 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             % I     - The DC current in A which was used to charge (positive) the battery or
             %         which was discharged (negative) from the battery.
             if I > 0 % charge
+                if b.clBMS % charge limitation
+                    b.findImaxC;
+                end
                 b.reH = @gt; % greater than
                 b.seH = @ge; % greater than or equal to
                 b.socLim = b.socMax;
@@ -390,8 +397,8 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             %ITERATECURRENT: Iteration to determine new state given a certain current.
             % The state of the battery is not changed by this method.
             %
-            % Syntax: [P, I, V, soc] = b.ITERATECURRENT(P, dt);
-            %         [P, I, V, soc] = ITERATECURRENT(b, P, dt);
+            % Syntax: [I, soc] = b.ITERATECURRENT(P, dt);
+            %         [I, soc] = ITERATECURRENT(b, P, dt);
             %
             % Input arguments:
             % b      -   battery object
@@ -621,9 +628,6 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
         end
         function set.sTol(b, tol)
             b.sTol = abs(tol);
-        end
-        function set.iTol(b, tol)
-            b.iTol = abs(tol);
         end
         %% getters
         function a = get.SoC(b)
