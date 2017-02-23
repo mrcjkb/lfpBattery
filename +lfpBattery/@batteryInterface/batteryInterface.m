@@ -98,7 +98,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
         % By default, the self-discharge of the batteries is neglected.
         psd;
     end
-    properties %(Access = 'protected', Hidden)
+    properties (Access = 'protected', Hidden)
         Imax; % Maximum current (dependent on charging or discharging)
         % Internal state of health.
         % If the age model is connected directly to the object, SoH points
