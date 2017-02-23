@@ -27,10 +27,16 @@ classdef (Abstract) seriesElement < lfpBattery.batCircuitElement
         function b = seriesElement(varargin)
             b@lfpBattery.batCircuitElement(varargin{:})
         end
-        function v = getNewVoltage(b, I, dt)
+        function v = getNewDischargeVoltage(b, I, dt)
             v = 0;
             for i = 1:b.nEl
-                v = v + b.El(i).getNewVoltage(I, dt);
+                v = v + b.El(i).getNewDischargeVoltage(I, dt);
+            end
+        end
+        function v = getNewChargeVoltage(b, I, dt)
+            v = 0;
+            for i = 1:b.nEl
+                v = v + b.El(i).getNewChargeVoltage(I, dt);
             end
         end
         function z = get.Zi(b)

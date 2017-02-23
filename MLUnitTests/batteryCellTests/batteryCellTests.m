@@ -8,7 +8,7 @@ load(fullfile(pwd, 'Resources', 'cccvfit.mat'))
 %% Initialization
 b = batteryCell(3.5, 3.2, 'socIni', 0.2, 'socMax', 1, 'socMin', 0.2);
 b.addcurves(d)
-b.addcurves(c, 'charge')
+b.addcurves(c, 'cccv')
 dt = 60;
 
 %% Charge and discharge with current and SoC limiting tests

@@ -19,24 +19,24 @@ classdef simpleSE < lfpBattery.simpleCircuitElement
     %
     %
     % SIMPLESE Methods:
-    % powerRequest      - Requests a power in W (positive for charging, 
-    %                     negative for discharging) from the battery.
-    % iteratePower      - Iteration to determine new state given a certain power.
-    % currentRequest    - Requests a current in A (positive for charging,
-    %                     negative for discharging) from the battery.
-    % iterateCurrent    - Iteration to determine new state given a certain current.
-    % addCounter        - Registers a cycleCounter object as an observer.
-    % dischargeFit      - Uses Levenberg-Marquardt algorithm to fit a
-    %                     discharge curve.
-    % initAgeModel      - Initializes the age model of the battery.
-    % getNewVoltage     - Returns the new voltage according to a current and a
-    %                     time step size.
-    % addcurves         - Adds a collection of discharge curves or a cycle
-    %                     life curve to the battery.
-    % getTopology       - Returns the number of parallel elements np and the
-    %                     number of elements in series ns in a battery object b.
-    % randomizeDC       - Slight randomization of the cell's discharge
-    %                     curve fits.
+    % powerRequest               - Requests a power in W (positive for charging, 
+    %                              negative for discharging) from the battery.
+    % iteratePower               - Iteration to determine new state given a certain power.
+    % currentRequest             - Requests a current in A (positive for charging,
+    %                              negative for discharging) from the battery.
+    % iterateCurrent             - Iteration to determine new state given a certain current.
+    % addCounter                 - Registers a cycleCounter object as an observer.
+    % dischargeFit               - Uses Levenberg-Marquardt algorithm to fit a
+    %                              discharge curve.
+    % initAgeModel               - Initializes the age model of the battery.
+    % getNewDischargeVoltage     - Returns the new voltage according to a discharging current and a
+    %                              time step size.
+    % getNewChargeVoltage        - Returns the new voltage according to a charging current and a
+    %                              time step size.
+    % addcurves                  - Adds a collection of discharge/charge curves, a cycle
+    %                              life curve or a CCCV curve to the battery.
+    % getTopology                - Returns the number of parallel elements np and the
+    %                              number of elements in series ns in a battery object b.
     %
     %
     % SIMPLESE Properties:
@@ -117,9 +117,11 @@ classdef simpleSE < lfpBattery.simpleCircuitElement
             b.refreshNominals;
             b.hasCells = true;
         end
-        function v = getNewVoltage(b, I, dt)
-            % Voltage = number of elements times elements' voltage
-            v = b.nEl * b.El.getNewVoltage(I, dt);
+        function v = getNewDischargeVoltage(b, I, dt)
+            v = b.nEl * b.El.getNewDischargeVoltage(I, dt); % Voltage = number of elements times elements' voltage
+        end
+        function v = getNewChargeVoltage(b, I, dt)
+            v = b.nEl * b.El.getNewChargeVoltage(I, dt); % Voltage = number of elements times elements' voltage
         end
         function [np, ns] = getTopology(b)
             [np, ns] = b.El.getTopology;

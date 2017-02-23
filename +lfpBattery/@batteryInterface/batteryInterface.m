@@ -141,6 +141,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
         clBMS = false; % Logical flag for whether BMS is active for charge current limiting
         cvL = cell(1, 1); % cell array of event listeners (observers) for batteryCell's CV event
         ccL = cell(1, 1); % cell array of event listeners (observers) for batteryCell's CC event
+        getNewVoltage; % Function handle to method for retrieving new voltage
     end
     properties (SetObservable, Hidden, SetAccess = 'protected')
         % State of charge (handled internally) This soc can be slightly
@@ -227,6 +228,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             % set operator handles according to charge or discharge
             sd = false; % self-discharge flag
             if P > 0 % charge
+                b.getNewVoltage = @getNewChargeVoltage; % Handle for voltage determination
                 if b.clBMS % charge limitation
                     b.findImaxC;
                     b.clBMS = false;
@@ -237,6 +239,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
                 b.seH = @ge; % greater than or equal to
                 b.socLim = b.socMax;
             else % discharge
+                b.getNewVoltage = @getNewDischargeVoltage;
                 b.Imax = b.ImaxD;
                 if P == 0 % Set P to self-discharge power and limit soc to zero
                     eta = 1; % Do not include efficiency for self-discharge
@@ -301,7 +304,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
                 b.cache{1} = b.V;
             end
             I = P / b.cache{1};
-            V = b.getNewVoltage(I, dt);
+            V = b.getNewVoltage(b, I, dt);
             Pit = I * sum([b.cache{1}; V]) * 0.5;
             err = b.lastPr - Pit;
             if abs(err) > b.pTol && b.pct < b.maxIterations
@@ -315,7 +318,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
                 I = lfpBattery.commons.upperlowerlim(-b.ImaxD, b.ImaxC, I);
                 b.lastIr = I;
                 I = b.iterateCurrent(I, dt);
-                V = b.getNewVoltage(I, dt);
+                V = b.getNewVoltage(b, I, dt);
                 P = I * sum([b.cache{1}; V]) * 0.5;
             end
             b.pct = 0;
@@ -356,6 +359,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             % I     - The DC current in A which was used to charge (positive) the battery or
             %         which was discharged (negative) from the battery.
             if I > 0 % charge
+                b.getNewVoltage = @getNewChargeVoltage; % Handle to voltage calculatin method
                 if b.clBMS % charge limitation
                     b.findImaxC;
                     b.clBMS = false;
@@ -365,6 +369,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
                 b.socLim = b.socMax;
                 eta = b.eta_bc; % limit: charging efficiency
             else
+                b.getNewVoltage = @getNewDischargeVoltage;
                 if I == 0
                     [P, V, I] = b.powerRequest(0, dt); % self-discharge is handled by powerRequest
                     return
@@ -376,20 +381,20 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
                 b.reH = @lt; % less than
                 b.seH = @le; % less than or equal to
             end
-            if b.socChk
+            if b.socChk % If charging is possible
                 I = I * eta;
                 I0 = I; % save initial request
                 I = lfpBattery.commons.upperlowerlim(I, -b.ImaxD, b.ImaxC); % limit to max current
                 b.lastIr = I;
                 I = b.iterateCurrent(I, dt);
-                if sign(I) ~= sign(I0)
-                    [P, I, V] = b.nullRequest;
-                else
-                    V = b.getNewVoltage(I, dt);
+                if sign(I) == sign(I0)
+                    V = b.getNewVoltage(b, I, dt);
                     P = I * sum([b.V; V]) * 0.5;
                     b.V = V;
                     b.charge(I * dt * b.secsToHours) % charge with Q
                     b.refreshSoC; % re-calculates element-level SoC as a total
+                else
+                    [P, I, V] = b.nullRequest;
                 end
                 I = I / eta; % Return what was taken from the load or discharged
             else
@@ -805,17 +810,28 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
     end % Static, protected methods
     
     methods (Abstract)
-        % GETNEWVOLTAGE: Returns the new voltage according to a current and a
+        % GETNEWDISCHARGEVOLTAGE: Returns the new voltage according to a discharging current and a
         % time step size.
         % 
-        % Syntax:   v = b.GETNEWVOLTAGE(I, dt);
-        %           v = GETNEWVOLTAGE(b, I, dt);
+        % Syntax:   v = b.GETNEWDISCHARGEVOLTAGE(I, dt);
+        %           v = GETNEWDISCHARGEVOLTAGE(b, I, dt);
         %
         % Input arguments:
         %   b   - battery object
         %   I   - current in A
         %   dt  - time step size in s
-        v = getNewVoltage(b, I, dt);
+        v = getNewDischargeVoltage(b, I, dt);
+        % GETNEWCHARGEVOLTAGE: Returns the new voltage according to a charging current and a
+        % time step size.
+        % 
+        % Syntax:   v = b.GETNEWCHARGEVOLTAGE(I, dt);
+        %           v = GETNEWCHARGEVOLTAGE(b, I, dt);
+        %
+        % Input arguments:
+        %   b   - battery object
+        %   I   - current in A
+        %   dt  - time step size in s
+        v = getNewChargeVoltage(b, I, dt);
         % ADDCURVES: Adds a collection of discharge curves or a cycle
         % life curve to the battery.
         %
@@ -827,8 +843,9 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
         %   d    - curve fit object (must implement the curveFitInterface or
         %          the curvefitCollection interface)
         %   type - String indicating which type of curve is to be added.
-        %          'discharge' (default) for a discharge curve and 'cycleLife' for a
-        %          cycleLife cell.
+        %          'discharge' (default) for a discharge curve, 'cycleLife' for a
+        %          cycleLife cell, 'charge' for a charge curve and 'cccv'
+        %          for a CCCV curve
         %
         % SEE ALSO: lfpBattery.curveFitInterface
         % lfpBattery.curvefitCollection lfpBattery.dischargeCurves

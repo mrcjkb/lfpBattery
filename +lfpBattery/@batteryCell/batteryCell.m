@@ -26,22 +26,24 @@ classdef batteryCell < lfpBattery.batteryInterface
     %                      cycleCounter interface.
     %
     % BATTERYCELL Methods:
-    % powerRequest      - Requests a power in W (positive for charging, 
-    %                     negative for discharging) from the battery.
-    % iteratePower      - Iteration to determine new state given a certain power.
-    % currentRequest    - Requests a current in A (positive for charging,
-    %                     negative for discharging) from the battery.
-    % iterateCurrent    - Iteration to determine new state given a certain current.
-    % addCounter        - Registers a cycleCounter object as an observer.
-    % dischargeFit      - Uses Levenberg-Marquardt algorithm to fit a
-    %                     discharge curve.
-    % initAgeModel      - Initializes the age model of the battery.
-    % getNewVoltage     - Returns the new voltage according to a current and a
-    %                     time step size.
-    % addcurves         - Adds a collection of discharge curves or a cycle
-    %                     life curve to the battery.
-    % randomizedc       - Re-fits the discharge curve with a slight
-    %                     randomization of the initial x parameters.
+    % powerRequest               - Requests a power in W (positive for charging, 
+    %                              negative for discharging) from the battery.
+    % iteratePower               - Iteration to determine new state given a certain power.
+    % currentRequest             - Requests a current in A (positive for charging,
+    %                              negative for discharging) from the battery.
+    % iterateCurrent             - Iteration to determine new state given a certain current.
+    % addCounter                 - Registers a cycleCounter object as an observer.
+    % dischargeFit               - Uses Levenberg-Marquardt algorithm to fit a
+    %                              discharge curve.
+    % initAgeModel               - Initializes the age model of the battery.
+    % getNewDischargeVoltage     - Returns the new voltage according to a discharging current and a
+    %                              time step size.
+    % getNewChargeVoltage        - Returns the new voltage according to a charging current and a
+    %                              time step size.
+    % addcurves                  - Adds a collection of discharge/charge curves, a cycle
+    %                              life curve or a CCCV curve to the battery.
+    % randomizedc                - Re-fits the discharge curve with a slight
+    %                              randomization of the initial x parameters.
     %
     %
     % BATTERYCELL Properties:
@@ -75,12 +77,18 @@ classdef batteryCell < lfpBattery.batteryInterface
     %         January 2017
     
     properties (Hidden, Access = 'protected');
-        dC; % curvefitCollection (dischargeCurves object)
+        dC; % curvefitCollection (of dischargeCurves objects)
         cC; % cccvFit (constant current, constant voltage curve fit)
+        cC2; % curvefitCollection (of chargeCurves or dischargeCurves objects)
         Vi; % for storing dependent V property
         zi; % for storing dependent Zi property
         socCV = inf; % state of charge at which the CV phase begins
-        cvFlag = false; % flag that indicates wheter cell is in CV phase of charging
+        cvFlag = false; % flag that indicates whether cell is in CV phase of charging
+        % flag that indicates whether discharge curves are used for
+        % charging or whether separate charge curves are used for charging.
+        % Set to false once addCurves() is called with the 'charge'
+        % argument.
+        useDischargeCurves4Charging = true;
     end
     properties (Dependent)
         V; % Resting voltage / V
@@ -147,9 +155,13 @@ classdef batteryCell < lfpBattery.batteryInterface
             b.hasCells = true; % always true for batteryCell
             b.isCell = true; % always false for batteryCell
         end % constructor
-        function [v, cd] = getNewVoltage(b, I, dt)
+        function [v, cd] = getNewDischargeVoltage(b, I, dt)
             cd = b.Cd - I * dt * b.secsToHours;
             v = b.dC.interp(I, cd);
+        end
+        function [v, cd] = getNewChargeVoltage(b, I, dt)
+            cd = b.Cd - I * dt * b.secsToHours;
+            v = b.cC2.interp(I, cd);
         end
         function it = createIterator(b)
             it = lfpBattery.nullIterator(b);
@@ -200,16 +212,44 @@ classdef batteryCell < lfpBattery.batteryInterface
                 if isempty(b.dC) % initialize dC property with d
                     if lfpBattery.commons.itfcmp(d, 'lfpBattery.curvefitCollection')
                         b.dC = d; % init with collection
+                        if b.useDischargeCurves4Charging
+                            % Applies the same to charge curves as long as
+                            % charge and discharge curves are not separated
+                            % by adding a curve with the 'charge' argument
+                            b.cC2 = d;
+                        end
                     else
                         b.dC = lfpBattery.dischargeCurves; % create new curve fit collection
                         b.dC.add(d)
+                        if b.useDischargeCurves4Charging
+                            b.cC2 = lfpBattery.dischargeCurves; % create new curve fit collection
+                            b.cC2.add(d)
+                        end
                     end
                 else % add d if dC exists already
                     b.dC.add(d)
+                    if b.useDischargeCurves4Charging
+                        b.cC2.add(d);
+                    end
                 end
             elseif strcmp(type, 'cycleLife')
                 b.ageModel.wFit = d; % MTODO: Implement tests for this
             elseif strcmp(type, 'charge')
+                % Init new curvefitCollection object if no charge curves
+                % have been added yet.
+                if b.useDischargeCurves4Charging || isempty(b.cC2)
+                    if lfpBattery.commons.itfcmp(d, 'lfpBattery.curvefitCollection')
+                        b.cC2 = d;
+                    else
+                        b.cC2 = lfpBattery.dischargeCurves; % create new curve fit collection
+                        b.cC2.add(d)
+                    end
+                else
+                    b.cC2.add(d)
+                end
+                % Set flag to indicate that 
+                b.useDischargeCurves4Charging = false;
+            elseif strcmp(type, 'cccv')
                 b.cC = d;
                 b.socCV = d.soc0; % SoC threshold for charge limiting
                 if b.SoC > b.socCV

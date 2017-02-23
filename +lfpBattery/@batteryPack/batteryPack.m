@@ -3,26 +3,28 @@ classdef batteryPack < lfpBattery.batteryInterface
     %
     %
     % BATTERYPACK Methods:
-    % powerRequest      - Requests a power in W (positive for charging,
-    %                     negative for discharging) from the battery.
-    % iteratePower      - Iteration to determine new state given a certain power.
-    % currentRequest    - Requests a current in A (positive for charging,
-    %                     negative for discharging) from the battery.
-    % iterateCurrent    - Iteration to determine new state given a certain current.
-    % addCounter        - Registers a cycleCounter object as an observer.
-    % dischargeFit      - Uses Levenberg-Marquardt algorithm to fit a
-    %                     discharge curve.
-    % initAgeModel      - Initializes the age model of the battery.
-    % getNewVoltage     - Returns the new voltage according to a current and a
-    %                     time step size.
-    % addcurves         - Adds a collection of discharge curves or a cycle
-    %                     life curve to the battery.
-    % randomizeDC       - Slight randomization of each cell's discharge
-    %                     curve fits.
-    % digitizeTool      - (static) Opens a GUI for digitizing discharge curves and
-    %                     cycle life curves (requires JAVA).
-    % gui               - (static) Opens a GUI for creating a batteryPack model.
-    %                     (requires JAVA)
+    % powerRequest               - Requests a power in W (positive for charging,
+    %                              negative for discharging) from the battery.
+    % iteratePower               - Iteration to determine new state given a certain power.
+    % currentRequest             - Requests a current in A (positive for charging,
+    %                              negative for discharging) from the battery.
+    % iterateCurrent             - Iteration to determine new state given a certain current.
+    % addCounter                 - Registers a cycleCounter object as an observer.
+    % dischargeFit               - Uses Levenberg-Marquardt algorithm to fit a
+    %                              discharge curve.
+    % initAgeModel               - Initializes the age model of the battery.
+    % getNewDischargeVoltage     - Returns the new voltage according to a discharging current and a
+    %                              time step size.
+    % getNewChargeVoltage        - Returns the new voltage according to a charging current and a
+    %                              time step size.
+    % addcurves                  - Adds a collection of discharge/charge curves, a cycle
+    %                              life curve or a CCCV curve to the battery.
+    % randomizeDC                - Slight randomization of each cell's discharge
+    %                              curve fits.
+    % digitizeTool               - (static) Opens a GUI for digitizing discharge curves and
+    %                              cycle life curves (requires JAVA).
+    % gui                        - (static) Opens a GUI for creating a batteryPack model.
+    %                              (requires JAVA)
     %
     %
     % BATTERYPACK Properties:
@@ -590,8 +592,11 @@ classdef batteryPack < lfpBattery.batteryInterface
             b.findImaxC;
             b.findImaxD;
         end
-        function v = getNewVoltage(b, I, dt)
-            v = b.El.getNewVoltage(I, dt);
+        function v = getNewDischargeVoltage(b, I, dt)
+            v = b.El.getNewDischargeVoltage(I, dt);
+        end
+        function v = getNewChargeVoltage(b, I, dt)
+            v = b.El.getNewChargeVoltage(I, dt);
         end
         function [np, ns] = getTopology(b)
             [np, ns] = b.El.getTopology;
