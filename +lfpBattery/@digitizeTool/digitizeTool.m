@@ -355,14 +355,25 @@ classdef digitizeTool < handle
             end
         end
         function sendbutton_Callback(obj, ~, ~) %#ok<*INUSD>
-            try
-                mname = char(obj.varname.getText);
-                s = struct;
-                s.raw = obj.ImgData;
-                s.fit = obj.fit;
-                assignin('base', mname, s)
-            catch
-                waitfor(msgbox('Failed to send curve fit to workspace.','ERROR','error'))
+            if obj.externalControl
+                try
+                    [fname, fpath] = uiputfile('*.mat','Save MAT file As');
+                    fit = obj.fit; %#ok<NASGU,PROPLC>
+                    raw = obj.ImgData; %#ok<NASGU>
+                    save(fullfile(fpath, fname), 'raw', 'fit')
+                catch
+                    waitfor(msgbox('Failed to save curve fit.','ERROR','error'))
+                end
+            else
+                try
+                    mname = char(obj.varname.getText);
+                    s = struct;
+                    s.raw = obj.ImgData;
+                    s.fit = obj.fit;
+                    assignin('base', mname, s)
+                catch
+                    waitfor(msgbox('Failed to send curve fit to workspace.','ERROR','error'))
+                end
             end
         end % sendbutton_Callback
         
