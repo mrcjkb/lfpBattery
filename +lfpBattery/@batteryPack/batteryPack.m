@@ -199,6 +199,14 @@ classdef batteryPack < lfpBattery.batteryInterface
     %                            -> adds dischargeCurve object to the battery's
     %                            cells.
     %
+    %   'cCurves'                - default: 'none' chargeCurve object to the
+    %                            battery's cells for charge voltage
+    %                            calculation.
+    %
+    %   'cccvCurves'             - default: 'none'
+    %                            -> adds a cccvFit object to the battery's cells for charge
+    %                            current limitation in the CV (constant voltage) phase.
+    %
     %   'ageCurve'               - default: 'none'
     %                            -> adds an age curve (e. g. a woehlerFit) to
     %                            the battery's cells.
@@ -380,7 +388,15 @@ classdef batteryPack < lfpBattery.batteryInterface
             %
             %   'dCurves'                - default: 'none'
             %                            -> adds dischargeCurve object to the battery's
-            %                            cells.
+            %                            cells for discharge voltage calculation.
+            %
+            %   'cCurves'                - default: 'none' chargeCurve object to the
+            %                            battery's cells for charge voltage
+            %                            calculation.
+            %
+            %   'cccvCurves'             - default: 'none'
+            %                            -> adds a cccvFit object to the battery's cells for charge
+            %                            current limitation in the CV (constant voltage) phase.
             %
             %   'ageCurve'               - default: 'none'
             %                            -> adds an age curve (e. g. a woehlerFit) to
@@ -398,10 +414,14 @@ classdef batteryPack < lfpBattery.batteryInterface
             addOptional(p, 'Setup', 'Auto', @(x) any(validatestring(x, valid)))
             addOptional(p, 'ideal', false, @islogical)
             addOptional(p, 'Zgauss', [0 0 0], @(x) isnumeric(x) & numel(x) == 3)
-            addOptional(p, 'dCurves', 'none', @(x) batteryPack.validateCurveOpt(x,...
-                'lfpBattery.curvefitCollection'))
-            addOptional(p, 'ageCurve', 'none', @(x) batteryPack.validateCurveOpt(x,...
-                'lfpBattery.curveFitInterface'))
+            addOptional(p, 'dCurves', 'none', @(x) batteryPack.validateCurveOpt(x, ...
+                'lfpBattery.curvefitCollection')) % discharge curves
+            addOptional(p, 'cCurves', 'none', @(x) batteryPack.validateCurveOpt(x, ...
+                'lfpBattery.curvefitCollection')) % charge curves
+            addOptional(p, 'cccvCurves', 'none', @(x) batteryPack.validateCurveOpt(x, ...
+                'lfpBattery.curveFitInterface')) % CCCV curves
+            addOptional(p, 'ageCurve', 'none', @(x) batteryPack.validateCurveOpt(x, ...
+                'lfpBattery.curveFitInterface')) % cycle life curves
             % parse inputs
             parse(p, varargin{:})
             % prepare age model and cycle counter params at pack/cell levels
@@ -453,6 +473,8 @@ classdef batteryPack < lfpBattery.batteryInterface
             Zi = p.Results.Zi; % internal impedance (mean if gauss)
             Zgauss = p.Results.Zgauss; % Gaussian distribution of internal impedances
             dC = p.Results.dCurves; % discharge curves ('none' by default)
+            cC = p.Results.cccvCurves; % CCCV curves ('none' by default)
+            cC2 = p.Results.cCurves; % charge curves ('none' by default)
             aC = p.Results.ageCurve; % cycle life furve ('none' by default)
             if isinteger(Cp) && isinteger(Vp) || strcmpi(p.Results.Setup, 'Manual') % automatic setup?
                 % user-defined setup
@@ -543,6 +565,13 @@ classdef batteryPack < lfpBattery.batteryInterface
                     'Attempting to use this model without cycle life curve fits will result in an error.'])
             elseif ~strcmpi(aC, 'none')
                 b.addcurves(aC, 'cycleLife')
+            end
+            % No need to issue warning for charge curves or CCCV curves
+            if ~strcmpi(cC, 'none')
+                b.addcurves(cC, 'cccv')
+            end
+            if ~strcmpi(cC2, 'none')
+                b.addcurves(cC2, 'charge')
             end
         end % constructor
         function addcurves(b, d, type)
