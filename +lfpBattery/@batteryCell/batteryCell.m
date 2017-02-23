@@ -260,36 +260,23 @@ classdef batteryCell < lfpBattery.batteryInterface
             b.findImaxC;
         end
         function i = findImaxD(b)
-            d = [b.dC];
-            nB = numel(b);
-            if numel(d) == nB
-                i = max([d.z]);
+            d = b.dC;
+            if ~isempty(d)
+                i = max(d.z);
             else
-                if isempty(d)
-                    i = zeros(1, numel(b));
-                else
-                    i = [max([d.z]), zeros(1, nB - numel(d))];
-                end
+                i = 0;
             end
-            for ind = 1:nB
-                b(ind).ImaxD = i(ind);
-            end
+            b.ImaxD = i;
         end
         function i = findImaxC(b)
-            d = [b.cC];
-            nB = numel(b);
-            if numel(d) == nB
-                i = d([b.SoC]);
-            else
-                if isempty(d)
-                    i = zeros(1, nB - numel(d));
-                else
-                    i = [d([b.SoC]), zeros(1, nB - numel(d))];
-                end
+            if ~isempty(b.cC) % Attemt to retrieve from CCCV curve first
+                i = b.cC(b.SoC);
+            elseif ~isempty(b.cC2) % Otherwise from charge curve
+                i = max(b.cC2.z);
+            else % Otherwise set to zero
+                i = 0;
             end
-            for ind = 1:nB
-                b(ind).ImaxC = i(ind);
-            end        
+            b.ImaxC = i;    
         end
         %% Getters & setters
         function v = get.V(b)

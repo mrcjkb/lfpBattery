@@ -52,11 +52,11 @@ classdef (Abstract) seriesElement < lfpBattery.batCircuitElement
         end
         function i = findImaxD(b)
             i = min(findImaxD@lfpBattery.batCircuitElement(b));
-            [b.ImaxD] = deal(i);
+            b.ImaxD = i;
         end
         function i = findImaxC(b)
             i = min(findImaxC@lfpBattery.batCircuitElement(b));
-            [b.ImaxC] = deal(i);
+            b.ImaxC = i;
         end
     end
     
