@@ -116,4 +116,4 @@ chargeDischargeTest(p, 'PSA', 300)
 
 
 %%
-disp('Circuit element tests passed.')
+disp('Circuit element tests passed')

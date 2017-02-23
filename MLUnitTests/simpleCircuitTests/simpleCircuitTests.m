@@ -18,5 +18,5 @@ chargeDischargeTest(ps, 'PS', 1000)
 
 %%
 
-disp('simple circuit tests passed.')
+disp('simple circuit tests passed')
 
