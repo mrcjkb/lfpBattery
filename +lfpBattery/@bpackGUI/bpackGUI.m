@@ -18,6 +18,7 @@ classdef bpackGUI < handle
         dC = 'none'; % discharge curve
         wF = 'none'; % woehler fit
         cC = 'none'; % cccv curve
+        cC2 = 'none'; % charge curve or discharge curve used for charging
         wfButton = cell(2, 1);
         varname;
     end
@@ -242,8 +243,9 @@ classdef bpackGUI < handle
             % set callbacks
             h = handle(b.simple, 'CallbackProperties');
             h.ActionPerformedCallback = @b.simplify;
-            %% Discharge Curve fits
+            %% Curve fits
             hc = uiflowcontainer('v0', 'parent', layout, 'FlowDirection', 'TopDown');
+            %% Discharge Curve fits
             jl = JLabel; jl.setText('Discharge curve fits:')
             jl.setHorizontalAlignment(0)
             str = [commons.getHtmlImage('dcurves_qualitative.png'), ...
@@ -261,6 +263,24 @@ classdef bpackGUI < handle
             javacomponent(jb, [], u);
             h = handle(jb, 'CallbackProperties');
             h.ActionPerformedCallback = @b.startDCFitTool;
+            %% Charge Curve fits
+            u = uiflowcontainer('v0', 'parent', hc, 'FlowDirection', 'LeftToRight');
+            jl = JLabel; jl.setText('Charge curve fits:')
+            jl.setHorizontalAlignment(0)
+            str = [commons.getHtmlImage('dcurves_qualitative.png'), ...
+                'A charge curve plots the charging voltage against the discharge capacity.<br>', ...
+                'There is no demo data available in this release.<br>', ...
+                'By default, the discharge curves are used.'];
+            jl.setToolTipText(str)
+            javacomponent(jl, [], u);
+            jb = JButton(b.multiline('Start digitize', 'and fit tool'));
+            jb.setToolTipText(b.multiline('Starts a tool for digitizing images and fitting the charge curves.', ...
+                'In this release, the discharge curve digitizer tool is used for charge curves.', ...
+                'There is no demo data available in this release.', ...
+                'By default, the discharge curves are used.'))
+            javacomponent(jb, [], u);
+            h = handle(jb, 'CallbackProperties');
+            h.ActionPerformedCallback = @b.startCCFitTool;
             %% cccv curve fits
             jl = JLabel; jl.setText('CCCV curve fits:')
             jl.setHorizontalAlignment(0)
@@ -428,8 +448,11 @@ classdef bpackGUI < handle
             end
             delete(c)
         end
+        function loadCCDemo(b, ~, ~) %#ok<INUSD>
+            waitfor(msgbox('No demo data available in this release.', 'error', 'error'))
+        end
         function loadCCCVDemo(b, ~, ~)
-            [c, jObj] = b.pauseGUI('Loading data...');
+            [cWait, jObj] = b.pauseGUI('Loading data...');
             try
                 msg = 'Load demo CCCV curve fit?';
                 btn = questdlg(msg, ...
@@ -437,7 +460,7 @@ classdef bpackGUI < handle
                     'OK','Cancel','OK');
                 if strcmp(btn, 'OK')
                     [p, ~] = fileparts(fileparts(which('lfpBatteryTests')));
-                    load(fullfile(p, 'Resources', 'cccvfit.mat', 'c'))
+                    load(fullfile(p, 'Resources', 'cccvfit.mat'), 'c')
                     b.cC = c;
                     jObj.setBusyText('Success!');
                     jObj.stop;
@@ -449,7 +472,7 @@ classdef bpackGUI < handle
                 jObj.stop;
                 pause(1)
             end
-            delete(c)
+            delete(cWait)
         end
         function loadACDemo(b, ~, ~)
             import lfpBattery.*
@@ -477,6 +500,9 @@ classdef bpackGUI < handle
         end
         function startDCFitTool(b, ~, ~)
             b.dC = b.startCurvefitTool(0, b.dC);
+        end
+        function startCCFitTool(b, ~, ~)
+            b.cC2 = b.startCurvefitTool(0, b.cC2);
         end
         function startCCCVFitTool(b, ~, ~)
             b.cC = b.startCurvefitTool(2, b.cC);
@@ -585,7 +611,7 @@ classdef bpackGUI < handle
                     'cycleCounter', 'auto', 'Equalization', EQ, 'etaBC', eta_bc, ...
                     'etaBD', eta_bd, 'ideal', ideal, 'socMax', socMax, 'socMin', socMin, ...
                     'socIni', socIni, 'Topology', topology, 'Zi', Zi, 'Zgauss', Zgauss, ... %#ok<PROPLC>
-                    'sohIni', sohIni, 'psd', psd, 'dCurves', b.dC, 'ageCurve', b.wF); %#ok<PROPLC>
+                    'sohIni', sohIni, 'psd', psd, 'dCurves', b.dC, 'cccvCurves', b.cC, 'cCurve', b.cC2, 'ageCurve', b.wF); %#ok<PROPLC>
                 assignin('base', char(b.varname.getText), bat);
                 jObj.setBusyText('Success!');
                 jObj.stop;
