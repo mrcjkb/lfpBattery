@@ -23,7 +23,7 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
     %
     %CURVEFITINTERFACE Properties:
     %   z    -   z-data of fitted curve. (i. e. the current at which the curve was recorded)
-    %   mode -   function used for fitting ('fmin' for fminsearch or 'lsq' for lsqcurvefit)
+    %   mode -   function used for fitting
     %   x    -   parameters for curve fit
     %   rmse -   root mean squared error
     %
@@ -44,7 +44,9 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
        z; % z-data of fitted curve. (i. e. the current at which the curve was recorded)
     end
     properties (Dependent)
-        mode; % function used for fitting ('fmin' for fminsearch or 'lsq' for lsqcurvefit)
+        % function used for fitting
+        % ('fmin' for fminsearch or 'lsq' for lsqcurvefit or 'both' for a combination)
+        mode;
     end
     properties (Abstract, Dependent)
        x; % parameters for fit function
