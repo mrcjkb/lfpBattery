@@ -4,7 +4,7 @@ classdef const
         F = 96485.3328959; % As/mol - Faraday constant
         R = 8.3144598; % J/(mol*K) - universal gas constant
         T_room = 293.15; % K - room temperature
-        z_Li = 1.05; % Charge number Li-Ion battery
+        z_Li = 1; % Ionic charge number of Lithium
         
         %% TU Colors
         red = [163 48 40]./255; %red
