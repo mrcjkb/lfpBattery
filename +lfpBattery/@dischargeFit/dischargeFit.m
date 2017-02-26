@@ -48,9 +48,7 @@ classdef dischargeFit < lfpBattery.curveFitInterface
     % December 2016
     
     properties (Dependent)
-        x;  % 3 fit parameters for f
-        xs; % 3 fit parameters for fs
-        xe; % 2 fit parameters for fe
+        x;  % 8 fit parameters for f
     end
     properties (Dependent, SetAccess = 'protected')
         dV_mean; % mean difference in voltage between fit and raw data
@@ -180,30 +178,14 @@ classdef dischargeFit < lfpBattery.curveFitInterface
         
         %% Dependent setters:
         function set.x(d, params)
-            assert(numel(params) == 3, 'Wrong number of params')
-            d.px(1:3) = params(:);
-            d.fit;
-        end
-        function set.xs(d, params)
-            assert(numel(params) == 3, 'Wrong number of params')
-            d.px(4:6) = params(:);
-            d.fit;
-        end
-        function set.xe(d, params)
-            assert(numel(params) == 2, 'Wrong number of params')
-            d.px(7:8) = params(:);
+            assert(numel(params) == 8, 'Wrong number of params')
+            d.px = params(:);
             d.fit;
         end
         
         %% Dependent getters
         function params = get.x(d)
-            params = d.px(1:3);
-        end
-        function params = get.xs(d)
-            params = d.px(4:6);
-        end
-        function params = get.xe(d)
-            params = d.px(7:8);
+            params = d.px;
         end
         function e = get.dV_mean(d)
             e = mean(d.e_tot);
