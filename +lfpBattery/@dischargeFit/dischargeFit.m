@@ -36,6 +36,14 @@ classdef dischargeFit < lfpBattery.curveFitInterface
     %                   'fmin'          - fminsearch
     %                   'both'          - a combination (lsq, then fmin)
     %
+    % DISCHARGEFIT Properties:
+    %   x       - Fit parameters (8x1 double).
+    %   dV_mean - Mean difference in voltage between fit and raw data.
+    %   dV_max  - Max. difference in voltage between fit and raw data.
+    %   T       - Temperature in K at which the curve was recorded.
+    %   z       - Current in A at which the curve was recorded.
+    %   mode    - Function used for fitting.
+    %   rmse    - Root mean squared error.
     %
     % DISCHARGEFIT Methods:
     %   plotResults - plots the fitted curve.
@@ -48,7 +56,9 @@ classdef dischargeFit < lfpBattery.curveFitInterface
     % December 2016
     
     properties (Dependent)
-        x;  % 8 fit parameters for f
+        % 8 fit parameters for f
+        % Modifying this property will cause the curve to be re-fitted.
+        x;
     end
     properties (Dependent, SetAccess = 'protected')
         dV_mean; % mean difference in voltage between fit and raw data
