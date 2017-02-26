@@ -1,1 +1,8 @@
 \boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\contentsline {section}{\numberline {1}Interfaces}{1}{section.1}
+\contentsline {section}{\numberline {2}Discharge curves}{2}{section.2}
+\contentsline {subsection}{\numberline {2.1}Single discharge curve}{2}{subsection.2.1}
+\contentsline {subsubsection}{\numberline {2.1.1}Object creation}{2}{subsubsection.2.1.1}
+\contentsline {subsubsection}{\numberline {2.1.2}Visual validation}{3}{subsubsection.2.1.2}
+\contentsline {subsubsection}{\numberline {2.1.3}Object properties}{4}{subsubsection.2.1.3}
+\contentsline {section}{References}{5}{equation.2.2}

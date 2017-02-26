@@ -83,7 +83,7 @@
       <file>lfpBattery_Documentation.bcf</file>
     </requires>
     <requires type="editable">
-      <file>PRO.bib</file>
+      <file>PRObat.bib</file>
     </requires>
   </external>
 </requests>
