@@ -127,7 +127,7 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
             d.fmin = fmin;
             d.fit;
         end
-        % Override of subsref (indexing) function
+        % Overload of subsref (indexing) function
         function v = subsref(d, S)
             if strcmp(S(1).type, '()')
                 v = d.fiteval(S(1).subs{1});
@@ -137,6 +137,13 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
                 builtin('subsref', d, S);
             end
         end % subsref overload
+        % Overload of horzcat and vertcat
+        function c = horzcat(d, ~) %#ok<STOUT>
+            d.catErr;
+        end
+        function c = vertcat(d, ~) %#ok<STOUT>
+            d.catErr;
+        end
         function plotResults(d, varargin)
             %PLOTRESULTS: Compares a scatter of the raw data with the fit
             %in a figure window.
@@ -230,6 +237,10 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
     end
     
     methods (Access = 'protected')
+        function catErr(d)
+            cl = class(d);
+            error(['Arrays of ', cl, ' objects are currently not supported.']); 
+        end
         function fit(d)
             %FIT: Checks which fit mode is selected and calls the
             %respective fit function/s accordingly
