@@ -150,6 +150,62 @@
       \verb Hyndman and Koehler - 2006 - Another look at measures of forecast accuracy.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\9U5FSRCE\\Hyndman and Koehler - 2006 - Another look at measures of forecast accuracy.pdf:application/pdf
       \endverb
     \endentry
+    \entry{_iterator_????}{online}{}
+      \field{sortinit}{8}
+      \field{sortinithash}{2f1b0e69e7617f99664f1cd00bb9603c}
+      \field{labeltitlesource}{title}
+      \field{title}{Iterator (Java Platform {SE} 7 )}
+      \field{urlday}{27}
+      \field{urlmonth}{2}
+      \field{urlyear}{2017}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb Iterator (Java Platform SE 7 ):C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\VHGZEZTH\\Iterator.html:text/html
+      \endverb
+      \verb{url}
+      \verb https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html
+      \endverb
+    \endentry
+    \entry{dambrowski_mathematical_2012}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=aa564d8f7927e8dc6a03506bd83bd3e1}{%
+           family={Dambrowski},
+           familyi={D\bibinitperiod},
+           given={Jonny},
+           giveni={J\bibinitperiod}}}%
+        {{hash=1c505b7e9a10bd66772fec4d9faa4c39}{%
+           family={Pichlmaier},
+           familyi={P\bibinitperiod},
+           given={Simon},
+           giveni={S\bibinitperiod}}}%
+        {{hash=5a56dbc874a9d5074c5390bbd890b54d}{%
+           family={Jossen},
+           familyi={J\bibinitperiod},
+           given={Andreas},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Mainz}%
+      }
+      \strng{namehash}{457e6bac861169e61833c41d15372908}
+      \strng{fullhash}{457e6bac861169e61833c41d15372908}
+      \strng{authornamehash}{457e6bac861169e61833c41d15372908}
+      \strng{authorfullhash}{457e6bac861169e61833c41d15372908}
+      \field{sortinit}{9}
+      \field{sortinithash}{2999ebab86052e6d71b434385f8b4ed2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Advanced Automotive Battery Conference Europe}
+      \field{eventtitle}{Advanced Automotive Battery Conference Europe}
+      \field{month}{6}
+      \field{title}{Mathematical methods for classification of state-of-charge time series for cycle lifetime prediction}
+      \field{year}{2012}
+      \field{dateera}{ce}
+      \verb{file}
+      \verb DAMBROWSKI 2012 Mathematical methods for classification of state-of-charge.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\KX46Z3SE\\DAMBROWSKI 2012 Mathematical methods for classification of state-of-charge.pdf:application/pdf
+      \endverb
+      \keyw{Electric batteries,Electrochemistry,Industrial,Storage batteries}
+    \endentry
   \endsortlist
 \endrefsection
 \endinput

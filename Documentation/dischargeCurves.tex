@@ -92,7 +92,7 @@ A list of the class's accessible properties is provided in Table~\ref{tab:discha
 	\label{tab:dischargeFitProps}
 \end{table}
 
-\subsubsection{Using the class}
+\subsubsection{Usage of a \mcode{dischargeFit} object}
 In order to calculate a voltage for a given discharge capacity, the object can be treated like a function handle, by using \mcode{subsref} indexing.
 \begin{lstlisting}
 d = dischargeFit(V, C_dis, I, T, 'mode', 'fmin');
@@ -160,4 +160,24 @@ However, the spline interpolation results in an overall more precise replication
 	\caption[Result of the \mcode{interp()} method for a current below the lowest measured current without output limitation and with output limitation]{Result of the \mcode{interp()} method for a current below the lowest measured current without output limitation (left) and with output limitation (right). The raw data was extracted from \cite{_data_2010}.}
 	\label{fig:dischargeCurvesIlim}
 \end{figure}
-As demonstrated Figure~\ref{fig:dischargeCurvesIlim} (left), the \mcode{interp} method using spline interpolation does not provide a good extrapolation of currents. In order to correct this, the voltage output is limited by the curve fit with the lowest current $I\subi{min}$ and by the curve fit with the highest current $I\subi{max}$, respectively. As a result, the \mcode{dischargeFit} recorded at $I\subi{min}$ is called for any current below $I\subi{min}$ (see Figure~\ref{fig:dischargeCurvesIlim}, left) and the \mcode{dischargeFit} recorded at $I\subi{max}$ is called for any current above $I\subi{max}$. In this model, the battery's maximum discharging current is limited by the \mcode{dischargeCurves} object's $I\subi{max}$ (see section\todo{ref section})
+As demonstrated Figure~\ref{fig:dischargeCurvesIlim} (left), the \mcode{interp} method using spline interpolation does not provide a good extrapolation of currents. In order to correct this, the voltage output is limited by the curve fit with the lowest current $I\subi{min}$ and by the curve fit with the highest current $I\subi{max}$, respectively. As a result, the \mcode{dischargeFit} recorded at $I\subi{min}$ is called for any current below $I\subi{min}$ (see Figure~\ref{fig:dischargeCurvesIlim}, left) and the \mcode{dischargeFit} recorded at $I\subi{max}$ is called for any current above $I\subi{max}$. In this model, the battery's maximum discharging current is limited by the \mcode{dischargeCurves} object's $I\subi{max}$ (see section\todo{ref section}).
+
+\subsubsection{Usage of a \mcode{dischargeCurves} object}
+Similarly to a \mcode{dischargeFit}, the results of a \mcode{dischargeCurves} object can be visually validated using the \mcode{plotResults()} method. Individual curve fit references removed using the \mcode{remove()} method and the respective currents. \clearpage
+\begin{lstlisting}
+% d = dischargeFit object
+% I = current
+dC.add(d) % add d to dischargeCurves dC
+dC.remove(I) % remove the dischargeFit object with current I from dC
+\end{lstlisting}
+In order to access the \mcode{dischargeFit} references stored within a \mcode{dischargeCurves} object, the \mcode{createIterator()} method can be used. This creates an iterator object, a \matlab\ implementation of the \mcode{java.util.iterator} interface~\cite{_iterator_????}. The object can be used to iterate through the wrapped \mcode{dischargeFit} objects using a similar syntax to that of a \java\ iterator.
+\begin{lstlisting}
+it = dC.createIterator; % returns an scIterator object
+while it.hasNext % returns true if there is another object to
+				 % iterate through
+	d = it.next; % returns a dischargeFit object
+	% more code here
+end
+it.reset % resets the scIterator
+\end{lstlisting}
+For usage in a battery model, a \mcode{dischargeCurves} object is passed to an implementation of the \mcode{batteryInterface} (see section\todo{ref section}) using it's \mcode{addCurves()} method.
