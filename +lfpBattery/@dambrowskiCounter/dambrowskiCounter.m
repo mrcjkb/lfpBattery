@@ -33,7 +33,7 @@ classdef dambrowskiCounter < lfpBattery.cycleCounter
     %
     %addlistener(c, 'NewCycle', @Obj.methodName)
     %
-    %SEE ALSO: lfpBattery.eoAgeModel lfpBattery.dambrowskiCounter
+    %SEE ALSO: lfpBattery.eoAgeModel lfpBattery.cycleCounter
     %lfpBattery.batteryAgeModel
     %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
