@@ -224,7 +224,8 @@ classdef (Abstract) curveFitInterface < matlab.mixin.Copyable %& lfpBattery.gpuC
         end
         function r = get.rmse(d)
             % fit errors
-            r = sqrt(sum(d.e_tot.^2)); % root mean squared error
+            e = d.e_tot;
+            r = sqrt(sum(e.^2)/numel(e)); % root mean squared error
         end
     end
     
