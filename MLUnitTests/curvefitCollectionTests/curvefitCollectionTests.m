@@ -39,7 +39,6 @@ end
 d.plotResults
 close gcf
 
-%% MTODO validate spline interpolation of dischargeCurves
 idx = 4;
 I_test = raw(idx).I;
 d.remove(I_test)
