@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  27 FEB 2017 21:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  27 FEB 2017 22:34
 entering extended mode
 **./lfpBattery_Documentation.tex
 (lfpBattery_Documentation.tex
@@ -2275,7 +2275,7 @@ Package microtype Info: Loading generic settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 
-<GUI.png, id=53, 834.86906pt x 342.5297pt>
+<GUI.png, id=61, 834.86906pt x 342.5297pt>
 File: GUI.png Graphic file (type png)
  <use GUI.png>
 Package pdftex.def Info: GUI.png used on input line 73.
@@ -2353,7 +2353,7 @@ Package tocbasic Info: character protrusion at lot deactivated on input line 97
 \tf@lot=\write9
 \openout9 = `lfpBattery_Documentation.lot'.
 
- <tulogo.pdf, id=88, 202.7575pt x 113.42375pt>
+ <tulogo.pdf, id=98, 202.7575pt x 113.42375pt>
 File: tulogo.pdf Graphic file (type pdf)
 
 <use tulogo.pdf>
@@ -2450,7 +2450,7 @@ d-to.pdf dischargeFit01.eps>
 (epstopdf)             \includegraphics on input line 50.
 Package epstopdf Info: Output file is already uptodate.
 
-<dischargeFit01-eps-converted-to.pdf, id=142, 633.36626pt x 317.185pt>
+<dischargeFit01-eps-converted-to.pdf, id=153, 633.36626pt x 317.185pt>
 File: dischargeFit01-eps-converted-to.pdf Graphic file (type pdf)
 
 <use dischargeFit01-eps-converted-to.pdf>
@@ -2476,7 +2476,7 @@ Package epstopdf Info: Source file: <dischargeFit02.eps>
 d-to.pdf dischargeFit02.eps>
 (epstopdf)             \includegraphics on input line 57.
 Package epstopdf Info: Output file is already uptodate.
-<dischargeFit02-eps-converted-to.pdf, id=144, 633.36626pt x 317.185pt>
+<dischargeFit02-eps-converted-to.pdf, id=155, 633.36626pt x 317.185pt>
 File: dischargeFit02-eps-converted-to.pdf Graphic file (type pdf)
 
 <use dischargeFit02-eps-converted-to.pdf>
@@ -2561,7 +2561,7 @@ Package epstopdf Info: Source file: <interpMethod.eps>
 to.pdf interpMethod.eps>
 (epstopdf)             \includegraphics on input line 151.
 Package epstopdf Info: Output file is already uptodate.
- <interpMethod-eps-converted-to.pdf, id=229, 633.36626pt x 317.185pt>
+ <interpMethod-eps-converted-to.pdf, id=240, 633.36626pt x 317.185pt>
 File: interpMethod-eps-converted-to.pdf Graphic file (type pdf)
 
 <use interpMethod-eps-converted-to.pdf>
@@ -2579,7 +2579,7 @@ verted-to.pdf dischargeCurvesIlim.eps>
 (epstopdf)             \includegraphics on input line 159.
 Package epstopdf Info: Output file is already uptodate.
 
-<dischargeCurvesIlim-eps-converted-to.pdf, id=232, 633.36626pt x 317.185pt>
+<dischargeCurvesIlim-eps-converted-to.pdf, id=243, 633.36626pt x 317.185pt>
 File: dischargeCurvesIlim-eps-converted-to.pdf Graphic file (type pdf)
 
 <use dischargeCurvesIlim-eps-converted-to.pdf>
@@ -2630,7 +2630,12 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 ]
 \openout2 = `ageModel.aux'.
 
- (ageModel.tex)
+ (ageModel.tex
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\lstinline' on input line 6.
+
+)
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 110.
@@ -2678,16 +2683,10 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 114.
 (dischargeCurves.aux) (ageModel.aux))
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 114.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 114.
+Package rerunfilecheck Info: File `lfpBattery_Documentation.out' has not change
+d.
+(rerunfilecheck)             Checksum: 24687049226BD7DC5E244EDC614B38C0;1148.
 
-
-Package rerunfilecheck Warning: File `lfpBattery_Documentation.out' has changed
-.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `lfpBattery_Documentation.out':
-(rerunfilecheck)             Before: 74697081445FE10C8BBDAA897C434EB5;972
-(rerunfilecheck)             After:  90969759777F73AEFE86A5B649A8B966;1041.
 
 LaTeX Warning: There were multiply-defined labels.
 
@@ -2696,11 +2695,11 @@ Package logreq Info: Writing requests to 'lfpBattery_Documentation.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 45572 strings out of 493363
- 857308 string characters out of 3139771
- 1450128 words of memory out of 3000000
- 48140 multiletter control sequences out of 15000+200000
- 26057 words of font info for 134 fonts, out of 3000000 for 9000
+ 45581 strings out of 493363
+ 857418 string characters out of 3139771
+ 1449146 words of memory out of 3000000
+ 48145 multiletter control sequences out of 15000+200000
+ 26124 words of font info for 135 fonts, out of 3000000 for 9000
  1127 hyphenation exceptions out of 8191
  73i,16n,78p,10399b,1602s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{C:/Pr
@@ -2723,9 +2722,9 @@ C:/Program Files/MiKTeX 2.9/fonts/type1/public/cm-super/sfsx1440.pfb><C:/Progra
 m Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrb8a.pfb><C:/Program Files/MiKTeX 
 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1
 /urw/courier/ucrro8a.pfb>
-Output written on lfpBattery_Documentation.pdf (15 pages, 565091 bytes).
+Output written on lfpBattery_Documentation.pdf (15 pages, 567631 bytes).
 PDF statistics:
- 393 PDF objects out of 1000 (max. 8388607)
- 111 named destinations out of 1000 (max. 500000)
- 34443 words of extra memory for PDF output out of 35830 (max. 10000000)
+ 403 PDF objects out of 1000 (max. 8388607)
+ 113 named destinations out of 1000 (max. 500000)
+ 34459 words of extra memory for PDF output out of 35830 (max. 10000000)
 

@@ -1,0 +1,7 @@
+\markboth{Age model}{Age model}
+\section{Age model}
+The age model is implemented using the Observer design pattern. This way, various age models (predefined or custom) can be dynamically added to a battery model at run time or even left out completely. The event oriented age model provided in this package is based solely on cycle counting, for which A mathematical approach developed by~\cite{dambrowski_mathematical_2012} is implemented. A description of the counting algorithm and the classes used to implement the age model is provided in the following sections.
+\subsection{Cycle counter}
+Cycle counting algorithms are designed to count cycles from a set of measured data. A challenge for a running simulation or a battery management system (BMS) that relies on cycle counting is to decide when to count the cycles of an accumulated data set. Counting could be done at fixed time intervals or it could be triggered by a certain event. The latter is the approach implemented by the \mcode{cycleCounter} interface.
+\subsubsection{The \mcode{cycleCounter} interface}
+The observing of charge cycles is handled by the abstract \mcode{cycleCounter} interface, in which all methods except for the \mcode{count()} method are predefined.

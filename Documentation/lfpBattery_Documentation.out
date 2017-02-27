@@ -10,4 +10,5 @@
 \BOOKMARK [3][-]{subsubsection.1.2.3}{Usage of a [basicstyle=]|dischargeCurves| object}{subsection.1.2}% 10
 \BOOKMARK [1][-]{section.2}{Age model}{}% 11
 \BOOKMARK [2][-]{subsection.2.1}{Cycle counter}{section.2}% 12
-\BOOKMARK [1][-]{subsection.2.1}{References}{}% 13
+\BOOKMARK [3][-]{subsubsection.2.1.1}{The [basicstyle=]|cycleCounter| interface}{subsection.2.1}% 13
+\BOOKMARK [1][-]{subsubsection.2.1.1}{References}{}% 14
