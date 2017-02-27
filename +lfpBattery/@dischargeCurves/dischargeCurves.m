@@ -12,7 +12,7 @@ classdef dischargeCurves < lfpBattery.curvefitCollection
     %DISCHARGECURVES Methods:
     %
     %   add                 - Adds a curve fit object cf to a collection c.
-    %   remove              - Removes the object with the z coordinate specified by z from the collection c.
+    %   remove              - Removes the object with the current I.
     %   createIterator      - Returns an iterator for the DISCHARGECURVES object.
     %
     %SEE ALSO: lfpBattery.dischargeFit lfpBattery.curveFitInterface
