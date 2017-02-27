@@ -5,8 +5,8 @@ classdef dischargeCurves < lfpBattery.curvefitCollection
     %
     %DISCHARGECURVES Properties:
     %
-    %   xydata - Array of dischargeFit or other curve fit objects (should implement curveFitInterface)
-    %   z      - Array of currents (in A) at which the respective curve measurements were
+    %   xydata - Cell array of dischargeFit or other curve fit objects (should implement curveFitInterface)
+    %   z      - Vector of currents (in A) at which the respective curve measurements were
     %            recorded
     %
     %DISCHARGECURVES Methods:

@@ -37,8 +37,8 @@
       \strng{fullhash}{ef2e23afa36faec72d8a8d31119c37ca}
       \strng{authornamehash}{ef2e23afa36faec72d8a8d31119c37ca}
       \strng{authorfullhash}{ef2e23afa36faec72d8a8d31119c37ca}
-      \field{sortinit}{2}
-      \field{sortinithash}{0aa614ace9f3a40ef5a67e7f7a184048}
+      \field{sortinit}{1}
+      \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{issn}{1521-3331}
@@ -77,8 +77,8 @@
       \strng{fullhash}{384be8aaa85e4db8086d32ca7b92b291}
       \strng{authornamehash}{384be8aaa85e4db8086d32ca7b92b291}
       \strng{authorfullhash}{384be8aaa85e4db8086d32ca7b92b291}
-      \field{sortinit}{3}
-      \field{sortinithash}{197da6d6c34c6b20ce45c4d4baace5a4}
+      \field{sortinit}{2}
+      \field{sortinithash}{0aa614ace9f3a40ef5a67e7f7a184048}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{day}{30}
@@ -98,8 +98,8 @@
       \list{location}{1}{%
         {Karlstein}%
       }
-      \field{sortinit}{4}
-      \field{sortinithash}{d221becdd544034cf9082056cd6e6d2d}
+      \field{sortinit}{3}
+      \field{sortinithash}{197da6d6c34c6b20ce45c4d4baace5a4}
       \field{labeltitlesource}{title}
       \field{title}{Data sheet: {BM}26650ETC1 - High Power Lithium Iron Phosphate Cell}
       \field{year}{2010}
@@ -109,6 +109,45 @@
       \endverb
       \verb{url}
       \verb www.bmz-gmbh.de
+      \endverb
+    \endentry
+    \entry{hyndman_another_2006}{article}{}
+      \name{author}{2}{}{%
+        {{hash=a3ecf7dc6730e4e8fc15fcbf9e002e55}{%
+           family={Hyndman},
+           familyi={H\bibinitperiod},
+           given={Rob\bibnamedelima J.},
+           giveni={R\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=a8ad2d1bee3a1fd17e95d0e907f76db6}{%
+           family={Koehler},
+           familyi={K\bibinitperiod},
+           given={Anne\bibnamedelima B.},
+           giveni={A\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+      }
+      \strng{namehash}{a98954758c1bcabb2b12f8de13efb871}
+      \strng{fullhash}{a98954758c1bcabb2b12f8de13efb871}
+      \strng{authornamehash}{a98954758c1bcabb2b12f8de13efb871}
+      \strng{authorfullhash}{a98954758c1bcabb2b12f8de13efb871}
+      \field{sortinit}{5}
+      \field{sortinithash}{c9df3c9fb8f555dd9201cedc5e343021}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{01692070}
+      \field{journaltitle}{International Journal of Forecasting}
+      \field{langid}{english}
+      \field{month}{10}
+      \field{number}{4}
+      \field{title}{Another look at measures of forecast accuracy}
+      \field{volume}{22}
+      \field{year}{2006}
+      \field{dateera}{ce}
+      \field{pages}{679\bibrangedash 688}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1016/j.ijforecast.2006.03.001
+      \endverb
+      \verb{file}
+      \verb Hyndman and Koehler - 2006 - Another look at measures of forecast accuracy.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\9U5FSRCE\\Hyndman and Koehler - 2006 - Another look at measures of forecast accuracy.pdf:application/pdf
       \endverb
     \endentry
   \endsortlist
