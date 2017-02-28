@@ -161,22 +161,18 @@ classdef (Abstract) cycleCounter < handle
             xb  = diff(b);          %-1 =>  indices of maxima
             %+1 =>  indices of minima
             imax = a(find(xb == -1) + 1); % indices of maxima
-            imin = a(find(xb == 1) + 1); % indices of minima
+            imin = a(find(xb == 1, 1, 'last') + 1); % last minimum
             nmaxi = numel(imax);
-            nmini = numel(imin);
             % Maximum or minumim at the ends? (for initialization)
             if (nmaxi == 0)
                 imax = zeros(0, 0, 'int32');
             else
-                if imax(1) < imin(1)
-                    imin(2:nmini+1) = imin;
-                    imin(1) = 1;
-                else
+                if imax(1) >= imin(1)
                     imax(2:nmaxi+1) = imax;
                     imax(1) = 1;
                 end
-                if imax(end) <= imin(end)
-                    imax(end+1) = Nt;
+                if imax(end) <= imin
+                    imax = [imax; Nt];
                 end
             end
             % Only return unique values (faster than built-in unique
