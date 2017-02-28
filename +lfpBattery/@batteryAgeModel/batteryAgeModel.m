@@ -19,7 +19,7 @@ classdef (Abstract) batteryAgeModel < handle
         % This property can be observed by creating an event listener
         % for a batteryAgeModel subclass with the class's addlistener() method:
         %       addlistener(b, 'SoH', 'PostSet', @obj.handlePropertyEvents);
-        %              - b is the batteryAgeModel subclass (the source) 
+        %              - b is the batteryAgeModel subclass (the source)
         %              - @obj.handlePropertyEvents is a handle to the
         %                   object's function that is called when the object is
         %                   notified of the SoH change.
@@ -37,7 +37,7 @@ classdef (Abstract) batteryAgeModel < handle
         eolAc;
     end
     properties (Access = 'protected')
-       lh; % Event listener (observer) 
+        lh; % Event listener (observer)
     end
     events
         EolReached; % Notifys listeners (observers) that the end of life specified by eolSoH has been reached
@@ -93,8 +93,8 @@ classdef (Abstract) batteryAgeModel < handle
         function set.Ac(b, a)
             b.SoH = 1-a;
             if b.SoH <= b.eolSoH
-               notify(b, 'EolReached')
-           end
+                notify(b, 'EolReached')
+            end
         end
         function set.eolAc(b, a)
             lfpBattery.commons.onezeroChk(a, 'End of life state of health')
