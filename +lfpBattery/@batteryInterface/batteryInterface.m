@@ -562,6 +562,10 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             cc = p.Results.cycleCounter;
             if ischar(am)
                 if ~strcmp(am, 'EO')
+                    if ~ischar(cc)
+                        warning(['A cycleCounter was added, but no ageModel was specified. ', ...
+                            'Replacing the cycleCounter with a dummyCycleCounter.'])
+                    end
                     b.cyc = lfpBattery.dummyCycleCounter;
                     b.ageModel = lfpBattery.dummyAgeModel;
                     if strcmp(am, 'LowerLevel')
