@@ -75,7 +75,8 @@ classdef eoCalAgeModel < lfpBattery.eoAgeModel
             %   l = calendar life of the battery in years
             %% call superclass constructor
             a = a@lfpBattery.eoAgeModel(varargin{:});
-            a.L_cal = l * 31557600; % set L_cal in seconds
+            a.L_cal = l * 525600 / a.eolAc; % set L_cal in seconds
+            % taking end of life age into account
         end % constructor
         function addCalAge(a, dt)
             % ADDCALAGE: Adds to the battery's age using the simulation time step size
