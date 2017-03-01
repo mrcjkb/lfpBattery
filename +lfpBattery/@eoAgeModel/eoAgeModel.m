@@ -85,7 +85,17 @@ classdef eoAgeModel < lfpBattery.batteryAgeModel
             %
             % Ac = Ac + sum(number_of_cycles_at_DoC_i / ...
             %    number_of_cycles_to_failure_at_DoC_i)
-            a.Ac = a.Ac + sum(1 ./ a.wFit(src.cDoC));
+            a.Ac = a.Ac + c.cycAgeCalc(src.cDoC);
+        end
+    end
+    methods (Static, Access = 'protected')
+        function ac = cycAgeCalc(cDoC)
+            % CYCAGECALC: Calculates the age from a cDoC profile
+            % % The aging is calculated according to the formula:
+            %
+            % Ac = Ac + sum(number_of_cycles_at_DoC_i / ...
+            %    number_of_cycles_to_failure_at_DoC_i)
+            ac = sum(1 ./ a.wFit(cDoC));
         end
     end
 end
