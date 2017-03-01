@@ -60,7 +60,7 @@ classdef eoAgeModel < lfpBattery.batteryAgeModel
             %
             %   cy is a cycleCounter object that is to be observed by a.
             if nargin < 3
-                eols = 0.2;
+                eols = 0.8;
             end
             if nargin < 4
                 init_soh = 1;
