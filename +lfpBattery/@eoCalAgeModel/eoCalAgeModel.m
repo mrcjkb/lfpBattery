@@ -42,7 +42,7 @@ classdef eoCalAgeModel < lfpBattery.eoAgeModel
         L_cal; % Calendar life in s
     end
     properties (Hidden, Access = 'protected')
-        cycleAge = false; % Flag to indicate whether calendar aging has occured.
+        cycleAge = 0; %Calendar aging.
     end
     
     methods
@@ -81,6 +81,8 @@ classdef eoCalAgeModel < lfpBattery.eoAgeModel
         function addCalAge(a, dt)
             % ADDCALAGE: Adds to the battery's age using the simulation time step size
             % if the battery was not cycled in the respective time step.
+            % If the battery was cycled, the maximum of cycle or calendar
+            % aging is added
             %
             % Syntax:
             %       a.ADDCALAGE(dt)
@@ -93,19 +95,14 @@ classdef eoCalAgeModel < lfpBattery.eoAgeModel
             %
             % This method should be called at runtime in every simulation
             % time step.
-            if ~a.cycleAge % call only if cycle aging has not occured
-                % increment age as a linear function of calendar life
-                a.Ac = a.Ac + dt / a.L_cal;
-            end
-            a.cycleAge = false; % reset
+            a.Ac = a.Ac + max(a.cycleAge, dt / a.L_cal);
+            a.cycleAge = 0; % reset cycle aging
         end % addCalAge
     end
     methods (Access = 'protected')
-        % Overload addAging method to set cycleAge property to true and
-        % thus prevent calendar aging from being added.
-        function addAging(a, src, evt)
-            addAging@lfpBattery.eoAgeModel(a, src, evt) % call superclass method
-            a.cycleAge = true;
+        % Overload addAging method to cycleAge property instead of Ac
+        function addAging(a, src, ~)
+            a.cycleAge = c.cycAgeCalc(src.cDoC);
         end
     end
 end
