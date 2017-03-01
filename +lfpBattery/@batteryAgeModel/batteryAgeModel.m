@@ -59,7 +59,7 @@ classdef (Abstract) batteryAgeModel < handle
             %
             %   cy is a cycleCounter object that is to be observed by b.
             if nargin < 2
-                eols = 0.2;
+                eols = 0.8;
             end
             if nargin < 3
                 init_soh = 1;
