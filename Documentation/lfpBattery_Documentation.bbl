@@ -166,6 +166,22 @@
       \verb https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html
       \endverb
     \endentry
+    \entry{_overview_????}{online}{}
+      \field{sortinit}{9}
+      \field{sortinithash}{2999ebab86052e6d71b434385f8b4ed2}
+      \field{labeltitlesource}{title}
+      \field{title}{Overview Events and Listeners - {MATLAB} \& Simulink - {MathWorks} United Kingdom}
+      \field{urlday}{28}
+      \field{urlmonth}{2}
+      \field{urlyear}{2017}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb Overview Events and Listeners - MATLAB & Simulink - MathWorks United Kingdom:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\ZHU4AA8U\\learning-to-use-events-and-listeners.html:text/html
+      \endverb
+      \verb{url}
+      \verb https://uk.mathworks.com/help/matlab/matlab_oop/learning-to-use-events-and-listeners.html?s_tid=gn_loc_drop
+      \endverb
+    \endentry
     \entry{dambrowski_mathematical_2012}{inproceedings}{}
       \name{author}{3}{}{%
         {{hash=aa564d8f7927e8dc6a03506bd83bd3e1}{%
@@ -191,8 +207,8 @@
       \strng{fullhash}{457e6bac861169e61833c41d15372908}
       \strng{authornamehash}{457e6bac861169e61833c41d15372908}
       \strng{authorfullhash}{457e6bac861169e61833c41d15372908}
-      \field{sortinit}{9}
-      \field{sortinithash}{2999ebab86052e6d71b434385f8b4ed2}
+      \field{sortinit}{1}
+      \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Advanced Automotive Battery Conference Europe}
@@ -205,6 +221,90 @@
       \verb DAMBROWSKI 2012 Mathematical methods for classification of state-of-charge.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\KX46Z3SE\\DAMBROWSKI 2012 Mathematical methods for classification of state-of-charge.pdf:application/pdf
       \endverb
       \keyw{Electric batteries,Electrochemistry,Industrial,Storage batteries}
+    \endentry
+    \entry{matsuishi_fatigue_1968}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{hash=9bb4b37029e8b664df31d91f49906111}{%
+           family={Matsuishi},
+           familyi={M\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+        {{hash=b682fefe6744dd7c14071a26fed17107}{%
+           family={Endo},
+           familyi={E\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Japan}%
+      }
+      \strng{namehash}{1983f5bec5929d6f3cf7abb55ba21916}
+      \strng{fullhash}{1983f5bec5929d6f3cf7abb55ba21916}
+      \strng{authornamehash}{1983f5bec5929d6f3cf7abb55ba21916}
+      \strng{authorfullhash}{1983f5bec5929d6f3cf7abb55ba21916}
+      \field{sortinit}{1}
+      \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Mech. Engineering}
+      \field{title}{Fatigue of metals subjected to varying stress}
+      \field{year}{1968}
+      \field{dateera}{ce}
+    \endentry
+    \entry{dufo-lopez_multi-objective_2008}{article}{}
+      \name{author}{2}{}{%
+        {{hash=2af112b3560c2f20b3c2cf612da5bc57}{%
+           family={Dufo-López},
+           familyi={D\bibinithyphendelim L\bibinitperiod},
+           given={Rodolfo},
+           giveni={R\bibinitperiod}}}%
+        {{hash=e2805da224267bda756ee82de062e389}{%
+           family={Bernal-Agustín},
+           familyi={B\bibinithyphendelim A\bibinitperiod},
+           given={José\bibnamedelima L.},
+           giveni={J\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+      }
+      \strng{namehash}{5b450e3932d16fe1c2acc7369a8ef966}
+      \strng{fullhash}{5b450e3932d16fe1c2acc7369a8ef966}
+      \strng{authornamehash}{5b450e3932d16fe1c2acc7369a8ef966}
+      \strng{authorfullhash}{5b450e3932d16fe1c2acc7369a8ef966}
+      \field{sortinit}{1}
+      \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{09601481}
+      \field{journaltitle}{Renewable Energy}
+      \field{langid}{english}
+      \field{month}{12}
+      \field{number}{12}
+      \field{title}{Multi-objective design of {PV}–wind–diesel–hydrogen–battery systems}
+      \field{volume}{33}
+      \field{year}{2008}
+      \field{dateera}{ce}
+      \field{pages}{2559\bibrangedash 2572}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1016/j.renene.2008.02.027
+      \endverb
+      \verb{file}
+      \verb Dufo-López and Bernal-Agustín - 2008 - Multi-objective design of PV–wind–diesel–hydrogen–.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\KIA7X57S\\Dufo-López and Bernal-Agustín - 2008 - Multi-objective design of PV–wind–diesel–hydrogen–.pdf:application/pdf
+      \endverb
+    \endentry
+    \entry{_rainflow_????}{online}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
+      \field{labeltitlesource}{title}
+      \field{title}{Rainflow Counting Algorithm - File Exchange - {MATLAB} Central}
+      \field{urlday}{27}
+      \field{urlmonth}{2}
+      \field{urlyear}{2017}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb Rainflow Counting Algorithm - File Exchange - MATLAB Central:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\D8JW8ISW\\3026-rainflow-counting-algorithm.html:text/html
+      \endverb
+      \verb{url}
+      \verb https://uk.mathworks.com/matlabcentral/fileexchange/3026-rainflow-counting-algorithm
+      \endverb
     \endentry
   \endsortlist
 \endrefsection

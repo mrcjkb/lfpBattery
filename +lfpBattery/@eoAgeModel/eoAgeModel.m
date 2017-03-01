@@ -6,6 +6,23 @@ classdef eoAgeModel < lfpBattery.batteryAgeModel
     %[1] J. Dambrowski, S. Pichlmaier, A. Jossen - "Mathematical methods for classification of
     %    state-of-charge time series for cycle lifetime prediction".
     %
+    %Syntax:
+    %
+    % EOAGEMODEL(cy);                        Creates an eoAgeModel object that
+    %                                       updates the age of the battery whenever notified by a
+    %                                       cycleCounter subclass cy with the 'NewCycle' event
+    %                                       (using Matlab's implementation of the observer pattern).
+    % EOAGEMODEL(cy, cfit);                  The age is calculated according to the curve fit
+    %                                       specified by cfit. cfit can be a function handle
+    %                                       or a woehlerFit object or a custom curve fit object
+    %                                       that implements the curveFitInterface.
+    % EOAGEMODEL(cy, cfit, eol);             Initializes the object with an end of life SoH
+    %                                       specified by eols (must be between 0 and 1)
+    % EOAGEMODEL(cy, cfit, eols, init_soh);  Initializes the SoH with init_soh (must be
+    %                                       between 0 and 1)
+    %
+    %   cy is a cycleCounter object that is to be observed by a.
+    %
     %EOAGEMODEL Methods:
     %
     %   eoAgeModel - Class constructor
@@ -18,6 +35,15 @@ classdef eoAgeModel < lfpBattery.batteryAgeModel
     
     methods
         function a = eoAgeModel(cy, cfit, eols, init_soh)
+            %EOAGEMODEL event oriented aging model [1]
+            %Notifies event listeners every time SoH changes. Use this class's
+            %addlistener() method to add event listeners for the SohChanged and EolReached events.
+            %
+            %[1] J. Dambrowski, S. Pichlmaier, A. Jossen - "Mathematical methods for classification of
+            %    state-of-charge time series for cycle lifetime prediction".
+            %
+            %Syntax:
+            %
             % EOAGEMODEL(cy);                        Creates an eoAgeModel object that
             %                                       updates the age of the battery whenever notified by a
             %                                       cycleCounter subclass cy with the 'NewCycle' event
