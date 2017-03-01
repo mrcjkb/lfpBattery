@@ -306,6 +306,133 @@
       \verb https://uk.mathworks.com/matlabcentral/fileexchange/3026-rainflow-counting-algorithm
       \endverb
     \endentry
+    \entry{naumann_betriebsabhangige_2014}{inproceedings}{}
+      \name{author}{4}{}{%
+        {{hash=2122d215f383a7ca169996c4dfcae81d}{%
+           family={Naumann},
+           familyi={N\bibinitperiod},
+           given={Maik},
+           giveni={M\bibinitperiod}}}%
+        {{hash=f2afa27c64e1e2aef892238802b9400b}{%
+           family={Truong},
+           familyi={T\bibinitperiod},
+           given={Cong\bibnamedelima Nam},
+           giveni={C\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
+        {{hash=bce4020da0053cb2d1e7d2e2d5bc3c2d}{%
+           family={Karl},
+           familyi={K\bibinitperiod},
+           given={Ralph\bibnamedelima Ch.},
+           giveni={R\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=5a56dbc874a9d5074c5390bbd890b54d}{%
+           family={Jossen},
+           familyi={J\bibinitperiod},
+           given={Andreas},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Graz}%
+      }
+      \strng{namehash}{29313e372b5c7042e0ca107c55967e70}
+      \strng{fullhash}{4898d311bba79fa7c6aa50579ab866f9}
+      \strng{authornamehash}{29313e372b5c7042e0ca107c55967e70}
+      \strng{authorfullhash}{4898d311bba79fa7c6aa50579ab866f9}
+      \field{sortinit}{1}
+      \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Für die zukünftig erhöhte und vermehrte Nutzung von Energiespeichern in Stromnetzen existieren kaum Alternativen. Ein ökonomischer Vergleich von Energiespeichern lässt sich aufgrund großer technischer Unterschiede vor allem in Bezug auf das Verschleißverhalten nur dann sinnvoll durchführen, wenn man diese in ausreichendem Detaillierungsgrad berücksichtigt. In diesem Beitrag soll dazu ein Modell vorgestellt werden, welches die Kosten über dem gesamten Betriebszeitraum als sogenannte Vollkosten für verschiedene Speicher abbilden kann. Anhand der relevanten Speicherkosten, der spezifischen Speicherparameter sowie dem Einfluss des betriebsabhängigen Verschleißes und damit der Betriebszeit werden die Vollkosten, bezogen auf die umgesetzte Energiemenge, ermittelt. Mit detaillierten Eingangsparametern ist somit ein aussagekräftiger Kostenvergleich verschiedener Speichertechnologien möglich.}
+      \field{booktitle}{13. Symposium Energieinnovation}
+      \field{eventtitle}{13. Symposium Energieinnovation}
+      \field{title}{Betriebsabhängige Kostenrechnung von Energiespeichern}
+      \field{year}{2014}
+      \field{dateera}{ce}
+      \verb{file}
+      \verb Naumann et al. - 2014 - Betriebsabhängige Kostenrechnung von Energiespeich.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\8XA55K54\\Naumann et al. - 2014 - Betriebsabhängige Kostenrechnung von Energiespeich.pdf:application/pdf;Naumann et al. - 2014 - Betriebsabhängige Kostenrechnung von Energiespeich.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\Z3ZRRITM\\Naumann et al. - 2014 - Betriebsabhängige Kostenrechnung von Energiespeich.pdf:application/pdf
+      \endverb
+      \keyw{betriebsabhängige Alterung,Energiespeicher,Kostenmodell,Vollkostenrechnung}
+    \endentry
+    \entry{drouilhet_battery_1997}{inproceedings}{}
+      \name{author}{4}{}{%
+        {{hash=53f1b4715478b27491ff796193895875}{%
+           family={Drouilhet},
+           familyi={D\bibinitperiod},
+           given={Stephen},
+           giveni={S\bibinitperiod}}}%
+        {{hash=b9528c4c7d71ede4df42aed08fa22cd3}{%
+           family={Johnson},
+           familyi={J\bibinitperiod},
+           given={Bertrand},
+           giveni={B\bibinitperiod}}}%
+        {{hash=53f1b4715478b27491ff796193895875}{%
+           family={Drouilhet},
+           familyi={D\bibinitperiod},
+           given={Stephen},
+           giveni={S\bibinitperiod}}}%
+        {{hash=b9528c4c7d71ede4df42aed08fa22cd3}{%
+           family={Johnson},
+           familyi={J\bibinitperiod},
+           given={Bertrand},
+           giveni={B\bibinitperiod}}}%
+      }
+      \strng{namehash}{b4ef3b128fa79cfa92caab1ec3d8bb22}
+      \strng{fullhash}{e0019d66d52da75fe41f315ffa44c714}
+      \strng{authornamehash}{b4ef3b128fa79cfa92caab1ec3d8bb22}
+      \strng{authorfullhash}{e0019d66d52da75fe41f315ffa44c714}
+      \field{sortinit}{1}
+      \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{35th Aerospace Sciences Meeting and Exhibit}
+      \field{title}{A battery life prediction method for hybrid power applications}
+      \field{year}{1997}
+      \field{dateera}{ce}
+      \field{pages}{948}
+      \range{pages}{1}
+      \verb{file}
+      \verb NREL cycle life.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\774CESSG\\NREL cycle life.pdf:application/pdf
+      \endverb
+    \endentry
+    \entry{bindner_lifetime_2005}{book}{}
+      \name{author}{5}{}{%
+        {{hash=caf6447b3fa5a154f8951be6d468c740}{%
+           family={Bindner},
+           familyi={B\bibinitperiod},
+           given={H},
+           giveni={H\bibinitperiod}}}%
+        {{hash=8798b2f6cfa5130115ed85f5e2eade52}{%
+           family={Cronin},
+           familyi={C\bibinitperiod},
+           given={T},
+           giveni={T\bibinitperiod}}}%
+        {{hash=dd57fd4310083b9abd333c3ffb5ccf53}{%
+           family={Lundsager},
+           familyi={L\bibinitperiod},
+           given={P},
+           giveni={P\bibinitperiod}}}%
+        {{hash=ba24233b2a8b4aac2c7c4384a5b9b634}{%
+           family={{Risø National Lab}},
+           familyi={R\bibinitperiod}}}%
+        {{hash=59434f807e328575ed743abbc45c680b}{%
+           family={{Roskilde (DK). Wind Energy Department}},
+           familyi={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{d26e830f9c395af74808209eec7d0365}
+      \strng{fullhash}{e24ad055322b41e2eb895d0e630628fd}
+      \strng{authornamehash}{d26e830f9c395af74808209eec7d0365}
+      \strng{authorfullhash}{e24ad055322b41e2eb895d0e630628fd}
+      \field{sortinit}{2}
+      \field{sortinithash}{0aa614ace9f3a40ef5a67e7f7a184048}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-87-550-3441-9}
+      \field{note}{{OCLC}: 826678302}
+      \field{title}{Lifetime modelling of lead acid batteries}
+      \field{year}{2005}
+      \field{dateera}{ce}
+      \verb{file}
+      \verb Bindner_et_al_Lifetime Modelling of Lead Acid Batteries.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\N75XC29I\\Bindner_et_al_Lifetime Modelling of Lead Acid Batteries.pdf:application/pdf
+      \endverb
+    \endentry
   \endsortlist
 \endrefsection
 \endinput

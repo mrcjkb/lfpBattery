@@ -37,6 +37,10 @@ classdef eoCalAgeModel < lfpBattery.eoAgeModel
     %
     %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
     %         March 2017
+    %
+    %SEE ALSO: lfpBattery.eoAgeModel lfpBattery.batteryAgeModel
+    %lfpBattery.cycleCounter lfpBattery.woehlerFit lfpBattery.nrelcFit
+    %lfpBattery.deFit
     
     properties (SetAccess = 'immutable')
         L_cal; % Calendar life in s

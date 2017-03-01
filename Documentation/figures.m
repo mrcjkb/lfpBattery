@@ -178,3 +178,12 @@ leg.Position(1) = l - 0.25;
 leg.Box = 'off';
 tldeccheck
 printfig(f, fullfile(p, 'Documentation', 'dischargeCurvesIlim'), 'eps')
+%% woehlerFit
+load(fullfile(p, 'Resources', 'wfit.mat'), 'fit')
+fit.plotResults
+title([])
+f = gcf;
+setRatio(f, [2, 1])
+fontsizeset(f, fs)
+expandaxes(f)
+printfig(f, fullfile(p, 'Documentation', 'woehlerFit'), 'eps')

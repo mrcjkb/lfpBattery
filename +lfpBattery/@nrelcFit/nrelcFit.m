@@ -1,5 +1,5 @@
 classdef nrelcFit < lfpBattery.cycleCurveFit
-    %NRELCFIT creates a fit object for a woehler curve
+    %NRELCFIT creates a fit object for a cycle life curve
     %according to the function
     %
     %N(DoD) = p1 * (1/DoD) * exp(p2 * (1 - 1 / DoD)));

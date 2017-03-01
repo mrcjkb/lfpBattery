@@ -66,9 +66,32 @@ Each \mcode{cycleCounter} object's \mcode{count()} method converts the saved $So
 \end{figure}
 
 \subsection{Event oriented ageing model}
-The event oriented ageing model - a very simple and lightweight model - is implemented by the \mcode{eoAgeModel} class, which subclasses the abstract \mcode{batteryAgeModel} interface.
+The event oriented ageing model - a very simple and lightweight model - is implemented by the \mcode{eoAgeModel} class, which subclasses the abstract \mcode{batteryAgeModel} interface. Cycle ageing is calculated based on a curve fit of the battery's number of cycles to failure $N\subi{f}$ vs $DoD$ curve.
 
-
+\subsubsection{Cycle life curve fits}
+Due to the fact that the cycle ageing can vary strongly between technologies, it can be difficult to find a good fit for the $N\subi{f}$ vs $DoD$ curve. In order to provide some flexibility, three different classes, each implementing the \mcode{curveFitInterface}, are provided for fitting such curves in this package: \mcode{woehlerFit}, \mcode{nrelcFit} and \mcode{deFit}.
+They only differ in their class names, the number of fit parameters and in the functions used for fitting. The function used in \mcode{woehlerFit} is based on a metal fatigue curve (also known as a "W{\"o}hler curve")~\cite{naumann_betriebsabhangige_2014}
+\begin{equation}
+N\subi{f}(DoD) = x\subi{1}\cdot DoD^{-x\subi{2}}
+\end{equation}
+with the fit parameters $x\subi{1}$ and $x\subi{2}$. The \mcode{nrelcFit} class bases it's fit method on an older model \cite{drouilhet_battery_1997}.
+\begin{equation}
+N\subi{f}(DoD) = x\subi{1}\cdot \frac{1}{DoD}\cdot exp\bigg(x\subi{2}\cdot \bigg(1 - \frac{1}{DoD}\bigg)\bigg)
+\end{equation}
+Finally, the \mcode{deFit} class uses a double exponential function that was originally developed for lead-acid batteries~\cite{bindner_lifetime_2005}. However, it also seems to provide decent results for lithium-ion batteries in some cases.
+\begin{equation}
+N\subi{f}(DoD) = x\subi{1} + x\subi{2}\cdot exp(-x\subi{3}\cdot DoD) + x\subi{4}\cdot exp(-x\subi{5}\cdot DoD)
+\end{equation}
+An example for the fit results of a \mcode{woehlerFit} object is depicted in Figure~\ref{fig:woehlerFit}. Due to a lithium-ion battery's extremely large amount of cycles to failure at low $DoD$s, large relative errors can occur - especially at $DoD$s close to 1. In order to reduce the $rmse$, as many raw data points as possible should be provided for fitting.
+% TODO fit with logarithmic scaling and lots of data points selected
+% TODO note that ageModel also accepts anonymous functions (not recommended, because notoriously slow)
+\begin{figure}[t!]
+	\captionsetup{type=figure}
+	\centering
+	\includegraphics[width=\textwidth]{woehlerFit}
+	\caption[Example for a lithium ion battery's $N\subi{f}$ vs $DoD$ cycle life curve fitted using the \mcode{woehlerFit} class]{Example for a lithium ion battery's $N\subi{f}$ vs $DoD$ cycle life curve fitted using the \mcode{woehlerFit} class.}
+	\label{fig:woehlerFit}
+\end{figure}
 \subsection{Creating a user-defined age model}
 \begin{lstlisting}
 classdef myCalendarAgeModel < lfpBattery.eoAgeModel
@@ -85,7 +108,8 @@ classdef myCalendarAgeModel < lfpBattery.eoAgeModel
 			% varargin = input args of eoAgeModel constructor
 			%% call superclass constructor
 			obj = obj@lfpBattery.eoAgeModel(varargin{:});
-			obj.L_cal = l * 31557600; % set L_cal in seconds
+			obj.L_cal = l * 525600  / obj.eolAc; % set L_cal in
+			% seconds taking end of life age into account
 		end
 		function addCalAge(obj, dt)
 			% Adds to the battery's age using the simulation time

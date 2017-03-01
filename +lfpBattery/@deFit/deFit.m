@@ -38,7 +38,7 @@ classdef deFit < lfpBattery.cycleCurveFit
     
     methods
         function d = deFit(DoDN, N, varargin)
-            %DEFIT creates a fit object for a batterie's cycle life
+            %DEFIT creates a fit object for a battery's cycle life
             %according to the double exponential function
             %
             %N(DoD) = x0 + x1 * exp(-x2*DoD) + x3 * exp(-x4*DoD)
