@@ -31,7 +31,8 @@ classdef eoAgeModel < lfpBattery.batteryAgeModel
     %function handle or woehlerFit object is used. The fit is applied to each cDoD histogram value returned by the
     %cycleCounter subclass, which should lead to more precise results.
     %
-    %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt, December 2016
+    %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
+    %         December 2016
     
     methods
         function a = eoAgeModel(cy, cfit, eols, init_soh)
