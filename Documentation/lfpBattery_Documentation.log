@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  2 MAR 2017 17:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  2 MAR 2017 19:41
 entering extended mode
 **./lfpBattery_Documentation.tex
 (lfpBattery_Documentation.tex
@@ -2275,7 +2275,7 @@ Package microtype Info: Loading generic settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 
-<GUI.png, id=86, 834.86906pt x 342.5297pt>
+<GUI.png, id=98, 834.86906pt x 342.5297pt>
 File: GUI.png Graphic file (type png)
  <use GUI.png>
 Package pdftex.def Info: GUI.png used on input line 73.
@@ -2353,7 +2353,7 @@ Package tocbasic Info: character protrusion at lot deactivated on input line 97
 \tf@lot=\write9
 \openout9 = `lfpBattery_Documentation.lot'.
 
- <tulogo.pdf, id=133, 202.7575pt x 113.42375pt>
+ <tulogo.pdf, id=148, 202.7575pt x 113.42375pt>
 File: tulogo.pdf Graphic file (type pdf)
 
 <use tulogo.pdf>
@@ -2396,7 +2396,7 @@ ne 1.
 
 
 LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <12> not available
-(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 23.
+(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 29.
 
 ) [3
 
@@ -2450,7 +2450,7 @@ d-to.pdf dischargeFit01.eps>
 (epstopdf)             \includegraphics on input line 51.
 Package epstopdf Info: Output file is already uptodate.
 
-<dischargeFit01-eps-converted-to.pdf, id=199, 633.36626pt x 317.185pt>
+<dischargeFit01-eps-converted-to.pdf, id=215, 633.36626pt x 317.185pt>
 File: dischargeFit01-eps-converted-to.pdf Graphic file (type pdf)
 
 <use dischargeFit01-eps-converted-to.pdf>
@@ -2476,7 +2476,7 @@ Package epstopdf Info: Source file: <dischargeFit02.eps>
 d-to.pdf dischargeFit02.eps>
 (epstopdf)             \includegraphics on input line 58.
 Package epstopdf Info: Output file is already uptodate.
-<dischargeFit02-eps-converted-to.pdf, id=201, 633.36626pt x 317.185pt>
+<dischargeFit02-eps-converted-to.pdf, id=217, 633.36626pt x 317.185pt>
 File: dischargeFit02-eps-converted-to.pdf Graphic file (type pdf)
 
 <use dischargeFit02-eps-converted-to.pdf>
@@ -2561,7 +2561,7 @@ Package epstopdf Info: Source file: <interpMethod.eps>
 to.pdf interpMethod.eps>
 (epstopdf)             \includegraphics on input line 152.
 Package epstopdf Info: Output file is already uptodate.
- <interpMethod-eps-converted-to.pdf, id=286, 633.36626pt x 317.185pt>
+ <interpMethod-eps-converted-to.pdf, id=302, 633.36626pt x 317.185pt>
 File: interpMethod-eps-converted-to.pdf Graphic file (type pdf)
 
 <use interpMethod-eps-converted-to.pdf>
@@ -2579,7 +2579,7 @@ verted-to.pdf dischargeCurvesIlim.eps>
 (epstopdf)             \includegraphics on input line 160.
 Package epstopdf Info: Output file is already uptodate.
 
-<dischargeCurvesIlim-eps-converted-to.pdf, id=289, 633.36626pt x 317.185pt>
+<dischargeCurvesIlim-eps-converted-to.pdf, id=305, 633.36626pt x 317.185pt>
 File: dischargeCurvesIlim-eps-converted-to.pdf Graphic file (type pdf)
 
 <use dischargeCurvesIlim-eps-converted-to.pdf>
@@ -2630,7 +2630,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 ]
 \openout2 = `ageModel.aux'.
 
- (ageModel.tex <observer_schema.pdf, id=344, 604.50844pt x 536.75531pt>
+ (ageModel.tex <observer_schema.pdf, id=361, 604.50844pt x 536.75531pt>
 File: observer_schema.pdf Graphic file (type pdf)
 
 <use observer_schema.pdf>
@@ -2653,7 +2653,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 ]
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 26.
+Package pdftex.def Info: tulogo.pdf used on input line 25.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -2681,7 +2681,7 @@ Package epstopdf Info: Source file: <DAM01.eps>
 DAM01.eps>
 (epstopdf)             \includegraphics on input line 44.
 Package epstopdf Info: Output file is already uptodate.
-<DAM01-eps-converted-to.pdf, id=390, 422.57875pt x 317.185pt>
+<DAM01-eps-converted-to.pdf, id=409, 422.57875pt x 317.185pt>
 File: DAM01-eps-converted-to.pdf Graphic file (type pdf)
 
 <use DAM01-eps-converted-to.pdf>
@@ -2698,7 +2698,7 @@ DAM02.eps>
 (epstopdf)             \includegraphics on input line 45.
 Package epstopdf Info: Output file is already uptodate.
 
-<DAM02-eps-converted-to.pdf, id=391, 422.57875pt x 317.185pt>
+<DAM02-eps-converted-to.pdf, id=410, 422.57875pt x 317.185pt>
 File: DAM02-eps-converted-to.pdf Graphic file (type pdf)
 
 <use DAM02-eps-converted-to.pdf>
@@ -2731,7 +2731,7 @@ Package epstopdf Info: Source file: <cdoc_hists.eps>
 .pdf cdoc_hists.eps>
 (epstopdf)             \includegraphics on input line 63.
 Package epstopdf Info: Output file is already uptodate.
- <cdoc_hists-eps-converted-to.pdf, id=413, 633.36626pt x 317.185pt>
+ <cdoc_hists-eps-converted-to.pdf, id=432, 633.36626pt x 317.185pt>
 File: cdoc_hists-eps-converted-to.pdf Graphic file (type pdf)
 
 <use cdoc_hists-eps-converted-to.pdf>
@@ -2771,37 +2771,28 @@ Package epstopdf Info: Source file: <woehlerFit.eps>
 (epstopdf)                    size: 54782 bytes
 (epstopdf)             Command: <epstopdf --outfile=woehlerFit-eps-converted-to
 .pdf woehlerFit.eps>
-(epstopdf)             \includegraphics on input line 115.
+(epstopdf)             \includegraphics on input line 89.
 Package epstopdf Info: Output file is already uptodate.
 
-<woehlerFit-eps-converted-to.pdf, id=460, 633.36626pt x 317.185pt>
+<woehlerFit-eps-converted-to.pdf, id=478, 633.36626pt x 317.185pt>
 File: woehlerFit-eps-converted-to.pdf Graphic file (type pdf)
 
 <use woehlerFit-eps-converted-to.pdf>
-Package pdftex.def Info: woehlerFit-eps-converted-to.pdf used on input line 115
-.
+Package pdftex.def Info: woehlerFit-eps-converted-to.pdf used on input line 89.
+
 (pdftex.def)             Requested size: 452.9679pt x 226.84845pt.
 
 
 LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <8> not available
-(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 116.
-
+(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 90.
 
 
 LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <6> not available
-(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 116.
+(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 90.
 
-
-LaTeX Font Info:    Try loading font information for OML+pcr on input line 121.
-
-("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omlpcr.fd"
-File: omlpcr.fd 
-)
-LaTeX Font Info:    Font shape `OML/pcr/m/n' in size <10> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 121.
 File: tulogo.pdf Graphic file (type pdf)
- <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 127.
+<use tulogo.pdf>
+Package pdftex.def Info: tulogo.pdf used on input line 108.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -2810,18 +2801,50 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[14]
-LaTeX Font Info:    Try loading font information for OMS+pcr on input line 134.
+[14 <./woehlerFit-eps-converted-to.pdf>]
+File: tulogo.pdf Graphic file (type pdf)
+ <use tulogo.pdf>
+Package pdftex.def Info: tulogo.pdf used on input line 151.
+(pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
- ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omspcr.fd"
+
+Package Fancyhdr Warning: \headheight is too small (18.125pt): 
+ Make it at least 29.69101pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[15
+
+]
+LaTeX Font Info:    Try loading font information for OML+pcr on input line 159.
+
+ ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omlpcr.fd"
+File: omlpcr.fd 
+)
+LaTeX Font Info:    Font shape `OML/pcr/m/n' in size <10> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 159.
+LaTeX Font Info:    Try loading font information for OMS+pcr on input line 172.
+
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omspcr.fd"
 File: omspcr.fd 
 )
 LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 134.
-)
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 172.
 File: tulogo.pdf Graphic file (type pdf)
+ <use tulogo.pdf>
+Package pdftex.def Info: tulogo.pdf used on input line 186.
+(pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
-<use tulogo.pdf>
+
+Package Fancyhdr Warning: \headheight is too small (18.125pt): 
+ Make it at least 29.69101pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[16])
+File: tulogo.pdf Graphic file (type pdf)
+ <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 110.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
@@ -2831,7 +2854,9 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[15 <./woehlerFit-eps-converted-to.pdf>]
+[17
+
+]
 
 Class scrartcl Warning: incompatible usage of \@ssect detected.
 (scrartcl)              You've used the KOMA-Script implementation of \@ssect
@@ -2861,7 +2886,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[16
+[18
 
 ]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 114.
@@ -2872,7 +2897,7 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 114.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 114.
 Package rerunfilecheck Info: File `lfpBattery_Documentation.out' has not change
 d.
-(rerunfilecheck)             Checksum: 188F31EF2AD805D641A7B98ECAD04BEA;1644.
+(rerunfilecheck)             Checksum: 7654FDD49BDBCD99565DCF7DABD4CA90;1884.
 
 
 LaTeX Warning: There were multiply-defined labels.
@@ -2882,13 +2907,13 @@ Package logreq Info: Writing requests to 'lfpBattery_Documentation.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 45945 strings out of 493363
- 863917 string characters out of 3139771
- 1471596 words of memory out of 3000000
- 48372 multiletter control sequences out of 15000+200000
- 32363 words of font info for 169 fonts, out of 3000000 for 9000
+ 46012 strings out of 493363
+ 864888 string characters out of 3139771
+ 1469841 words of memory out of 3000000
+ 48402 multiletter control sequences out of 15000+200000
+ 32430 words of font info for 170 fonts, out of 3000000 for 9000
  1127 hyphenation exceptions out of 8191
- 73i,16n,78p,10399b,2371s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 73i,16n,78p,10399b,1602s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{C:/Pr
 ogram Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Program Files/MiKTeX 2.9
 /fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/Program Files/MiKTeX 2.9/fonts/
@@ -2912,9 +2937,9 @@ s/MiKTeX 2.9/fonts/type1/public/cm-super/sfss0800.pfb><C:/Program Files/MiKTeX
 /type1/public/cm-super/sfsx1440.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/ur
 w/courier/ucrb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8
 a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrro8a.pfb>
-Output written on lfpBattery_Documentation.pdf (21 pages, 937448 bytes).
+Output written on lfpBattery_Documentation.pdf (23 pages, 954522 bytes).
 PDF statistics:
- 661 PDF objects out of 1000 (max. 8388607)
- 212 named destinations out of 1000 (max. 500000)
- 44260 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 726 PDF objects out of 1000 (max. 8388607)
+ 247 named destinations out of 1000 (max. 500000)
+ 44284 words of extra memory for PDF output out of 51595 (max. 10000000)
 
