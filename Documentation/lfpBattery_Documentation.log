@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  2 MAR 2017 23:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  2 MAR 2017 23:43
 entering extended mode
 **./lfpBattery_Documentation.tex
 (lfpBattery_Documentation.tex
@@ -2873,17 +2873,9 @@ File: composite_schema.pdf Graphic file (type pdf)
 <use composite_schema.pdf>
 Package pdftex.def Info: composite_schema.pdf used on input line 24.
 (pdftex.def)             Requested size: 452.9679pt x 322.8113pt.
-
-<method_delegation.pdf, id=606, 682.04813pt x 329.73187pt>
-File: method_delegation.pdf Graphic file (type pdf)
-
-<use method_delegation.pdf>
-Package pdftex.def Info: method_delegation.pdf used on input line 32.
-(pdftex.def)             Requested size: 452.9679pt x 218.98717pt.
-)
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 111.
+Package pdftex.def Info: tulogo.pdf used on input line 28.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -2896,6 +2888,13 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 
 
  <./topologies2.pdf>]
+<method_delegation.pdf, id=623, 682.04813pt x 329.73187pt>
+File: method_delegation.pdf Graphic file (type pdf)
+
+<use method_delegation.pdf>
+Package pdftex.def Info: method_delegation.pdf used on input line 34.
+(pdftex.def)             Requested size: 452.9679pt x 218.98717pt.
+)
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 111.
@@ -2970,10 +2969,16 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 116.
 (dischargeCurves.aux) (ageModel.aux) (batteryInterface.aux))
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 116.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 116.
-Package rerunfilecheck Info: File `lfpBattery_Documentation.out' has not change
-d.
-(rerunfilecheck)             Checksum: C6F57DCC69B0E29C66AB024986441726;2004.
 
+
+Package rerunfilecheck Warning: File `lfpBattery_Documentation.out' has changed
+.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `lfpBattery_Documentation.out':
+(rerunfilecheck)             Before: C6F57DCC69B0E29C66AB024986441726;2004
+(rerunfilecheck)             After:  0B34EAD41C68818794D883CA8178EF9B;2072.
 
 LaTeX Warning: There were multiply-defined labels.
 
@@ -2982,13 +2987,13 @@ Package logreq Info: Writing requests to 'lfpBattery_Documentation.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 46074 strings out of 493363
- 866092 string characters out of 3139771
+ 46076 strings out of 493363
+ 866124 string characters out of 3139771
  1472129 words of memory out of 3000000
- 48438 multiletter control sequences out of 15000+200000
+ 48439 multiletter control sequences out of 15000+200000
  32430 words of font info for 170 fonts, out of 3000000 for 9000
  1127 hyphenation exceptions out of 8191
- 73i,16n,78p,10399b,1746s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 73i,16n,78p,10399b,1744s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{C:/Pr
 ogram Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Program Files/MiKTeX 2.9
 /fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/Program Files/MiKTeX 2.9/fonts/
@@ -3012,9 +3017,9 @@ s/MiKTeX 2.9/fonts/type1/public/cm-super/sfss0800.pfb><C:/Program Files/MiKTeX
 /type1/public/cm-super/sfsx1440.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/ur
 w/courier/ucrb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8
 a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrro8a.pfb>
-Output written on lfpBattery_Documentation.pdf (27 pages, 1486237 bytes).
+Output written on lfpBattery_Documentation.pdf (27 pages, 1492331 bytes).
 PDF statistics:
  841 PDF objects out of 1000 (max. 8388607)
- 263 named destinations out of 1000 (max. 500000)
+ 264 named destinations out of 1000 (max. 500000)
  44315 words of extra memory for PDF output out of 51595 (max. 10000000)
 
