@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  2 MAR 2017 23:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  2 MAR 2017 23:58
 entering extended mode
 **./lfpBattery_Documentation.tex
 (lfpBattery_Documentation.tex
@@ -2981,10 +2981,10 @@ Package logreq Info: Writing requests to 'lfpBattery_Documentation.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 46077 strings out of 493363
- 866140 string characters out of 3139771
+ 46075 strings out of 493363
+ 866104 string characters out of 3139771
  1472129 words of memory out of 3000000
- 48440 multiletter control sequences out of 15000+200000
+ 48438 multiletter control sequences out of 15000+200000
  32430 words of font info for 170 fonts, out of 3000000 for 9000
  1127 hyphenation exceptions out of 8191
  73i,16n,78p,10399b,1744s stack positions out of 5000i,500n,10000p,200000b,50000s
