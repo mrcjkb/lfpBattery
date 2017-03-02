@@ -433,6 +433,49 @@
       \verb Bindner_et_al_Lifetime Modelling of Lead Acid Batteries.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\N75XC29I\\Bindner_et_al_Lifetime Modelling of Lead Acid Batteries.pdf:application/pdf
       \endverb
     \endentry
+    \entry{cordoba-arenas_control-oriented_2015}{article}{}
+      \name{author}{3}{}{%
+        {{hash=bcb7b2b0bac3fc2c6135c81c44f9bf0b}{%
+           family={Cordoba-Arenas},
+           familyi={C\bibinithyphendelim A\bibinitperiod},
+           given={Andrea},
+           giveni={A\bibinitperiod}}}%
+        {{hash=1031b2e120656a4229aec4d954b5d41c}{%
+           family={Onori},
+           familyi={O\bibinitperiod},
+           given={Simona},
+           giveni={S\bibinitperiod}}}%
+        {{hash=637e58c637c90686caa7c55c10d628dd}{%
+           family={Rizzoni},
+           familyi={R\bibinitperiod},
+           given={Giorgio},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{38b2dad1795da8155ff14568bb60c0bb}
+      \strng{fullhash}{38b2dad1795da8155ff14568bb60c0bb}
+      \strng{authornamehash}{38b2dad1795da8155ff14568bb60c0bb}
+      \strng{authorfullhash}{38b2dad1795da8155ff14568bb60c0bb}
+      \field{sortinit}{2}
+      \field{sortinithash}{0aa614ace9f3a40ef5a67e7f7a184048}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{03787753}
+      \field{journaltitle}{Journal of Power Sources}
+      \field{langid}{english}
+      \field{month}{4}
+      \field{title}{A control-oriented lithium-ion battery pack model for plug-in hybrid electric vehicle cycle-life studies and system design with consideration of health management}
+      \field{volume}{279}
+      \field{year}{2015}
+      \field{dateera}{ce}
+      \field{pages}{791\bibrangedash 808}
+      \range{pages}{18}
+      \verb{doi}
+      \verb 10.1016/j.jpowsour.2014.12.048
+      \endverb
+      \verb{file}
+      \verb A control-oriented lithium-ion battery pack model for plug-in hybrid electric vehicle cycle-life studies and system design with consideration of health management.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\E83ZB6JP\\A control-oriented lithium-ion battery pack model for plug-in hybrid electric vehicle cycle-life studies and system design with consideration of health.pdf:application/pdf
+      \endverb
+    \endentry
   \endsortlist
 \endrefsection
 \endinput

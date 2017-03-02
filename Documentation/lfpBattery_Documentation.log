@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  2 MAR 2017 19:41
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  2 MAR 2017 23:24
 entering extended mode
 **./lfpBattery_Documentation.tex
 (lfpBattery_Documentation.tex
@@ -2116,7 +2116,7 @@ File: english.lbx 2016/12/05 v3.7 biblatex localization (PK/JW/AB)
 
 LaTeX Warning: Label `sec:dischargeCurves' multiply defined.
 
-) (ageModel.aux))
+) (ageModel.aux) (batteryInterface.aux))
 \openout1 = `lfpBattery_Documentation.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 70.
@@ -2133,7 +2133,8 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 70.
 LaTeX Font Info:    ... okay on input line 70.
 LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 70.
 LaTeX Font Info:    Try loading font information for TS1+cmr on input line 70.
- ("C:\Program Files\MiKTeX 2.9\tex\latex\base\ts1cmr.fd"
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\ts1cmr.fd"
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    ... okay on input line 70.
@@ -2275,7 +2276,7 @@ Package microtype Info: Loading generic settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 
-<GUI.png, id=98, 834.86906pt x 342.5297pt>
+<GUI.png, id=106, 834.86906pt x 342.5297pt>
 File: GUI.png Graphic file (type png)
  <use GUI.png>
 Package pdftex.def Info: GUI.png used on input line 73.
@@ -2353,7 +2354,7 @@ Package tocbasic Info: character protrusion at lot deactivated on input line 97
 \tf@lot=\write9
 \openout9 = `lfpBattery_Documentation.lot'.
 
- <tulogo.pdf, id=148, 202.7575pt x 113.42375pt>
+ <tulogo.pdf, id=161, 202.7575pt x 113.42375pt>
 File: tulogo.pdf Graphic file (type pdf)
 
 <use tulogo.pdf>
@@ -2450,7 +2451,7 @@ d-to.pdf dischargeFit01.eps>
 (epstopdf)             \includegraphics on input line 51.
 Package epstopdf Info: Output file is already uptodate.
 
-<dischargeFit01-eps-converted-to.pdf, id=215, 633.36626pt x 317.185pt>
+<dischargeFit01-eps-converted-to.pdf, id=233, 633.36626pt x 317.185pt>
 File: dischargeFit01-eps-converted-to.pdf Graphic file (type pdf)
 
 <use dischargeFit01-eps-converted-to.pdf>
@@ -2476,7 +2477,7 @@ Package epstopdf Info: Source file: <dischargeFit02.eps>
 d-to.pdf dischargeFit02.eps>
 (epstopdf)             \includegraphics on input line 58.
 Package epstopdf Info: Output file is already uptodate.
-<dischargeFit02-eps-converted-to.pdf, id=217, 633.36626pt x 317.185pt>
+<dischargeFit02-eps-converted-to.pdf, id=235, 633.36626pt x 317.185pt>
 File: dischargeFit02-eps-converted-to.pdf Graphic file (type pdf)
 
 <use dischargeFit02-eps-converted-to.pdf>
@@ -2561,7 +2562,7 @@ Package epstopdf Info: Source file: <interpMethod.eps>
 to.pdf interpMethod.eps>
 (epstopdf)             \includegraphics on input line 152.
 Package epstopdf Info: Output file is already uptodate.
- <interpMethod-eps-converted-to.pdf, id=302, 633.36626pt x 317.185pt>
+ <interpMethod-eps-converted-to.pdf, id=320, 633.36626pt x 317.185pt>
 File: interpMethod-eps-converted-to.pdf Graphic file (type pdf)
 
 <use interpMethod-eps-converted-to.pdf>
@@ -2579,7 +2580,7 @@ verted-to.pdf dischargeCurvesIlim.eps>
 (epstopdf)             \includegraphics on input line 160.
 Package epstopdf Info: Output file is already uptodate.
 
-<dischargeCurvesIlim-eps-converted-to.pdf, id=305, 633.36626pt x 317.185pt>
+<dischargeCurvesIlim-eps-converted-to.pdf, id=323, 633.36626pt x 317.185pt>
 File: dischargeCurvesIlim-eps-converted-to.pdf Graphic file (type pdf)
 
 <use dischargeCurvesIlim-eps-converted-to.pdf>
@@ -2630,7 +2631,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 ]
 \openout2 = `ageModel.aux'.
 
- (ageModel.tex <observer_schema.pdf, id=361, 604.50844pt x 536.75531pt>
+ (ageModel.tex <observer_schema.pdf, id=379, 604.50844pt x 536.75531pt>
 File: observer_schema.pdf Graphic file (type pdf)
 
 <use observer_schema.pdf>
@@ -2681,7 +2682,7 @@ Package epstopdf Info: Source file: <DAM01.eps>
 DAM01.eps>
 (epstopdf)             \includegraphics on input line 44.
 Package epstopdf Info: Output file is already uptodate.
-<DAM01-eps-converted-to.pdf, id=409, 422.57875pt x 317.185pt>
+<DAM01-eps-converted-to.pdf, id=427, 422.57875pt x 317.185pt>
 File: DAM01-eps-converted-to.pdf Graphic file (type pdf)
 
 <use DAM01-eps-converted-to.pdf>
@@ -2698,7 +2699,7 @@ DAM02.eps>
 (epstopdf)             \includegraphics on input line 45.
 Package epstopdf Info: Output file is already uptodate.
 
-<DAM02-eps-converted-to.pdf, id=410, 422.57875pt x 317.185pt>
+<DAM02-eps-converted-to.pdf, id=428, 422.57875pt x 317.185pt>
 File: DAM02-eps-converted-to.pdf Graphic file (type pdf)
 
 <use DAM02-eps-converted-to.pdf>
@@ -2731,7 +2732,7 @@ Package epstopdf Info: Source file: <cdoc_hists.eps>
 .pdf cdoc_hists.eps>
 (epstopdf)             \includegraphics on input line 63.
 Package epstopdf Info: Output file is already uptodate.
- <cdoc_hists-eps-converted-to.pdf, id=432, 633.36626pt x 317.185pt>
+ <cdoc_hists-eps-converted-to.pdf, id=450, 633.36626pt x 317.185pt>
 File: cdoc_hists-eps-converted-to.pdf Graphic file (type pdf)
 
 <use cdoc_hists-eps-converted-to.pdf>
@@ -2774,7 +2775,7 @@ Package epstopdf Info: Source file: <woehlerFit.eps>
 (epstopdf)             \includegraphics on input line 89.
 Package epstopdf Info: Output file is already uptodate.
 
-<woehlerFit-eps-converted-to.pdf, id=478, 633.36626pt x 317.185pt>
+<woehlerFit-eps-converted-to.pdf, id=496, 633.36626pt x 317.185pt>
 File: woehlerFit-eps-converted-to.pdf Graphic file (type pdf)
 
 <use woehlerFit-eps-converted-to.pdf>
@@ -2857,27 +2858,32 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 [17
 
 ]
+\openout2 = `batteryInterface.aux'.
 
-Class scrartcl Warning: incompatible usage of \@ssect detected.
-(scrartcl)              You've used the KOMA-Script implementation of \@ssect
-(scrartcl)              from within a non compatible caller, that does not
-(scrartcl)              \scr@s@ct@@nn@m@ locally.
-(scrartcl)              This could result in several error messages on input li
-ne 112.
+ (batteryInterface.tex
+<topologies2.pdf, id=599, 360.59718pt x 273.27094pt>
+File: topologies2.pdf Graphic file (type pdf)
+ <use topologies2.pdf>
+Package pdftex.def Info: topologies2.pdf used on input line 16.
+(pdftex.def)             Requested size: 452.9679pt x 343.27238pt.
 
+<composite_schema.pdf, id=603, 785.93625pt x 560.0925pt>
+File: composite_schema.pdf Graphic file (type pdf)
 
-LaTeX Font Warning: Font shape `OT1/cmss/m/sc' in size <12> not available
-(Font)              Font shape `OT1/cmr/m/sc' tried instead on input line 112.
+<use composite_schema.pdf>
+Package pdftex.def Info: composite_schema.pdf used on input line 24.
+(pdftex.def)             Requested size: 452.9679pt x 322.8113pt.
 
+<method_delegation.pdf, id=606, 682.04813pt x 329.73187pt>
+File: method_delegation.pdf Graphic file (type pdf)
 
-Overfull \hbox (56.40347pt too wide) in paragraph at lines 114--114
-[]\OT1/cmss/m/n/12 (-20) R. Dufo-Lopez and J. L. Bernal-Agustn, \  Multi-obj
-ective de-sign of PV{wind{diesel{hydrogen{battery
- []
-
+<use method_delegation.pdf>
+Package pdftex.def Info: method_delegation.pdf used on input line 32.
+(pdftex.def)             Requested size: 452.9679pt x 218.98717pt.
+)
 File: tulogo.pdf Graphic file (type pdf)
-<use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 114.
+ <use tulogo.pdf>
+Package pdftex.def Info: tulogo.pdf used on input line 111.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -2888,16 +2894,85 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 
 [18
 
+
+ <./topologies2.pdf>]
+File: tulogo.pdf Graphic file (type pdf)
+ <use tulogo.pdf>
+Package pdftex.def Info: tulogo.pdf used on input line 111.
+(pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
+
+
+Package Fancyhdr Warning: \headheight is too small (18.125pt): 
+ Make it at least 29.69101pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[19 <./composite_schema.pdf>]
+File: tulogo.pdf Graphic file (type pdf)
+ <use tulogo.pdf>
+Package pdftex.def Info: tulogo.pdf used on input line 111.
+(pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
+
+
+Package Fancyhdr Warning: \headheight is too small (18.125pt): 
+ Make it at least 29.69101pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[20 <./method_delegation.pdf>]
+
+Class scrartcl Warning: incompatible usage of \@ssect detected.
+(scrartcl)              You've used the KOMA-Script implementation of \@ssect
+(scrartcl)              from within a non compatible caller, that does not
+(scrartcl)              \scr@s@ct@@nn@m@ locally.
+(scrartcl)              This could result in several error messages on input li
+ne 113.
+
+
+LaTeX Font Warning: Font shape `OT1/cmss/m/sc' in size <12> not available
+(Font)              Font shape `OT1/cmr/m/sc' tried instead on input line 113.
+
+
+Overfull \hbox (56.40347pt too wide) in paragraph at lines 116--116
+[]\OT1/cmss/m/n/12 (-20) R. Dufo-Lopez and J. L. Bernal-Agustn, \  Multi-obj
+ective de-sign of PV{wind{diesel{hydrogen{battery
+ []
+
+File: tulogo.pdf Graphic file (type pdf)
+<use tulogo.pdf>
+Package pdftex.def Info: tulogo.pdf used on input line 113.
+(pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
+
+
+Package Fancyhdr Warning: \headheight is too small (18.125pt): 
+ Make it at least 29.69101pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[21
+
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 114.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 114.
+File: tulogo.pdf Graphic file (type pdf)
+ <use tulogo.pdf>
+Package pdftex.def Info: tulogo.pdf used on input line 116.
+(pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
+
+
+Package Fancyhdr Warning: \headheight is too small (18.125pt): 
+ Make it at least 29.69101pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[22]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 116.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 116.
  (lfpBattery_Documentation.aux (abbreviations.aux) (symbols.aux)
-(dischargeCurves.aux) (ageModel.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 114.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 114.
+(dischargeCurves.aux) (ageModel.aux) (batteryInterface.aux))
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 116.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 116.
 Package rerunfilecheck Info: File `lfpBattery_Documentation.out' has not change
 d.
-(rerunfilecheck)             Checksum: 7654FDD49BDBCD99565DCF7DABD4CA90;1884.
+(rerunfilecheck)             Checksum: C6F57DCC69B0E29C66AB024986441726;2004.
 
 
 LaTeX Warning: There were multiply-defined labels.
@@ -2907,13 +2982,13 @@ Package logreq Info: Writing requests to 'lfpBattery_Documentation.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 46012 strings out of 493363
- 864888 string characters out of 3139771
- 1469841 words of memory out of 3000000
- 48402 multiletter control sequences out of 15000+200000
+ 46074 strings out of 493363
+ 866092 string characters out of 3139771
+ 1472129 words of memory out of 3000000
+ 48438 multiletter control sequences out of 15000+200000
  32430 words of font info for 170 fonts, out of 3000000 for 9000
  1127 hyphenation exceptions out of 8191
- 73i,16n,78p,10399b,1602s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 73i,16n,78p,10399b,1746s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{C:/Pr
 ogram Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Program Files/MiKTeX 2.9
 /fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/Program Files/MiKTeX 2.9/fonts/
@@ -2937,9 +3012,9 @@ s/MiKTeX 2.9/fonts/type1/public/cm-super/sfss0800.pfb><C:/Program Files/MiKTeX
 /type1/public/cm-super/sfsx1440.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/ur
 w/courier/ucrb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8
 a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrro8a.pfb>
-Output written on lfpBattery_Documentation.pdf (23 pages, 954522 bytes).
+Output written on lfpBattery_Documentation.pdf (27 pages, 1486237 bytes).
 PDF statistics:
- 726 PDF objects out of 1000 (max. 8388607)
- 247 named destinations out of 1000 (max. 500000)
- 44284 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 841 PDF objects out of 1000 (max. 8388607)
+ 263 named destinations out of 1000 (max. 500000)
+ 44315 words of extra memory for PDF output out of 51595 (max. 10000000)
 

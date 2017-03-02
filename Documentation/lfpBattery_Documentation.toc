@@ -17,8 +17,10 @@
 \contentsline {subsubsection}{\numberline {2.2.3}Comparison of the cycle counters}{12}{subsubsection.2.2.3}
 \contentsline {subsection}{\numberline {2.3}Event oriented ageing model}{13}{subsection.2.3}
 \contentsline {subsubsection}{\numberline {2.3.1}Cycle life curve fits}{13}{subsubsection.2.3.1}
-\contentsline {subsubsection}{\numberline {2.3.2}Cycle Ageing}{15}{subsubsection.2.3.2}
+\contentsline {subsubsection}{\numberline {2.3.2}Cycle ageing}{15}{subsubsection.2.3.2}
 \contentsline {subsubsection}{\numberline {2.3.3}Age model initialization}{15}{subsubsection.2.3.3}
 \contentsline {subsubsection}{\numberline {2.3.4}Creating a user-defined age model}{16}{subsubsection.2.3.4}
 \contentsline {subsubsection}{\numberline {2.3.5}Calendar ageing}{17}{subsubsection.2.3.5}
-\contentsline {section}{References}{18}{equation.2.9}
+\contentsline {section}{\numberline {3}Battery Composition}{18}{section.3}
+\contentsline {subsection}{\numberline {3.1}Overview}{18}{subsection.3.1}
+\contentsline {section}{References}{21}{figure.caption.35}
