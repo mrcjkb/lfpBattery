@@ -27,7 +27,7 @@ classdef (Abstract) digitizeToolState < handle
         colors = lfpBattery.const.corpDesign;
         msgStr = cell(3, 1);
     end
-    properties (Access = 'protected')
+    properties (Hidden, Access = 'protected')
         dTool; % reference to digitizeTool object
         Origprompt;
         Xmsg;
@@ -46,6 +46,7 @@ classdef (Abstract) digitizeToolState < handle
         delXcal;
         delYcal;
         aqmarker;
+        prev;
     end
     
     methods

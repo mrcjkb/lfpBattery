@@ -194,23 +194,13 @@ classdef digitizeTool < handle
     end
     methods (Access = 'protected')
         function selectbutton_Callback(obj, ~, ~)
-            persistent pathname;
-            persistent lastpathname;
             import lfpBattery.*
             try
-                if isempty(pathname)
-                    pathname = pwd;
-                end
-                [pathname, filename] = commons.uigetimage('Choose image', pathname);
+                [pathname, filename] = commons.uigetimage('Choose image', obj.pathcache);
                 if isequal(filename, 0) || isequal(pathname, 0)
-                    if isempty(lastpathname)
-                        pathname = pwd;
-                    else
-                        pathname = lastpathname;
-                    end
                     return
                 else
-                    lastpathname = pathname;
+                    obj.pathcache(pathname)
                     imagename = fullfile(pathname, filename);
                 end
             catch
@@ -267,12 +257,12 @@ classdef digitizeTool < handle
             % Query number of data sets
             try
                 numsets = obj.state.numsets;
+                obj.ImgData = repmat(struct(), 1, numsets);
             catch
                 cancelandreset(obj);
                 waitfor(msgbox('Error!','ERROR','error'))
                 return
             end
-            obj.ImgData = repmat(struct(), 1, numsets);
             cct = 0;
             for si = 1:numsets % Data set loop
                 if cct > size(obj.state.colors, 1)
@@ -451,7 +441,19 @@ classdef digitizeTool < handle
             x = get(0, 'PointerLocation');
             x(ind) = xp(ind);
             set(0, 'PointerLocation', x);
-        end
+        end % lockpointer
+    end
+    methods (Static, Access = 'protected')
+        function path = pathcache(path)
+            persistent pathname;
+            if nargin > 0
+                pathname = path;
+            elseif isempty(pathname)
+                pathname = pwd;
+            end
+            if nargout > 0
+                path = pathname;
+            end
+        end % pathcache
     end
 end
-
