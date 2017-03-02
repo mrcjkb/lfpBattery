@@ -142,6 +142,7 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
         cvL = cell(1, 1); % cell array of event listeners (observers) for batteryCell's CV event
         ccL = cell(1, 1); % cell array of event listeners (observers) for batteryCell's CC event
         getNewVoltage; % Function handle to method for retrieving new voltage
+        wFit; % cache for cycleCurveFit objects (in case they are added before age model is initialized)
     end
     properties (SetObservable, Hidden, SetAccess = 'protected')
         % State of charge (handled internally) This soc can be slightly
@@ -582,6 +583,9 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
                     end
                     b.cyc = cy;
                     b.ageModel = lfpBattery.eoAgeModel(cy);
+                    if ~isempty(b.wFit)
+                        b.ageModel.wFit = b.wFit;
+                    end
                     b.sohPointer = @sohPoint; % point SoH to internal SoH
                 end
             else % custom age model
@@ -592,6 +596,14 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
                 end
                 b.cyc = cy;
                 b.ageModel = am;
+                if ~isempty(b.wFit)
+                    if isempty(am.wFit)
+                        b.ageModel.wFit = b.wFit;
+                    else
+                        warning(['Battery and age model both have a cycle life curve fit. ', ...
+                            'The battery''s fit has been replaced with the age model''s fit.'])
+                    end
+                end
                 b.sohPointer = @sohPoint; % point SoH to internal SoH
             end
             % Make sure the battery model's SoH is updated every time

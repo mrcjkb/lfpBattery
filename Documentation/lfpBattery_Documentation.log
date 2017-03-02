@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  2 MAR 2017 16:59
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  2 MAR 2017 17:53
 entering extended mode
 **./lfpBattery_Documentation.tex
 (lfpBattery_Documentation.tex
@@ -2420,7 +2420,7 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 
 File: tulogo.pdf Graphic file (type pdf)
 <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 28.
+Package pdftex.def Info: tulogo.pdf used on input line 29.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -2433,7 +2433,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.28 \begin{lstlisting}
+l.29 \begin{lstlisting}
                         [1
 
 
@@ -2447,7 +2447,7 @@ Package epstopdf Info: Source file: <dischargeFit01.eps>
 (epstopdf)                    size: 64172 bytes
 (epstopdf)             Command: <epstopdf --outfile=dischargeFit01-eps-converte
 d-to.pdf dischargeFit01.eps>
-(epstopdf)             \includegraphics on input line 50.
+(epstopdf)             \includegraphics on input line 51.
 Package epstopdf Info: Output file is already uptodate.
 
 <dischargeFit01-eps-converted-to.pdf, id=199, 633.36626pt x 317.185pt>
@@ -2455,17 +2455,17 @@ File: dischargeFit01-eps-converted-to.pdf Graphic file (type pdf)
 
 <use dischargeFit01-eps-converted-to.pdf>
 Package pdftex.def Info: dischargeFit01-eps-converted-to.pdf used on input line
- 50.
+ 51.
 (pdftex.def)             Requested size: 439.37941pt x 220.04362pt.
 
 
 LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <10.95> not available
-(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 51.
+(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 52.
 
 LaTeX Font Info:    Font shape `OT1/pcr/m/it' in size <10.95> not available
-(Font)              Font shape `OT1/pcr/m/sl' tried instead on input line 51.
+(Font)              Font shape `OT1/pcr/m/sl' tried instead on input line 52.
 LaTeX Font Info:    Font shape `OT1/pcr/m/it' in size <10> not available
-(Font)              Font shape `OT1/pcr/m/sl' tried instead on input line 51.
+(Font)              Font shape `OT1/pcr/m/sl' tried instead on input line 52.
 Package epstopdf Info: Source file: <dischargeFit02.eps>
 (epstopdf)                    date: 2017-02-26 20:50:21
 (epstopdf)                    size: 59000 bytes
@@ -2474,20 +2474,20 @@ Package epstopdf Info: Source file: <dischargeFit02.eps>
 (epstopdf)                    size: 58224 bytes
 (epstopdf)             Command: <epstopdf --outfile=dischargeFit02-eps-converte
 d-to.pdf dischargeFit02.eps>
-(epstopdf)             \includegraphics on input line 57.
+(epstopdf)             \includegraphics on input line 58.
 Package epstopdf Info: Output file is already uptodate.
 <dischargeFit02-eps-converted-to.pdf, id=201, 633.36626pt x 317.185pt>
 File: dischargeFit02-eps-converted-to.pdf Graphic file (type pdf)
 
 <use dischargeFit02-eps-converted-to.pdf>
 Package pdftex.def Info: dischargeFit02-eps-converted-to.pdf used on input line
- 57.
+ 58.
 (pdftex.def)             Requested size: 439.37941pt x 220.04362pt.
 LaTeX Font Info:    Font shape `TS1/pcr/m/it' in size <10.95> not available
-(Font)              Font shape `TS1/pcr/m/sl' tried instead on input line 58.
+(Font)              Font shape `TS1/pcr/m/sl' tried instead on input line 59.
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 65.
+Package pdftex.def Info: tulogo.pdf used on input line 66.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -2500,11 +2500,11 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.65 
+l.66 
       [2 <./dischargeFit01-eps-converted-to.pdf>]
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 75.
+Package pdftex.def Info: tulogo.pdf used on input line 76.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -2516,16 +2516,16 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 [3 <./dischargeFit02-eps-converted-to.pdf>]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\lstinline' on input line 95.
+(hyperref)                removing `\lstinline' on input line 96.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 104--105
+Underfull \hbox (badness 10000) in paragraph at lines 105--106
 
  []
 
 File: tulogo.pdf Graphic file (type pdf)
 <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 109.
+Package pdftex.def Info: tulogo.pdf used on input line 110.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -2537,11 +2537,11 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 [4]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\lstinline' on input line 110.
+(hyperref)                removing `\lstinline' on input line 111.
 
 File: tulogo.pdf Graphic file (type pdf)
 <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 142.
+Package pdftex.def Info: tulogo.pdf used on input line 143.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -2559,14 +2559,14 @@ Package epstopdf Info: Source file: <interpMethod.eps>
 (epstopdf)                    size: 70223 bytes
 (epstopdf)             Command: <epstopdf --outfile=interpMethod-eps-converted-
 to.pdf interpMethod.eps>
-(epstopdf)             \includegraphics on input line 151.
+(epstopdf)             \includegraphics on input line 152.
 Package epstopdf Info: Output file is already uptodate.
  <interpMethod-eps-converted-to.pdf, id=286, 633.36626pt x 317.185pt>
 File: interpMethod-eps-converted-to.pdf Graphic file (type pdf)
 
 <use interpMethod-eps-converted-to.pdf>
 Package pdftex.def Info: interpMethod-eps-converted-to.pdf used on input line 1
-51.
+52.
 (pdftex.def)             Requested size: 439.37941pt x 220.04362pt.
 Package epstopdf Info: Source file: <dischargeCurvesIlim.eps>
 (epstopdf)                    date: 2017-02-27 19:45:15
@@ -2576,7 +2576,7 @@ Package epstopdf Info: Source file: <dischargeCurvesIlim.eps>
 (epstopdf)                    size: 69920 bytes
 (epstopdf)             Command: <epstopdf --outfile=dischargeCurvesIlim-eps-con
 verted-to.pdf dischargeCurvesIlim.eps>
-(epstopdf)             \includegraphics on input line 159.
+(epstopdf)             \includegraphics on input line 160.
 Package epstopdf Info: Output file is already uptodate.
 
 <dischargeCurvesIlim-eps-converted-to.pdf, id=289, 633.36626pt x 317.185pt>
@@ -2584,11 +2584,11 @@ File: dischargeCurvesIlim-eps-converted-to.pdf Graphic file (type pdf)
 
 <use dischargeCurvesIlim-eps-converted-to.pdf>
 Package pdftex.def Info: dischargeCurvesIlim-eps-converted-to.pdf used on input
- line 159.
+ line 160.
 (pdftex.def)             Requested size: 439.37941pt x 220.04362pt.
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 164.
+Package pdftex.def Info: tulogo.pdf used on input line 165.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -2600,11 +2600,11 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 [6 <./interpMethod-eps-converted-to.pdf>]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\lstinline' on input line 165.
+(hyperref)                removing `\lstinline' on input line 166.
 
 File: tulogo.pdf Graphic file (type pdf)
 <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 166.
+Package pdftex.def Info: tulogo.pdf used on input line 167.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -2767,51 +2767,41 @@ Package epstopdf Info: Source file: <woehlerFit.eps>
 (epstopdf)                    date: 2017-03-02 16:59:08
 (epstopdf)                    size: 58011 bytes
 (epstopdf)             Output file: <woehlerFit-eps-converted-to.pdf>
-(epstopdf)                    date: 2017-03-01 03:03:08
-(epstopdf)                    size: 47658 bytes
+(epstopdf)                    date: 2017-03-02 16:59:30
+(epstopdf)                    size: 54782 bytes
 (epstopdf)             Command: <epstopdf --outfile=woehlerFit-eps-converted-to
 .pdf woehlerFit.eps>
-(epstopdf)             \includegraphics on input line 91.
-runsystem(epstopdf --outfile=woehlerFit-eps-converted-to.pdf woehlerFit.eps)...
-executed (allowed).
+(epstopdf)             \includegraphics on input line 115.
+Package epstopdf Info: Output file is already uptodate.
 
-Package epstopdf Info: Result file: <woehlerFit-eps-converted-to.pdf>
-(epstopdf)                    date: 2017-03-02 16:59:30
-(epstopdf)                    size: 54782 bytes.
-
-<woehlerFit-eps-converted-to.pdf, id=459, 633.36626pt x 317.185pt>
+<woehlerFit-eps-converted-to.pdf, id=460, 633.36626pt x 317.185pt>
 File: woehlerFit-eps-converted-to.pdf Graphic file (type pdf)
 
 <use woehlerFit-eps-converted-to.pdf>
-Package pdftex.def Info: woehlerFit-eps-converted-to.pdf used on input line 91.
-
+Package pdftex.def Info: woehlerFit-eps-converted-to.pdf used on input line 115
+.
 (pdftex.def)             Requested size: 452.9679pt x 226.84845pt.
 
 
 LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <8> not available
-(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 92.
+(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 116.
+
 
 
 LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <6> not available
-(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 92.
+(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 116.
 
-LaTeX Font Info:    Try loading font information for OML+pcr on input line 97.
+
+LaTeX Font Info:    Try loading font information for OML+pcr on input line 121.
+
 ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omlpcr.fd"
 File: omlpcr.fd 
 )
 LaTeX Font Info:    Font shape `OML/pcr/m/n' in size <10> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 97.
-LaTeX Font Info:    Try loading font information for OMS+pcr on input line 110.
-
-
-("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omspcr.fd"
-File: omspcr.fd 
-)
-LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 110.
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 121.
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 113.
+Package pdftex.def Info: tulogo.pdf used on input line 127.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -2820,9 +2810,18 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[14 <./woehlerFit-eps-converted-to.pdf>])
+[14]
+LaTeX Font Info:    Try loading font information for OMS+pcr on input line 134.
+
+ ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omspcr.fd"
+File: omspcr.fd 
+)
+LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 134.
+)
 File: tulogo.pdf Graphic file (type pdf)
- <use tulogo.pdf>
+
+<use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 110.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
@@ -2832,7 +2831,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[15]
+[15 <./woehlerFit-eps-converted-to.pdf>]
 
 Class scrartcl Warning: incompatible usage of \@ssect detected.
 (scrartcl)              You've used the KOMA-Script implementation of \@ssect
@@ -2873,7 +2872,7 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 114.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 114.
 Package rerunfilecheck Info: File `lfpBattery_Documentation.out' has not change
 d.
-(rerunfilecheck)             Checksum: 8F886A7C9DAC09A1EC663B2FA5B50060;1644.
+(rerunfilecheck)             Checksum: 188F31EF2AD805D641A7B98ECAD04BEA;1644.
 
 
 LaTeX Warning: There were multiply-defined labels.
@@ -2883,13 +2882,13 @@ Package logreq Info: Writing requests to 'lfpBattery_Documentation.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 45911 strings out of 493363
- 863455 string characters out of 3139771
- 1451523 words of memory out of 3000000
- 48358 multiletter control sequences out of 15000+200000
- 32296 words of font info for 168 fonts, out of 3000000 for 9000
+ 45945 strings out of 493363
+ 863917 string characters out of 3139771
+ 1471596 words of memory out of 3000000
+ 48372 multiletter control sequences out of 15000+200000
+ 32363 words of font info for 169 fonts, out of 3000000 for 9000
  1127 hyphenation exceptions out of 8191
- 73i,16n,78p,10399b,2373s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 73i,16n,78p,10399b,2371s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{C:/Pr
 ogram Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Program Files/MiKTeX 2.9
 /fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/Program Files/MiKTeX 2.9/fonts/
@@ -2913,9 +2912,9 @@ s/MiKTeX 2.9/fonts/type1/public/cm-super/sfss0800.pfb><C:/Program Files/MiKTeX
 /type1/public/cm-super/sfsx1440.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/ur
 w/courier/ucrb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8
 a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrro8a.pfb>
-Output written on lfpBattery_Documentation.pdf (21 pages, 933388 bytes).
+Output written on lfpBattery_Documentation.pdf (21 pages, 937448 bytes).
 PDF statistics:
- 639 PDF objects out of 1000 (max. 8388607)
- 194 named destinations out of 1000 (max. 500000)
+ 661 PDF objects out of 1000 (max. 8388607)
+ 212 named destinations out of 1000 (max. 500000)
  44260 words of extra memory for PDF output out of 51595 (max. 10000000)
 

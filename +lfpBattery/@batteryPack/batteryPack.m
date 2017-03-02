@@ -579,10 +579,11 @@ classdef batteryPack < lfpBattery.batteryInterface
                 type = 'discharge';
             end
             if strcmpi(type, 'cycleLife') && strcmpi(b.AgeModelLevel, 'Pack')
+                b.wFit = d;
                 if ~strcmpi(b.AgeModelLevel, 'no age model')
                     b.ageModel.wFit = d;
                 else
-                    error('No age model specified this battery pack.')
+                    warning('No age model specified for this battery pack.')
                 end
             else
                 % pass curve to all cells if discharge curve or cycle life

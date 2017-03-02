@@ -233,7 +233,8 @@ classdef batteryCell < lfpBattery.batteryInterface
                     end
                 end
             elseif strcmp(type, 'cycleLife')
-                b.ageModel.wFit = d; % MTODO: Implement tests for this
+                b.wFit = d;
+                b.ageModel.wFit = d;
             elseif strcmp(type, 'charge')
                 % Init new curvefitCollection object if no charge curves
                 % have been added yet.

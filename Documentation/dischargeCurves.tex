@@ -16,6 +16,7 @@ V(SoC) = x_1 - \frac{R\cdot T}{z\subi{Li}\cdot F}\cdot ln\Big(\frac{SoC}{1-SoC}\
 where $x_1,\ ..,\ x_8$ are the fit parameters, $R = 8.3144598$ J/(mol $\cdot$ K) is the universal gas constant, $z\subi{Li} = 1$ is the ionic charge number of lithium, $F = 96485.3328959$ As/mol is the Faraday constant, $SoC$ is the state of charge, $V$ is the voltage in V and $T$ is the temperature in K at which the curve was recorded. The curves are fitted using the levenberg-marquardt algorithm and either the \mcode{lsqcurvefit} method, the \mcode{fminsearch} method or a combination of both, depending on the user's preference. 
 
 \subsubsection{Creation of a \mcode{dischargeFit} object}
+\label{sec:dischargeFit_creation}
 A \mcode{dischargeFit} object is created with the digitized raw data - the voltage $V$ in V, the discharge capacity $C\subi{dis}$ in Ah, the current $I$ in A at which the curve was recorded and the temperature $T$ in K at which the curve was recorded.
 \begin{lstlisting}
 d = dischargeFit(V, C_dis, I, T);

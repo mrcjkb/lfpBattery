@@ -10,7 +10,7 @@ classdef (Abstract) batteryAgeModel < handle
         eolSoH; % SoH at which end of life is reached.
     end
     properties (Hidden, GetAccess = 'protected')
-        % woehlerFit object or function handle (must implement the curveFitInterface)
+        % cycleCurveFit object or function handle (must implement the curveFitInterface)
         % of a cycles to failure = f(DoC) curve.
         wFit;
     end

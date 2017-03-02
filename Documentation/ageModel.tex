@@ -82,7 +82,31 @@ Finally, the \mcode{deFit} class uses a double exponential function that was ori
 \begin{equation}
 N\subi{f}(DoD) = x\subi{1} + x\subi{2}\cdot exp(-x\subi{3}\cdot DoD) + x\subi{4}\cdot exp(-x\subi{5}\cdot DoD)
 \end{equation}
-An example for the fit results of a \mcode{woehlerFit} object is depicted in Figure~\ref{fig:woehlerFit}. Due to a lithium-ion battery's extremely large amount of cycles to failure at low $DoD$s, large relative errors may occur, especially at $DoD$s close to 1. In order to reduce the $rmse$, as many raw data points as possible should be provided for fitting.
+An example for the fit results of a \mcode{woehlerFit} object is depicted in Figure~\ref{fig:woehlerFit}. Due to a lithium-ion battery's extremely large amount of cycles to failure at low $DoD$s, large relative errors may occur, especially at $DoD$s close to 1. In order to reduce the $rmse$, as many raw data points as possible should be provided for fitting. \\
+A cycle life curve fit object is initialized with the raw data and the optional name-value pairs that the \mcode{dischargeFit} and every other subclass of the \mcode{curveFitInterface} accepts (see section~\ref{sec:dischargeFit_creation}). It can then be passed on to an age model via it's constructor or by setting it's \mcode{wFit} property.
+\begin{lstlisting}
+% DoD = depth of discharge, N = number of cycles to failure
+fit1 = woehlerFit(DoD, N);
+fit1.plotResults; % plot results to new figure window
+fit2 = deFit(DoD, N, 'mode', 'lsq'); % using lsqcurvefit
+% using fminsearch and with custom initial params:
+fit3 = nrelcFit(DoD, N, 'mode', 'fmin', 'x0', [0.5; 1]);
+% Pass cycle counter cy and fit1 to age model via it's constructor
+am = eoAgeModel(cy, fit1);
+am.wFit = fit2; % Replace fit1 with fit2 in age model
+\end{lstlisting}
+Alternatively, a cycle life curve fit can be passed directly to a battery object \mcode{bat} via it's \mcode{addcurves()} method.
+\begin{lstlisting}
+fit = woehlerFit(DoD, N);
+bat.initAgeModel('ageModel', 'EO')
+bat.addcurves(fit, 'cycleLife')
+\end{lstlisting}
+If the age model has not been initialized when the curve fit is added, it is stored for later use.
+\begin{lstlisting}
+bat.addcurves(fit, 'cycleLife')
+bat.initAgeModel('ageModel', 'EO') % fit is automatically passed
+								   % to the age model
+\end{lstlisting}
 
 % TODO note that ageModel also accepts anonymous functions (not recommended, because notoriously slow)
 \begin{figure}[t!]
