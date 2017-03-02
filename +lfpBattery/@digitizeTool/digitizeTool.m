@@ -194,12 +194,23 @@ classdef digitizeTool < handle
     end
     methods (Access = 'protected')
         function selectbutton_Callback(obj, ~, ~)
+            persistent pathname;
+            persistent lastpathname;
             import lfpBattery.*
             try
-                [pathname, filename] = commons.uigetimage('Choose image');
-                if isequal(filename,0) || isequal(pathname,0)
+                if isempty(pathname)
+                    pathname = pwd;
+                end
+                [pathname, filename] = commons.uigetimage('Choose image', pathname);
+                if isequal(filename, 0) || isequal(pathname, 0)
+                    if isempty(lastpathname)
+                        pathname = pwd;
+                    else
+                        pathname = lastpathname;
+                    end
                     return
                 else
+                    lastpathname = pathname;
                     imagename = fullfile(pathname, filename);
                 end
             catch
@@ -228,6 +239,7 @@ classdef digitizeTool < handle
                 end
             end
             obj.errCt = 0;
+            % Define X-axis
             chk = true;
             while chk
                 try

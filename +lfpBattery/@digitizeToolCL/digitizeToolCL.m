@@ -22,8 +22,8 @@ classdef digitizeToolCL < lfpBattery.digitizeToolState
         function obj = digitizeToolCL(varargin)
             obj@lfpBattery.digitizeToolState(varargin{:})
         end
-        function [scalefactorYdata, chk] = getYAxisYdata(obj)
-            [~, chk] = getYAxisYdata@lfpBattery.digitizeToolState(obj);
+        function chk = getYAxisYdata(obj)
+            chk = getYAxisYdata@lfpBattery.digitizeToolState(obj);
             % Determine Y-axis scaling
             Ytype = questdlg('Axis scaling (Y)', ...
                 'Walkthrough', ...
@@ -31,10 +31,10 @@ classdef digitizeToolCL < lfpBattery.digitizeToolState
             drawnow
             switch Ytype
                 case 'LINEAR'
-                    scalefactorYdata = YAxisYdata - OriginXYdata(2);
+                    obj.scalefactorYdata = obj.YAxisYdata - obj.OriginXYdata(2);
                 case 'LOGARITHMIC'
                     obj.logy = true;
-                    scalefactorYdata = log10(YAxisYdata/OriginXYdata(2));
+                    obj.scalefactorYdata = log10(obj.YAxisYdata / obj.OriginXYdata(2));
                 case 'CANCEL'
                     obj.dTool.errCt = 7;
                     error('cancelled')
