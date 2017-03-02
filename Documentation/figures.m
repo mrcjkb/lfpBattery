@@ -181,6 +181,7 @@ printfig(f, fullfile(p, 'Documentation', 'dischargeCurvesIlim'), 'eps')
 %% woehlerFit
 load(fullfile(p, 'Resources', 'wfit.mat'), 'fit')
 fit.plotResults
+set(gca,'yscale','log')
 title([])
 f = gcf;
 setRatio(f, [2, 1])

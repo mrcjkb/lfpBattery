@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  2 MAR 2017 09:55
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  2 MAR 2017 16:59
 entering extended mode
 **./lfpBattery_Documentation.tex
 (lfpBattery_Documentation.tex
@@ -2764,15 +2764,20 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 
 [13 <./cdoc_hists-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <woehlerFit.eps>
-(epstopdf)                    date: 2017-03-01 03:01:14
-(epstopdf)                    size: 54059 bytes
+(epstopdf)                    date: 2017-03-02 16:59:08
+(epstopdf)                    size: 58011 bytes
 (epstopdf)             Output file: <woehlerFit-eps-converted-to.pdf>
 (epstopdf)                    date: 2017-03-01 03:03:08
 (epstopdf)                    size: 47658 bytes
 (epstopdf)             Command: <epstopdf --outfile=woehlerFit-eps-converted-to
 .pdf woehlerFit.eps>
 (epstopdf)             \includegraphics on input line 91.
-Package epstopdf Info: Output file is already uptodate.
+runsystem(epstopdf --outfile=woehlerFit-eps-converted-to.pdf woehlerFit.eps)...
+executed (allowed).
+
+Package epstopdf Info: Result file: <woehlerFit-eps-converted-to.pdf>
+(epstopdf)                    date: 2017-03-02 16:59:30
+(epstopdf)                    size: 54782 bytes.
 
 <woehlerFit-eps-converted-to.pdf, id=459, 633.36626pt x 317.185pt>
 File: woehlerFit-eps-converted-to.pdf Graphic file (type pdf)
@@ -2908,7 +2913,7 @@ s/MiKTeX 2.9/fonts/type1/public/cm-super/sfss0800.pfb><C:/Program Files/MiKTeX
 /type1/public/cm-super/sfsx1440.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/ur
 w/courier/ucrb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8
 a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrro8a.pfb>
-Output written on lfpBattery_Documentation.pdf (21 pages, 926254 bytes).
+Output written on lfpBattery_Documentation.pdf (21 pages, 933388 bytes).
 PDF statistics:
  639 PDF objects out of 1000 (max. 8388607)
  194 named destinations out of 1000 (max. 500000)

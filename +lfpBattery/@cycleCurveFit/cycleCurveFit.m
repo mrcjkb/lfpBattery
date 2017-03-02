@@ -32,6 +32,9 @@ classdef cycleCurveFit < lfpBattery.curveFitInterface
             plotResults@lfpBattery.curveFitInterface(d, varargin{:}); % Call superclas plot method
             xlabel('\itDoD')
             ylabel('Cycles to failure \itN')
+            if max(d.rawY) / min(d.rawY) > 100
+                set(gca,'yscale','log')
+            end
         end
         %% Dependent setters
         function set.x(d, params)

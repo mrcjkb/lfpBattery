@@ -82,8 +82,8 @@ Finally, the \mcode{deFit} class uses a double exponential function that was ori
 \begin{equation}
 N\subi{f}(DoD) = x\subi{1} + x\subi{2}\cdot exp(-x\subi{3}\cdot DoD) + x\subi{4}\cdot exp(-x\subi{5}\cdot DoD)
 \end{equation}
-An example for the fit results of a \mcode{woehlerFit} object is depicted in Figure~\ref{fig:woehlerFit}. Due to a lithium-ion battery's extremely large amount of cycles to failure at low $DoD$s, large relative errors can occur - especially at $DoD$s close to 1. In order to reduce the $rmse$, as many raw data points as possible should be provided for fitting.
-% TODO fit with logarithmic scaling and lots of data points selected
+An example for the fit results of a \mcode{woehlerFit} object is depicted in Figure~\ref{fig:woehlerFit}. Due to a lithium-ion battery's extremely large amount of cycles to failure at low $DoD$s, large relative errors may occur, especially at $DoD$s close to 1. In order to reduce the $rmse$, as many raw data points as possible should be provided for fitting.
+
 % TODO note that ageModel also accepts anonymous functions (not recommended, because notoriously slow)
 \begin{figure}[t!]
 	\captionsetup{type=figure}
