@@ -476,6 +476,35 @@
       \verb A control-oriented lithium-ion battery pack model for plug-in hybrid electric vehicle cycle-life studies and system design with consideration of health management.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\E83ZB6JP\\A control-oriented lithium-ion battery pack model for plug-in hybrid electric vehicle cycle-life studies and system design with consideration of health.pdf:application/pdf
       \endverb
     \endentry
+    \entry{keil_aufbau_2012}{article}{}
+      \name{author}{2}{}{%
+        {{hash=566486c68aca4044aa0722ef9239e974}{%
+           family={Keil},
+           familyi={K\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod}}}%
+        {{hash=5a56dbc874a9d5074c5390bbd890b54d}{%
+           family={Jossen},
+           familyi={J\bibinitperiod},
+           given={Andreas},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{53d174aa790fb3385c95e33142148e89}
+      \strng{fullhash}{53d174aa790fb3385c95e33142148e89}
+      \strng{authornamehash}{53d174aa790fb3385c95e33142148e89}
+      \strng{authorfullhash}{53d174aa790fb3385c95e33142148e89}
+      \field{sortinit}{2}
+      \field{sortinithash}{0aa614ace9f3a40ef5a67e7f7a184048}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{19. {DESIGN} \& {ELEKTRONIK}-Entwicklerforum Batterien \& Ladekonzepte}
+      \field{title}{Aufbau und Parametrierung von Batteriemodellen}
+      \field{year}{2012}
+      \field{dateera}{ce}
+      \verb{file}
+      \verb KEIL 2011 Aufbau und Parametrierung von Batteriemodellen.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\I7WZJ6BT\\KEIL 2011 Aufbau und Parametrierung von Batteriemodellen.pdf:application/pdf
+      \endverb
+    \endentry
   \endsortlist
 \endrefsection
 \endinput

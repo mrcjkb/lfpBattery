@@ -1,8 +1,10 @@
 \markboth{Discharge curves}{Discharge curves}
-\section{Discharge curves} \label{sec:dischargeCurves}
+\section{Discharge curves}
+\label{sec:dischargeCurvesMain}
 Many battery data sheets provide measured discharge curves, on which the charging and discharging behaviour of this model is based. Rather than determining the curves according to the internal impedance, a common approach \cite{lijun_gao_dynamic_2002}, this model determins the curves directly by means of digitizing the images and creating a curve fit. The classes used for fitting and modelling the discharge curves are described in the following subsections.
 
 \subsection{Single discharge curve}
+\label{sec:dischargeFit}
 For modelling a single discharge curve, the class \mcode{dischargeFit} is used, which implements the interface \mcode{curveFitInterface}\todo{Section describing interface, etc.}. The curve is fitted according to \cite{werder_entwicklung_2014}, using a function that is loosely based on the Nernst equation with two exonential functions superimposed as a correction for the voltage drops at the beginning and end of the curve.
 \begin{equation}
 \begin{aligned}

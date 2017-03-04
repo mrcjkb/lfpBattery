@@ -1,7 +1,14 @@
 classdef dischargeCurves < lfpBattery.curvefitCollection
     %DISCHARGECURVES sorted collection of dischargeFit (or other curveFitInterface) objects.
-    %Uses interplation to extract data between two curve fits according to
+    %Uses interplation to extract data between multiple curve fits according to
     %the current (stored as the z property).
+    %
+    %DISCHARGECURVES  Initializes collection of discharge curves, each with a single current value.
+    %DISCHARGECURVES(d1, d2, .., dn) Initializes collection with
+    %                                curve fits d1, d2, .. up to dn
+    %d1, d2, .., dn must implement the curveFitInterface. If two
+    %curve fits dn-1 and dn have the same z property, the curve fit
+    %dn-1 will be removed.
     %
     %DISCHARGECURVES Properties:
     %
@@ -11,7 +18,7 @@ classdef dischargeCurves < lfpBattery.curvefitCollection
     %
     %DISCHARGECURVES Methods:
     %
-    %   add                 - Adds a curve fit object cf to a collection c.
+    %   add                 - Adds or converts a curve fit object cf to a collection c.
     %   remove              - Removes the object with the current I.
     %   createIterator      - Returns an iterator for the DISCHARGECURVES object.
     %
@@ -86,11 +93,11 @@ classdef dischargeCurves < lfpBattery.curvefitCollection
         function v = interp(d, I, C)
             %INTERP returns interpolated voltage in V between calculations of
             %multiple dischargeFit objects.
-            %Syntax: V = INTERP(I, C);
+            %Syntax: V = d.INTERP(I, C);
             %
             %V = voltage in V
             %I = current in A
-            %C = capacity in Ah
+            %C = capacity in Ah after discharging/charging
             %
             %NOTE: Due to the fact that an extrapolation of low and high
             %currents leads to bad results at a low SoC, the current is

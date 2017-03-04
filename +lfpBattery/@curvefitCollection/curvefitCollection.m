@@ -1,6 +1,6 @@
 classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
     %CURVEFITCOLLECTION sorted collection of curveFit objects. Uses
-    %interplation to extract data between two curve fits according to z
+    %interplation to extract data between multiple curve fits according to z
     %value
     %
     %CURVEFITCOLLECTION Properties:
@@ -11,7 +11,7 @@ classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
     %
     %CURVEFITCOLLECTION Methods:
     %
-    %   add                 - Adds a curve fit object cf to a collection c.
+    %   add                 - Adds or converts a curve fit object cf to a collection c.
     %   remove              - Removes the object with the z coordinate specified by z from the collection c.
     %   createIterator      - Returns an iterator.
     %
@@ -73,6 +73,12 @@ classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
         function add(c, d)
             %ADD: Adds a curve fit object cf to a collection c.
             %     Syntax: c.ADD(cf)
+            %
+            %Can also be used to convert a collection of one class to
+            %another class, e.g.
+            %d = mdischargeCurves;
+            %d.add(dcurves)
+            %%-> converts a dischargeCurves object into an mdischargeCurves object.
             %
             %If an object cf with the same z coordinate exists, the
             %existing one is replaced.

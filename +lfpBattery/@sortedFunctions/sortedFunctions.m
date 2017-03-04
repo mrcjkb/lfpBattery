@@ -27,8 +27,14 @@ classdef (Abstract) sortedFunctions < lfpBattery.composite %& lfpBattery.gpuComp
             end
         end
         function add(c, d)
-            %ADD:   Adds an object to the collection
+            %ADD:   Adds an object to the collection.
             %     Syntax: c.ADD(cf)
+            %
+            %Can also be used to convert a collection of one class to
+            %another class, e.g.
+            %d = mdischargeCurves;
+            %d.add(dcurves)
+            %%-> converts a dischargeCurves object into an mdischargeCurves object.
             %
             %If an object cf with the same z coordinate exists, the
             %existing one is replaced.

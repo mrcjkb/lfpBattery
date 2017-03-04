@@ -170,8 +170,27 @@ A flow chart of the \mcode{iteratePower()} method is depicted in Figure~\ref{fig
 	\caption[Flow chart of the \mcode{iterateCurrent()} method]{Flow chart of the \mcode{iterateCurrent()} method.}
 	\label{fig:iterateCurrent}
 \end{figure}
-Figure~\ref{fig:iterateCurrent} depicts a flow chart of the \mcode{iterateCurrent()} function. Using this method is a lot faster than using the \mcode{iteratePower()} function, due to it's comparative simplicity. However, the current may need to be determined separately in some cases. Before the iteration, the current is limited to $I\subi{max}$. Finally, the another limitation is performed if the $SoC$ is not within the interval $[SoC\subi{min}, SoC\subi{max}]$. Normally, one or two iterations should suffice for returning the current and $SoC$. The voltage and power are not calculated and must be determined by calling the \mcode{getNewVoltage()} method if required\footnote{For example, this is done within the \mcode{currentRequest()} method, which does return the voltage and power.}.
-%TODO: iteratePower() description
-%TODO: iterateCurrent() description
+Figure~\ref{fig:iterateCurrent} depicts a flow chart of the \mcode{iterateCurrent()} function. Using this method is a lot faster than using the \mcode{iteratePower()} function, due to it's comparative simplicity. However, the current may need to be determined separately in some cases. Before the iteration, the current is limited to $I\subi{max}$. Finally, the another limitation is performed if the $SoC$ is not within the interval $[SoC\subi{min}, SoC\subi{max}]$. Normally, one or two iterations should suffice for returning the current and $SoC$. The voltage and power are not calculated and must be determined by calling the \mcode{getNewVoltage()} method if required\footnote{For example, this is done within the \mcode{currentRequest()} method, which does return the voltage and power.}.\\
+\begin{figure}[t!]
+	\captionsetup{type=figure}
+	\centering
+	\includegraphics[width=\textwidth]{simulations01}
+	\caption[Comparison of battery pack charging simulations using a constant current, a linearly increasing current and a random current, respectively - Voltage vs. simulation time]{Comparison of battery pack charging simulations using a constant current, a linearly increasing current and a random current, respectively - Voltage vs. simulation time. The pack's cells were modelled according to~\cite{_data_2010}.}
+	\label{fig:simulations01}
+\end{figure}
+The results of three charging simulations of a battery pack are depicted in Figure~\ref{fig:simulations01}. Since the data sheet~\cite{_data_2010} that was used does not contain any voltage curves for charging currents, the discharge curves were used for charging, too\footnote{This is the default behaviour if no charge curves are added.}. Every time, the empty pack was charged until an $SoC$ of approx. 0.9 was reached. In the first simulation (on the left hand side), the battery was charged with a constant current $I\subi{max}$. The resulting voltage is an interpolation between two curve fits and appears to have perfect results upon first glance. For the second simulation (Figure~\ref{fig:simulations01}, center), the current was linearly increased between 0 and $I\subi{max}$. The resulting voltage is a curve that interpolates all of the curve fits at different capacities.  Here, the problems of using discharge curves for charging become apparent. The voltage is higher than in the first simulation - especially at lower currents. This is typical behaviour for discharging. However, a lower charging current should result in lower voltages. Due to this problem, it is advisable to add separate charging and discharging curve fits to the model. This can be done via the \mcode{addcurves()} method:
+\begin{lstlisting}
+bat.addcurves(chargeCurvefitObj, 'charge')}
+bat.addcurves(dischargeCurvefitObj, 'discharge')}
+\end{lstlisting}
+A charge curve fit can be fitted using the \mcode{dischargeFit} class or the \mcode{dischargeFit()} method (see section~\ref{sec:dischargeFit}) or a user-defined class that implements the \mcode{curveFitInterface}.
+A random distribution of currents within the interval $[0, I\subi{max}]$ was used for the third simulation (Figure~\ref{fig:simulations01}, right). The main issue of this model's approach using curve fits is emphasised here. Voltage leaps occur if the current changes drastically from one time step to another. It is highly doubtful that a battery would behave like this in reality, since the discharge curves are actually measured by discharging with a certain current and then waiting for long periods of time (e.g. up to four hours) until the resting voltage stabilizes before taking measurements~\cite{keil_aufbau_2012}. A possible solution in a simulation that charges and discharges with strongly fluctuating currents could be to smooth the returned voltages out with a running mean or to create a custom version of the \mcode{dischargeCurves} class (see section~\ref{sec:dischargeCurves}) that always returns the mean of all currents' voltages as a function of the $SoC$.  
+\begin{figure}[t!]
+	\captionsetup{type=figure}
+	\centering
+	\includegraphics[width=\textwidth]{simulations02}
+	\caption[Comparison of battery pack charging simulations using a constant current, a linearly increasing current and a random current, respectively - Voltage vs. $SoC$]{Comparison of battery pack charging simulations using a constant current, a linearly increasing current and a random current, respectively - Voltage vs. $SoC$. The pack's cells were modelled according to~\cite{_data_2010}.}
+	\label{fig:simulations02}
+\end{figure}
 %TODO: Figure showing "jumps" in the voltage with variable charging currents
 \subsubsection{Age model level}
