@@ -232,6 +232,7 @@ classdef batteryCell < lfpBattery.batteryInterface
                         b.cC2.add(d);
                     end
                 end
+                b.Vi = b.getNewDischargeVoltage(0, 0); % initialize voltage
             elseif strcmp(type, 'cycleLife')
                 b.wFit = d;
                 b.ageModel.wFit = d;
@@ -250,6 +251,7 @@ classdef batteryCell < lfpBattery.batteryInterface
                 end
                 % Set flag to indicate that 
                 b.useDischargeCurves4Charging = false;
+                b.Vi = b.getNewChargeVoltage(0, 0); % initialize voltage
             elseif strcmp(type, 'cccv')
                 b.cC = d;
                 b.socCV = d.soc0; % SoC threshold for charge limiting
