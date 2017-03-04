@@ -32,8 +32,16 @@ classdef (Abstract) sortedFunctions < lfpBattery.composite %& lfpBattery.gpuComp
             %
             %If an object cf with the same z coordinate exists, the
             %existing one is replaced.
+            try % This converts one sortedFunctions subclass into another
+                if numel(d.xydata) > 1
+                    for i = 1:numel(d.xydata)
+                        c.add(d.xydata{i})
+                    end
+                end
+            catch
+            end
             if isempty(c.xydata) % object initialization
-               c.xydata{1} = d;
+                c.xydata{1} = d;
                c.z = d.z;
             else
                 try % if another sortedCollection is added, add all the elements of sortedCollection
