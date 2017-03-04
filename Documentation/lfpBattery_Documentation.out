@@ -23,4 +23,8 @@
 \BOOKMARK [1][-]{section.3}{Battery Composition}{}% 23
 \BOOKMARK [2][-]{subsection.3.1}{Overview}{section.3}% 24
 \BOOKMARK [2][-]{subsection.3.2}{Method delegation}{section.3}% 25
-\BOOKMARK [1][-]{figure.caption.35}{References}{}% 26
+\BOOKMARK [2][-]{subsection.3.3}{Battery Interface}{section.3}% 26
+\BOOKMARK [3][-]{subsubsection.3.3.1}{Battery object initialization}{subsection.3.3}% 27
+\BOOKMARK [3][-]{subsubsection.3.3.2}{Battery charging and discharging}{subsection.3.3}% 28
+\BOOKMARK [3][-]{subsubsection.3.3.3}{Age model level}{subsection.3.3}% 29
+\BOOKMARK [1][-]{subsubsection.3.3.3}{References}{}% 30

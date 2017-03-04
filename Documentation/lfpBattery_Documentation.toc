@@ -24,4 +24,8 @@
 \contentsline {section}{\numberline {3}Battery Composition}{18}{section.3}
 \contentsline {subsection}{\numberline {3.1}Overview}{18}{subsection.3.1}
 \contentsline {subsection}{\numberline {3.2}Method delegation}{19}{subsection.3.2}
-\contentsline {section}{References}{21}{figure.caption.35}
+\contentsline {subsection}{\numberline {3.3}Battery Interface}{21}{subsection.3.3}
+\contentsline {subsubsection}{\numberline {3.3.1}Battery object initialization}{21}{subsubsection.3.3.1}
+\contentsline {subsubsection}{\numberline {3.3.2}Battery charging and discharging}{23}{subsubsection.3.3.2}
+\contentsline {subsubsection}{\numberline {3.3.3}Age model level}{25}{subsubsection.3.3.3}
+\contentsline {section}{References}{26}{subsubsection.3.3.3}

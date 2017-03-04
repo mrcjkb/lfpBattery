@@ -125,9 +125,10 @@ bat.addcurves(fit, 'cycleLife')
 \end{lstlisting}
 
 \subsubsection{Cycle ageing}
-A battery's age $A\subi{c}$ is the opposite of the $SoH$.
+A battery's age $A\subi{c}$ is the opposite of the $SoH$, which is the usable capacity $C\subi{bu}$ divided by the nominal capacity $C\subi{n}$.
 \begin{equation}
-A\subi{c} = 1 - SoH
+\label{eq:age_soh}
+A\subi{c} = 1 - SoH = 1 - \frac{C\subi{bu}}{C\subi{n}}
 \end{equation}
 In the \mcode{eoAgeModel} class, the ageing due to cycling stress $A\subi{cyc}$ with $n$ cycles and their respective $DoD$ is determined from the curve fit $N\subi{f}(DoD)$.
 \begin{equation}
@@ -144,8 +145,7 @@ am = eoAgeModel(cy);
 am = eoAgeModel(cy, cfit); % adds a cycle life curve fit
 % Specify the SoH at which the end of life is reached (default: 0.2)
 am = eoAgeModel(cy, cfit, soh_eol);
-% Set the initial SoC
-am = eoAgeModel(cy, cfit, soh_eol, soc_ini);
+am = eoAgeModel(cy, cfit, soh_eol, soc_ini); % Set the initial SoC
 \end{lstlisting}
 To initialize the age model directly from a battery \mcode{bat}, use it's \mcode{initAgeModel()} method.
 \begin{lstlisting}
