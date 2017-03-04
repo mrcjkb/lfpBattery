@@ -184,7 +184,7 @@ bat.addcurves(chargeCurvefitObj, 'charge')}
 bat.addcurves(dischargeCurvefitObj, 'discharge')}
 \end{lstlisting}
 A charge curve fit can be fitted using the \mcode{dischargeFit} class or the \mcode{dischargeFit()} method (see section~\ref{sec:dischargeFit}) or a user-defined class that implements the \mcode{curveFitInterface}.
-A random distribution of currents within the interval $[0, I\subi{max}]$ was used for the third simulation (Figure~\ref{fig:simulations01}, right). The main issue of this model's approach using curve fits is emphasised here. Voltage leaps occur if the current changes drastically from one time step to another. It is highly doubtful that a battery would behave like this in reality, since the discharge curves are actually measured by discharging with a certain current and then waiting for long periods of time (e.g. up to four hours) until the resting voltage stabilizes before taking measurements~\cite{keil_aufbau_2012}. A possible solution in a simulation that charges and discharges with strongly fluctuating currents could be to smooth the returned voltages out with a running mean or to create a custom version of the \mcode{dischargeCurves} class (see section~\ref{sec:dischargeCurves}) that always returns the mean of all currents' voltages as a function of the $SoC$.  
+A random distribution of currents within the interval $[0, I\subi{max}]$ was used for the third simulation (Figure~\ref{fig:simulations01}, right). The main issue of this model's approach using curve fits is emphasised here. Voltage leaps occur if the current changes drastically from one time step to another. It is highly doubtful that a battery would behave like this in reality, since the discharge curves are actually measured by discharging with a certain current and then waiting for long periods of time (e.g. up to four hours) until the resting voltage stabilizes before taking measurements~\cite{keil_aufbau_2012}. A possible solution in a simulation that charges and discharges with strongly fluctuating currents could be to smooth the returned voltages out with a running mean or to use a customized version of the \mcode{dischargeCurves} class (see section~\ref{sec:dischargeCurves}) that always returns the mean of all currents' voltages as a function of the $SoC$. The \mcode{mdischargeCurves} class was added to this package for that purpose. As is shown in Figure~\ref{fig:simulations02}, plotting the voltage against the $SoC$ causes the curves to follow more similar functions than when plotting them against the current. By using the \mcode{mdischargeCurves} class instead of the \mcode{dischargeCurves} class, the volatile curve with random currents can be flattened out to produce the results in Figure~\ref{fig:mdischargeCurves}. It should be noted, however, that the mean charging and discharging currents of the simulation must be known so that the relevant curve fits can be added accordingly.
 \begin{figure}[t!]
 	\captionsetup{type=figure}
 	\centering
@@ -192,5 +192,21 @@ A random distribution of currents within the interval $[0, I\subi{max}]$ was use
 	\caption[Comparison of battery pack charging simulations using a constant current, a linearly increasing current and a random current, respectively - Voltage vs. $SoC$]{Comparison of battery pack charging simulations using a constant current, a linearly increasing current and a random current, respectively - Voltage vs. $SoC$. The pack's cells were modelled according to~\cite{_data_2010}.}
 	\label{fig:simulations02}
 \end{figure}
-%TODO: Figure showing "jumps" in the voltage with variable charging currents
+\begin{figure}[b!]
+	\captionsetup{type=figure}
+	\centering
+	\includegraphics[width=\textwidth]{mdischargeCurves}
+	\caption[Simulation of battery charging with random currents using the \mcode{mdischargeCurves} class for voltage calculation]{Simulation of battery charging with random currents using the \mcode{mdischargeCurves} class for voltage calculation. The resulting voltage is a function of the battery's $SoC$.}
+	\label{fig:mdischargeCurves}
+\end{figure}
+\clearpage
+An \mcode{mdischargeCurves} object shares the exact same interface as a \mcode{dischargeCurves} object. To convert the classes into each other, use the \mcode{add()} method.
+\begin{lstlisting}
+d2 = mdischargeCurves;
+d2.add(d); % Adds all of the dischargeCurves' dischargeFit objects
+% to the mdischargeCurves object
+% Works the other way around, too
+d = dischargeCurves;
+d.add(d2)
+\end{lstlisting}
 \subsubsection{Age model level}

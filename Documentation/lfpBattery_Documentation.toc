@@ -27,5 +27,5 @@
 \contentsline {subsection}{\numberline {3.3}Battery Interface}{21}{subsection.3.3}
 \contentsline {subsubsection}{\numberline {3.3.1}Battery object initialization}{21}{subsubsection.3.3.1}
 \contentsline {subsubsection}{\numberline {3.3.2}Battery charging and discharging}{23}{subsubsection.3.3.2}
-\contentsline {subsubsection}{\numberline {3.3.3}Age model level}{26}{subsubsection.3.3.3}
-\contentsline {section}{References}{28}{subsubsection.3.3.3}
+\contentsline {subsubsection}{\numberline {3.3.3}Age model level}{28}{subsubsection.3.3.3}
+\contentsline {section}{References}{29}{subsubsection.3.3.3}
