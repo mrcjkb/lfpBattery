@@ -85,7 +85,7 @@ classdef dischargeCurves < lfpBattery.curvefitCollection
         end % dischargeFit
         function v = interp(d, I, C)
             %INTERP returns interpolated voltage in V between calculations of
-            %multiple dischargeCurves.
+            %multiple dischargeFit objects.
             %Syntax: V = INTERP(I, C);
             %
             %V = voltage in V
