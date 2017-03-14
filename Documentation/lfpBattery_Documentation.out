@@ -30,4 +30,6 @@
 \BOOKMARK [2][-]{subsection.3.4}{CCCV charging and BMS}{section.3}% 30
 \BOOKMARK [3][-]{subsubsection.3.4.1}{CCCV curve fits}{subsection.3.4}% 31
 \BOOKMARK [3][-]{subsubsection.3.4.2}{Cell monitoring and communication with the charger}{subsection.3.4}% 32
-\BOOKMARK [1][-]{figure.caption.50}{References}{}% 33
+\BOOKMARK [2][-]{subsection.3.5}{Simplified model}{section.3}% 33
+\BOOKMARK [2][-]{subsection.3.6}{The [basicstyle=]|batteryPack| class}{section.3}% 34
+\BOOKMARK [1][-]{subsection.3.6}{References}{}% 35

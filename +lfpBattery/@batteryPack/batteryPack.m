@@ -12,6 +12,11 @@ classdef batteryPack < lfpBattery.batteryInterface
     % addCounter                 - Registers a cycleCounter object as an observer.
     % dischargeFit               - Uses Levenberg-Marquardt algorithm to fit a
     %                              discharge curve.
+    % chargeFit                  - Uses Levenberg-Marquardt algorithm to
+    %                              fit a charge curve.
+    % cycleFit                   - Creates a fit object for a cycles to
+    %                              failure vs. DoD curve and adds it to the pack.
+    % cccvFit                    - Adds a CCCV curve fit to the pack.
     % initAgeModel               - Initializes the age model of the battery.
     % getNewDischargeVoltage     - Returns the new voltage according to a discharging current and a
     %                              time step size.
@@ -23,7 +28,7 @@ classdef batteryPack < lfpBattery.batteryInterface
     %                              curve fits.
     % digitizeTool               - (static) Opens a GUI for digitizing discharge curves and
     %                              cycle life curves (requires JAVA).
-    % gui                        - (static) Opens a GUI for creating a batteryPack model.
+    % GUI                        - (static) Opens a GUI for creating a batteryPack model.
     %                              (requires JAVA)
     %
     %

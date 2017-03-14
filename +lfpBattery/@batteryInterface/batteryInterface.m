@@ -469,30 +469,146 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             %Input arguments:
             %   V:              Voltage (V) = f(C_dis) (from data sheet)
             %   C_dis:          Discharge capacity (Ah) (from data sheet)
-            %   I:              Current at which curve was measured
+            %   I:              Current (A) at which curve was measured
             %   T:              Temperature (K) at which curve was mearured
             %
             %OptionName-OptionValue pairs:
             %
             %   'x0'            Initial params for fit functions.
-            %                   default: zeros(9, 1)
+            %                   default: zeros(8, 1)
             %
-            %   x0 = [E0; Ea; Eb; Aex; Bex; Cex; x0; v0; delta] with:
+            %   x0 = [E0; Ea; Eb; x0; v0; delta; Aex; Bex] with:
             %
             %   E0, Ea, Eb:     Parameters for Nernst fit (initial estimations)
-            %   Aex, Bex, Cex:  Parameters for fit of exponential drop at
-            %                   the end of the curve (initial estimations)
             %   x0, v0, delta:  Parameters for fit of exponential drop at
             %                   the beginning of the curve (initial estimations)
+            %   Aex, Bex:       Parameters for fit of exponential drop at
+            %                   the end of the curve (initial estimations)
+            %
+            %   'mode'          Function used for fitting curves
+            %                   'lsq' (default) - lsqcurvefit
+            %                   'fmin'          - fminsearch
+            %                   'both'          - a combination (lsq, then fmin)
+            
+            % add a new dischargeFit object according to the input arguments
+            b.addcurves(lfpBattery.dischargeFit(V, C_dis, I, Temp, varargin{:}));
+        end % dischargeFit
+        function chargeFit(b, V, C_dis, I, Temp, varargin)
+            %CHARGEFIT: Uses Levenberg-Marquardt algorithm to fit a
+            %charge curve of a lithium-ion battery in three parts:
+            %1: exponential drop at the beginning of the discharge curve
+            %2: according to the nernst-equation
+            %3: exponential drop at the end of the discharge curve
+            %and adds the fitted curve to the battery model b.
+            %Syntax:
+            %   b.chargeFit(V, C_dis, I, T);
+            %           --> initialization of curve fit params with zeros
+            %
+            %   b.chargeFit(V, C_dis, I, T, 'OptionName', 'OptionValue');
+            %           --> custom initialization of curve fit params
+            %
+            %Input arguments:
+            %   V:              Voltage (V) = f(C_dis) (from data sheet)
+            %   C_dis:          Discharge capacity (Ah) (from data sheet)
+            %   I:              Current (A) at which curve was measured
+            %   T:              Temperature (K) at which curve was mearured
+            %
+            %OptionName-OptionValue pairs:
+            %
+            %   'x0'            Initial params for fit functions.
+            %                   default: zeros(8, 1)
+            %
+            %   x0 = [E0; Ea; Eb; x0; v0; delta; Aex; Bex] with:
+            %
+            %   E0, Ea, Eb:     Parameters for Nernst fit (initial estimations)
+            %   x0, v0, delta:  Parameters for fit of exponential drop at
+            %                   the beginning of the curve (initial estimations)
+            %   Aex, Bex:       Parameters for fit of exponential drop at
+            %                   the end of the curve (initial estimations)
+            %
+            %   'mode'          Function used for fitting curves
+            %                   'lsq' (default) - lsqcurvefit
+            %                   'fmin'          - fminsearch
+            %                   'both'          - a combination (lsq, then fmin)
+            
+            % add a new dischargeFit object according to the input arguments
+            b.addcurves(lfpBattery.dischargeFit(V, C_dis, I, Temp, varargin{:}), 'charge');
+        end % chargeFit
+        function cycleFit(b, DoDN, N, varargin)
+            %CYCLEFIT creates a fit object for a cycles to failure vs. DoD curve.
+            %
+            %The default fitting class used is lfpBattery.woehlerFit.
+            %The fitted curve is added to the battery model b.
+            %
+            %   d = b.CYCLEFIT(DoD, N) 
+            %           --> creates a fit for the function N(DoD)
+            %
+            %   d = b.CYCLEFIT(DoD, N, 'OptionName', 'OptionValue');
+            %           --> custom initialization of curve fit params
+            %
+            %OptionName-OptionValue pairs:
+            %
+            %   'x0'            Initial params for fit functions.
+            %                   default: zeros(2, 1)
+            %
+            %   x0 = [p1; p2]
+            %
             %
             %   'mode'          Function used for fitting curves
             %                   'lsq'           - lsqcurvefit
             %                   'fmin'          - fminsearch
             %                   'both'          - (default) a combination (lsq, then fmin)
-            
-            % add a new dischargeFit object according to the input arguments
-            b.addcurves(lfpBattery.dischargeFit(V, C_dis, I, Temp, varargin{:}));
-        end % dischargeFit
+            %
+            %   'fitClass'      Class to be used for curve fitting: 
+            %                   'woehlerFit', 'nrelcFit' or 'deFit'
+            p = inputParser;
+            validClasses = {'woehlerFit', 'nrelcFit', 'deFit'};
+            addOptional(p, 'fitClass', 'woehlerFit', @(x) validatestring(x, validClasses))
+            addOptional(p, 'x0', 'auto')
+            addOptional(p, 'mode', 'both')
+            switch p.Results.fitClass
+                case 'woehlerFit'
+                    fitClass = @lfpBattery.woehlerFit;
+                case 'nrelcFit'
+                    fitClass = @lfpBattery.nrelcFit;
+                case 'deFit'
+                    fitClass = @lfpBattery.deFit;
+                otherwise
+                    error('Unexpected fit class.')
+            end
+            % Create new fit object according to input arguments
+            if strcmp(p.Results.x0, 'auto')
+                fit = fitClass(DoDN, N, 'mode', p.Results.mode);
+            else
+                fit = fitClass(DoDN, N, 'x0', p.Results.x0, 'mode', p.Results.mode);
+            end
+            % Add fit object to pack
+            b.addcurves(fit, 'cycleLife')
+        end % woehlerFit
+        function cccvFit(b, varargin)
+            %CCCVFIT: Creates a linear curve fit of the CV phase of a CCCV
+            %(constant current, constant voltage) charging curve: Imax = f(SoC)
+            %where SoC is the state of charge and Imax is the maximum
+            %current and adds it to the battery pack b.
+            %
+            %Syntax: c = b.CCCVFIT(soc, iMax);
+            %        c = b.CCCVFIT(soc, iMax, socMax);
+            %
+            %Input arguments:
+            %   soc     - state of charge [0..1].
+            %   iMax    - maximum current in A at soc.
+            %   socMax  - (optional) maximum SoC at the end of the CV
+            %             phase (default: 1).
+            %
+            %   The input arguments soc and iMax can be scalars or vectors
+            %   of the same size.
+            %   Note that only the first value is used for the fit.
+            %   However, it may be advisable to include data for multiple
+            %   points of the curve to validate that the correspondece is
+            %   in fact linear.
+           
+            b.addcurves(lfpBattery.cccvFit(varargin{:}), 'cccv')
+        end % cccvFit
         function addElements(b, varargin)
             % ADDELEMENTS: Adds elements to the collection (e. g. the
             % batteryPack, parallelElement or stringElement b. An element can

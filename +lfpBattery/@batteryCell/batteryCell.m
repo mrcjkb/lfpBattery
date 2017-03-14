@@ -35,6 +35,11 @@ classdef batteryCell < lfpBattery.batteryInterface
     % addCounter                 - Registers a cycleCounter object as an observer.
     % dischargeFit               - Uses Levenberg-Marquardt algorithm to fit a
     %                              discharge curve.
+    % chargeFit                  - Uses Levenberg-Marquardt algorithm to
+    %                              fit a charge curve.
+    % cycleFit                   - Creates a fit object for a cycles to
+    %                              failure vs. DoD curve and adds it to the cell.
+    % cccvFit                    - Adds a CCCV curve fit to the cell.
     % initAgeModel               - Initializes the age model of the battery.
     % getNewDischargeVoltage     - Returns the new voltage according to a discharging current and a
     %                              time step size.
@@ -76,7 +81,7 @@ classdef batteryCell < lfpBattery.batteryInterface
     %Authors: Marc Jakobi, Festus Anynagbe, Marc Schmidt
     %         January 2017
     
-    properties (Hidden, Access = 'protected');
+    properties (Hidden, Access = 'protected')
         dC; % curvefitCollection (of dischargeCurves objects)
         cC; % cccvFit (constant current, constant voltage curve fit)
         cC2; % curvefitCollection (of chargeCurves or dischargeCurves objects)

@@ -18,7 +18,7 @@ Each component can either be another composite object or a leaf.
 	\caption[Visualization of the possible battery topology compositions]{Visualization of the possible battery topology compositions.}
 	\label{fig:topologies2}
 \end{figure}
-Figure~\ref{fig:topologies2} provides a visual overview of the topologies that are possible using different compositions. Using this variation of the Composite design pattern, the components can be combined in any possible way at runtime. The most common battery topologies are strings of parallel elements (SP) and parallel strings of cells (PS)~\cite{cordoba-arenas_control-oriented_2015}. In Figure~\ref{fig:topologies2}, these would be the case if the composition's leaf nodes (cells) were all in the second layer (marked green). However, since every component can be either a cell or another composite, more complicated topologies are made possible in this package. \\
+Figure~\ref{fig:topologies2} provides a visual overview of the topologies that are possible using different compositions. Using this variation of the Composite design pattern, the components can be combined in any possible way at runtime. The most common battery topologies are strings of parallel elements (SP) and parallel strings of cells (PS)~\cite{cordoba-arenas_control-oriented_2015}. In Figure~\ref{fig:topologies2}, these would be the case if the composition's leaf nodes (cells) were all in the second layer (marked green). However, since every component can be either a cell or an array of other composite objects, more complicated topologies are made possible in this package. \\
 \begin{figure}[t!]
 	\captionsetup{type=figure}
 	\centering
@@ -28,6 +28,7 @@ Figure~\ref{fig:topologies2} provides a visual overview of the topologies that a
 \end{figure}
 
 \subsection{Method delegation}
+\label{sec:method_delegation}
 A pattern diagram of the classes used for the topology composition is depicted in Figure~\ref{fig:composite_schema}. Every composite element holds a reference to a component and delegates the methods called on it to said component. The delegated methods are wrapped with the rules of the respective topology in a similar fashion as is done with the Decorator design pattern. An example of the method delegation for a PS configuration - a \mcode{parallelElement} that holds a set of \mcode{seriesElement} objects, each in turn holding a set of \mcode{batteryCell} objects - is visualized in Figure~\ref{fig:method_delegation}. In this example, a current \mcode{I} and the simulation time step size is passed to the \mcode{parallelElement} via a \mcode{getVoltage()} method. The \mcode{parallelElement} determines which portion of \mcode{I} to send to each of it's components and delegates the method. Each \mcode{seriesElement} does the same and delegates the method to it's \mcode{batteryCell} objects. These return their voltages back to the \mcode{seriesElement} objects, which sum up the results received from their cells and pass the sum back to the \mcode{parallelElement}. Finally, the \mcode{parallelElement} calculates the mean of all the summed up voltages it received and passes the end-result back to the client.
 \begin{figure}[t!]
 	\captionsetup{type=figure}
@@ -269,3 +270,25 @@ In this model, the cell monitoring and communication with the charger are implem
 	\caption[Schematic visualization of the BMS combined with CCCV charging]{Schematic visualization of the BMS combined with CCCV charging.}
 	\label{fig:cccvBMS}
 \end{figure}
+
+\subsection{Simplified model}
+The cell resolution of the battery model provided in this package can lead to long simulation times for packs containing large numbers of cells. For example, a 12~V pack with a capacity of 390~Ah (ca. 4.7~kWh) may contain over 500 cells (assuming a nominal cell voltage of 3.2~V and a nominal cell capacity of 3~Ah). In many simulations, the individual ageing and voltage distribution of cells may be of little to no interest. For such cases, a simplified version of the model was devised. It was implemented using the Decorator design pattern, which functions similarly to the Composite pattern used for the non-simplified model (see section~\ref{sec:batteryCompositionOverview}). The decorator (wrapper) objects used in the simplified model are
+\begin{itemize}
+	\item \mcode{simplePE}: A set of components in parallel.
+	\item \mcode{simpleSE}: A set of components in series.
+\end{itemize}
+Much like the their non-simplified counterparts, they can hold a reference to either a \mcode{batteryCell} or another wrapper object. The difference is that the decorator can only wrap a single object, rather than an array of objects. The number of subcomponents is stored as a separate property. Instead of simulating individual cells and delegating the methods to each of the subcomponents (see section~\ref{sec:method_delegation}), the methods are delegated to a single subcomponent (and ultimately to a single cell) and the number of subcomponents is used to determine the end result. Consequentially, passive equalization cannot be modelled using the simplified model. Also, the age model can only be added on the pack level\footnote{It is technically possible to add an age model to the cell, but doing so has no effect other than slowing down the simulation if the \mcode{'LowerLevel'} argument is not passed to the pack's \mcode{initAgeModel()} method.}. While the \mcode{simplePE} and \mcode{simpleSE} classes do implement the \mcode{batteryInterface} and thus share all methods, their constructors are called differently. To construct a "simple circuit element" decorator, the wrapped object and the number of subcomponents it holds are passed as input arguments.
+\begin{lstlisting}
+b1 = batteryCell(3, 3.2);
+b2 = batteryCell(3, 3.2);
+% add dischargeCurves, etc. to b1 & b2...
+se = simpleSE(b2, 3); % 3 cells in series
+pe = simplePE(b1, 3); % 3 parallel cells
+sp = simpleSE(pe, 3); % 3 strings of parallel elements
+ps = simplePE(se, 3); % 3 parallel strings of cells
+ps.initAgeModel('ageModel', 'EO') % initialize age model
+\end{lstlisting}
+
+
+\subsection{The \mcode{batteryPack} class}
+For simple, centralized access to most features of this package, a facade of the model was created in the form of the \mcode{batteryPack} class. In most use cases, the \mcode{batteryPack} will be the only class 
