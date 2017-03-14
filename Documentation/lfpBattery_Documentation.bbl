@@ -107,9 +107,6 @@
       \verb{file}
       \verb _BM26650ETC.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\IRTX3K3S\\_BM26650ETC.pdf:application/pdf
       \endverb
-      \verb{url}
-      \verb www.bmz-gmbh.de
-      \endverb
     \endentry
     \entry{hyndman_another_2006}{article}{}
       \name{author}{2}{}{%
@@ -504,6 +501,35 @@
       \verb{file}
       \verb KEIL 2011 Aufbau und Parametrierung von Batteriemodellen.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\I7WZJ6BT\\KEIL 2011 Aufbau und Parametrierung von Batteriemodellen.pdf:application/pdf
       \endverb
+    \endentry
+    \entry{andrea_battery_2010}{book}{}
+      \name{author}{1}{}{%
+        {{hash=d762df0d12d4c5f225b633473ba59a5d}{%
+           family={Andrea},
+           familyi={A\bibinitperiod},
+           given={Davide},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Boston}%
+      }
+      \list{publisher}{1}{%
+        {Artech House}%
+      }
+      \strng{namehash}{d762df0d12d4c5f225b633473ba59a5d}
+      \strng{fullhash}{d762df0d12d4c5f225b633473ba59a5d}
+      \strng{authornamehash}{d762df0d12d4c5f225b633473ba59a5d}
+      \strng{authorfullhash}{d762df0d12d4c5f225b633473ba59a5d}
+      \field{sortinit}{2}
+      \field{sortinithash}{0aa614ace9f3a40ef5a67e7f7a184048}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-1-60807-104-3}
+      \field{pagetotal}{290}
+      \field{title}{Battery management systems for large lithium-ion battery packs}
+      \field{year}{2010}
+      \field{dateera}{ce}
+      \keyw{Design and construction,Lithium cells,Storage batteries}
     \endentry
   \endsortlist
 \endrefsection

@@ -187,3 +187,27 @@ setRatio(f, [2, 1])
 fontsizeset(f, fs)
 expandaxes(f)
 printfig(f, fullfile(p, 'Documentation', 'woehlerFit'), 'eps')
+%% CCCV fits
+load(fullfile(p, 'MLUnitTests', 'batteryCellTests', 'dcCurves.mat'))
+load(fullfile(p, 'Resources', 'cccvfit.mat'))
+f = figure;
+setRatio(f, [2 1])
+AX(1) = subplot(1, 2, 1);
+c.plotResults(false)
+AX(2) = subplot(1, 2, 2);
+c2.plotResults(false)
+leg = legend('raw data', 'fit', 'Orientation', 'horizontal');
+leg.Location = 'northoutside';
+leg.Box = 'off';
+fontsizeset(f, fs)
+expandaxes(f, 0.01)
+h = AX(1).Position(4);
+for i = 1:2
+    AX(i).Position(4) = h - 0.05;
+end
+b = leg.Position(2);
+l = leg.Position(1);
+leg.Position(2) = b - 0.04;
+leg.Position(1) = l - 0.27;
+tldeccheck
+printfig(f, fullfile(p, 'Documentation', 'cccvFit'), 'eps')

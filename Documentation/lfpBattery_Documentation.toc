@@ -28,4 +28,7 @@
 \contentsline {subsubsection}{\numberline {3.3.1}Battery object initialization}{21}{subsubsection.3.3.1}
 \contentsline {subsubsection}{\numberline {3.3.2}Battery charging and discharging}{23}{subsubsection.3.3.2}
 \contentsline {subsubsection}{\numberline {3.3.3}Age model level}{28}{subsubsection.3.3.3}
-\contentsline {section}{References}{29}{subsubsection.3.3.3}
+\contentsline {subsection}{\numberline {3.4}CCCV charging and BMS}{28}{subsection.3.4}
+\contentsline {subsubsection}{\numberline {3.4.1}CCCV curve fits}{29}{subsubsection.3.4.1}
+\contentsline {subsubsection}{\numberline {3.4.2}Cell monitoring and communication with the charger}{30}{subsubsection.3.4.2}
+\contentsline {section}{References}{32}{figure.caption.50}

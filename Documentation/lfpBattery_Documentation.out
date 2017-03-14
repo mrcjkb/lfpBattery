@@ -27,4 +27,7 @@
 \BOOKMARK [3][-]{subsubsection.3.3.1}{Battery object initialization}{subsection.3.3}% 27
 \BOOKMARK [3][-]{subsubsection.3.3.2}{Battery charging and discharging}{subsection.3.3}% 28
 \BOOKMARK [3][-]{subsubsection.3.3.3}{Age model level}{subsection.3.3}% 29
-\BOOKMARK [1][-]{subsubsection.3.3.3}{References}{}% 30
+\BOOKMARK [2][-]{subsection.3.4}{CCCV charging and BMS}{section.3}% 30
+\BOOKMARK [3][-]{subsubsection.3.4.1}{CCCV curve fits}{subsection.3.4}% 31
+\BOOKMARK [3][-]{subsubsection.3.4.2}{Cell monitoring and communication with the charger}{subsection.3.4}% 32
+\BOOKMARK [1][-]{figure.caption.50}{References}{}% 33

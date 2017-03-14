@@ -92,6 +92,7 @@ I\subs{subcomponent}{j} = \frac{\frac{1}{p\subs{z}{j}}}{\sum_{i=1}^{n}\frac{1}{p
 
 
 \subsection{Battery Interface}
+\label{sec:batteryInterface}
 The battery interface is described in the following subsections. Every component implements the \mcode{batteryInterface}, so the methods described in this section can be called on \mcode{batteryCell} objects and on the composites.
 
 \subsubsection{Battery object initialization}
@@ -139,6 +140,7 @@ end
 \end{lstlisting}
 
 \subsubsection{Battery charging and discharging}
+\label{sec:charge_discharge}
 Battery charging \footnote{Discharging will also be referred to as charging (with a negative current) in this documentation.} is handled by the methods \mcode{powerRequest()} and \mcode{currentRequest()}. Both functions are called in a similar manner. The syntax is as follows:
 \begin{lstlisting}
 [P, V, I] = bat.powerRequest(P, dt);
@@ -204,9 +206,66 @@ An \mcode{mdischargeCurves} object shares the exact same interface as a \mcode{d
 \begin{lstlisting}
 d2 = mdischargeCurves;
 d2.add(d); % Adds all of the dischargeCurves' dischargeFit objects
-% to the mdischargeCurves object
+		   % to the mdischargeCurves object
 % Works the other way around, too
 d = dischargeCurves;
 d.add(d2)
 \end{lstlisting}
+
 \subsubsection{Age model level}
+\label{sec:AgeModelLevel}
+The age model (see section~\ref{sec:ageModel}) can be left out completely, added on the pack level or added on the cell level. Adding it on the pack level is done by calling \mcode{initAgeModel()}\footnote{The \mcode{initAgeMoel()} method is described in sections~\ref{sec:cycleCounting}~-~\ref{sec:eoAgeModel}.} on the outermost wrapper object, e.g. a \mcode{batteryPack} (see section\todo{ref section}), a \mcode{parallelElement}, a \mcode{seriesElementPE}, etc. Doing so will cause the battery pack's total $SoC$ to be observed for cycle counting and the pack's $SoH$ to be updated by the \mcode{batteryAgeModel} object. If the cells have varying properties (i.e. different internal impedances), their individual cycles may vary and it could make sense to add an age model to each cell individually. This can be done by calling \mcode{initAgeModel()} on every cell. The cells can be extracted using the \mcode{createIterator()} method, which returns a \mcode{batteryIterator} object that can be used to iterate through the cells. To indicate that the age model is set to the cell, level, the main battery pack object (outermost wrapper) must have it's age model set to \mcode{'LowerLevel'}, or the $SoH$ will not be calculated correctly. The following code provides an example of extracting a battery pack \mcode{bat}'s cells and setting the age model.
+\begin{lstlisting}
+it = bat.createIterator;
+while it.hasNext % Iterate through cells
+	b = it.next; % batteryCell object
+	b.initAgeModel('ageModel', 'EO')
+end
+% Make sure 'LowerLevel' option is set on outermost wrapper
+bat.initAgeModel('LowerLevel')
+\end{lstlisting}
+
+\subsection{CCCV charging and BMS}
+\label{sec:cccv_BMS}
+\begin{figure}[t!]
+	\captionsetup{type=figure}
+	\centering
+	\includegraphics[width=\textwidth]{cccv_qualitative}
+	\caption[Qualitative example of a CCCV charging curve]{Qualitative example of a CCCV charging curve.}
+	\label{fig:cccv_qualitative}
+\end{figure}
+Typically, a lithium-ion battery is charged using a constant current / constant voltage (CCCV) charging strategy. A qualitative example of the CCCV strategy is depicted in Figure~\ref{fig:cccv_qualitative}. In the CC phase, a constant charging current causes the $SoC$ to increase linearly over time while the voltage rises according to the respective charging curve (see section~\ref{sec:dischargeCurves}). When the voltage reaches a certain threshold, the current is reduced in order to stabilize the voltage during the CV phase. As a result, the $SoC$ is no longer a linear function of time and increases at a slower pace. In practice, this charging strategy works well for individual cells and cells connected in parallel, since the voltage is distributed evenly across all cells. However, this is not the case for cells connected in series. A CCCV charger may limit the total voltage, but it has no knowledge of the distribution across the individual cells, which could result in the cells with the highest voltage getting damaged~\cite{andrea_battery_2010}. To prevent this, a battery management system (BMS) is required. The BMS monitors each cell individually and communicates with the charger. In the case of active equalization, the BMS rebalances the charge and voltages among the cells. This can be modelled by using the \mcode{seriesElementAE} class (see section~\ref{sec:batteryCompositionOverview}).
+
+\subsubsection{CCCV curve fits}
+\label{sec:cccvFit}
+Due to the fact that simulations using variable currents are possible with this model, the charge limitation in the CV phase is done by limiting the maximum charging current $I\subi{max}$ as a function of the $SoC$. Thus, lower currents than $I\subi{max}$ are also possible during the CC phase. By default, $I\subi{max}$ is limited according to the discharge curve with the largest current stored in the cell's \mcode{dischargeCurves} reference (see section~\ref{sec:charge_discharge}). If a set of charge curve fits is added without adding a CCCV curve (using the \mcode{'charge'} option of the \mcode{addcurves()} method), $I\subi{max}$ is set according to the charge curve with the greatest current. Finally, if a \mcode{cccvFit} object is added, $I\subi{max}$ is dynamically set as a linear function of the $SoC$ according to the CCCV curve fit. 
+\begin{equation}
+I\subi{max}(SoC) = \frac{I\subi{max,CC}}{1-SoC\subi{CC/CV}}\cdot (1 - SoC)
+\end{equation}
+where $I\subi{max,CC}$ is the maximum current during the CC phase and $SoC\subi{CC/CV}$ is the $SoC$ at the end of the CC phase.
+To add a CCCV curve fit to a battery object \mcode{bat}, the \mcode{addcurvers()} method can be called with the \mcode{'cccv'} option. The \mcode{cccvFit} class implements the \mcode{curveFitInterface} and is initialized with the raw data ($SoC$ and $I\subi{max}$ with $I\subi{max} = f(SoC)$) and the optional name-value pairs described in section~\ref{sec:dischargeFit}. If for some reason the curve's maximum $SoC$ is not 1, it should be passed to the constructor via a third argument $SoC\subi{max}$.
+\begin{lstlisting}
+% CCCV curve fit
+c = cccvFit(soc, iMax);
+c2 = cccvFit(soc, iMax, socMax); % with SoC limitation
+bat.addcurves(c, 'cccv') % add c to battery object
+\end{lstlisting}
+\begin{figure}[t!]
+	\captionsetup{type=figure}
+	\centering
+	\includegraphics[width=\textwidth]{cccvFit}
+	\caption[Linear curve fits of $I\subi{max}(SoC)$ during the CV phase for two different battery cells]{Linear curve fits of $I\subi{max}(SoC)$ during the CV phase for two different battery cells.}
+	\label{fig:cccvFit}
+\end{figure}
+Two curve fits for two different battery cells' CV phases are depicted in Figure~\ref{fig:cccvFit}. For the cell fitted on the right hand side, the linear model provides a very good approximation. However, for cells with short CV phases resulting in small $SoC$ gradients (fitted on the left hand side), the digitized raw data can appear more noisy due to the difficulty in digitizing the image.
+
+\subsubsection{Cell monitoring and communication with the charger}
+\label{sec:BMS}
+In this model, the cell monitoring and communication with the charger are implemented using the Observer design pattern. The cells take on the role of the subjects and are automatically registered with the pack they are added to via the \mcode{addElements()} method (see section~\ref{sec:batteryInterface}). The communication flows between the BMS and the charger are visualized in Figure~\ref{fig:cccvBMS}, with each communication path colour coded. Each battery composite object (e.g. a battery pack) contains a logical flag that indicates whether CV charging is active (true) or not (false). If a cell's individual $SoC$ reaches the threshold at which CV charging is activated, the battery pack is notified, causing it's flag to be set true. This notification is also sent out if a cell that was in the CV phase moves back into the CC phase by being discharged. At the beginning of each time step, the maximum charging current is recalculated if the battery pack's CCCV flag is true. This also sets it false again to prevent unnecessary recalculations. If the flag is false, charging continues with the last cached $I\subi{max}$. Using this method significantly reduces simulation time compared to directly triggering a recalculation of $I\subi{max}$ every time a cell's $SoC$ threshold is reached.  
+\begin{figure}[t!]
+	\captionsetup{type=figure}
+	\centering
+	\includegraphics[width=\textwidth]{cccvBMS}
+	\caption[Schematic visualization of the BMS combined with CCCV charging]{Schematic visualization of the BMS combined with CCCV charging.}
+	\label{fig:cccvBMS}
+\end{figure}

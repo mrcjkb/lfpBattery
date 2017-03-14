@@ -104,7 +104,7 @@ V = d(Cd); % Voltage in V
 Cd_vect = linspace(0, 3, 1000); % Vector of discharge capacities in Ah
 V_vect = d(Cd_vect); % Corresponding vector of voltages in V
 \end{lstlisting}
-A \mcode{dischargeFit} object is not accessed directly by the battery model, but rather stored in a \mcode{dischargeCurves} object. After creating a \mcode{dischargeFit}, it can be added to a \mcode{dischargeCurves} collection by using the \mcode{add()} method (see section~\ref{sec:dischargeCurves}). Alternatively, it can be added directly to a subclass of the \mcode{batteryInterface} (see section) \todo{section ref} using it's \mcode{addcurves()} method. \\
+A \mcode{dischargeFit} object is not accessed directly by the battery model, but rather stored in a \mcode{dischargeCurves} object. After creating a \mcode{dischargeFit}, it can be added to a \mcode{dischargeCurves} collection by using the \mcode{add()} method (see section~\ref{sec:dischargeCurves}). Alternatively, it can be added directly to a subclass of the \mcode{batteryInterface} (see section~\ref{sec:batteryInterface}) using it's \mcode{addcurves()} method. \\
 
 \subsection{Collection of discharge curves}
 \label{sec:dischargeCurves}
@@ -183,4 +183,4 @@ while it.hasNext % returns true if there is another object to
 end
 it.reset % resets the scIterator
 \end{lstlisting}
-For usage in a battery model, a \mcode{dischargeCurves} object is passed to an implementation of the \mcode{batteryInterface} (see section\todo{ref section}) using it's \mcode{addCurves()} method.
+For usage in a battery model, a \mcode{dischargeCurves} object is passed to an implementation of the \mcode{batteryInterface} (see section~\ref{sec:batteryInterface}) using it's \mcode{addCurves()} method.

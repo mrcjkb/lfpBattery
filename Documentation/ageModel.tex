@@ -1,6 +1,7 @@
 \markboth{Age model}{Age model}
 \section{Age model}
-The age model is implemented using the Observer design pattern via Matlab's "Events and Listeners\footnote{in \matlab, an observer is often referred to as a "listener". However, "observer" is the more common term in OOP design pattern terminology and will be used throughout this documentation.}"~\cite{_overview_????}. This way, various age models (predefined or custom) can be dynamically added to a battery model at run time or even left out completely. Ageing can be simulated on the battery pack level (by treating all cells as one entity) or on the cell level (by observing each cell separately)\footnote{see section}\todo{ref section in footnote}. The event oriented age model provided in this package is based solely on cycle counting, for which a mathematical approach developed by~\cite{dambrowski_mathematical_2012} is implemented. Descriptions of the counting algorithm and the classes used to implement the age model are provided in the following sections.
+\label{sec:ageModel}
+The age model is implemented using the Observer design pattern via Matlab's "Events and Listeners\footnote{in \matlab, an observer is often referred to as a "listener". However, "observer" is the more common term in OOP design pattern terminology and will be used throughout this documentation.}"~\cite{_overview_????}. This way, various age models (predefined or custom) can be dynamically added to a battery model at run time or even left out completely. Ageing can be simulated on the battery pack level (by treating all cells as one entity) or on the cell level (by observing each cell separately)\footnote{see section\ref{sec:AgeModelLevel}.}. The event oriented age model provided in this package is based solely on cycle counting, for which a mathematical approach developed by~\cite{dambrowski_mathematical_2012} is implemented. Descriptions of the counting algorithm and the classes used to implement the age model are provided in the following sections.
 \subsection{Overview}
 Cycle counting algorithms are designed to count cycles from a set of measured data. A challenge for a running simulation or a battery management system (BMS) that relies on cycle counting is to decide when to count the cycles of an accumulated data set. Counting could be done at fixed time intervals or it could be triggered by a certain event. The latter is the approach implemented by the \mcode{cycleCounter} interface, which acts both as an observer of a battery cell or pack as well as a subject for the \mcode{eoAgeModel} class.\\
 The observation of charge cycles is handled by the abstract \mcode{cycleCounter} interface, in which all methods except for the \mcode{count()} method are predefined. An object that implements the interface is regularly updated with the observed battery's $SoC$, which is stored within the object's memory. The cycle counting occurs every time the $SoC$ reaches an upper threshold, i.e. the observed battery's maximum $SoC$. After counting, the \mcode{NewCycle} event is triggered, causing all of the object's observers (i.e. an \mcode{eoAgeModel} object) to be notified that new data is available for simulation. The age model then uses the data to determine the battery's new state of health $SoH$ and passes it on to the battery. \\
@@ -14,6 +15,7 @@ An Observer Pattern class diagram of the age model is depicted in Figure~\ref{fi
 \end{figure}
 
 \subsection{Cycle counting}
+\label{sec:cycleCounting}
 In this pack, two classes have been created to implement the \mcode{cycleCounter}'s \mcode{count()} method.
 A \mcode{cycleCounter} subclass can be constructed in one of the following ways:
 \begin{lstlisting}
@@ -22,7 +24,7 @@ c = cycleCounter(init_soc); % sets the initial SoC
 c = cycleCounter(init_soc, soc_max); % sets the initial SoC and the
 									 % max. SoC
 \end{lstlisting}
-where \mcode{cycleCounter} must be replaced with the name of the respective class that is being constructed (e.g. \mcode{dambrowskiCounter} or \mcode{rainflowCounter}). To register the object as an observer of a battery object \mcode{bat}\footnote{\mcode{bat} can be an object of any class that implements the \mcode{batteryInterface}.}\todo{ref section}, the \mcode{initAgeModel()} method can be used.
+where \mcode{cycleCounter} must be replaced with the name of the respective class that is being constructed (e.g. \mcode{dambrowskiCounter} or \mcode{rainflowCounter}). To register the object as an observer of a battery object \mcode{bat}\footnote{\mcode{bat} can be an object of any class that implements the \mcode{batteryInterface} (see section~\ref{sec:batteryInterface}).}, the \mcode{initAgeModel()} method can be used.
 \begin{lstlisting}
 % Extract intitial SoC and max. SoC from battery
 init_soc = bat.SoC;
@@ -66,6 +68,7 @@ Each \mcode{cycleCounter} object's \mcode{count()} method converts the saved $So
 \end{figure}
 
 \subsection{Event oriented ageing model}
+\label{sec:eoAgeModel}
 The event oriented ageing model - a very simple and lightweight model - is implemented by the \mcode{eoAgeModel} class, which subclasses the abstract \mcode{batteryAgeModel} interface. Cycle ageing is calculated based on a curve fit of the battery's number of cycles to failure $N\subi{f}$ vs $DoD$ curve.
 
 \subsubsection{Cycle life curve fits}
