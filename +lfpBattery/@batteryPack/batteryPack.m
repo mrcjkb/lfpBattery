@@ -1,65 +1,6 @@
 classdef batteryPack < lfpBattery.batteryInterface
     %BATTERYPACK: Cell-resolved model of a lithium ion battery pack.
     %
-    %
-    % BATTERYPACK Methods:
-    % powerRequest               - Requests a power in W (positive for charging,
-    %                              negative for discharging) from the battery.
-    % iteratePower               - Iteration to determine new state given a certain power.
-    % currentRequest             - Requests a current in A (positive for charging,
-    %                              negative for discharging) from the battery.
-    % iterateCurrent             - Iteration to determine new state given a certain current.
-    % addCounter                 - Registers a cycleCounter object as an observer.
-    % dischargeFit               - Uses Levenberg-Marquardt algorithm to fit a
-    %                              discharge curve.
-    % chargeFit                  - Uses Levenberg-Marquardt algorithm to
-    %                              fit a charge curve.
-    % cycleFit                   - Creates a fit object for a cycles to
-    %                              failure vs. DoD curve and adds it to the pack.
-    % cccvFit                    - Adds a CCCV curve fit to the pack.
-    % initAgeModel               - Initializes the age model of the battery.
-    % getNewDischargeVoltage     - Returns the new voltage according to a discharging current and a
-    %                              time step size.
-    % getNewChargeVoltage        - Returns the new voltage according to a charging current and a
-    %                              time step size.
-    % addcurves                  - Adds a collection of discharge/charge curves, a cycle
-    %                              life curve or a CCCV curve to the battery.
-    % randomizeDC                - Slight randomization of each cell's discharge
-    %                              curve fits.
-    % digitizeTool               - (static) Opens a GUI for digitizing discharge curves and
-    %                              cycle life curves (requires JAVA).
-    % GUI                        - (static) Opens a GUI for creating a batteryPack model.
-    %                              (requires JAVA)
-    %
-    %
-    % BATTERYPACK Properties:
-    % AgeModelLevel     - Level of the age model ('Cell or 'Pack')
-    % C                 - Current capacity level in Ah.
-    % Cbu               - Useable capacity in Ah.
-    % Cd                - Discharge capacity in Ah (Cd = 0 if SoC = 1).
-    % Cn                - Nominal (or average) capacity in Ah.
-    % eta_bc            - Efficiency when charging [0,..,1].
-    % eta_bd            - Efficiency when discharging [0,..,1].
-    % Imax              - Maximum current in A.
-    % psd               - Self discharge rate in 1/month [0,..,1].
-    % SoC               - State of charge [0,..,1].
-    % socMax            - Maximum SoC (default: 1).
-    % socMin            - Minimum SoC (default: 0.2).
-    % SoH               - State of health [0,..,1].
-    % V                 - Resting voltage in V.
-    % Vn                - Nominal (or average) voltage in V.
-    % Zi                - Internal impedance in Ohm.
-    % nP                - number of parallel elements.
-    % nS                - number of elements in series.
-    %
-    %
-    % BATTERYPACK Settable Properties:
-    % maxIterations     - Maximum number of iterations in iteratePower()
-    %                     and iterateCurrent() methods.
-    % pTol              - Tolerance for the power iteration in W.
-    % sTol              - Tolerance for SoC limitation iteration.
-    %
-    %
     %Syntax:
     %       b = BATTERYPACK(Cp, Vp, Cc, Vc);
     %           Initializes a battery pack with the nominal cell voltae Vc and the
@@ -216,6 +157,62 @@ classdef batteryPack < lfpBattery.batteryInterface
     %                            -> adds an age curve (e. g. a woehlerFit) to
     %                            the battery's cells.
     %
+    % BATTERYPACK Methods:
+    % powerRequest               - Requests a power in W (positive for charging,
+    %                              negative for discharging) from the battery.
+    % iteratePower               - Iteration to determine new state given a certain power.
+    % currentRequest             - Requests a current in A (positive for charging,
+    %                              negative for discharging) from the battery.
+    % iterateCurrent             - Iteration to determine new state given a certain current.
+    % addCounter                 - Registers a cycleCounter object as an observer.
+    % dischargeFit               - Uses Levenberg-Marquardt algorithm to fit a
+    %                              discharge curve.
+    % chargeFit                  - Uses Levenberg-Marquardt algorithm to
+    %                              fit a charge curve.
+    % cycleFit                   - Creates a fit object for a cycles to
+    %                              failure vs. DoD curve and adds it to the pack.
+    % cccvFit                    - Adds a CCCV curve fit to the pack.
+    % initAgeModel               - Initializes the age model of the battery.
+    % getNewDischargeVoltage     - Returns the new voltage according to a discharging current and a
+    %                              time step size.
+    % getNewChargeVoltage        - Returns the new voltage according to a charging current and a
+    %                              time step size.
+    % addcurves                  - Adds a collection of discharge/charge curves, a cycle
+    %                              life curve or a CCCV curve to the battery.
+    % randomizeDC                - Slight randomization of each cell's discharge
+    %                              curve fits.
+    % digitizeTool               - (static) Opens a GUI for digitizing discharge curves and
+    %                              cycle life curves (requires JAVA).
+    % GUI                        - (static) Opens a GUI for creating a batteryPack model.
+    %                              (requires JAVA)
+    %
+    %
+    % BATTERYPACK Properties:
+    % AgeModelLevel     - Level of the age model ('Cell or 'Pack')
+    % C                 - Current capacity level in Ah.
+    % Cbu               - Useable capacity in Ah.
+    % Cd                - Discharge capacity in Ah (Cd = 0 if SoC = 1).
+    % Cn                - Nominal (or average) capacity in Ah.
+    % eta_bc            - Efficiency when charging [0,..,1].
+    % eta_bd            - Efficiency when discharging [0,..,1].
+    % Imax              - Maximum current in A.
+    % psd               - Self discharge rate in 1/month [0,..,1].
+    % SoC               - State of charge [0,..,1].
+    % socMax            - Maximum SoC (default: 1).
+    % socMin            - Minimum SoC (default: 0.2).
+    % SoH               - State of health [0,..,1].
+    % V                 - Resting voltage in V.
+    % Vn                - Nominal (or average) voltage in V.
+    % Zi                - Internal impedance in Ohm.
+    % nP                - number of parallel elements.
+    % nS                - number of elements in series.
+    %
+    %
+    % BATTERYPACK Settable Properties:
+    % maxIterations     - Maximum number of iterations in iteratePower()
+    %                     and iterateCurrent() methods.
+    % pTol              - Tolerance for the power iteration in W.
+    % sTol              - Tolerance for SoC limitation iteration.
     %
     %Authors: Marc Jakobi, Festus Anynagbe, Marc Schmidt
     %         January 2017
