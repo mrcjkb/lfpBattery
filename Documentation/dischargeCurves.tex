@@ -5,7 +5,7 @@ Many battery data sheets provide measured discharge curves, on which the chargin
 
 \subsection{Single discharge curve}
 \label{sec:dischargeFit}
-For modelling a single discharge curve, the class \mcode{dischargeFit} is used, which implements the interface \mcode{curveFitInterface}\todo{Section describing interface, etc.}. The curve is fitted according to \cite{werder_entwicklung_2014}, using a function that is loosely based on the Nernst equation with two exonential functions superimposed as a correction for the voltage drops at the beginning and end of the curve.
+For modelling a single discharge curve, the class \mcode{dischargeFit} is used, which implements the interface \mcode{curveFitInterface}\todo{Section describing interface, etc.}. The curve is fitted according to \cite{werder_entwicklung_2014}, using a function that is loosely based on the Nernst equation with two exponential functions superimposed as a correction for the voltage drops at the beginning and end of the curve.
 \begin{equation}
 \begin{aligned}
 V(SoC) = x_1 - \frac{R\cdot T}{z\subi{Li}\cdot F}\cdot ln\Big(\frac{SoC}{1-SoC}\Big)
@@ -15,7 +15,7 @@ V(SoC) = x_1 - \frac{R\cdot T}{z\subi{Li}\cdot F}\cdot ln\Big(\frac{SoC}{1-SoC}\
 \end{aligned}
 \end{equation}
 
-where $x_1,\ ..,\ x_8$ are the fit parameters, $R = 8.3144598$ J/(mol $\cdot$ K) is the universal gas constant, $z\subi{Li} = 1$ is the ionic charge number of lithium, $F = 96485.3328959$ As/mol is the Faraday constant, $SoC$ is the state of charge, $V$ is the voltage in V and $T$ is the temperature in K at which the curve was recorded. The curves are fitted using the levenberg-marquardt algorithm and either the \mcode{lsqcurvefit} method, the \mcode{fminsearch} method or a combination of both, depending on the user's preference. 
+where $x_1,\ ..,\ x_8$ are the fit parameters, $R = 8.3144598$ J/(mol $\cdot$ K) is the universal gas constant, $z\subi{Li} = 1$ is the ionic charge number of lithium, $F = 96485.3328959$ As/mol is the Faraday constant, $SoC$ is the state of charge, $V$ is the voltage in V and $T$ is the temperature in K at which the curve was recorded. The curves are fitted using the Levenberg-Marquardt algorithm and either the \mcode{lsqcurvefit} method, the \mcode{fminsearch} method or a combination of both, depending on the user's preference. 
 
 \subsubsection{Creation of a \mcode{dischargeFit} object}
 \label{sec:dischargeFit_creation}

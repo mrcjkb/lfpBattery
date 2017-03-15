@@ -41,6 +41,12 @@
 \newcommand{\subi}[1]{_\text{#1}} % subscript index
 \newcommand{\subs}[2]{_{\text{#1}, #2}} % subscript index + running index
 \newcommand{\dexp}[1]{\cdot 10^{#1}} % *10^...
+% Multiline in table (left)
+\newcommand{\tml}[1]{\begin{tabular}{@{}l@{}}#1\end{tabular}}
+% Multiline in table (center)
+\newcommand{\tmc}[1]{\begin{tabular}{@{}c@{}}#1\end{tabular}}
+% Multiline in table (right)
+\newcommand{\tmr}[1]{\begin{tabular}{@{}r@{}}#1\end{tabular}}
 %Color definitions
 \usepackage{xcolor}
 \definecolor{HTWgreen}{RGB}{119,185,0}

@@ -27,7 +27,7 @@ classdef batteryPack < lfpBattery.batteryInterface
     %           number of elements per string ns.
     %           np and ns can be any numerical data type using this syntax.
     %
-    %       b = BATTERYPACK(__, 'OptionName', OptionValue)
+    %       b = BATTERYPACK(__, 'OptionName', OptionValue);
     %           Used for specifying additional options, which are described below.
     %           The option names must be specified as strings.
     %
@@ -47,6 +47,10 @@ classdef batteryPack < lfpBattery.batteryInterface
     %
     %Additional Options:
     %
+    %   'ageCurve'               - default: 'none'
+    %                            -> adds an age curve (e. g. a woehlerFit) to
+    %                            the battery's age model.
+    %
     %   'ageModel'                - 'none' (default), 'EO', or a custom age model object
     %                               that implements the batteryAgeModel interface.
     %                               -> 'EO' = event oriented aging model (eoAgeModel object)
@@ -56,11 +60,23 @@ classdef batteryPack < lfpBattery.batteryInterface
     %                             or to each cell individually. Applying the age model to the
     %                             pack should result in faster simulation times.
     %
+    %   'cccvCurves'             - default: 'none'
+    %                            -> adds a CCCV curve fit object to the battery's cells for charge
+    %                            current limitation in the CV (constant voltage) phase.
+    %
+    %   'cCurves'                - default: 'none' chargeCurve object to the
+    %                            battery's cells for charge voltage
+    %                            calculation.
+    %
     %   'cycleCounter'            - 'auto' (default), 'dambrowski' or a custom cycle counter
     %                               object that implements the cycleCounter
     %                               interface. By default, no cycle counter is
     %                               implemented if 'ageModel' is set to 'none',
     %                               otherwise the 'dambrowski' counter is used.
+    %
+    %   'dCurves'                - default: 'none'
+    %                            -> adds dischargeCurve object to the battery's
+    %                            cells.
     %
     %   'Equalization'            - 'Passive' (default) or 'Active'.
     %                             -> Specifies which type of equalization (balancing)
@@ -119,8 +135,7 @@ classdef batteryPack < lfpBattery.batteryInterface
     %                             The internal impedance is currently not used
     %                             as a physical parameter. However, it is used
     %                             in the circuit elements to determine the
-    %                             distribution of currents and voltages.
-    %                                   
+    %                             distribution of currents and voltages.                                  
     %
     %   'Zgauss'                 - default: [0, Zi, Zi]
     %                            -> Vector for gaussian distribution of battery
@@ -136,26 +151,11 @@ classdef batteryPack < lfpBattery.batteryInterface
     %                                - In order to use this option, the Statistics
     %                                  and Machine Learning Toolbox is
     %                                  required.
-    %                                - Due to the limitation using Zmin and Zmax, a
+    %                                - Due to the limitation using Zmin and Zmax,
     %                                  the mean or std may vary slightly from what was
     %                                  set. To get an exact std and mean, Zmin must be
     %                                  set to -Inf and Zmax must be set to Inf.
     %
-    %   'dCurves'                - default: 'none'
-    %                            -> adds dischargeCurve object to the battery's
-    %                            cells.
-    %
-    %   'cCurves'                - default: 'none' chargeCurve object to the
-    %                            battery's cells for charge voltage
-    %                            calculation.
-    %
-    %   'cccvCurves'             - default: 'none'
-    %                            -> adds a cccvFit object to the battery's cells for charge
-    %                            current limitation in the CV (constant voltage) phase.
-    %
-    %   'ageCurve'               - default: 'none'
-    %                            -> adds an age curve (e. g. a woehlerFit) to
-    %                            the battery's cells.
     %
     % BATTERYPACK Methods:
     % powerRequest               - Requests a power in W (positive for charging,

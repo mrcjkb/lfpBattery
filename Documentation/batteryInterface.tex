@@ -291,4 +291,83 @@ ps.initAgeModel('ageModel', 'EO') % initialize age model
 
 
 \subsection{The \mcode{batteryPack} class}
-For simple, centralized access to most features of this package, a facade of the model was created in the form of the \mcode{batteryPack} class. In most use cases, the \mcode{batteryPack} will be the only class that needs to be accessed in order to create a fully functional battery pack model. The class contains methods for curve fitting and static functions that open GUIs for easy configuration (see section~\todo{ref section GUI}).
+\label{sec:batteryPack}
+For simple, centralized access to most features of this package, a facade of the model was created in the form of the \mcode{batteryPack} class. In most use cases, the \mcode{batteryPack} will be the only class that needs to be accessed in order to create a fully functional battery pack model. The class contains methods for curve fitting and static functions that launch GUIs for digitizing the curves and easy configuration of the model (see section~\todo{ref section GUI}). Disregarding the \mcode{dischargeCurves}, it is possible to create a fully functional battery pack model using the \mcode{batteryPack} constructor alone\footnote{A \mcode{dischargeCurves} object must be created beforehand and passed to the constructor or added after the initialization of the pack using the \mcode{dischargeFit()} or \mcode{addcurves()} method.}. Possible topologies of a \mcode{batteryPack} are SP, PS, strings of cells and parallel cells (see section~\ref{sec:batteryCompositionOverview}). For more complicated topologies, the pack must be created using the non-simplified circuit element wrappers. 
+
+\subsubsection{The \mcode{batteryPack} constructor}
+\label{sec:batteryPackConstructor}
+When initializing a \mcode{batteryPack} object, the cells and circuit elements (simplified or non-simplified) are initialized automatically according to the constructor's input arguments. An "empty" \mcode{batteryPack} object is constructed with the nominal cell capacity \mcode{Cc} in Ah, the nominal cell voltage \mcode{Vc} in V and one of the following:
+\begin{enumerate}\renewcommand{\labelenumi}{\roman{enumi})}
+	\item Automatic setup: The pack's nominal capacity \mcode{Cp} and voltage \mcode{Vp} in Ah and V, respectively. 
+	\item Manual setup: The number of parallel cells \mcode{np} and the number of cells in series \mcode{ns}.
+\end{enumerate}
+\begin{lstlisting}
+bat = batteryPack(Cp, Vp, Cc, Vc); % (i) Automatic setup
+bat = batteryPack(np, ns, Cc, Vc); % (ii) Manual setup 
+% (np & ns must be integers)
+\end{lstlisting}
+In option (i), the cells are automatically arranged in such a way that the pack's resulting nominal capacity and voltage come as close as possible to \mcode{Cp} and \mcode{Vp}, respectively. If the first two input arguments are integers, option (ii) is called and the pack's nominals are calculated according to \mcode{np} and \mcode{ns}. To call option (ii) with any numeric data type, the \mcode{'Setup'} option must be set to \mcode{'Manual'}.
+\begin{lstlisting}
+bat = batteryPack(np, ns, Cc, Vc, 'Setup', 'Manual');
+\end{lstlisting}
+All of the above constructors can be called with additional options that are specified by the name-value pairs listed in Table~\ref{tab:batteryPackOptions}.
+\begin{lstlisting}
+bat = batteryPack(.., 'OptionName', OptionValue);
+\end{lstlisting}
+If no \mcode{dischargeCurves} object is passed to the \mcode{batteryPack} via it's constructor's \mcode{'dCurves'} option, a warning is printed to the command window. A warning is also printed if an age model is specified (using the \mcode{'ageModel'} option), but no cycle life curve fit (i.e. \mcode{woehlerFit}) object is passed via the \mcode{'ageCurve'} option. The model cannot be used until a \mcode{dischargeCurve} is initialized (either via the constructor or via the \mcode{dischargeFit()} or \mcode{addcurves()} method).
+
+\begin{longtable}{l l m{0.45\textwidth}l}
+	\caption[Option name-value pairs of the \mcode{batteryPack} constructor]{Option name-value pairs of the \mcode{batteryPack} constructor.}\\ \toprule
+	Name & Values & Description \\ \midrule
+	\endfirsthead
+	\multicolumn{3}{@{}l}{\ldots continued}\\
+	\toprule
+	Name & Values & Description \\ \midrule
+	\endhead
+	\hline
+	\multicolumn{3}{r@{}}{continued \ldots}\    \endfoot
+	\bottomrule
+	\endlastfoot
+	\mcode{'ageCurve'} & \tml{\mcode{'none'} (default)\\ Age curve object} & Adds an age curve (e.g. \mcode{woehlerFit}) to the battery's age model.\\
+	\midrule
+	\mcode{'ageModel'} & \tml{\mcode{'none'} (default) \\ \mcode{'EO'} \\ Age model object}& 
+	Specifies the age model that is used. \mcode{'EO'} stands for "event oriented aging". Optionally, a custom age model object that implements the \mcode{batteryAgeModel} interface can be passed as a value.\\
+	\midrule
+	\mcode{'AgeModelLevel'} & \tml{\mcode{'Pack'} (default) \\ \mcode{'Cell'}} & Specifies whether the age model is applied to the pack or to each cell individually.\\
+	\midrule
+	\mcode{'cccvCurves'} & \tml{\mcode{'none'} (default)\\ CCCV curve fit} & Adds a CCCV curve fit object (e.g. \mcode{cccvFit}) to the battery's cells for charge current limitation in the CV phase.\\
+	\midrule
+	\mcode{'cCurves'} & \tml{\mcode{'none'} (default)\\ Charge curve fit} & Adds a Charge curve fit object (e.g. \mcode{curvefitCollection} subclass) to the battery's cells for voltage calculation during charging.\\
+	\midrule
+	\mcode{'cycleCounter'} & \tml{\mcode{'auto'} (default) \\ \mcode{'dambrowski'} \\ Cycle counter object} & Specifies the class that is used for cycle counting. By default, no counter is selected if no age model is specified. Otherwise, a \mcode{dambrowskiCounter} is used. A custom cycle counter object that implements the \mcode{cycleCounter} interface can also be passed as a value.\\
+	\midrule
+	\mcode{'dCurves'} & \tml{\mcode{'none'} (default)\\ Discharge curve fit} & Adds a discharge curve fit object (e.g. \mcode{dischargeCurves}) to the battery's cells.\\
+	\midrule
+	\mcode{'Equalization'} & \tml{\mcode{'Passive'} (default) \\ \mcode{'Active'}} & Specifies which type of equalization (balancing) is used for the strings in the pack. If the \mcode{'ideal'} option is set to true, active equalization is is always used.\\
+	\midrule
+	\mcode{'etaBC'} & \tml{\mcode{1x1 double} \\ Default: $0.97$} & The battery's charging efficiency. Must be between $0$ and $1$.
+	If the data sheet does not differentiate between charging and discharging efficiencies, set this property according to the data sheet and \mcode{'etaBD'} to $1$.\\
+	\midrule
+	\mcode{'etaBD'} & \tml{\mcode{1x1 double} \\ Default: $0.97$} & The battery's discharging efficiency. Must be between $0$ and $1$.\\
+	\midrule
+	\mcode{'ideal'} & \tml{\mcode{false} (default) \\ \mcode{true}} & If set to true, the battery is constructed using the faster, simplified model with ideal cells and balancing. Setting this to true assumes that all cells have exactly the same parameters and that the balancing is perfect. This should result in much fewer resource consumption during simulation, as only one cell is used for calculations.\\
+	\midrule
+	\mcode{'psd'} & \tml{\mcode{1x1 double}\\ Default: $0$} & Self-discharge in $1$/month. Must be between $0$ and $1$ (i.e. $0.01$ for a self-discharge of $1$~\% per month)\\
+	\midrule
+	\mcode{'socMax'} & \tml{\mcode{1x1 double}\\ Default: $1$} & Upper limit for the battery pack's $SoC$.\\
+	\midrule
+	\mcode{'socMin'} & \tml{\mcode{1x1 double}\\ Default: $0.2$} & Lower limit for the battery pack's $SoC$. Note that the $SoC$ can go below this limit if it is above $0$ and if the self-discharge (\mcode{'psd'}) has been set to a value greater than $0$.\\
+	\midrule
+	\mcode{'socIni'} & \tml{\mcode{1x1 double}\\ Default: $0.2$} & Initial $SoC$ of the battery pack.\\
+	\midrule
+	\mcode{'sohIni'} & \tml{\mcode{1x1 double}\\ Default: $1$} & Initial $SoH$ of the battery pack.\\
+	\midrule
+	\mcode{'Topology'} & \tml{\mcode{'SP'} (default)\\ \mcode{'PS'}} & The topology of the pack's cells. \mcode{'SP'} for strings of parallel cells and \mcode{'PS'} for parallel strings of cells\\
+	\midrule
+	\mcode{'Zi'} & \tml{\mcode{1x1 double}\\ Default: $17\cdot 10^{-3}$} & Internal impedance of the battery cells in $\Omega$. The internal impedance is currently not used as a physical parameter. However, it is used in the circuit elements to determine the distribution of currents and voltages.\\
+	\midrule
+	\mcode{'Zgauss'} & \tml{\mcode{1x3 double}\\ Default \mcode{[0, Zi, Zi]}} & Vector for gaussian distribution of the battery cells' internal impedances. The vector has the following values: \mcode{[Zstd, Zmin, Zmax]} with \mcode{Zstd}~=~Standard deviation std of the internal impedance $Z\subi{i}$ in $\Omega$; \mcode{Zmin}~=~Smallest $Z\subi{i}$ in $\Omega$ and \mcode{Zmax}~=~Largest $Z\subi{i}$ in $\Omega$. The mean is the value specified by the option \mcode{'Zi'}. This setting is ignored if the \mcode{'ideal'} option is set to \mcode{true}. In order to use this option, the Statistics and Machine Learning Toolbox must be installed. Due to the limitation of $Z\subi{i}$ to \mcode{Zmin} and \mcode{Zmax}, the mean or std may vary slightly from what was set. To get an exact std, \mcode{Zmin} must be set to \mcode{-Inf} and \mcode{Zmax} must be set to \mcode{Inf}\footnote{A Gaussian distribution is only defined for the interval $[-\infty, \infty]$.}.
+	\label{tab:batteryPackOptions}
+\end{longtable}
+
+\subsubsection{Methods and properties of the \mcode{batteryPack} class}
