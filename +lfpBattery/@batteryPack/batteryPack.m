@@ -195,7 +195,8 @@ classdef batteryPack < lfpBattery.batteryInterface
     % Cn                - Nominal (or average) capacity in Ah.
     % eta_bc            - Efficiency when charging [0,..,1].
     % eta_bd            - Efficiency when discharging [0,..,1].
-    % Imax              - Maximum current in A.
+    % ImaxC             - Maximum charging current in A.
+    % ImaxD             - Maximum discharging current in A.
     % psd               - Self discharge rate in 1/month [0,..,1].
     % SoC               - State of charge [0,..,1].
     % socMax            - Maximum SoC (default: 1).
