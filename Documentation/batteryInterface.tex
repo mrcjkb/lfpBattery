@@ -349,7 +349,7 @@ If no \mcode{dischargeCurves} object is passed to the \mcode{batteryPack} via it
 	If the data sheet does not differentiate between charging and discharging efficiencies, set this property according to the data sheet and \mcode{'etaBD'} to $1$.\\
 	\midrule
 	\mcode{'etaBD'} & \tml{\mcode{1x1 double} \\ Default: $0.97$} & The battery's discharging efficiency. Must be between $0$ and $1$.\\
-	\midrule
+%	\midrule
 	\mcode{'ideal'} & \tml{\mcode{false} (default) \\ \mcode{true}} & If set to true, the battery is constructed using the faster, simplified model with ideal cells and balancing. Setting this to true assumes that all cells have exactly the same parameters and that the balancing is perfect. This should result in much fewer resource consumption during simulation, as only one cell is used for calculations.\\
 	\midrule
 	\mcode{'psd'} & \tml{\mcode{1x1 double}\\ Default: $0$} & Self-discharge in $1$/month. Must be between $0$ and $1$ (i.e. $0.01$ for a self-discharge of $1$~\% per month)\\
@@ -366,8 +366,93 @@ If no \mcode{dischargeCurves} object is passed to the \mcode{batteryPack} via it
 	\midrule
 	\mcode{'Zi'} & \tml{\mcode{1x1 double}\\ Default: $17\cdot 10^{-3}$} & Internal impedance of the battery cells in $\Omega$. The internal impedance is currently not used as a physical parameter. However, it is used in the circuit elements to determine the distribution of currents and voltages.\\
 	\midrule
-	\mcode{'Zgauss'} & \tml{\mcode{1x3 double}\\ Default \mcode{[0, Zi, Zi]}} & Vector for gaussian distribution of the battery cells' internal impedances. The vector has the following values: \mcode{[Zstd, Zmin, Zmax]} with \mcode{Zstd}~=~Standard deviation std of the internal impedance $Z\subi{i}$ in $\Omega$; \mcode{Zmin}~=~Smallest $Z\subi{i}$ in $\Omega$ and \mcode{Zmax}~=~Largest $Z\subi{i}$ in $\Omega$. The mean is the value specified by the option \mcode{'Zi'}. This setting is ignored if the \mcode{'ideal'} option is set to \mcode{true}. In order to use this option, the Statistics and Machine Learning Toolbox must be installed. Due to the limitation of $Z\subi{i}$ to \mcode{Zmin} and \mcode{Zmax}, the mean or std may vary slightly from what was set. To get an exact std, \mcode{Zmin} must be set to \mcode{-Inf} and \mcode{Zmax} must be set to \mcode{Inf}\footnote{A Gaussian distribution is only defined for the interval $[-\infty, \infty]$.}.
+	\mcode{'Zgauss'} & \tml{\mcode{1x3 double}\\ Default \mcode{[0, Zi, Zi]}} & Vector for gaussian distribution of the battery cells' internal impedances. The vector has the following values: \mcode{[Zstd, Zmin, Zmax]} with \mcode{Zstd}~=~Standard deviation std of the internal impedance $Z\subi{i}$ in $\Omega$; \mcode{Zmin}~=~Smallest $Z\subi{i}$ in $\Omega$ and \mcode{Zmax}~=~Largest $Z\subi{i}$ in $\Omega$. The mean is the value specified by the option \mcode{'Zi'}. This setting is ignored if the \mcode{'ideal'} option is set to \mcode{true}. In order to use this option, the Statistics and Machine Learning Toolbox must be installed. Due to the limitation of $Z\subi{i}$ to \mcode{Zmin} and \mcode{Zmax}, the mean or std may vary slightly from what was set. To get an exact std, \mcode{Zmin} must be set to \mcode{-Inf} and \mcode{Zmax} must be set to \mcode{Inf}\footnote{A Gaussian distribution is mathematically defined for the interval $[-\infty, \infty]$. In this package, the interval can be limited iteratively using the \mcode{norminvlim()} function~\cite{jakobi_norminvlim_2016}, but a perfect limitation is not possible.}.
 	\label{tab:batteryPackOptions}
 \end{longtable}
 
-\subsubsection{Methods and properties of the \mcode{batteryPack} class}
+\subsubsection{Properties of the \mcode{batteryPack} class}
+The accessible properties of the \mcode{batteryPack} class are listed in Table~\ref{tab:batteryPackProps}. With the exception of \mcode{AgeModelLevel}, all properties are inherited from the \mcode{batteryInterface} and are therefore also available for all other \mcode{batteryInterface} subclasses, such as the \mcode{batteryCell}, \mcode{parallelElement}, etc.
+\begin{longtable}{l p{0.47\textwidth}l l l}
+	\caption[Accessible properties of the \mcode{batteryPack} class]{Accessible properties of the \mcode{batteryPack} class.}\\ \toprule
+	Property & Description & Unit & Set access \\ \midrule
+	\endfirsthead
+	\multicolumn{3}{@{}l}{\ldots continued}\\
+	\toprule
+ 	Property & Description & Unit & Set access \\ \midrule
+	\endhead
+	\hline
+	\multicolumn{3}{r@{}}{continued \ldots}\    \endfoot
+	\bottomrule
+	\endlastfoot
+	\mcode{AgeModelLevel} & Level of the age model (\mcode{'Cell'} or \mcode{'Pack'}) & - & read only \\
+	\mcode{C} & Current capacity level & Ah & read only \\
+	\mcode{Cbu} & Total useable capacity taking $SoH$ and $SoC$ boundaries into account & Ah & read only \\
+	\mcode{Cd} & Discharge capacity & Ah & read only \\
+	\mcode{Cn} & Nominal (or average) capacity & Ah & immutable \\
+	\mcode{eta_bc} & Efficiency when charging & - & immutable \\
+	\mcode{eta_bd} & Efficiency when discharging & - & immutable \\
+	\mcode{ImaxC} & Maximum charging current & A & read only \\
+	\mcode{ImaxD} & Maximum discharging current & A & read only \\
+	\mcode{psd} & Self discharge rate & $1$/month & immutable \\
+	\mcode{SoC} & State of charge & - & read only \\
+	\mcode{socMax} & Maximum $SoC$ & - & public \\
+	\mcode{socMin} & Minimum $SoC$ & - & public \\
+	\mcode{SoH} & State of health & - & read only \\
+	\mcode{V} & Resting voltage & V & read only \\
+	\mcode{Vn} & Nominal (or average) voltage & V & read only \\
+	\mcode{Zi} & Internal impedance & $\Omega$ & immutable \\
+	\mcode{nP} & number of parallel elements & - & read only \\
+	\mcode{nS} & number of elements in series & - & read only \\
+	\mcode{maxIterations} & Maximum number of iterations in the \mcode{iteratePower()} and \mcode{iterateCurrent()} methods & - & public \\
+	\mcode{pTol} & Tolerance for the power iteration (Stopping criteria) & W & public \\
+	\mcode{sTol} & Tolerance for the $SoC$ limitation iteration & - & public \\
+	\label{tab:batteryPackProps}
+\end{longtable}
+
+\subsubsection{Methods of the \mcode{batteryPack} class}
+As a subclass of the \mcode{batteryInterface}, all of it's methods are inherited by the \mcode{batteryPack} class. For a detailed description of battery charging and discharging using the \mcode{powerRequest()} and/or \mcode{currentRequest()} methods, see section~\ref{sec:charge_discharge}. These are the two methods that are required for the simulation. Most of the class's public methods are only needed for internal algorithms of the model. However, a complete list of the public methods is provided in Table~\ref{tab:batteryPackMethods}. The curve fitting methods (which can be called if curve fits are not passed to the constructor) and the GUI tool functions are not inherited from the \mcode{batteryInterface}. A detailed description of the syntax of each method with the respective input and output arguments is provided in the \matlab\ documentation, which can be accessed by typing
+\begin{lstlisting}
+doc lfpBattery.batteryPack
+% or
+import lfpBattery.*
+doc batteryPack
+\end{lstlisting}
+into the command window.
+
+\begin{longtable}{l p{0.6\textwidth}l}
+	\caption[Public methods of the \mcode{batteryPack} class]{Public methods of the \mcode{batteryPack} class.}\\ \toprule
+	Method & Description\\ \midrule
+	\endfirsthead
+	\multicolumn{3}{@{}l}{\ldots continued}\\
+	\toprule
+	Method & Description\\ \midrule
+	\endhead
+	\hline
+	\multicolumn{3}{r@{}}{continued \ldots}\    \endfoot
+	\bottomrule
+	\endlastfoot
+	\mcode{powerRequest()} & Requests a power in W (positive for charging,
+	negative for discharging) from the battery. \\
+	\mcode{iteratePower()} & Iteration to determine new state given a certain power. The state of the battery is not changed by this method. \\
+	\mcode{currentRequest()} & Requests a current in A (positive for charging,
+	negative for discharging) from the battery.  \\
+	\mcode{iterateCurrent()} & Iteration to determine new state given a certain current. The state of the battery is not changed by this method. \\
+	\mcode{addCounter()} & Registers a cycleCounter object as an observer\footnote{Not recommended. Use \mcode{initAgeModel()} instead.}. \\
+	\mcode{dischargeFit()}\footnote{Unique to the \mcode{batteryPack} class.} & Uses Levenberg-Marquardt algorithm to fit a
+	discharge curve. \\
+	\mcode{chargeFit()}\footnotemark[2]. & Uses Levenberg-Marquardt algorithm to
+	fit a charge curve. \\
+	\mcode{cycleFit()}\footnotemark[2] & Creates a fit object for a cycles to
+	failure vs. DoD curve and adds it to the pack. \\
+	\mcode{cccvFit()}\footnotemark[2] & Adds a CCCV curve fit to the pack. \\
+	\mcode{initAgeModel()} & Initializes the age model of the battery. \\
+	\mcode{getNewDischargeVoltage()} & Returns the new voltage according to a discharging current and a time step size. The state of the battery is not changed by this method. \\
+	\mcode{getNewChargeVoltage()} & Returns the new voltage according to a charging current and a time step size. \\
+	\mcode{addcurves()} & Adds a collection of discharge/charge curves, a cycle
+	life curve or a CCCV curve to the battery. \\
+	\mcode{randomizeDC()}\footnotemark[2] & Slight randomization of each cell's discharge
+	curve fits\footnote{Not recommended. This method is an alternative to setting a gaussian distribution of the internal impedances $Z\subi{i}$. However, this method may use large amounts of memory and result in degraded performance.}. \\
+	\mcode{digitizeTool()}\footnotemark[2] & (Static) Opens a GUI for digitizing discharge curves and cycle life curves (requires JAVA). \\
+	\mcode{GUI}\footnotemark[2] & (Static) Opens a GUI for creating a batteryPack model (requires JAVA). \\
+	\label{tab:batteryPackMethods}
+\end{longtable}

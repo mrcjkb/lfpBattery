@@ -33,5 +33,6 @@
 \BOOKMARK [2][-]{subsection.3.5}{Simplified model}{section.3}% 33
 \BOOKMARK [2][-]{subsection.3.6}{The [basicstyle=]|batteryPack| class}{section.3}% 34
 \BOOKMARK [3][-]{subsubsection.3.6.1}{The [basicstyle=]|batteryPack| constructor}{subsection.3.6}% 35
-\BOOKMARK [3][-]{subsubsection.3.6.2}{Methods and properties of the [basicstyle=]|batteryPack| class}{subsection.3.6}% 36
-\BOOKMARK [1][-]{subsubsection.3.6.2}{References}{}% 37
+\BOOKMARK [3][-]{subsubsection.3.6.2}{Properties of the [basicstyle=]|batteryPack| class}{subsection.3.6}% 36
+\BOOKMARK [3][-]{subsubsection.3.6.3}{Methods of the [basicstyle=]|batteryPack| class}{subsection.3.6}% 37
+\BOOKMARK [1][-]{table.4}{References}{}% 38

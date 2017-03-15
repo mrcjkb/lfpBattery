@@ -2134,7 +2134,7 @@
     <bcf:citekey order="11">matsuishi_fatigue_1968</bcf:citekey>
     <bcf:citekey order="12">dufo-lopez_multi-objective_2008</bcf:citekey>
     <bcf:citekey order="13">_rainflow_????</bcf:citekey>
-    <bcf:citekey order="14">_rainflow_????</bcf:citekey>
+    <bcf:citekey order="14">nieslony_rainflow_2010</bcf:citekey>
     <bcf:citekey order="15">dambrowski_mathematical_2012</bcf:citekey>
     <bcf:citekey order="16">dambrowski_mathematical_2012</bcf:citekey>
     <bcf:citekey order="17">_rainflow_????</bcf:citekey>
@@ -2147,6 +2147,7 @@
     <bcf:citekey order="24">keil_aufbau_2012</bcf:citekey>
     <bcf:citekey order="25">_data_2010</bcf:citekey>
     <bcf:citekey order="26">andrea_battery_2010</bcf:citekey>
+    <bcf:citekey order="27">jakobi_norminvlim_2016</bcf:citekey>
   </bcf:section>
   <bcf:sortlist section="0" name="none/global/" type="entry" sortscheme="none" sortnamekeyscheme="global" labelprefix="">
   <bcf:sorting>

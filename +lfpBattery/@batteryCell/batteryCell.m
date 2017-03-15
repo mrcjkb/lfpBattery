@@ -32,7 +32,8 @@ classdef batteryCell < lfpBattery.batteryInterface
     % currentRequest             - Requests a current in A (positive for charging,
     %                              negative for discharging) from the battery.
     % iterateCurrent             - Iteration to determine new state given a certain current.
-    % addCounter                 - Registers a cycleCounter object as an observer.
+    % addCounter                 - Registers a cycleCounter object as an observer(Not recommended.
+    %                              Use initAgeModel() instead).
     % dischargeFit               - Uses Levenberg-Marquardt algorithm to fit a
     %                              discharge curve.
     % chargeFit                  - Uses Levenberg-Marquardt algorithm to

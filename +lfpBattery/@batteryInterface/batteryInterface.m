@@ -438,6 +438,10 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             %battery's age model.
             %An age model must be linked to the battery in order for this
             %method to be callable.
+            %Usage of this method is not recommended. Use initAgeModel
+            %instead.
+            %
+            %SEE ALSO: lfpBattery.batteryInterface.initAgeModel
             %
             %Syntax. b.ADDCOUNTER(cy)
             %        ADDCOUNTER(b, cy)

@@ -287,14 +287,28 @@
       \verb Dufo-López and Bernal-Agustín - 2008 - Multi-objective design of PV–wind–diesel–hydrogen–.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\KIA7X57S\\Dufo-López and Bernal-Agustín - 2008 - Multi-objective design of PV–wind–diesel–hydrogen–.pdf:application/pdf
       \endverb
     \endentry
-    \entry{_rainflow_????}{online}{}
+    \entry{nieslony_rainflow_2010}{online}{}
+      \name{author}{1}{}{%
+        {{hash=908c8fb1a8213755635ed975b20c0a99}{%
+           family={Nieslony},
+           familyi={N\bibinitperiod},
+           given={Adam},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{908c8fb1a8213755635ed975b20c0a99}
+      \strng{fullhash}{908c8fb1a8213755635ed975b20c0a99}
+      \strng{authornamehash}{908c8fb1a8213755635ed975b20c0a99}
+      \strng{authorfullhash}{908c8fb1a8213755635ed975b20c0a99}
       \field{sortinit}{1}
       \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
+      \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{Rainflow Counting Algorithm - File Exchange - {MATLAB} Central}
       \field{urlday}{27}
       \field{urlmonth}{2}
       \field{urlyear}{2017}
+      \field{year}{2010}
+      \field{dateera}{ce}
       \field{urldateera}{ce}
       \verb{file}
       \verb Rainflow Counting Algorithm - File Exchange - MATLAB Central:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\D8JW8ISW\\3026-rainflow-counting-algorithm.html:text/html
@@ -531,7 +545,38 @@
       \field{dateera}{ce}
       \keyw{Design and construction,Lithium cells,Storage batteries}
     \endentry
+    \entry{jakobi_norminvlim_2016}{online}{}
+      \name{author}{1}{}{%
+        {{hash=0f1dda41aeae317d4ce17498bd672d5f}{%
+           family={Jakobi},
+           familyi={J\bibinitperiod},
+           given={Marc},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{0f1dda41aeae317d4ce17498bd672d5f}
+      \strng{fullhash}{0f1dda41aeae317d4ce17498bd672d5f}
+      \strng{authornamehash}{0f1dda41aeae317d4ce17498bd672d5f}
+      \strng{authorfullhash}{0f1dda41aeae317d4ce17498bd672d5f}
+      \field{sortinit}{2}
+      \field{sortinithash}{0aa614ace9f3a40ef5a67e7f7a184048}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{norminvlim - File Exchange - {MATLAB} Central}
+      \field{urlday}{15}
+      \field{urlmonth}{3}
+      \field{urlyear}{2017}
+      \field{year}{2016}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb norminvlim - File Exchange - MATLAB Central:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\553A2U83\\59762-norminvlim.html:text/html
+      \endverb
+      \verb{url}
+      \verb https://de.mathworks.com/matlabcentral/fileexchange/59762-norminvlim
+      \endverb
+    \endentry
   \endsortlist
+  \missing{_rainflow_????}
 \endrefsection
 \endinput
 
