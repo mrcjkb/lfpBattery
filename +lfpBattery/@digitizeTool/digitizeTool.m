@@ -41,7 +41,7 @@ classdef digitizeTool < handle
             lfpBattery.commons.javaGUIchk
             import lfpBattery.* javax.swing.* java.awt.*
             p = inputParser;
-            addOptional(p, 'type', 'DC', @(x) any(validatestring(x, {'DC', 'CL', 'CCCV'})))
+            addOptional(p, 'type', 'DC', @(x) any(validatestring(x, {'DC', 'CL', 'CCCV', 'DIGITIZE'})))
             parse(p, varargin{:})
             %% Create figure
             obj.mainframe = figure('Tag', 'mainframe', 'NumberTitle', 'off', 'Name', 'lfpBattery digitizer and curve fit tool',...
@@ -87,7 +87,7 @@ classdef digitizeTool < handle
             uifc = uiflowcontainer('v0', 'parent', uifc1, ...
                 'FlowDirection', 'BottomUp', 'BackgroundColor', [1 1 1]);
             % list
-            obj.list = JList({'discharge curves', 'cycle life curve', 'CCCV curve'});
+            obj.list = JList({'discharge curves', 'cycle life curve', 'CCCV curve', 'other'});
             obj.list.setFont(fnt);
             obj.list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             switch p.Results.type
@@ -97,6 +97,8 @@ classdef digitizeTool < handle
                     ind = 1;
                 case 'CCCV'
                     ind = 2;
+                case 'DIGITIZE'
+                    ind = 3;
             end
             obj.list.setSelectedIndex(ind)
             obj.list.setToolTipText(['<html>Selects the type of curve that will be fitted.<br>', ...
@@ -104,7 +106,8 @@ classdef digitizeTool < handle
                 'A cycle life curve is a curve of cycles to failure vs. depth of discharge.<br>', ...
                 'A CCCV curve contains 3 curves over the charging time: The current, the voltage and the SoC.<br>', ...
                 'The current and SoC curves are required for the CCCV curve fit in order to generate a function<br>', ...
-                'Imax = f(SoC)'])
+                'Imax = f(SoC)', ...
+                'Select "other" for digitizing any curve type without curve fitting.'])
             h = handle(obj.list, 'CallbackProperties');
             h.ValueChangedCallback = @obj.setState;
             javacomponent(obj.list, [], uifc);
@@ -157,6 +160,7 @@ classdef digitizeTool < handle
             % save gui data in figure
             guidata(obj.mainframe, obj)
             % initialize states
+            obj.states{4} = lfpBattery.digitizeToolOTHER(obj);
             obj.states{3} = lfpBattery.digitizeToolCCCV(obj);
             obj.states{2} = lfpBattery.digitizeToolCL(obj);
             obj.states{1} = lfpBattery.digitizeToolDC(obj);
@@ -183,11 +187,13 @@ classdef digitizeTool < handle
                     str = [commons.getHtmlImage('wfit_qualitative.png'), ...
                         'Selects the type of curve that will be fitted.<br>', ...
                         'A discharge curve plots the voltage against the discharge capacity.'];
-                otherwise
+                case 2
                     str = [commons.getHtmlImage('cccv_qualitative.png'), ...
                         'A CCCV curve contains 3 curves over the charging time: The current, the voltage and the SoC.<br>', ...
                         'The current and SoC curves are required for the CCCV curve fit in order to generate a function<br>', ...
                         'Imax = f(SoC)'];
+                otherwise
+                    str = 'Any type of curve is digitized without curve fitting.';
             end
             src.setToolTipText(str)
         end

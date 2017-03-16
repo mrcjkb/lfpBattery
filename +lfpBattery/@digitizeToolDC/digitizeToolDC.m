@@ -80,7 +80,7 @@ classdef digitizeToolDC < lfpBattery.digitizeToolState
             end
         end
         function plotResults(obj)
-            obj.dTool.fit.plotResults
+            obj.plotbutton.setEnabled(false)
         end % plotResults
     end
 end
