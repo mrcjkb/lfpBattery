@@ -108,10 +108,6 @@ classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
                 plotResults(tmp, false, varargin{:});
             end
         end
-        % Overload saveobj to print handle link warning
-        function c = saveobj(c)
-            lfpBattery.commons.warnHandleSave(c)
-        end
     end
     
     methods (Access = 'protected')
@@ -131,10 +127,6 @@ classdef curvefitCollection < lfpBattery.sortedFunctions & matlab.mixin.Copyable
             catch
                 lfpBattery.commons.validateInterface(obj, 'lfpBattery.curveFitInterface');
             end
-        end
-        % Overload loadobj to print handle link warning
-        function b = loadobj(b)
-            lfpBattery.commons.warnHandleSave(b)
         end
     end
 end
