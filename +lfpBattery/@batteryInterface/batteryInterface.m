@@ -894,6 +894,10 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
             I = 0;
             V = b.V;
         end
+        % Overload saveobj to print handle link warning
+        function b = saveobj(b)
+            lfpBattery.commons.warnHandleSave(b)
+        end
         % gpuCompatible methods
         % These methods are currently unsupported and may be removed in a
         % future version.
@@ -1013,6 +1017,13 @@ classdef (Abstract) batteryInterface < lfpBattery.composite %& lfpBattery.gpuCom
     methods (Abstract, Access = 'protected')
         refreshNominals(b); % Refresh nominal voltage and capacity (called whenever a new element is added)
         s = sohCalc(b); % Determines the SoH
+    end
+    
+    methods (Static)
+        % Overload loadobj to print handle link warning
+        function b = loadobj(b)
+            lfpBattery.commons.warnHandleSave(b)
+        end
     end
 end 
 

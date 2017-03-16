@@ -3,7 +3,9 @@ function batteryCellTests
 %   Detailed explanation goes here
 
 import lfpBattery.*
+warning('off')
 load(fullfile(pwd, 'MLUnitTests', 'batteryCellTests', 'dcCurves.mat'))
+warning('on')
 load(fullfile(pwd, 'Resources', 'cccvfit.mat'))
 %% Initialization
 b = batteryCell(3.5, 3.2, 'socIni', 0.2, 'socMax', 1, 'socMin', 0.2);

@@ -20,8 +20,20 @@ classdef (Abstract) iterator < handle
    %January 2017
    
    methods (Abstract)
-      obj = next(it); % Returns next object.
-      tf = hasNext(it); % Returns true if iterator has another object to return
-      reset(it); % Resets the iterator to first object
+       obj = next(it); % Returns next object.
+       tf = hasNext(it); % Returns true if iterator has another object to return
+       reset(it); % Resets the iterator to first object
+   end
+   methods
+       function c = saveobj(c)
+           lfpBattery.commons.warnHandleSave(c)
+       end
+   end
+   methods (Static)
+       % Overload loadobj to print handle link warning
+       function b = loadobj(sb)
+           b = loadobj@lfpBattery.composite(sb);
+           lfpBattery.commons.warnHandleSave(b)
+       end
    end
 end

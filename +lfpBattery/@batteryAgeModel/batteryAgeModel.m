@@ -107,10 +107,20 @@ classdef (Abstract) batteryAgeModel < handle
         function a = get.eolAc(b)
             a = 1 - b.eolSoH;
         end
+        % Overload saveobj to print handle link warning
+        function b = saveobj(b)
+            lfpBattery.commons.warnHandleSave(b)
+        end
     end
     methods (Abstract, Access = 'protected')
         % ADDAGING adds to the battery's age every time a cycleCounter
         % object (or subclass) notifies about a new cycle.
         addAging(b, src, ~);
+    end
+    methods (Static)
+        % Overload loadobj to print handle link warning
+        function b = loadobj(b)
+            lfpBattery.commons.warnHandleSave(b)
+        end
     end
 end

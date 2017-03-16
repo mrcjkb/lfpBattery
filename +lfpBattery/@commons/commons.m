@@ -9,6 +9,14 @@ classdef commons
                 error('javax.swing is required to run this tool.')
             end
         end
+        function warnHandleSave(obj)
+            % Prints a warning to the command window that obj contains
+            % handle links that cannot be maintained
+            type = class(obj);
+            warning(['Saved object of type ', type, ' contains handle links that cannot be maintained when saving to a MAT file. ', ...
+                'This may result in unexpected behaviour of the loaded object or in large amounts of data and memory leaks. ', ...
+                'It is recommended to initialize the object at runtime.'])
+        end
         function onezeroChk(var, varName)
             % ONEZEROCHK: Returns an error if the variable var with varName
             % is not in the interval [0,..1]
