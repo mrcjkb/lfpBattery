@@ -39,4 +39,4 @@
 \contentsline {section}{\numberline {4}GUI tools}{40}{section.4}
 \contentsline {subsection}{\numberline {4.1}Battery Pack Designer}{40}{subsection.4.1}
 \contentsline {subsection}{\numberline {4.2}Digitizer and curve fit tool}{41}{subsection.4.2}
-\contentsline {section}{References}{42}{subsection.4.2}
+\contentsline {section}{References}{44}{figure.caption.55}

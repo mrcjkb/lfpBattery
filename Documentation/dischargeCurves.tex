@@ -5,7 +5,7 @@ Many battery data sheets provide measured discharge curves, on which the chargin
 
 \subsection{Single discharge curve}
 \label{sec:dischargeFit}
-For modelling a single discharge curve, the class \mcode{dischargeFit} is used, which implements the interface \mcode{curveFitInterface}\todo{Section describing interface, etc.}. The curve is fitted according to \cite{werder_entwicklung_2014}, using a function that is loosely based on the Nernst equation with two exponential functions superimposed as a correction for the voltage drops at the beginning and end of the curve.
+For modelling a single discharge curve, the class \mcode{dischargeFit} is used, which implements the \mcode{curveFitInterface}. The curve is fitted according to \cite{werder_entwicklung_2014}, using a function that is loosely based on the Nernst equation with two exponential functions superimposed as a correction for the voltage drops at the beginning and end of the curve.
 \begin{equation}
 \begin{aligned}
 V(SoC) = x_1 - \frac{R\cdot T}{z\subi{Li}\cdot F}\cdot ln\Big(\frac{SoC}{1-SoC}\Big)
@@ -163,7 +163,7 @@ However, the spline interpolation results in an overall more precise replication
 	\caption[Result of the \mcode{interp()} method for a current below the lowest measured current without output limitation and with output limitation]{Result of the \mcode{interp()} method for a current below the lowest measured current without output limitation (left) and with output limitation (right). The raw data was extracted from \cite{_data_2010}.}
 	\label{fig:dischargeCurvesIlim}
 \end{figure}
-As demonstrated Figure~\ref{fig:dischargeCurvesIlim} (left), the \mcode{interp} method using spline interpolation does not provide a good extrapolation of currents. In order to correct this, the voltage output is limited by the curve fit with the lowest current $I\subi{min}$ and by the curve fit with the highest current $I\subi{max}$, respectively. As a result, the \mcode{dischargeFit} recorded at $I\subi{min}$ is called for any current below $I\subi{min}$ (see Figure~\ref{fig:dischargeCurvesIlim}, left) and the \mcode{dischargeFit} recorded at $I\subi{max}$ is called for any current above $I\subi{max}$. In this model, the battery's maximum discharging current is limited by the \mcode{dischargeCurves} object's $I\subi{max}$ (see section\todo{ref section}).
+As demonstrated Figure~\ref{fig:dischargeCurvesIlim} (left), the \mcode{interp} method using spline interpolation does not provide a good extrapolation of currents. In order to correct this, the voltage output is limited by the curve fit with the lowest current $I\subi{min}$ and by the curve fit with the highest current $I\subi{max}$, respectively. As a result, the \mcode{dischargeFit} recorded at $I\subi{min}$ is called for any current below $I\subi{min}$ (see Figure~\ref{fig:dischargeCurvesIlim}, left) and the \mcode{dischargeFit} recorded at $I\subi{max}$ is called for any current above $I\subi{max}$. In this model, the battery's maximum discharging current is limited by the \mcode{dischargeCurves} object's $I\subi{max}$ (see section~\ref{sec:charge_discharge}).
 
 \subsubsection{Usage of a \mcode{dischargeCurves} object}
 Similarly to a \mcode{dischargeFit}, the results of a \mcode{dischargeCurves} object can be visually validated using the \mcode{plotResults()} method. Individual curve fit references removed using the \mcode{remove()} method and the respective currents. \clearpage
