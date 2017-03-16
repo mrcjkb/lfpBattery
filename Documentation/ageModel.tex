@@ -58,7 +58,7 @@ bat.initAgeModel('ageModel', 'EO')
 \end{lstlisting}
 
 \subsubsection{Comparison of the cycle counters}
-Each \mcode{cycleCounter} object's \mcode{count()} method converts the saved $SoC$ profile into a cycle-Depth-of-Cycle $cDoC$ curve - a vector containing the depths of discharge $DoD$ of all the counted cycles. The simulation results of two batteries using a \mcode{dambrowskiCounter} and a \mcode{rainflowCounter}, respectively, are compared in Figure~\ref{fig:cdoc_hists}. The cycles' $DoD$s are each sorted into 50 BINs and compared in a histogram. Overall, the histograms appear very similar, thus proving that both classes produce good results. However, more cycles are counted using the \mcode{dambrowskiCounter} class, possibly causing the simulated battery to age slightly faster. While both classes use different methods for determining the extrema\footnote{\mcode{dambrowskiCounter} uses \mcode{cycleCounter}'s \mcode{iMaxima()} method and \mcode{rainflowCounter} uses the \mcode{sig2ext()} function~\cite{_rainflow_????}.}, the amount local maxima found is the same. Thus, the determination of extrema can be ruled out as a cause and the root of the discrepancy must lie within the different counting approaches.
+Each \mcode{cycleCounter} object's \mcode{count()} method converts the saved $SoC$ profile into a cycle-Depth-of-Cycle $cDoC$ curve - a vector containing the depths of discharge $DoD$ of all the counted cycles. The simulation results of two batteries using a \mcode{dambrowskiCounter} and a \mcode{rainflowCounter}, respectively, are compared in Figure~\ref{fig:cdoc_hists}. The cycles' $DoD$s are each sorted into 50 BINs and compared in a histogram. Overall, the histograms appear very similar, thus proving that both classes produce good results. However, more cycles are counted using the \mcode{dambrowskiCounter} class, possibly causing the simulated battery to age slightly faster. While both classes use different methods for determining the extrema\footnote{\mcode{dambrowskiCounter} uses \mcode{cycleCounter}'s \mcode{iMaxima()} method and \mcode{rainflowCounter} uses the \mcode{sig2ext()} function~\cite{nieslony_rainflow_2010}.}, the amount local maxima found is the same. Thus, the determination of extrema can be ruled out as a cause and the root of the discrepancy must lie within the different counting approaches.
 \begin{figure}[t!]
 	\captionsetup{type=figure}
 	\centering
@@ -105,8 +105,7 @@ fit2 = deFit(DoD, N, 'mode', 'lsq');
 fit3 = nrelcFit(DoD, N, 'mode', 'fmin', 'x0', [0.5; 1]);
 % Pass cycle counter cy and fit1 to age model via it's constructor
 am = eoAgeModel(cy, fit1);
-% Replace fit1 with fit2 in age model
-am.wFit = fit2;
+am.wFit = fit2; % Replace fit1 with fit2 in age model
 \end{lstlisting}
 \clearpage
 Alternatively, a cycle life curve fit can be passed directly to a battery object \mcode{bat} via it's \mcode{addcurves()} method.
