@@ -59,7 +59,7 @@ classdef bpackGUI < handle
             jl.setBackground(Color.white);
             javacomponent(jl, [], logo);
             %% Authors
-            str = ['<html><div align="right">batteryPack GUI v.1.0<br>Marc Jakobi, Festus Angangbe, Marc Schmidt',...
+            str = ['<html><div align="right">Battery Pack Designer v.1.0<br>Marc Jakobi, Festus Angangbe, Marc Schmidt',...
                 '<br>TU Berlin, 2017</div>'];
             jl = JLabel; jl.setText(str)
             jl.setVerticalAlignment(1)
