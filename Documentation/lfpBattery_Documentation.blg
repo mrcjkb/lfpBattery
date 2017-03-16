@@ -1,17 +1,17 @@
 [0] Config.pm:354> INFO - This is Biber 2.7
 [0] Config.pm:357> INFO - Logfile is 'lfpBattery_Documentation.blg'
-[52] biber-MSWIN64:303> INFO - === 
-[90] Biber.pm:359> INFO - Reading 'lfpBattery_Documentation.bcf'
-[251] Biber.pm:835> INFO - Found 18 citekeys in bib section 0
-[277] Biber.pm:3670> INFO - Processing section 0
-[308] Biber.pm:3840> INFO - Looking for bibtex format file 'PRObat.bib' for section 0
-[318] bibtex.pm:1435> INFO - Decoding LaTeX character macros into UTF-8
-[332] bibtex.pm:1292> INFO - Found BibTeX data source 'PRObat.bib'
-[426] Utils.pm:164> WARN - I didn't find a database entry for '_rainflow_????' (section 0)
-[457] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[457] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[457] Biber.pm:3499> INFO - Sorting list 'none/global/' of type 'entry' with scheme 'none' and locale 'en-US'
-[457] Biber.pm:3505> INFO - No sort tailoring available for locale 'en-US'
-[476] bbl.pm:608> INFO - Writing 'lfpBattery_Documentation.bbl' with encoding 'UTF-8'
-[481] bbl.pm:712> INFO - Output to lfpBattery_Documentation.bbl
-[487] Biber.pm:109> INFO - WARNINGS: 1
+[53] biber-MSWIN64:303> INFO - === 
+[91] Biber.pm:359> INFO - Reading 'lfpBattery_Documentation.bcf'
+[241] Biber.pm:835> INFO - Found 22 citekeys in bib section 0
+[266] Biber.pm:3670> INFO - Processing section 0
+[297] Biber.pm:3840> INFO - Looking for bibtex format file 'PRObat.bib' for section 0
+[307] bibtex.pm:1435> INFO - Decoding LaTeX character macros into UTF-8
+[322] bibtex.pm:1292> INFO - Found BibTeX data source 'PRObat.bib'
+[424] Utils.pm:164> WARN - I didn't find a database entry for '_rainflow_????' (section 0)
+[458] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[458] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[458] Biber.pm:3499> INFO - Sorting list 'none/global/' of type 'entry' with scheme 'none' and locale 'en-US'
+[458] Biber.pm:3505> INFO - No sort tailoring available for locale 'en-US'
+[480] bbl.pm:608> INFO - Writing 'lfpBattery_Documentation.bbl' with encoding 'UTF-8'
+[486] bbl.pm:712> INFO - Output to lfpBattery_Documentation.bbl
+[491] Biber.pm:109> INFO - WARNINGS: 1

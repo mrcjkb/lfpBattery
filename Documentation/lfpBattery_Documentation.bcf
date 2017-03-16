@@ -2121,34 +2121,38 @@
     <bcf:datasource type="file" datatype="bibtex">PRObat.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="1">lijun_gao_dynamic_2002</bcf:citekey>
-    <bcf:citekey order="2">werder_entwicklung_2014</bcf:citekey>
-    <bcf:citekey order="3">_data_2010</bcf:citekey>
-    <bcf:citekey order="4">_data_2010</bcf:citekey>
-    <bcf:citekey order="5">hyndman_another_2006</bcf:citekey>
+    <bcf:citekey order="1">cui_multi-stress_2015</bcf:citekey>
+    <bcf:citekey order="1">xu_degradation-limiting_2013</bcf:citekey>
+    <bcf:citekey order="2">foti_inside_2008</bcf:citekey>
+    <bcf:citekey order="3">_matlab_2016</bcf:citekey>
+    <bcf:citekey order="4">lijun_gao_dynamic_2002</bcf:citekey>
+    <bcf:citekey order="5">werder_entwicklung_2014</bcf:citekey>
     <bcf:citekey order="6">_data_2010</bcf:citekey>
     <bcf:citekey order="7">_data_2010</bcf:citekey>
-    <bcf:citekey order="8">_iterator_????</bcf:citekey>
-    <bcf:citekey order="9">_overview_????</bcf:citekey>
-    <bcf:citekey order="10">dambrowski_mathematical_2012</bcf:citekey>
-    <bcf:citekey order="11">matsuishi_fatigue_1968</bcf:citekey>
-    <bcf:citekey order="12">dufo-lopez_multi-objective_2008</bcf:citekey>
-    <bcf:citekey order="13">_rainflow_????</bcf:citekey>
-    <bcf:citekey order="14">nieslony_rainflow_2010</bcf:citekey>
-    <bcf:citekey order="15">dambrowski_mathematical_2012</bcf:citekey>
-    <bcf:citekey order="16">dambrowski_mathematical_2012</bcf:citekey>
+    <bcf:citekey order="8">hyndman_another_2006</bcf:citekey>
+    <bcf:citekey order="9">_data_2010</bcf:citekey>
+    <bcf:citekey order="10">_data_2010</bcf:citekey>
+    <bcf:citekey order="11">_iterator_????</bcf:citekey>
+    <bcf:citekey order="12">_overview_????</bcf:citekey>
+    <bcf:citekey order="13">dambrowski_mathematical_2012</bcf:citekey>
+    <bcf:citekey order="14">matsuishi_fatigue_1968</bcf:citekey>
+    <bcf:citekey order="15">dufo-lopez_multi-objective_2008</bcf:citekey>
+    <bcf:citekey order="16">_rainflow_????</bcf:citekey>
     <bcf:citekey order="17">nieslony_rainflow_2010</bcf:citekey>
-    <bcf:citekey order="18">naumann_betriebsabhangige_2014</bcf:citekey>
-    <bcf:citekey order="19">drouilhet_battery_1997</bcf:citekey>
-    <bcf:citekey order="20">bindner_lifetime_2005</bcf:citekey>
-    <bcf:citekey order="21">cordoba-arenas_control-oriented_2015</bcf:citekey>
-    <bcf:citekey order="22">_data_2010</bcf:citekey>
-    <bcf:citekey order="23">_data_2010</bcf:citekey>
-    <bcf:citekey order="24">keil_aufbau_2012</bcf:citekey>
+    <bcf:citekey order="18">dambrowski_mathematical_2012</bcf:citekey>
+    <bcf:citekey order="19">dambrowski_mathematical_2012</bcf:citekey>
+    <bcf:citekey order="20">nieslony_rainflow_2010</bcf:citekey>
+    <bcf:citekey order="21">naumann_betriebsabhangige_2014</bcf:citekey>
+    <bcf:citekey order="22">drouilhet_battery_1997</bcf:citekey>
+    <bcf:citekey order="23">bindner_lifetime_2005</bcf:citekey>
+    <bcf:citekey order="24">cordoba-arenas_control-oriented_2015</bcf:citekey>
     <bcf:citekey order="25">_data_2010</bcf:citekey>
-    <bcf:citekey order="26">andrea_battery_2010</bcf:citekey>
-    <bcf:citekey order="27">jakobi_norminvlim_2016</bcf:citekey>
+    <bcf:citekey order="26">_data_2010</bcf:citekey>
+    <bcf:citekey order="27">keil_aufbau_2012</bcf:citekey>
     <bcf:citekey order="28">_data_2010</bcf:citekey>
+    <bcf:citekey order="29">andrea_battery_2010</bcf:citekey>
+    <bcf:citekey order="30">jakobi_norminvlim_2016</bcf:citekey>
+    <bcf:citekey order="31">_data_2010</bcf:citekey>
   </bcf:section>
   <bcf:sortlist section="0" name="none/global/" type="entry" sortscheme="none" sortnamekeyscheme="global" labelprefix="">
   <bcf:sorting>

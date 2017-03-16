@@ -1,5 +1,5 @@
 # lfpBattery
-OOP LiFe-battery model in Matlab
+Cell-resolved OOP LiFe-battery model for Matlab
 
 To install, add the folder containing this package and it's subfolders to Matlab's search path.
 For a detailed documentation, type

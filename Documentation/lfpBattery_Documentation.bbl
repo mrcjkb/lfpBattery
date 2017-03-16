@@ -19,6 +19,154 @@
 
 \refsection{0}
   \sortlist[entry]{none/global/}
+    \entry{cui_multi-stress_2015}{article}{}
+      \name{author}{8}{}{%
+        {{hash=82ab9c0a35cb7b22df19ba4db63f1773}{%
+           family={Cui},
+           familyi={C\bibinitperiod},
+           given={Yingzhi},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=78d760df1ea07f22243ce05dabace5cd}{%
+           family={Du},
+           familyi={D\bibinitperiod},
+           given={Chunyu},
+           giveni={C\bibinitperiod}}}%
+        {{hash=3c7a47441e797c7ac3b8d3ff8636df75}{%
+           family={Yin},
+           familyi={Y\bibinitperiod},
+           given={Geping},
+           giveni={G\bibinitperiod}}}%
+        {{hash=9b1bdba3d100cbcf3072170d4ed1ef93}{%
+           family={Gao},
+           familyi={G\bibinitperiod},
+           given={Yunzhi},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=a47f6d684bfcfcf397e5bd4101b81682}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Lingling},
+           giveni={L\bibinitperiod}}}%
+        {{hash=be0997ea0a9451a64f958baf45ce57f4}{%
+           family={Guan},
+           familyi={G\bibinitperiod},
+           given={Ting},
+           giveni={T\bibinitperiod}}}%
+        {{hash=c6a9202aa49559a5adce7f6d3df33482}{%
+           family={Yang},
+           familyi={Y\bibinitperiod},
+           given={Lijie},
+           giveni={L\bibinitperiod}}}%
+        {{hash=64d012a55b7c3b61b62004f484e7f153}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Fuping},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{a9ad6dcddfc71a4b6194c538cc959036}
+      \strng{fullhash}{dcc16f45b1d37dbce035f3ff165f4255}
+      \strng{authornamehash}{a9ad6dcddfc71a4b6194c538cc959036}
+      \strng{authorfullhash}{dcc16f45b1d37dbce035f3ff165f4255}
+      \field{sortinit}{1}
+      \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{03787753}
+      \field{journaltitle}{Journal of Power Sources}
+      \field{langid}{english}
+      \field{month}{4}
+      \field{title}{Multi-stress factor model for cycle lifetime prediction of lithium ion batteries with shallow-depth discharge}
+      \field{urlday}{24}
+      \field{urlmonth}{10}
+      \field{urlyear}{2016}
+      \field{volume}{279}
+      \field{year}{2015}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{123\bibrangedash 132}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1016/j.jpowsour.2015.01.003
+      \endverb
+      \verb{file}
+      \verb Multi-stress factor model for cycle lifetime prediction of lithium ion batteries with shallow-depth discharge.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\ECIIWEU4\\Multi-stress factor model for cycle lifetime prediction of lithium ion batteries with shallow-depth discharge.pdf:application/pdf
+      \endverb
+    \endentry
+    \entry{xu_degradation-limiting_2013}{thesis}{}
+      \name{author}{1}{}{%
+        {{hash=3ae17ab43d742a61fe7ce0723e4663e8}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Bolun},
+           giveni={B\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {{ETH} Z"urich}%
+      }
+      \list{location}{1}{%
+        {Z"urich}%
+      }
+      \strng{namehash}{3ae17ab43d742a61fe7ce0723e4663e8}
+      \strng{fullhash}{3ae17ab43d742a61fe7ce0723e4663e8}
+      \strng{authornamehash}{3ae17ab43d742a61fe7ce0723e4663e8}
+      \strng{authorfullhash}{3ae17ab43d742a61fe7ce0723e4663e8}
+      \field{sortinit}{1}
+      \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{9}
+      \field{title}{Degradation-limiting Optimization of Battery Energy Storage Systems Operation}
+      \field{type}{phdthesis}
+      \field{year}{2013}
+      \field{dateera}{ce}
+      \verb{file}
+      \verb Xu_MA_2013.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\VE2GBK72\\Xu_MA_2013.pdf:application/pdf
+      \endverb
+    \endentry
+    \entry{foti_inside_2008}{online}{}
+      \name{author}{1}{}{%
+        {{hash=43f0d8fe15b2fee3c1ccc2dc5e76fdc9}{%
+           family={Foti},
+           familyi={F\bibinitperiod},
+           given={Dave},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{43f0d8fe15b2fee3c1ccc2dc5e76fdc9}
+      \strng{fullhash}{43f0d8fe15b2fee3c1ccc2dc5e76fdc9}
+      \strng{authornamehash}{43f0d8fe15b2fee3c1ccc2dc5e76fdc9}
+      \strng{authorfullhash}{43f0d8fe15b2fee3c1ccc2dc5e76fdc9}
+      \field{sortinit}{2}
+      \field{sortinithash}{0aa614ace9f3a40ef5a67e7f7a184048}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Inside {MATLAB} Objects in R2008a - {MATLAB} \& Simulink}
+      \field{urlday}{7}
+      \field{urlmonth}{12}
+      \field{urlyear}{2016}
+      \field{year}{2008}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb Inside MATLAB Objects in R2008a - MATLAB & Simulink:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\IWNZSQMS\\inside-matlab-objects-in-r2008a.html:text/html
+      \endverb
+      \verb{url}
+      \verb https://de.mathworks.com/company/newsletters/articles/inside-matlab-objects-in-r2008a.html
+      \endverb
+    \endentry
+    \entry{_matlab_2016}{unpublished}{}
+      \list{location}{1}{%
+        {Korea}%
+      }
+      \field{sortinit}{3}
+      \field{sortinithash}{197da6d6c34c6b20ce45c4d4baace5a4}
+      \field{labeltitlesource}{title}
+      \field{note}{Matlab Expo}
+      \field{title}{Matlab programming techniques for efficiency and performance}
+      \field{year}{2016}
+      \field{dateera}{ce}
+      \verb{file}
+      \verb matlab-programming-techniques-for-efficiency-performance.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\H5433KBX\\matlab-programming-techniques-for-efficiency-performance.pdf:application/pdf
+      \endverb
+    \endentry
     \entry{lijun_gao_dynamic_2002}{article}{}
       \name{author}{3}{}{%
         {{hash=705f288abf3da79bd1755d33802d7206}{%
@@ -37,8 +185,8 @@
       \strng{fullhash}{ef2e23afa36faec72d8a8d31119c37ca}
       \strng{authornamehash}{ef2e23afa36faec72d8a8d31119c37ca}
       \strng{authorfullhash}{ef2e23afa36faec72d8a8d31119c37ca}
-      \field{sortinit}{1}
-      \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
+      \field{sortinit}{4}
+      \field{sortinithash}{d221becdd544034cf9082056cd6e6d2d}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{issn}{1521-3331}
@@ -77,8 +225,8 @@
       \strng{fullhash}{384be8aaa85e4db8086d32ca7b92b291}
       \strng{authornamehash}{384be8aaa85e4db8086d32ca7b92b291}
       \strng{authorfullhash}{384be8aaa85e4db8086d32ca7b92b291}
-      \field{sortinit}{2}
-      \field{sortinithash}{0aa614ace9f3a40ef5a67e7f7a184048}
+      \field{sortinit}{5}
+      \field{sortinithash}{c9df3c9fb8f555dd9201cedc5e343021}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{day}{30}
@@ -98,8 +246,8 @@
       \list{location}{1}{%
         {Karlstein}%
       }
-      \field{sortinit}{3}
-      \field{sortinithash}{197da6d6c34c6b20ce45c4d4baace5a4}
+      \field{sortinit}{6}
+      \field{sortinithash}{02bbed3ed82f61ae046619460488516d}
       \field{labeltitlesource}{title}
       \field{title}{Data sheet: {BM}26650ETC1 - High Power Lithium Iron Phosphate Cell}
       \field{year}{2010}
@@ -125,8 +273,8 @@
       \strng{fullhash}{a98954758c1bcabb2b12f8de13efb871}
       \strng{authornamehash}{a98954758c1bcabb2b12f8de13efb871}
       \strng{authorfullhash}{a98954758c1bcabb2b12f8de13efb871}
-      \field{sortinit}{5}
-      \field{sortinithash}{c9df3c9fb8f555dd9201cedc5e343021}
+      \field{sortinit}{8}
+      \field{sortinithash}{2f1b0e69e7617f99664f1cd00bb9603c}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{issn}{01692070}
@@ -148,8 +296,8 @@
       \endverb
     \endentry
     \entry{_iterator_????}{online}{}
-      \field{sortinit}{8}
-      \field{sortinithash}{2f1b0e69e7617f99664f1cd00bb9603c}
+      \field{sortinit}{1}
+      \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
       \field{labeltitlesource}{title}
       \field{title}{Iterator (Java Platform {SE} 7 )}
       \field{urlday}{27}
@@ -164,8 +312,8 @@
       \endverb
     \endentry
     \entry{_overview_????}{online}{}
-      \field{sortinit}{9}
-      \field{sortinithash}{2999ebab86052e6d71b434385f8b4ed2}
+      \field{sortinit}{1}
+      \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
       \field{labeltitlesource}{title}
       \field{title}{Overview Events and Listeners - {MATLAB} \& Simulink - {MathWorks} United Kingdom}
       \field{urlday}{28}
@@ -347,8 +495,8 @@
       \strng{fullhash}{4898d311bba79fa7c6aa50579ab866f9}
       \strng{authornamehash}{29313e372b5c7042e0ca107c55967e70}
       \strng{authorfullhash}{4898d311bba79fa7c6aa50579ab866f9}
-      \field{sortinit}{1}
-      \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
+      \field{sortinit}{2}
+      \field{sortinithash}{0aa614ace9f3a40ef5a67e7f7a184048}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{abstract}{Für die zukünftig erhöhte und vermehrte Nutzung von Energiespeichern in Stromnetzen existieren kaum Alternativen. Ein ökonomischer Vergleich von Energiespeichern lässt sich aufgrund großer technischer Unterschiede vor allem in Bezug auf das Verschleißverhalten nur dann sinnvoll durchführen, wenn man diese in ausreichendem Detaillierungsgrad berücksichtigt. In diesem Beitrag soll dazu ein Modell vorgestellt werden, welches die Kosten über dem gesamten Betriebszeitraum als sogenannte Vollkosten für verschiedene Speicher abbilden kann. Anhand der relevanten Speicherkosten, der spezifischen Speicherparameter sowie dem Einfluss des betriebsabhängigen Verschleißes und damit der Betriebszeit werden die Vollkosten, bezogen auf die umgesetzte Energiemenge, ermittelt. Mit detaillierten Eingangsparametern ist somit ein aussagekräftiger Kostenvergleich verschiedener Speichertechnologien möglich.}
@@ -389,8 +537,8 @@
       \strng{fullhash}{e0019d66d52da75fe41f315ffa44c714}
       \strng{authornamehash}{b4ef3b128fa79cfa92caab1ec3d8bb22}
       \strng{authorfullhash}{e0019d66d52da75fe41f315ffa44c714}
-      \field{sortinit}{1}
-      \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
+      \field{sortinit}{2}
+      \field{sortinithash}{0aa614ace9f3a40ef5a67e7f7a184048}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{35th Aerospace Sciences Meeting and Exhibit}
@@ -557,8 +705,8 @@
       \strng{fullhash}{0f1dda41aeae317d4ce17498bd672d5f}
       \strng{authornamehash}{0f1dda41aeae317d4ce17498bd672d5f}
       \strng{authorfullhash}{0f1dda41aeae317d4ce17498bd672d5f}
-      \field{sortinit}{2}
-      \field{sortinithash}{0aa614ace9f3a40ef5a67e7f7a184048}
+      \field{sortinit}{3}
+      \field{sortinithash}{197da6d6c34c6b20ce45c4d4baace5a4}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{norminvlim - File Exchange - {MATLAB} Central}
