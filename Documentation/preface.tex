@@ -1,0 +1,62 @@
+\markboth{Preface}{Preface}
+\section*{Preface}
+\addcontentsline{toc}{section}{Preface}
+The following text provides a complete documentation of the battery model provided in the \mcode{lfpBattery} \matlab\ package. It combines a description of the model's components with an analysis and validation using example simulations and a tutorial on how to use the package.
+
+\subsection*{Organization}
+\addcontentsline{toc}{subsection}{Organization}
+This documentation is organized in sections that are sorted in such a way that a detailed understanding of the model's design and functionality is conveyed to the reader. For a basic knowledge of how to use the model, the sections do not have to be read in order. Parts of the documentation that are not relevant to the usage of the model in \matlab\ can safely be skipped. However, it is recommended to read the entire documentation for an understanding of the strengths and weaknesses of the model.
+
+\subsection*{Typing conventions of this documentation}
+\addcontentsline{toc}{subsection}{Typing conventions of this documentation}
+Since this documentation describes a \matlab\ package, the following special text formatting is used extensively:
+\begin{itemize}
+	\item \matlab\ code and the names of \matlab\ objects and properties are formatted in \mcode{fixed-width} font and the default \matlab\ colour coding.
+	\item \matlab functions (methods) are formatted in \mcode{fixed-width} font with brackets added at the end, e.g. \mcode{plot()}.
+	\item Formulas, mathematical symbols, physical units and constants are formatted according to the norms DIN~1338, DIN~1304, DIN~1301 and DIN~1313.
+	\item If a formula, symbol, unit or constant is used within \matlab\ code, the \mcode{fixed-width} font is used.
+\end{itemize}
+
+\subsection*{Quick start}
+\addcontentsline{toc}{subsection}{Quick start}
+To quickly get started with the usage of this package, skip to the sections~\ref{sec:batteryPack} and~\ref{sec:GUI}. Note that any script or function that uses this package should start with the line
+\begin{lstlisting}
+import lfpBattery.*
+\end{lstlisting}
+Alternatively, only the required objects can be imported, e.g.
+\begin{lstlisting}
+import lfpBattery.batteryPack lfpBattery.dischargeCurves
+bat = batteryPack(varargin{:});
+dC = dischargeCurves(varargin{:});
+\end{lstlisting}
+or the object with the name \mcode{objectName} can be initialized as \mcode{lfpBattery.objectName}, e.g.
+\begin{lstlisting}
+bat = lfpBattery.batteryPack(varargin{:}); % creates a batteryPack object
+\end{lstlisting}
+For the code examples provided in this documentation, it is assumed that the \mcode{lfpBattery} package has been imported. \\
+Section~\ref{sec:GUI} provides a description of the GUI tools that can be used for getting to know the package and for creating the required curve fits. For repeaded use in a simulation, it is recommended to start off with the \mcode{batteryPack} class, which provides centralized access to almost all of the features of this package and is described in section~\ref{sec:batteryPack}.
+
+\subsection*{Terminology}
+\addcontentsline{toc}{subsection}{Terminology}
+Object oriented programming (OOP), design pattern and \matlab\ terminology is used frequently throughout this documentation. A short description of some of the terms is provided in the following.
+
+\subsubsection*{Interface} \label{sec:interface}
+In OOP languages such as \java and C++, the term "interface" commonly refers to an abstract set of methods that specifies the behaviour that objects must implement. Unlike a class, an interface does not have any properties. \matlab\ OOP contains abstract classes, but no interfaces. However, in the terminology of design patterns, an interface can also be an abstract class. In this documentation, an abstract class that defines the behaviour that objects must implement via a set of methods and/or properties is referred to as an "interface". Examples are the \mcode{curveFitInterface} for all curve fitting classes and the \mcode{batteryInterface}, which is a common interface for the battery pack elements and the cells.
+
+\subsubsection*{Immutable}
+In \matlab\ OOP, object properties can be private (read only) or public (read and write access), among others. A property that can be set from an object's constructor (upon initialization), but is read only afterwards is called "immutable".
+
+\subsubsection*{Observer}
+In the Observer design pattern, an observer is an object that is notified by the subject it is observing when an event occurs. The subject sends information to the observer about which event has occurred, the source of the event and which of the observer object's methods is to be triggered. Observers are also often referred to as "listeners".
+
+\subsubsection*{Subject}
+In the Observer design pattern, a subject is an object that is observed. It holds a handle reference to one or more observers and when an event occurs, it sends out a notification to the observer, triggering one or more of it's methods.
+
+\subsubsection*{Component}
+In the Composite design pattern, a component is any class that implements the shared interface. Both composite and leaf elements are components.
+
+\subsubsection*{Composite}
+In the Composite design pattern, a composite is a component that can hold a reference to another component.
+
+\subsubsection*{Leaf}
+In the Composite design pattern, a leaf is a component that cannot hold a reference to another component.

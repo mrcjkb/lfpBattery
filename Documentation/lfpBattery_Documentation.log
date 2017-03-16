@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  16 MAR 2017 19:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  16 MAR 2017 20:48
 entering extended mode
 **./lfpBattery_Documentation.tex
 (lfpBattery_Documentation.tex
@@ -2111,7 +2111,7 @@ Package biblatex Info: ... file 'english.lbx' found.
 ("C:\Program Files\MiKTeX 2.9\tex\latex\biblatex\lbx\english.lbx"
 File: english.lbx 2016/12/05 v3.7 biblatex localization (PK/JW/AB)
 )
-(lfpBattery_Documentation.aux (abbreviations.aux) (symbols.aux)
+(lfpBattery_Documentation.aux (abbreviations.aux) (symbols.aux) (preface.aux)
 (dischargeCurves.aux) (ageModel.aux) (batteryInterface.aux) (guiTools.aux))
 \openout1 = `lfpBattery_Documentation.aux'.
 
@@ -2279,7 +2279,7 @@ Package microtype Info: Loading generic settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 
-<GUI.png, id=170, 837.88031pt x 344.03531pt>
+<GUI.png, id=190, 837.88031pt x 344.03531pt>
 File: GUI.png Graphic file (type png)
  <use GUI.png>
 Package pdftex.def Info: GUI.png used on input line 79.
@@ -2318,7 +2318,7 @@ Package microtype Info: Loading generic settings for font family
 \openout7 = `lfpBattery_Documentation.toc'.
 
 
-<tulogo.pdf, id=229, 202.7575pt x 113.42375pt>
+<tulogo.pdf, id=254, 202.7575pt x 113.42375pt>
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 99.
@@ -2435,6 +2435,168 @@ LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <12> not available
 
 
 ]
+\openout2 = `preface.aux'.
+
+ (preface.tex
+
+Class scrartcl Warning: incompatible usage of \@ssect detected.
+(scrartcl)              You've used the KOMA-Script implementation of \@ssect
+(scrartcl)              from within a non compatible caller, that does not
+(scrartcl)              \scr@s@ct@@nn@m@ locally.
+(scrartcl)              This could result in several error messages on input li
+ne 2.
+
+
+Class scrartcl Warning: incompatible usage of \@ssect detected.
+(scrartcl)              You've used the KOMA-Script implementation of \@ssect
+(scrartcl)              from within a non compatible caller, that does not
+(scrartcl)              \scr@s@ct@@nn@m@ locally.
+(scrartcl)              This could result in several error messages on input li
+ne 6.
+
+
+Class scrartcl Warning: incompatible usage of \@ssect detected.
+(scrartcl)              You've used the KOMA-Script implementation of \@ssect
+(scrartcl)              from within a non compatible caller, that does not
+(scrartcl)              \scr@s@ct@@nn@m@ locally.
+(scrartcl)              This could result in several error messages on input li
+ne 10.
+
+
+Class scrartcl Warning: incompatible usage of \@ssect detected.
+(scrartcl)              You've used the KOMA-Script implementation of \@ssect
+(scrartcl)              from within a non compatible caller, that does not
+(scrartcl)              \scr@s@ct@@nn@m@ locally.
+(scrartcl)              This could result in several error messages on input li
+ne 20.
+
+LaTeX Font Info:    Try loading font information for OMS+pcr on input line 29.
+("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omspcr.fd"
+File: omspcr.fd 
+)
+LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 29.
+File: tulogo.pdf Graphic file (type pdf)
+ <use tulogo.pdf>
+Package pdftex.def Info: tulogo.pdf used on input line 32.
+(pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
+
+
+Package Fancyhdr Warning: \headheight is too small (18.125pt): 
+ Make it at least 29.69101pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.32 o
+      r the object with the name \mcode{objectName} can be initialized as \m...
+[1
+
+
+
+]
+
+Class scrartcl Warning: incompatible usage of \@ssect detected.
+(scrartcl)              You've used the KOMA-Script implementation of \@ssect
+(scrartcl)              from within a non compatible caller, that does not
+(scrartcl)              \scr@s@ct@@nn@m@ locally.
+(scrartcl)              This could result in several error messages on input li
+ne 39.
+
+
+Class scrartcl Warning: incompatible usage of \@ssect detected.
+(scrartcl)              You've used the KOMA-Script implementation of \@ssect
+(scrartcl)              from within a non compatible caller, that does not
+(scrartcl)              \scr@s@ct@@nn@m@ locally.
+(scrartcl)              This could result in several error messages on input li
+ne 43.
+
+
+Class scrartcl Warning: incompatible usage of \@ssect detected.
+(scrartcl)              You've used the KOMA-Script implementation of \@ssect
+(scrartcl)              from within a non compatible caller, that does not
+(scrartcl)              \scr@s@ct@@nn@m@ locally.
+(scrartcl)              This could result in several error messages on input li
+ne 46.
+
+
+Class scrartcl Warning: incompatible usage of \@ssect detected.
+(scrartcl)              You've used the KOMA-Script implementation of \@ssect
+(scrartcl)              from within a non compatible caller, that does not
+(scrartcl)              \scr@s@ct@@nn@m@ locally.
+(scrartcl)              This could result in several error messages on input li
+ne 49.
+
+
+Class scrartcl Warning: incompatible usage of \@ssect detected.
+(scrartcl)              You've used the KOMA-Script implementation of \@ssect
+(scrartcl)              from within a non compatible caller, that does not
+(scrartcl)              \scr@s@ct@@nn@m@ locally.
+(scrartcl)              This could result in several error messages on input li
+ne 52.
+
+File: tulogo.pdf Graphic file (type pdf)
+<use tulogo.pdf>
+Package pdftex.def Info: tulogo.pdf used on input line 54.
+(pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
+
+
+Package Fancyhdr Warning: \headheight is too small (18.125pt): 
+ Make it at least 29.69101pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.54 
+      [2]
+
+Class scrartcl Warning: incompatible usage of \@ssect detected.
+(scrartcl)              You've used the KOMA-Script implementation of \@ssect
+(scrartcl)              from within a non compatible caller, that does not
+(scrartcl)              \scr@s@ct@@nn@m@ locally.
+(scrartcl)              This could result in several error messages on input li
+ne 55.
+
+
+Class scrartcl Warning: incompatible usage of \@ssect detected.
+(scrartcl)              You've used the KOMA-Script implementation of \@ssect
+(scrartcl)              from within a non compatible caller, that does not
+(scrartcl)              \scr@s@ct@@nn@m@ locally.
+(scrartcl)              This could result in several error messages on input li
+ne 58.
+
+
+Class scrartcl Warning: incompatible usage of \@ssect detected.
+(scrartcl)              You've used the KOMA-Script implementation of \@ssect
+(scrartcl)              from within a non compatible caller, that does not
+(scrartcl)              \scr@s@ct@@nn@m@ locally.
+(scrartcl)              This could result in several error messages on input li
+ne 61.
+
+)
+File: tulogo.pdf Graphic file (type pdf)
+ <use tulogo.pdf>
+Package pdftex.def Info: tulogo.pdf used on input line 114.
+(pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
+
+
+Package Fancyhdr Warning: \headheight is too small (18.125pt): 
+ Make it at least 29.69101pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.3}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.114 \include{preface}
+                        [3]
 \openout2 = `dischargeCurves.aux'.
 
  (dischargeCurves.tex
@@ -2460,13 +2622,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.31 \begin{lstlisting}
-                        [1
-
+[4
 
 
 ]
@@ -2480,8 +2636,7 @@ Package epstopdf Info: Source file: <dischargeFit01.eps>
 d-to.pdf dischargeFit01.eps>
 (epstopdf)             \includegraphics on input line 53.
 Package epstopdf Info: Output file is already uptodate.
-
-<dischargeFit01-eps-converted-to.pdf, id=361, 633.36626pt x 317.185pt>
+ <dischargeFit01-eps-converted-to.pdf, id=416, 633.36626pt x 317.185pt>
 File: dischargeFit01-eps-converted-to.pdf Graphic file (type pdf)
 
 <use dischargeFit01-eps-converted-to.pdf>
@@ -2507,7 +2662,7 @@ Package epstopdf Info: Source file: <dischargeFit02.eps>
 d-to.pdf dischargeFit02.eps>
 (epstopdf)             \includegraphics on input line 60.
 Package epstopdf Info: Output file is already uptodate.
-<dischargeFit02-eps-converted-to.pdf, id=363, 633.36626pt x 317.185pt>
+<dischargeFit02-eps-converted-to.pdf, id=418, 633.36626pt x 317.185pt>
 File: dischargeFit02-eps-converted-to.pdf Graphic file (type pdf)
 
 <use dischargeFit02-eps-converted-to.pdf>
@@ -2527,12 +2682,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.68 
-      [2 <./dischargeFit01-eps-converted-to.pdf>]
+[5 <./dischargeFit01-eps-converted-to.pdf>]
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 78.
@@ -2544,12 +2694,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-pdfTeX warning (ext4): destination with the same identifier (name{page.3}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.78 
-      [3 <./dischargeFit02-eps-converted-to.pdf>]
+[6 <./dischargeFit02-eps-converted-to.pdf>]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `\lstinline' on input line 98.
@@ -2570,7 +2715,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[4]
+[7]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `\lstinline' on input line 113.
@@ -2586,7 +2731,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[5]
+[8]
 Package epstopdf Info: Source file: <interpMethod.eps>
 (epstopdf)                    date: 2017-02-27 18:52:41
 (epstopdf)                    size: 77394 bytes
@@ -2597,7 +2742,7 @@ Package epstopdf Info: Source file: <interpMethod.eps>
 to.pdf interpMethod.eps>
 (epstopdf)             \includegraphics on input line 154.
 Package epstopdf Info: Output file is already uptodate.
- <interpMethod-eps-converted-to.pdf, id=446, 633.36626pt x 317.185pt>
+ <interpMethod-eps-converted-to.pdf, id=503, 633.36626pt x 317.185pt>
 File: interpMethod-eps-converted-to.pdf Graphic file (type pdf)
 
 <use interpMethod-eps-converted-to.pdf>
@@ -2615,7 +2760,7 @@ verted-to.pdf dischargeCurvesIlim.eps>
 (epstopdf)             \includegraphics on input line 162.
 Package epstopdf Info: Output file is already uptodate.
 
-<dischargeCurvesIlim-eps-converted-to.pdf, id=449, 633.36626pt x 317.185pt>
+<dischargeCurvesIlim-eps-converted-to.pdf, id=506, 633.36626pt x 317.185pt>
 File: dischargeCurvesIlim-eps-converted-to.pdf Graphic file (type pdf)
 
 <use dischargeCurvesIlim-eps-converted-to.pdf>
@@ -2633,7 +2778,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[6 <./interpMethod-eps-converted-to.pdf>]
+[9 <./interpMethod-eps-converted-to.pdf>]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `\lstinline' on input line 168.
@@ -2649,7 +2794,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[7 <./dischargeCurvesIlim-eps-converted-to.pdf>])
+[10 <./dischargeCurvesIlim-eps-converted-to.pdf>])
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 115.
@@ -2661,12 +2806,12 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[8
+[11
 
 ]
 \openout2 = `ageModel.aux'.
 
- (ageModel.tex <observer_schema.pdf, id=506, 604.50844pt x 536.75531pt>
+ (ageModel.tex <observer_schema.pdf, id=562, 604.50844pt x 536.75531pt>
 File: observer_schema.pdf Graphic file (type pdf)
 
 <use observer_schema.pdf>
@@ -2683,7 +2828,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[9
+[12
 
 
 ]
@@ -2698,7 +2843,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[10 <./observer_schema.pdf>]
+[13 <./observer_schema.pdf>]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `\lstinline' on input line 39.
@@ -2717,7 +2862,7 @@ Package epstopdf Info: Source file: <DAM01.eps>
 DAM01.eps>
 (epstopdf)             \includegraphics on input line 46.
 Package epstopdf Info: Output file is already uptodate.
-<DAM01-eps-converted-to.pdf, id=553, 422.57875pt x 317.185pt>
+<DAM01-eps-converted-to.pdf, id=610, 422.57875pt x 317.185pt>
 File: DAM01-eps-converted-to.pdf Graphic file (type pdf)
 
 <use DAM01-eps-converted-to.pdf>
@@ -2734,7 +2879,7 @@ DAM02.eps>
 (epstopdf)             \includegraphics on input line 47.
 Package epstopdf Info: Output file is already uptodate.
 
-<DAM02-eps-converted-to.pdf, id=554, 422.57875pt x 317.185pt>
+<DAM02-eps-converted-to.pdf, id=611, 422.57875pt x 317.185pt>
 File: DAM02-eps-converted-to.pdf Graphic file (type pdf)
 
 <use DAM02-eps-converted-to.pdf>
@@ -2756,7 +2901,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[11]
+[14]
 Package epstopdf Info: Source file: <cdoc_hists.eps>
 (epstopdf)                    date: 2017-02-28 23:39:21
 (epstopdf)                    size: 55555 bytes
@@ -2767,7 +2912,7 @@ Package epstopdf Info: Source file: <cdoc_hists.eps>
 .pdf cdoc_hists.eps>
 (epstopdf)             \includegraphics on input line 65.
 Package epstopdf Info: Output file is already uptodate.
- <cdoc_hists-eps-converted-to.pdf, id=574, 633.36626pt x 317.185pt>
+ <cdoc_hists-eps-converted-to.pdf, id=631, 633.36626pt x 317.185pt>
 File: cdoc_hists-eps-converted-to.pdf Graphic file (type pdf)
 
 <use cdoc_hists-eps-converted-to.pdf>
@@ -2785,7 +2930,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[12 <./DAM01-eps-converted-to.pdf> <./DAM02-eps-converted-to.pdf>]
+[15 <./DAM01-eps-converted-to.pdf> <./DAM02-eps-converted-to.pdf>]
 File: tulogo.pdf Graphic file (type pdf)
 
 <use tulogo.pdf>
@@ -2798,7 +2943,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[13 <./cdoc_hists-eps-converted-to.pdf>]
+[16 <./cdoc_hists-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <woehlerFit.eps>
 (epstopdf)                    date: 2017-03-02 16:59:08
 (epstopdf)                    size: 58011 bytes
@@ -2810,7 +2955,7 @@ Package epstopdf Info: Source file: <woehlerFit.eps>
 (epstopdf)             \includegraphics on input line 92.
 Package epstopdf Info: Output file is already uptodate.
 
-<woehlerFit-eps-converted-to.pdf, id=620, 633.36626pt x 317.185pt>
+<woehlerFit-eps-converted-to.pdf, id=676, 633.36626pt x 317.185pt>
 File: woehlerFit-eps-converted-to.pdf Graphic file (type pdf)
 
 <use woehlerFit-eps-converted-to.pdf>
@@ -2837,7 +2982,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[14 <./woehlerFit-eps-converted-to.pdf>]
+[17 <./woehlerFit-eps-converted-to.pdf>]
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 111.
@@ -2849,7 +2994,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[15]
+[18]
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 154.
@@ -2861,7 +3006,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[16
+[19
 
 ]
 LaTeX Font Info:    Try loading font information for OML+pcr on input line 162.
@@ -2871,16 +3016,9 @@ File: omlpcr.fd
 )
 LaTeX Font Info:    Font shape `OML/pcr/m/n' in size <10> not available
 (Font)              Font shape `OML/cmm/m/it' tried instead on input line 162.
-LaTeX Font Info:    Try loading font information for OMS+pcr on input line 175.
-
-
-("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omspcr.fd"
-File: omspcr.fd 
-)
-LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 175.
 File: tulogo.pdf Graphic file (type pdf)
- <use tulogo.pdf>
+
+<use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 189.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
@@ -2890,7 +3028,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[17])
+[20])
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 116.
@@ -2902,19 +3040,19 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[18
+[21
 
 ]
 \openout2 = `batteryInterface.aux'.
 
  (batteryInterface.tex
-<topologies2.pdf, id=727, 360.59718pt x 273.27094pt>
+<topologies2.pdf, id=783, 360.59718pt x 273.27094pt>
 File: topologies2.pdf Graphic file (type pdf)
  <use topologies2.pdf>
 Package pdftex.def Info: topologies2.pdf used on input line 17.
 (pdftex.def)             Requested size: 452.9679pt x 343.27238pt.
 
-<composite_schema.pdf, id=731, 785.93625pt x 560.0925pt>
+<composite_schema.pdf, id=787, 785.93625pt x 560.0925pt>
 File: composite_schema.pdf Graphic file (type pdf)
 
 <use composite_schema.pdf>
@@ -2931,11 +3069,11 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[19
+[22
 
 
  <./topologies2.pdf>]
-<method_delegation.pdf, id=751, 682.04813pt x 329.73187pt>
+<method_delegation.pdf, id=807, 682.04813pt x 329.73187pt>
 File: method_delegation.pdf Graphic file (type pdf)
 
 <use method_delegation.pdf>
@@ -2952,7 +3090,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[20 <./composite_schema.pdf>]
+[23 <./composite_schema.pdf>]
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 71.
@@ -2964,7 +3102,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[21 <./method_delegation.pdf>]
+[24 <./method_delegation.pdf>]
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 107.
@@ -2976,7 +3114,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[22]
+[25]
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 146.
@@ -2988,19 +3126,19 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[23] <powerRequest.pdf, id=868, 599.99156pt x 477.28313pt>
+[26] <powerRequest.pdf, id=925, 599.99156pt x 477.28313pt>
 File: powerRequest.pdf Graphic file (type pdf)
 
 <use powerRequest.pdf>
 Package pdftex.def Info: powerRequest.pdf used on input line 156.
 (pdftex.def)             Requested size: 452.9679pt x 360.33563pt.
- <iteratePower.pdf, id=870, 717.43031pt x 463.7325pt>
+ <iteratePower.pdf, id=927, 717.43031pt x 463.7325pt>
 File: iteratePower.pdf Graphic file (type pdf)
 
 <use iteratePower.pdf>
 Package pdftex.def Info: iteratePower.pdf used on input line 164.
 (pdftex.def)             Requested size: 452.9679pt x 292.79692pt.
- <iterateCurrent.pdf, id=872, 628.59843pt x 384.6872pt>
+ <iterateCurrent.pdf, id=929, 628.59843pt x 384.6872pt>
 File: iterateCurrent.pdf Graphic file (type pdf)
 
 <use iterateCurrent.pdf>
@@ -3017,7 +3155,7 @@ Package epstopdf Info: Source file: <simulations01.eps>
 (epstopdf)             \includegraphics on input line 180.
 Package epstopdf Info: Output file is already uptodate.
 
-<simulations01-eps-converted-to.pdf, id=875, 633.36626pt x 317.185pt>
+<simulations01-eps-converted-to.pdf, id=932, 633.36626pt x 317.185pt>
 File: simulations01-eps-converted-to.pdf Graphic file (type pdf)
 
 <use simulations01-eps-converted-to.pdf>
@@ -3035,7 +3173,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[24 <./powerRequest.pdf>]
+[27 <./powerRequest.pdf>]
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 185.
@@ -3047,7 +3185,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[25 <./iteratePower.pdf>]
+[28 <./iteratePower.pdf>]
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 185.
@@ -3059,7 +3197,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[26 <./iterateCurrent.pdf>]
+[29 <./iterateCurrent.pdf>]
 Package epstopdf Info: Source file: <simulations02.eps>
 (epstopdf)                    date: 2017-03-04 17:31:17
 (epstopdf)                    size: 90260 bytes
@@ -3071,7 +3209,7 @@ Package epstopdf Info: Source file: <simulations02.eps>
 (epstopdf)             \includegraphics on input line 194.
 Package epstopdf Info: Output file is already uptodate.
 
-<simulations02-eps-converted-to.pdf, id=954, 633.36626pt x 317.185pt>
+<simulations02-eps-converted-to.pdf, id=1010, 633.36626pt x 317.185pt>
 File: simulations02-eps-converted-to.pdf Graphic file (type pdf)
 
 <use simulations02-eps-converted-to.pdf>
@@ -3089,7 +3227,7 @@ ted-to.pdf mdischargeCurves.eps>
 (epstopdf)             \includegraphics on input line 201.
 Package epstopdf Info: Output file is already uptodate.
 
-<mdischargeCurves-eps-converted-to.pdf, id=956, 633.36626pt x 317.185pt>
+<mdischargeCurves-eps-converted-to.pdf, id=1012, 633.36626pt x 317.185pt>
 File: mdischargeCurves-eps-converted-to.pdf Graphic file (type pdf)
 
 <use mdischargeCurves-eps-converted-to.pdf>
@@ -3107,7 +3245,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[27 <./simulations01-eps-converted-to.pdf>]
+[30 <./simulations01-eps-converted-to.pdf>]
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 205.
@@ -3119,8 +3257,8 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[28 <./simulations02-eps-converted-to.pdf> <./mdischargeCurves-eps-converted-to
-.pdf>] <cccv_qualitative.pdf, id=995, 408.02437pt x 179.92218pt>
+[31 <./simulations02-eps-converted-to.pdf> <./mdischargeCurves-eps-converted-to
+.pdf>] <cccv_qualitative.pdf, id=1052, 408.02437pt x 179.92218pt>
 File: cccv_qualitative.pdf Graphic file (type pdf)
 
 <use cccv_qualitative.pdf>
@@ -3137,7 +3275,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[29
+[32
 
 ]
 File: tulogo.pdf Graphic file (type pdf)
@@ -3151,7 +3289,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[30 <./cccv_qualitative.pdf>]
+[33 <./cccv_qualitative.pdf>]
 Package epstopdf Info: Source file: <cccvFit.eps>
 (epstopdf)                    date: 2017-03-14 17:16:54
 (epstopdf)                    size: 48769 bytes
@@ -3163,14 +3301,14 @@ f cccvFit.eps>
 (epstopdf)             \includegraphics on input line 257.
 Package epstopdf Info: Output file is already uptodate.
 
-<cccvFit-eps-converted-to.pdf, id=1038, 633.36626pt x 317.185pt>
+<cccvFit-eps-converted-to.pdf, id=1094, 633.36626pt x 317.185pt>
 File: cccvFit-eps-converted-to.pdf Graphic file (type pdf)
 
 <use cccvFit-eps-converted-to.pdf>
 Package pdftex.def Info: cccvFit-eps-converted-to.pdf used on input line 257.
 (pdftex.def)             Requested size: 452.9679pt x 226.84845pt.
 
-<cccvBMS.pdf, id=1042, 438.13687pt x 380.92313pt>
+<cccvBMS.pdf, id=1098, 438.13687pt x 380.92313pt>
 File: cccvBMS.pdf Graphic file (type pdf)
  <use cccvBMS.pdf>
 Package pdftex.def Info: cccvBMS.pdf used on input line 269.
@@ -3187,7 +3325,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[31 <./cccvFit-eps-converted-to.pdf>]
+[34 <./cccvFit-eps-converted-to.pdf>]
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 277.
@@ -3199,7 +3337,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[32 <./cccvBMS.pdf>]
+[35 <./cccvBMS.pdf>]
 LaTeX Font Info:    Font shape `OT1/pcr/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/pcr/b/n' tried instead on input line 293.
 
@@ -3222,7 +3360,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[33]
+[36]
 Overfull \hbox (8.58388pt too wide) in paragraph at lines 317--318
 \OT1/cmss/m/n/12 (-20) If no [][][] ob-ject is pas-sed to the [][][] via it's c
 on-struc-tor's [][][][][][][][][][][]
@@ -3249,7 +3387,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[34]
+[37]
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 371.
@@ -3261,7 +3399,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[35]
+[38]
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 371.
@@ -3273,7 +3411,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[36]
+[39]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `\lstinline' on input line 373.
@@ -3299,7 +3437,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[37]
+[40]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `\lstinline' on input line 412.
@@ -3352,7 +3490,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[38])
+[41])
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 117.
@@ -3364,10 +3502,10 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[39]
+[42]
 \openout2 = `guiTools.aux'.
 
- (guiTools.tex <Designer.png, id=1161, 928.97063pt x 403.5075pt>
+ (guiTools.tex <Designer.png, id=1218, 928.97063pt x 403.5075pt>
 File: Designer.png Graphic file (type png)
 
 <use Designer.png>
@@ -3384,10 +3522,10 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[40
+[43
 
 
- <./Designer.png>] <digitizeTool01.png, id=1175, 1770.615pt x 1002.74625pt>
+ <./Designer.png>] <digitizeTool01.png, id=1232, 1770.615pt x 1002.74625pt>
 File: digitizeTool01.png Graphic file (type png)
 
 <use digitizeTool01.png>
@@ -3404,14 +3542,14 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[41 <./digitizeTool01.png>]
-<file_chooser.png, id=1186, 704.6325pt x 684.5575pt>
+[44 <./digitizeTool01.png>]
+<file_chooser.png, id=1243, 704.6325pt x 684.5575pt>
 File: file_chooser.png Graphic file (type png)
  <use file_chooser.png>
 Package pdftex.def Info: file_chooser.png used on input line 53.
 (pdftex.def)             Requested size: 258.195pt x 250.83806pt.
 
-<digitizeTool02.png, id=1187, 1770.615pt x 1002.74625pt>
+<digitizeTool02.png, id=1244, 1770.615pt x 1002.74625pt>
 File: digitizeTool02.png Graphic file (type png)
 
 <use digitizeTool02.png>
@@ -3429,7 +3567,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[42 <./file_chooser.png>]
+[45 <./file_chooser.png>]
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 118.
@@ -3441,7 +3579,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[43 <./digitizeTool02.png>]
+[46 <./digitizeTool02.png>]
 
 Class scrartcl Warning: incompatible usage of \@ssect detected.
 (scrartcl)              You've used the KOMA-Script implementation of \@ssect
@@ -3471,7 +3609,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[44
+[47
 
 ]
 File: tulogo.pdf Graphic file (type pdf)
@@ -3485,25 +3623,26 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[45]
+[48]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 123.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 123.
  (lfpBattery_Documentation.aux (abbreviations.aux) (symbols.aux)
-(dischargeCurves.aux) (ageModel.aux) (batteryInterface.aux) (guiTools.aux))
+(preface.aux) (dischargeCurves.aux) (ageModel.aux) (batteryInterface.aux)
+(guiTools.aux))
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 123.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 123.
 Package rerunfilecheck Info: File `lfpBattery_Documentation.out' has not change
 d.
-(rerunfilecheck)             Checksum: B16C3FF7E5C3921495C86575E171EAF3;3331.
+(rerunfilecheck)             Checksum: 5CC5EF9285AC1958C1918D79711989DE;3644.
 Package logreq Info: Writing requests to 'lfpBattery_Documentation.run.xml'.
 \openout1 = `lfpBattery_Documentation.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 46434 strings out of 493363
- 871007 string characters out of 3139771
- 1484402 words of memory out of 3000000
- 48587 multiletter control sequences out of 15000+200000
+ 46482 strings out of 493363
+ 871636 string characters out of 3139771
+ 1487278 words of memory out of 3000000
+ 48605 multiletter control sequences out of 15000+200000
  33251 words of font info for 176 fonts, out of 3000000 for 9000
  1127 hyphenation exceptions out of 8191
  73i,17n,71p,10399b,2370s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -3535,9 +3674,9 @@ uper/sfss0800.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/cm-super/sfss
 <C:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrb8a.pfb><C:/Program Fil
 es/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/f
 onts/type1/urw/courier/ucrro8a.pfb>
-Output written on lfpBattery_Documentation.pdf (52 pages, 3410815 bytes).
+Output written on lfpBattery_Documentation.pdf (55 pages, 3424647 bytes).
 PDF statistics:
- 1418 PDF objects out of 1440 (max. 8388607)
- 446 named destinations out of 1000 (max. 500000)
- 45532 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 1480 PDF objects out of 1728 (max. 8388607)
+ 469 named destinations out of 1000 (max. 500000)
+ 45572 words of extra memory for PDF output out of 51595 (max. 10000000)
 

@@ -1,41 +1,46 @@
-\BOOKMARK [1][-]{section.1}{Discharge curves}{}% 1
-\BOOKMARK [2][-]{subsection.1.1}{Single discharge curve}{section.1}% 2
-\BOOKMARK [3][-]{subsubsection.1.1.1}{Creation of a [basicstyle=]|dischargeFit| object}{subsection.1.1}% 3
-\BOOKMARK [3][-]{subsubsection.1.1.2}{Visual validation}{subsection.1.1}% 4
-\BOOKMARK [3][-]{subsubsection.1.1.3}{Object properties}{subsection.1.1}% 5
-\BOOKMARK [3][-]{subsubsection.1.1.4}{Usage of a [basicstyle=]|dischargeFit| object}{subsection.1.1}% 6
-\BOOKMARK [2][-]{subsection.1.2}{Collection of discharge curves}{section.1}% 7
-\BOOKMARK [3][-]{subsubsection.1.2.1}{Creation of a [basicstyle=]|dischargeCurves| object}{subsection.1.2}% 8
-\BOOKMARK [3][-]{subsubsection.1.2.2}{Interpolation between curves}{subsection.1.2}% 9
-\BOOKMARK [3][-]{subsubsection.1.2.3}{Usage of a [basicstyle=]|dischargeCurves| object}{subsection.1.2}% 10
-\BOOKMARK [1][-]{section.2}{Age model}{}% 11
-\BOOKMARK [2][-]{subsection.2.1}{Overview}{section.2}% 12
-\BOOKMARK [2][-]{subsection.2.2}{Cycle counting}{section.2}% 13
-\BOOKMARK [3][-]{subsubsection.2.2.1}{The [basicstyle=]|rainflowCounter| class}{subsection.2.2}% 14
-\BOOKMARK [3][-]{subsubsection.2.2.2}{The [basicstyle=]|dambrowskiCounter| class}{subsection.2.2}% 15
-\BOOKMARK [3][-]{subsubsection.2.2.3}{Comparison of the cycle counters}{subsection.2.2}% 16
-\BOOKMARK [2][-]{subsection.2.3}{Event oriented ageing model}{section.2}% 17
-\BOOKMARK [3][-]{subsubsection.2.3.1}{Cycle life curve fits}{subsection.2.3}% 18
-\BOOKMARK [3][-]{subsubsection.2.3.2}{Cycle ageing}{subsection.2.3}% 19
-\BOOKMARK [3][-]{subsubsection.2.3.3}{Age model initialization}{subsection.2.3}% 20
-\BOOKMARK [3][-]{subsubsection.2.3.4}{Creating a user-defined age model}{subsection.2.3}% 21
-\BOOKMARK [3][-]{subsubsection.2.3.5}{Calendar ageing}{subsection.2.3}% 22
-\BOOKMARK [1][-]{section.3}{Battery Composition}{}% 23
-\BOOKMARK [2][-]{subsection.3.1}{Overview}{section.3}% 24
-\BOOKMARK [2][-]{subsection.3.2}{Method delegation}{section.3}% 25
-\BOOKMARK [2][-]{subsection.3.3}{Battery Interface}{section.3}% 26
-\BOOKMARK [3][-]{subsubsection.3.3.1}{Battery object initialization}{subsection.3.3}% 27
-\BOOKMARK [3][-]{subsubsection.3.3.2}{Battery charging and discharging}{subsection.3.3}% 28
-\BOOKMARK [3][-]{subsubsection.3.3.3}{Age model level}{subsection.3.3}% 29
-\BOOKMARK [2][-]{subsection.3.4}{CCCV charging and BMS}{section.3}% 30
-\BOOKMARK [3][-]{subsubsection.3.4.1}{CCCV curve fits}{subsection.3.4}% 31
-\BOOKMARK [3][-]{subsubsection.3.4.2}{Cell monitoring and communication with the charger}{subsection.3.4}% 32
-\BOOKMARK [2][-]{subsection.3.5}{Simplified model}{section.3}% 33
-\BOOKMARK [2][-]{subsection.3.6}{The [basicstyle=]|batteryPack| class}{section.3}% 34
-\BOOKMARK [3][-]{subsubsection.3.6.1}{The [basicstyle=]|batteryPack| constructor}{subsection.3.6}% 35
-\BOOKMARK [3][-]{subsubsection.3.6.2}{Properties of the [basicstyle=]|batteryPack| class}{subsection.3.6}% 36
-\BOOKMARK [3][-]{subsubsection.3.6.3}{Methods of the [basicstyle=]|batteryPack| class}{subsection.3.6}% 37
-\BOOKMARK [1][-]{section.4}{GUI tools}{}% 38
-\BOOKMARK [2][-]{subsection.4.1}{Battery Pack Designer}{section.4}% 39
-\BOOKMARK [2][-]{subsection.4.2}{Digitizer and curve fit tool}{section.4}% 40
-\BOOKMARK [1][-]{figure.caption.55}{References}{}% 41
+\BOOKMARK [1][-]{section*.7}{Preface}{}% 1
+\BOOKMARK [2][-]{section*.8}{Organization}{section*.7}% 2
+\BOOKMARK [2][-]{section*.9}{Typing conventions of this documentation}{section*.7}% 3
+\BOOKMARK [2][-]{section*.10}{Quick start}{section*.7}% 4
+\BOOKMARK [2][-]{section*.11}{Terminology}{section*.7}% 5
+\BOOKMARK [1][-]{section.1}{Discharge curves}{}% 6
+\BOOKMARK [2][-]{subsection.1.1}{Single discharge curve}{section.1}% 7
+\BOOKMARK [3][-]{subsubsection.1.1.1}{Creation of a [basicstyle=]|dischargeFit| object}{subsection.1.1}% 8
+\BOOKMARK [3][-]{subsubsection.1.1.2}{Visual validation}{subsection.1.1}% 9
+\BOOKMARK [3][-]{subsubsection.1.1.3}{Object properties}{subsection.1.1}% 10
+\BOOKMARK [3][-]{subsubsection.1.1.4}{Usage of a [basicstyle=]|dischargeFit| object}{subsection.1.1}% 11
+\BOOKMARK [2][-]{subsection.1.2}{Collection of discharge curves}{section.1}% 12
+\BOOKMARK [3][-]{subsubsection.1.2.1}{Creation of a [basicstyle=]|dischargeCurves| object}{subsection.1.2}% 13
+\BOOKMARK [3][-]{subsubsection.1.2.2}{Interpolation between curves}{subsection.1.2}% 14
+\BOOKMARK [3][-]{subsubsection.1.2.3}{Usage of a [basicstyle=]|dischargeCurves| object}{subsection.1.2}% 15
+\BOOKMARK [1][-]{section.2}{Age model}{}% 16
+\BOOKMARK [2][-]{subsection.2.1}{Overview}{section.2}% 17
+\BOOKMARK [2][-]{subsection.2.2}{Cycle counting}{section.2}% 18
+\BOOKMARK [3][-]{subsubsection.2.2.1}{The [basicstyle=]|rainflowCounter| class}{subsection.2.2}% 19
+\BOOKMARK [3][-]{subsubsection.2.2.2}{The [basicstyle=]|dambrowskiCounter| class}{subsection.2.2}% 20
+\BOOKMARK [3][-]{subsubsection.2.2.3}{Comparison of the cycle counters}{subsection.2.2}% 21
+\BOOKMARK [2][-]{subsection.2.3}{Event oriented ageing model}{section.2}% 22
+\BOOKMARK [3][-]{subsubsection.2.3.1}{Cycle life curve fits}{subsection.2.3}% 23
+\BOOKMARK [3][-]{subsubsection.2.3.2}{Cycle ageing}{subsection.2.3}% 24
+\BOOKMARK [3][-]{subsubsection.2.3.3}{Age model initialization}{subsection.2.3}% 25
+\BOOKMARK [3][-]{subsubsection.2.3.4}{Creating a user-defined age model}{subsection.2.3}% 26
+\BOOKMARK [3][-]{subsubsection.2.3.5}{Calendar ageing}{subsection.2.3}% 27
+\BOOKMARK [1][-]{section.3}{Battery Composition}{}% 28
+\BOOKMARK [2][-]{subsection.3.1}{Overview}{section.3}% 29
+\BOOKMARK [2][-]{subsection.3.2}{Method delegation}{section.3}% 30
+\BOOKMARK [2][-]{subsection.3.3}{Battery Interface}{section.3}% 31
+\BOOKMARK [3][-]{subsubsection.3.3.1}{Battery object initialization}{subsection.3.3}% 32
+\BOOKMARK [3][-]{subsubsection.3.3.2}{Battery charging and discharging}{subsection.3.3}% 33
+\BOOKMARK [3][-]{subsubsection.3.3.3}{Age model level}{subsection.3.3}% 34
+\BOOKMARK [2][-]{subsection.3.4}{CCCV charging and BMS}{section.3}% 35
+\BOOKMARK [3][-]{subsubsection.3.4.1}{CCCV curve fits}{subsection.3.4}% 36
+\BOOKMARK [3][-]{subsubsection.3.4.2}{Cell monitoring and communication with the charger}{subsection.3.4}% 37
+\BOOKMARK [2][-]{subsection.3.5}{Simplified model}{section.3}% 38
+\BOOKMARK [2][-]{subsection.3.6}{The [basicstyle=]|batteryPack| class}{section.3}% 39
+\BOOKMARK [3][-]{subsubsection.3.6.1}{The [basicstyle=]|batteryPack| constructor}{subsection.3.6}% 40
+\BOOKMARK [3][-]{subsubsection.3.6.2}{Properties of the [basicstyle=]|batteryPack| class}{subsection.3.6}% 41
+\BOOKMARK [3][-]{subsubsection.3.6.3}{Methods of the [basicstyle=]|batteryPack| class}{subsection.3.6}% 42
+\BOOKMARK [1][-]{section.4}{GUI tools}{}% 43
+\BOOKMARK [2][-]{subsection.4.1}{Battery Pack Designer}{section.4}% 44
+\BOOKMARK [2][-]{subsection.4.2}{Digitizer and curve fit tool}{section.4}% 45
+\BOOKMARK [1][-]{figure.caption.67}{References}{}% 46
