@@ -412,8 +412,7 @@ The accessible properties of the \mcode{batteryPack} class are listed in Table~\
 \subsubsection{Methods of the \mcode{batteryPack} class}
 As a subclass of the \mcode{batteryInterface}, all of it's methods are inherited by the \mcode{batteryPack} class. For a detailed description of battery charging and discharging using the \mcode{powerRequest()} and/or \mcode{currentRequest()} methods, see section~\ref{sec:charge_discharge}. These are the two methods that are required for the simulation. Most of the class's public methods are only needed for internal algorithms of the model. However, a complete list of the public methods is provided in Table~\ref{tab:batteryPackMethods}. The curve fitting methods (which can be called if curve fits are not passed to the constructor) and the GUI tool functions are not inherited from the \mcode{batteryInterface}. A detailed description of the syntax of each method with the respective input and output arguments is provided in the \matlab\ documentation, which can be accessed by typing
 \begin{lstlisting}
-doc lfpBattery.batteryPack
-% or
+doc lfpBattery.batteryPack % or
 import lfpBattery.*
 doc batteryPack
 \end{lstlisting}
