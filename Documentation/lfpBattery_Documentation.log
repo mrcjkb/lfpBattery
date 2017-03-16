@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  16 MAR 2017 20:57
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  16 MAR 2017 21:02
 entering extended mode
 **./lfpBattery_Documentation.tex
 (lfpBattery_Documentation.tex
@@ -2111,7 +2111,7 @@ Package biblatex Info: ... file 'english.lbx' found.
 ("C:\Program Files\MiKTeX 2.9\tex\latex\biblatex\lbx\english.lbx"
 File: english.lbx 2016/12/05 v3.7 biblatex localization (PK/JW/AB)
 )
-(lfpBattery_Documentation.aux (abbreviations.aux) (symbols.aux) (preface.aux)
+(lfpBattery_Documentation.aux (acronyms.aux) (symbols.aux) (preface.aux)
 (dischargeCurves.aux) (ageModel.aux) (batteryInterface.aux) (guiTools.aux))
 \openout1 = `lfpBattery_Documentation.aux'.
 
@@ -2402,9 +2402,9 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  This may cause the page layout to be inconsistent, however.
 
 [2]
-\openout2 = `abbreviations.aux'.
+\openout2 = `acronyms.aux'.
 
- (abbreviations.tex
+ (acronyms.tex
 
 Class scrartcl Warning: incompatible usage of \@ssect detected.
 (scrartcl)              You've used the KOMA-Script implementation of \@ssect
@@ -3626,9 +3626,8 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 [48]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 123.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 123.
- (lfpBattery_Documentation.aux (abbreviations.aux) (symbols.aux)
-(preface.aux) (dischargeCurves.aux) (ageModel.aux) (batteryInterface.aux)
-(guiTools.aux))
+ (lfpBattery_Documentation.aux (acronyms.aux) (symbols.aux) (preface.aux)
+(dischargeCurves.aux) (ageModel.aux) (batteryInterface.aux) (guiTools.aux))
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 123.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 123.
 Package rerunfilecheck Info: File `lfpBattery_Documentation.out' has not change
@@ -3640,7 +3639,7 @@ Package logreq Info: Writing requests to 'lfpBattery_Documentation.run.xml'.
  ) 
 Here is how much of TeX's memory you used:
  46482 strings out of 493363
- 871636 string characters out of 3139771
+ 871581 string characters out of 3139771
  1487278 words of memory out of 3000000
  48605 multiletter control sequences out of 15000+200000
  33251 words of font info for 176 fonts, out of 3000000 for 9000
