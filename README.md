@@ -1,6 +1,20 @@
 # lfpBattery
-LiFe-battery model TU Berlin
-Still under development
-"Elektrische Energiespeichertechnik" - "Projekt Batterien"
+OOP LiFe-battery model in Matlab
 
-Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
+For a detailed documentation, type
+
+lfpBattery.pdfdoc
+
+into Matlab's command window. Or navigate to
+"*lfpBattery_root_path*\Documentation\lfpBattery_Documentation.pdf"
+
+
+To use the classes in this package, it must first be imported with the line
+
+import lfpBattery.*
+
+__________________________________________________________________________________
+Authors: B.Sc. Marc Jakobi, B.Sc. Festus Anyangbe, B.Sc. Marc Schmidt - HTW Berlin
+Supervision: M.Sc. Steven Neupert - TU Berlin
+TU Berlin - "Elektrische Energiespeichertechnik" EET - "Projekt Batterien"
+March 2017
