@@ -1,6 +1,6 @@
  BSD License
  
- Copyright (c) 2016 Marc Jakobi, Festus Anyangbe, Marc Schmidt
+ Copyright (c) 2017 Marc Jakobi, Festus Anyangbe, Marc Schmidt
  All rights reserved.
 
 

@@ -1,7 +1,7 @@
 % NOTE: Not all functions required for running this script are included in
 % the lfpBattery package.
 import lfpBattery.*
-[p, ~] = fileparts(fileparts(which('lfpBatteryTests')));
+p = commons.getRoot;
 cd(p)
 fs = 14;
 %% dischargeFit lsq vs fmin

@@ -3,7 +3,8 @@
 \contentsline {subsection}{Organization}{1}{section*.8}
 \contentsline {subsection}{Typing conventions of this documentation}{1}{section*.9}
 \contentsline {subsection}{Quick start}{1}{section*.10}
-\contentsline {subsection}{Terminology}{2}{section*.11}
+\contentsline {subsection}{Issue Tracker}{2}{section*.11}
+\contentsline {subsection}{Terminology}{2}{section*.12}
 \contentsline {section}{\numberline {1}Introduction}{4}{section.1}
 \contentsline {section}{\numberline {2}Discharge curves}{5}{section.2}
 \contentsline {subsection}{\numberline {2.1}Single discharge curve}{5}{subsection.2.1}
@@ -45,5 +46,6 @@
 \contentsline {section}{\numberline {5}GUI tools}{43}{section.5}
 \contentsline {subsection}{\numberline {5.1}Battery Pack Designer}{43}{subsection.5.1}
 \contentsline {subsection}{\numberline {5.2}Digitizer and curve fit tool}{44}{subsection.5.2}
-\contentsline {section}{\numberline {6}Summary and conclusion}{47}{section.6}
-\contentsline {section}{References}{48}{section.6}
+\contentsline {section}{\numberline {6}Summary and outlook}{47}{section.6}
+\contentsline {section}{BSD license}{49}{section*.69}
+\contentsline {section}{References}{50}{section*.69}
