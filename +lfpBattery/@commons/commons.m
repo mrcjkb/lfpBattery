@@ -1,8 +1,18 @@
 classdef commons
-    %COMMONS: Class for commonly used static functions
+    %COMMONS: Class for commonly used static functions.
+    %The methods in this class are shared by the classes of the lfpBattery
+    %package.
+    %
+    %Authors: Marc Jakobi, Festus Anyangbe, Marc Schmidt
+    %         March 2017
     
     methods (Static)
+        function p = getRoot
+            % GETROOT: Returns the root path of the lfpBattery package
+            [p, ~] = fileparts(fileparts(which('lfpBatteryTests')));
+        end
         function javaGUIchk
+            % JAVAGUICHK: Throws an error if java.awt or java.swing are not found.
             if ~usejava('awt')
                 error('java.awt is required to run this tool.')
             elseif ~usejava('swing')
@@ -10,7 +20,7 @@ classdef commons
             end
         end
         function warnHandleSave(obj)
-            % Prints a warning to the command window that obj contains
+            % WARNHANDLESAVE: Prints a warning to the command window that obj contains
             % handle links that cannot be maintained
             type = class(obj);
             warning(['Saved object of type ', type, ' contains handle links that cannot be maintained when saving to a MAT file. ', ...
@@ -561,7 +571,8 @@ classdef commons
         end  % uigetimage
         
         function PreviewCallback(hjfc, ~, hprev)
-            % Preview callback function for uigetimage
+            % PREVIEWCALLBACK: Preview callback function for uigetimage
+            % class
             persistent nameCache;
             persistent imCache;
             persistent cIdx;
@@ -614,7 +625,6 @@ classdef commons
                     uiresume(d);
             end
         end  % ActionPerformedCallback
-        
         % Key-types callback in the file-name editbox
         function KeyTypedCallback(hEditbox, ~, hjFileChooser)
             text = char(get(hEditbox, 'Text'));

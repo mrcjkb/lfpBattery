@@ -1,7 +1,7 @@
 function perfTests
 %PERFTESTS: Function for calling profiling subfunctions
 import lfpBattery.*
-[p, ~] = fileparts(fileparts(which('perfTests')));
+p = lfpBattery.commons.getRoot;
 warning('off')
 load(fullfile(p, 'profiling', 'profileBat00.mat'), 'bat')
 load(fullfile(p, 'MLUnitTests', 'batteryCellTests', 'dcCurves.mat'), 'd')
