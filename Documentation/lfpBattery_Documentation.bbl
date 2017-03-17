@@ -122,6 +122,49 @@
       \verb Xu_MA_2013.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\VE2GBK72\\Xu_MA_2013.pdf:application/pdf
       \endverb
     \endentry
+    \entry{cordoba-arenas_control-oriented_2015}{article}{}
+      \name{author}{3}{}{%
+        {{hash=bcb7b2b0bac3fc2c6135c81c44f9bf0b}{%
+           family={Cordoba-Arenas},
+           familyi={C\bibinithyphendelim A\bibinitperiod},
+           given={Andrea},
+           giveni={A\bibinitperiod}}}%
+        {{hash=1031b2e120656a4229aec4d954b5d41c}{%
+           family={Onori},
+           familyi={O\bibinitperiod},
+           given={Simona},
+           giveni={S\bibinitperiod}}}%
+        {{hash=637e58c637c90686caa7c55c10d628dd}{%
+           family={Rizzoni},
+           familyi={R\bibinitperiod},
+           given={Giorgio},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{38b2dad1795da8155ff14568bb60c0bb}
+      \strng{fullhash}{38b2dad1795da8155ff14568bb60c0bb}
+      \strng{authornamehash}{38b2dad1795da8155ff14568bb60c0bb}
+      \strng{authorfullhash}{38b2dad1795da8155ff14568bb60c0bb}
+      \field{sortinit}{2}
+      \field{sortinithash}{0aa614ace9f3a40ef5a67e7f7a184048}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{03787753}
+      \field{journaltitle}{Journal of Power Sources}
+      \field{langid}{english}
+      \field{month}{4}
+      \field{title}{A control-oriented lithium-ion battery pack model for plug-in hybrid electric vehicle cycle-life studies and system design with consideration of health management}
+      \field{volume}{279}
+      \field{year}{2015}
+      \field{dateera}{ce}
+      \field{pages}{791\bibrangedash 808}
+      \range{pages}{18}
+      \verb{doi}
+      \verb 10.1016/j.jpowsour.2014.12.048
+      \endverb
+      \verb{file}
+      \verb A control-oriented lithium-ion battery pack model for plug-in hybrid electric vehicle cycle-life studies and system design with consideration of health management.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\E83ZB6JP\\A control-oriented lithium-ion battery pack model for plug-in hybrid electric vehicle cycle-life studies and system design with consideration of health.pdf:application/pdf
+      \endverb
+    \endentry
     \entry{foti_inside_2008}{online}{}
       \name{author}{1}{}{%
         {{hash=43f0d8fe15b2fee3c1ccc2dc5e76fdc9}{%
@@ -134,8 +177,8 @@
       \strng{fullhash}{43f0d8fe15b2fee3c1ccc2dc5e76fdc9}
       \strng{authornamehash}{43f0d8fe15b2fee3c1ccc2dc5e76fdc9}
       \strng{authorfullhash}{43f0d8fe15b2fee3c1ccc2dc5e76fdc9}
-      \field{sortinit}{2}
-      \field{sortinithash}{0aa614ace9f3a40ef5a67e7f7a184048}
+      \field{sortinit}{3}
+      \field{sortinithash}{197da6d6c34c6b20ce45c4d4baace5a4}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{Inside {MATLAB} Objects in R2008a - {MATLAB} \& Simulink}
@@ -156,8 +199,8 @@
       \list{location}{1}{%
         {Korea}%
       }
-      \field{sortinit}{3}
-      \field{sortinithash}{197da6d6c34c6b20ce45c4d4baace5a4}
+      \field{sortinit}{4}
+      \field{sortinithash}{d221becdd544034cf9082056cd6e6d2d}
       \field{labeltitlesource}{title}
       \field{note}{Matlab Expo}
       \field{title}{Matlab programming techniques for efficiency and performance}
@@ -185,8 +228,8 @@
       \strng{fullhash}{ef2e23afa36faec72d8a8d31119c37ca}
       \strng{authornamehash}{ef2e23afa36faec72d8a8d31119c37ca}
       \strng{authorfullhash}{ef2e23afa36faec72d8a8d31119c37ca}
-      \field{sortinit}{4}
-      \field{sortinithash}{d221becdd544034cf9082056cd6e6d2d}
+      \field{sortinit}{5}
+      \field{sortinithash}{c9df3c9fb8f555dd9201cedc5e343021}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{issn}{1521-3331}
@@ -225,14 +268,14 @@
       \strng{fullhash}{384be8aaa85e4db8086d32ca7b92b291}
       \strng{authornamehash}{384be8aaa85e4db8086d32ca7b92b291}
       \strng{authorfullhash}{384be8aaa85e4db8086d32ca7b92b291}
-      \field{sortinit}{5}
-      \field{sortinithash}{c9df3c9fb8f555dd9201cedc5e343021}
+      \field{sortinit}{6}
+      \field{sortinithash}{02bbed3ed82f61ae046619460488516d}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{day}{30}
       \field{month}{9}
       \field{title}{Entwicklung eines Batteriemodells auf Lithium Basis}
-      \field{type}{phdthesis}
+      \field{type}{master's thesis}
       \field{year}{2014}
       \field{dateera}{ce}
       \verb{file}
@@ -246,8 +289,8 @@
       \list{location}{1}{%
         {Karlstein}%
       }
-      \field{sortinit}{6}
-      \field{sortinithash}{02bbed3ed82f61ae046619460488516d}
+      \field{sortinit}{7}
+      \field{sortinithash}{6ac7fe70cdec8cba8f65694411ce2532}
       \field{labeltitlesource}{title}
       \field{title}{Data sheet: {BM}26650ETC1 - High Power Lithium Iron Phosphate Cell}
       \field{year}{2010}
@@ -273,8 +316,8 @@
       \strng{fullhash}{a98954758c1bcabb2b12f8de13efb871}
       \strng{authornamehash}{a98954758c1bcabb2b12f8de13efb871}
       \strng{authorfullhash}{a98954758c1bcabb2b12f8de13efb871}
-      \field{sortinit}{8}
-      \field{sortinithash}{2f1b0e69e7617f99664f1cd00bb9603c}
+      \field{sortinit}{9}
+      \field{sortinithash}{2999ebab86052e6d71b434385f8b4ed2}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{issn}{01692070}
@@ -499,14 +542,14 @@
       \field{sortinithash}{0aa614ace9f3a40ef5a67e7f7a184048}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{abstract}{Für die zukünftig erhöhte und vermehrte Nutzung von Energiespeichern in Stromnetzen existieren kaum Alternativen. Ein ökonomischer Vergleich von Energiespeichern lässt sich aufgrund großer technischer Unterschiede vor allem in Bezug auf das Verschleißverhalten nur dann sinnvoll durchführen, wenn man diese in ausreichendem Detaillierungsgrad berücksichtigt. In diesem Beitrag soll dazu ein Modell vorgestellt werden, welches die Kosten über dem gesamten Betriebszeitraum als sogenannte Vollkosten für verschiedene Speicher abbilden kann. Anhand der relevanten Speicherkosten, der spezifischen Speicherparameter sowie dem Einfluss des betriebsabhängigen Verschleißes und damit der Betriebszeit werden die Vollkosten, bezogen auf die umgesetzte Energiemenge, ermittelt. Mit detaillierten Eingangsparametern ist somit ein aussagekräftiger Kostenvergleich verschiedener Speichertechnologien möglich.}
+      \field{abstract}{Für die zukünftig erhöhte und vermehrte Nutzung von Energiespeichern in Stromnetzen existieren kaum Alternativen. Ein ökonomischer Vergleich von Energiespeichern lässt sich aufgrund gro{ß}er technischer Unterschiede vor allem in Bezug auf das Verschlei{ß}verhalten nur dann sinnvoll durchführen, wenn man diese in ausreichendem Detaillierungsgrad berücksichtigt. In diesem Beitrag soll dazu ein Modell vorgestellt werden, welches die Kosten über dem gesamten Betriebszeitraum als sogenannte Vollkosten für verschiedene Speicher abbilden kann. Anhand der relevanten Speicherkosten, der spezifischen Speicherparameter sowie dem Einfluss des betriebsabhängigen Verschlei{ß}es und damit der Betriebszeit werden die Vollkosten, bezogen auf die umgesetzte Energiemenge, ermittelt. Mit detaillierten Eingangsparametern ist somit ein aussagekräftiger Kostenvergleich verschiedener Speichertechnologien möglich.}
       \field{booktitle}{13. Symposium Energieinnovation}
       \field{eventtitle}{13. Symposium Energieinnovation}
       \field{title}{Betriebsabhängige Kostenrechnung von Energiespeichern}
       \field{year}{2014}
       \field{dateera}{ce}
       \verb{file}
-      \verb Naumann et al. - 2014 - Betriebsabhängige Kostenrechnung von Energiespeich.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\8XA55K54\\Naumann et al. - 2014 - Betriebsabhängige Kostenrechnung von Energiespeich.pdf:application/pdf;Naumann et al. - 2014 - Betriebsabhängige Kostenrechnung von Energiespeich.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\Z3ZRRITM\\Naumann et al. - 2014 - Betriebsabhängige Kostenrechnung von Energiespeich.pdf:application/pdf
+      \verb Naumann et al. - 2014 - Betriebsabh{\"a}ngige Kostenrechnung von Energiespeich.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\8XA55K54\\Naumann et al. - 2014 - Betriebsabhängige Kostenrechnung von Energiespeich.pdf:application/pdf;Naumann et al. - 2014 - Betriebsabhängige Kostenrechnung von Energiespeich.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\Z3ZRRITM\\Naumann et al. - 2014 - Betriebsabhängige Kostenrechnung von Energiespeich.pdf:application/pdf
       \endverb
       \keyw{betriebsabhängige Alterung,Energiespeicher,Kostenmodell,Vollkostenrechnung}
     \endentry
@@ -592,49 +635,6 @@
       \verb Bindner_et_al_Lifetime Modelling of Lead Acid Batteries.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\N75XC29I\\Bindner_et_al_Lifetime Modelling of Lead Acid Batteries.pdf:application/pdf
       \endverb
     \endentry
-    \entry{cordoba-arenas_control-oriented_2015}{article}{}
-      \name{author}{3}{}{%
-        {{hash=bcb7b2b0bac3fc2c6135c81c44f9bf0b}{%
-           family={Cordoba-Arenas},
-           familyi={C\bibinithyphendelim A\bibinitperiod},
-           given={Andrea},
-           giveni={A\bibinitperiod}}}%
-        {{hash=1031b2e120656a4229aec4d954b5d41c}{%
-           family={Onori},
-           familyi={O\bibinitperiod},
-           given={Simona},
-           giveni={S\bibinitperiod}}}%
-        {{hash=637e58c637c90686caa7c55c10d628dd}{%
-           family={Rizzoni},
-           familyi={R\bibinitperiod},
-           given={Giorgio},
-           giveni={G\bibinitperiod}}}%
-      }
-      \strng{namehash}{38b2dad1795da8155ff14568bb60c0bb}
-      \strng{fullhash}{38b2dad1795da8155ff14568bb60c0bb}
-      \strng{authornamehash}{38b2dad1795da8155ff14568bb60c0bb}
-      \strng{authorfullhash}{38b2dad1795da8155ff14568bb60c0bb}
-      \field{sortinit}{2}
-      \field{sortinithash}{0aa614ace9f3a40ef5a67e7f7a184048}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{issn}{03787753}
-      \field{journaltitle}{Journal of Power Sources}
-      \field{langid}{english}
-      \field{month}{4}
-      \field{title}{A control-oriented lithium-ion battery pack model for plug-in hybrid electric vehicle cycle-life studies and system design with consideration of health management}
-      \field{volume}{279}
-      \field{year}{2015}
-      \field{dateera}{ce}
-      \field{pages}{791\bibrangedash 808}
-      \range{pages}{18}
-      \verb{doi}
-      \verb 10.1016/j.jpowsour.2014.12.048
-      \endverb
-      \verb{file}
-      \verb A control-oriented lithium-ion battery pack model for plug-in hybrid electric vehicle cycle-life studies and system design with consideration of health management.pdf:C\:\\Users\\Emotion\\AppData\\Roaming\\Zotero\\Zotero\\Profiles\\0814wgfq.default\\zotero\\storage\\E83ZB6JP\\A control-oriented lithium-ion battery pack model for plug-in hybrid electric vehicle cycle-life studies and system design with consideration of health.pdf:application/pdf
-      \endverb
-    \endentry
     \entry{keil_aufbau_2012}{article}{}
       \name{author}{2}{}{%
         {{hash=566486c68aca4044aa0722ef9239e974}{%
@@ -682,8 +682,8 @@
       \strng{fullhash}{d762df0d12d4c5f225b633473ba59a5d}
       \strng{authornamehash}{d762df0d12d4c5f225b633473ba59a5d}
       \strng{authorfullhash}{d762df0d12d4c5f225b633473ba59a5d}
-      \field{sortinit}{2}
-      \field{sortinithash}{0aa614ace9f3a40ef5a67e7f7a184048}
+      \field{sortinit}{3}
+      \field{sortinithash}{197da6d6c34c6b20ce45c4d4baace5a4}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{isbn}{978-1-60807-104-3}
@@ -724,7 +724,6 @@
       \endverb
     \endentry
   \endsortlist
-  \missing{_rainflow_????}
 \endrefsection
 \endinput
 

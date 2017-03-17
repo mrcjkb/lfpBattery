@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  17 MAR 2017 13:52
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  17 MAR 2017 18:55
 entering extended mode
 **./lfpBattery_Documentation.tex
 (lfpBattery_Documentation.tex
@@ -2223,20 +2223,13 @@ Package biblatex Info: Automatic encoding selection.
 
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'lfpBattery_Documentation.bbl' found.
- (lfpBattery_Documentation.bbl
-
-Package biblatex Warning: The following entry could not be found
-(biblatex)                in the database:
-(biblatex)                _rainflow_????
-(biblatex)                Please verify the spelling and rerun
-(biblatex)                LaTeX afterwards.
-
-)
+ (lfpBattery_Documentation.bbl)
 Package biblatex Info: Reference section=0 on input line 76.
 Package biblatex Info: Reference segment=0 on input line 76.
 \AtBeginShipoutBox=\box75
 Package hyperref Info: Link coloring OFF on input line 76.
- ("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 
 ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\gettitlestring.sty"
@@ -2889,7 +2882,7 @@ Package epstopdf Info: Source file: <DAM01.eps>
 DAM01.eps>
 (epstopdf)             \includegraphics on input line 46.
 Package epstopdf Info: Output file is already uptodate.
-<DAM01-eps-converted-to.pdf, id=652, 422.57875pt x 317.185pt>
+<DAM01-eps-converted-to.pdf, id=653, 422.57875pt x 317.185pt>
 File: DAM01-eps-converted-to.pdf Graphic file (type pdf)
 
 <use DAM01-eps-converted-to.pdf>
@@ -2906,7 +2899,7 @@ DAM02.eps>
 (epstopdf)             \includegraphics on input line 47.
 Package epstopdf Info: Output file is already uptodate.
 
-<DAM02-eps-converted-to.pdf, id=653, 422.57875pt x 317.185pt>
+<DAM02-eps-converted-to.pdf, id=654, 422.57875pt x 317.185pt>
 File: DAM02-eps-converted-to.pdf Graphic file (type pdf)
 
 <use DAM02-eps-converted-to.pdf>
@@ -2939,7 +2932,7 @@ Package epstopdf Info: Source file: <cdoc_hists.eps>
 .pdf cdoc_hists.eps>
 (epstopdf)             \includegraphics on input line 65.
 Package epstopdf Info: Output file is already uptodate.
- <cdoc_hists-eps-converted-to.pdf, id=674, 633.36626pt x 317.185pt>
+ <cdoc_hists-eps-converted-to.pdf, id=675, 633.36626pt x 317.185pt>
 File: cdoc_hists-eps-converted-to.pdf Graphic file (type pdf)
 
 <use cdoc_hists-eps-converted-to.pdf>
@@ -2961,7 +2954,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 File: tulogo.pdf Graphic file (type pdf)
 
 <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 85.
+Package pdftex.def Info: tulogo.pdf used on input line 87.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -2982,7 +2975,7 @@ Package epstopdf Info: Source file: <woehlerFit.eps>
 (epstopdf)             \includegraphics on input line 92.
 Package epstopdf Info: Output file is already uptodate.
 
-<woehlerFit-eps-converted-to.pdf, id=719, 633.36626pt x 317.185pt>
+<woehlerFit-eps-converted-to.pdf, id=721, 633.36626pt x 317.185pt>
 File: woehlerFit-eps-converted-to.pdf Graphic file (type pdf)
 
 <use woehlerFit-eps-converted-to.pdf>
@@ -3061,13 +3054,13 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 \openout2 = `batteryInterface.aux'.
 
  (batteryInterface.tex
-<topologies2.pdf, id=821, 360.59718pt x 273.27094pt>
+<topologies2.pdf, id=822, 360.59718pt x 273.27094pt>
 File: topologies2.pdf Graphic file (type pdf)
  <use topologies2.pdf>
 Package pdftex.def Info: topologies2.pdf used on input line 17.
 (pdftex.def)             Requested size: 452.9679pt x 343.27238pt.
 
-<composite_schema.pdf, id=825, 785.93625pt x 560.0925pt>
+<composite_schema.pdf, id=826, 785.93625pt x 560.0925pt>
 File: composite_schema.pdf Graphic file (type pdf)
 
 <use composite_schema.pdf>
@@ -3088,7 +3081,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 
 
  <./topologies2.pdf>]
-<method_delegation.pdf, id=845, 682.04813pt x 329.73187pt>
+<method_delegation.pdf, id=846, 682.04813pt x 329.73187pt>
 File: method_delegation.pdf Graphic file (type pdf)
 
 <use method_delegation.pdf>
@@ -3141,19 +3134,19 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[26] <powerRequest.pdf, id=962, 599.99156pt x 477.28313pt>
+[26] <powerRequest.pdf, id=963, 599.99156pt x 477.28313pt>
 File: powerRequest.pdf Graphic file (type pdf)
 
 <use powerRequest.pdf>
 Package pdftex.def Info: powerRequest.pdf used on input line 156.
 (pdftex.def)             Requested size: 452.9679pt x 360.33563pt.
- <iteratePower.pdf, id=964, 717.43031pt x 463.7325pt>
+ <iteratePower.pdf, id=965, 717.43031pt x 463.7325pt>
 File: iteratePower.pdf Graphic file (type pdf)
 
 <use iteratePower.pdf>
 Package pdftex.def Info: iteratePower.pdf used on input line 164.
 (pdftex.def)             Requested size: 452.9679pt x 292.79692pt.
- <iterateCurrent.pdf, id=966, 628.59843pt x 384.6872pt>
+ <iterateCurrent.pdf, id=967, 628.59843pt x 384.6872pt>
 File: iterateCurrent.pdf Graphic file (type pdf)
 
 <use iterateCurrent.pdf>
@@ -3170,7 +3163,7 @@ Package epstopdf Info: Source file: <simulations01.eps>
 (epstopdf)             \includegraphics on input line 180.
 Package epstopdf Info: Output file is already uptodate.
 
-<simulations01-eps-converted-to.pdf, id=969, 633.36626pt x 317.185pt>
+<simulations01-eps-converted-to.pdf, id=970, 633.36626pt x 317.185pt>
 File: simulations01-eps-converted-to.pdf Graphic file (type pdf)
 
 <use simulations01-eps-converted-to.pdf>
@@ -3224,7 +3217,7 @@ Package epstopdf Info: Source file: <simulations02.eps>
 (epstopdf)             \includegraphics on input line 194.
 Package epstopdf Info: Output file is already uptodate.
 
-<simulations02-eps-converted-to.pdf, id=1047, 633.36626pt x 317.185pt>
+<simulations02-eps-converted-to.pdf, id=1048, 633.36626pt x 317.185pt>
 File: simulations02-eps-converted-to.pdf Graphic file (type pdf)
 
 <use simulations02-eps-converted-to.pdf>
@@ -3242,7 +3235,7 @@ ted-to.pdf mdischargeCurves.eps>
 (epstopdf)             \includegraphics on input line 201.
 Package epstopdf Info: Output file is already uptodate.
 
-<mdischargeCurves-eps-converted-to.pdf, id=1049, 633.36626pt x 317.185pt>
+<mdischargeCurves-eps-converted-to.pdf, id=1050, 633.36626pt x 317.185pt>
 File: mdischargeCurves-eps-converted-to.pdf Graphic file (type pdf)
 
 <use mdischargeCurves-eps-converted-to.pdf>
@@ -3273,7 +3266,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  This may cause the page layout to be inconsistent, however.
 
 [31 <./simulations02-eps-converted-to.pdf> <./mdischargeCurves-eps-converted-to
-.pdf>] <cccv_qualitative.pdf, id=1089, 408.02437pt x 179.92218pt>
+.pdf>] <cccv_qualitative.pdf, id=1090, 408.02437pt x 179.92218pt>
 File: cccv_qualitative.pdf Graphic file (type pdf)
 
 <use cccv_qualitative.pdf>
@@ -3316,14 +3309,14 @@ f cccvFit.eps>
 (epstopdf)             \includegraphics on input line 257.
 Package epstopdf Info: Output file is already uptodate.
 
-<cccvFit-eps-converted-to.pdf, id=1131, 633.36626pt x 317.185pt>
+<cccvFit-eps-converted-to.pdf, id=1132, 633.36626pt x 317.185pt>
 File: cccvFit-eps-converted-to.pdf Graphic file (type pdf)
 
 <use cccvFit-eps-converted-to.pdf>
 Package pdftex.def Info: cccvFit-eps-converted-to.pdf used on input line 257.
 (pdftex.def)             Requested size: 452.9679pt x 226.84845pt.
 
-<cccvBMS.pdf, id=1135, 438.13687pt x 380.92313pt>
+<cccvBMS.pdf, id=1136, 438.13687pt x 380.92313pt>
 File: cccvBMS.pdf Graphic file (type pdf)
  <use cccvBMS.pdf>
 Package pdftex.def Info: cccvBMS.pdf used on input line 269.
@@ -3520,7 +3513,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 [42]
 \openout2 = `guiTools.aux'.
 
- (guiTools.tex <Designer.png, id=1255, 928.97063pt x 403.5075pt>
+ (guiTools.tex <Designer.png, id=1256, 928.97063pt x 403.5075pt>
 File: Designer.png Graphic file (type png)
 
 <use Designer.png>
@@ -3540,7 +3533,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 [43
 
 
- <./Designer.png>] <digitizeTool01.png, id=1269, 1770.615pt x 1002.74625pt>
+ <./Designer.png>] <digitizeTool01.png, id=1270, 1770.615pt x 1002.74625pt>
 File: digitizeTool01.png Graphic file (type png)
 
 <use digitizeTool01.png>
@@ -3558,13 +3551,13 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  This may cause the page layout to be inconsistent, however.
 
 [44 <./digitizeTool01.png>]
-<file_chooser.png, id=1280, 704.6325pt x 684.5575pt>
+<file_chooser.png, id=1281, 704.6325pt x 684.5575pt>
 File: file_chooser.png Graphic file (type png)
  <use file_chooser.png>
 Package pdftex.def Info: file_chooser.png used on input line 53.
 (pdftex.def)             Requested size: 258.195pt x 250.83806pt.
 
-<digitizeTool02.png, id=1281, 1770.615pt x 1002.74625pt>
+<digitizeTool02.png, id=1282, 1770.615pt x 1002.74625pt>
 File: digitizeTool02.png Graphic file (type png)
 
 <use digitizeTool02.png>
@@ -3731,10 +3724,10 @@ Package logreq Info: Writing requests to 'lfpBattery_Documentation.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 46539 strings out of 493363
- 872597 string characters out of 3139771
- 1493319 words of memory out of 3000000
- 48631 multiletter control sequences out of 15000+200000
+ 46538 strings out of 493363
+ 872587 string characters out of 3139771
+ 1493313 words of memory out of 3000000
+ 48630 multiletter control sequences out of 15000+200000
  33073 words of font info for 176 fonts, out of 3000000 for 9000
  1127 hyphenation exceptions out of 8191
  73i,17n,71p,10399b,2370s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -3767,9 +3760,9 @@ s0800.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/cm-super/sfss1200.pfb
 ram Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrb8a.pfb><C:/Program Files/MiKTe
 X 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/typ
 e1/urw/courier/ucrro8a.pfb>
-Output written on lfpBattery_Documentation.pdf (58 pages, 3456897 bytes).
+Output written on lfpBattery_Documentation.pdf (58 pages, 3456916 bytes).
 PDF statistics:
- 1540 PDF objects out of 1728 (max. 8388607)
+ 1541 PDF objects out of 1728 (max. 8388607)
  484 named destinations out of 1000 (max. 500000)
  45092 words of extra memory for PDF output out of 51595 (max. 10000000)
 
