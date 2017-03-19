@@ -206,7 +206,7 @@ classdef digitizeTool < handle
                 if isequal(filename, 0) || isequal(pathname, 0)
                     return
                 else
-                    obj.pathcache(pathname)
+                    obj.pathcache(pathname);
                     imagename = fullfile(pathname, filename);
                 end
             catch
