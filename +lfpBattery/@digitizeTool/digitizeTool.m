@@ -78,7 +78,7 @@ classdef digitizeTool < handle
             javacomponent(jl, [], title);
             %% hInfo text box
             obj.hInfo = JLabel;
-            obj.hInfo.setText('<html>INFO<br><br>Select curve fit type and choose file...</html>");')
+            obj.hInfo.setText('<html>INFO<br><br>Select curve fit type. Click on "Choose image" button to start...</html>");')
             obj.hInfo.setVerticalAlignment(1)
             obj.hInfo.setFont(fnt);
             javacomponent(obj.hInfo,[], uifc1);
