@@ -402,7 +402,7 @@ classdef digitizeTool < handle
             ylabel('')
             xlabel('')
             set(obj.axes1,'Box','on')
-            obj.hInfo.setText('<html>INFO<br><br>Select curve fit type and choose file...</html>");')
+            obj.hInfo.setText('<html>INFO<br><br>Select curve fit type. Click on "Choose image" button to start...</html>");')
         end % cancelandreset
         
         function obj = axesreset(obj)
