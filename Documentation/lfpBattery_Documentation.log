@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  19 MAR 2017 22:29
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.26)  22 MAR 2017 22:12
 entering extended mode
 **./lfpBattery_Documentation.tex
 (lfpBattery_Documentation.tex
@@ -2273,11 +2273,11 @@ Package microtype Info: Loading generic settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 
-<GUI.png, id=205, 837.88031pt x 344.03531pt>
-File: GUI.png Graphic file (type png)
- <use GUI.png>
-Package pdftex.def Info: GUI.png used on input line 79.
-(pdftex.def)             Requested size: 452.9679pt x 185.98628pt.
+<title.pdf, id=205, 353.06906pt x 236.38312pt>
+File: title.pdf Graphic file (type pdf)
+ <use title.pdf>
+Package pdftex.def Info: title.pdf used on input line 79.
+(pdftex.def)             Requested size: 452.9679pt x 303.26909pt.
 LaTeX Font Info:    Try loading font information for TS1+cmss on input line 83.
 
 
@@ -2288,7 +2288,7 @@ Package microtype Info: Loading generic settings for font family
 (microtype)             `cmss' (encoding: TS1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
- [1{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map} <./GUI.png>]
+ [1{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map} <./title.pdf>]
 
 Class scrartcl Warning: incompatible usage of \@ssect detected.
 (scrartcl)              You've used the KOMA-Script implementation of \@ssect
@@ -2312,7 +2312,7 @@ Package microtype Info: Loading generic settings for font family
 \openout7 = `lfpBattery_Documentation.toc'.
 
 
-<tulogo.pdf, id=273, 202.7575pt x 113.42375pt>
+<tulogo.pdf, id=275, 202.7575pt x 113.42375pt>
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
 Package pdftex.def Info: tulogo.pdf used on input line 99.
@@ -2498,7 +2498,7 @@ Class scrartcl Warning: incompatible usage of \@ssect detected.
 (scrartcl)              from within a non compatible caller, that does not
 (scrartcl)              \scr@s@ct@@nn@m@ locally.
 (scrartcl)              This could result in several error messages on input li
-ne 39.
+ne 40.
 
 
 Class scrartcl Warning: incompatible usage of \@ssect detected.
@@ -2506,7 +2506,7 @@ Class scrartcl Warning: incompatible usage of \@ssect detected.
 (scrartcl)              from within a non compatible caller, that does not
 (scrartcl)              \scr@s@ct@@nn@m@ locally.
 (scrartcl)              This could result in several error messages on input li
-ne 43.
+ne 44.
 
 
 Class scrartcl Warning: incompatible usage of \@ssect detected.
@@ -2514,7 +2514,7 @@ Class scrartcl Warning: incompatible usage of \@ssect detected.
 (scrartcl)              from within a non compatible caller, that does not
 (scrartcl)              \scr@s@ct@@nn@m@ locally.
 (scrartcl)              This could result in several error messages on input li
-ne 47.
+ne 48.
 
 
 Class scrartcl Warning: incompatible usage of \@ssect detected.
@@ -2522,7 +2522,7 @@ Class scrartcl Warning: incompatible usage of \@ssect detected.
 (scrartcl)              from within a non compatible caller, that does not
 (scrartcl)              \scr@s@ct@@nn@m@ locally.
 (scrartcl)              This could result in several error messages on input li
-ne 50.
+ne 51.
 
 
 Class scrartcl Warning: incompatible usage of \@ssect detected.
@@ -2530,11 +2530,11 @@ Class scrartcl Warning: incompatible usage of \@ssect detected.
 (scrartcl)              from within a non compatible caller, that does not
 (scrartcl)              \scr@s@ct@@nn@m@ locally.
 (scrartcl)              This could result in several error messages on input li
-ne 53.
+ne 54.
 
 File: tulogo.pdf Graphic file (type pdf)
 <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 55.
+Package pdftex.def Info: tulogo.pdf used on input line 56.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -2547,7 +2547,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.55 
+l.56 
       [2]
 
 Class scrartcl Warning: incompatible usage of \@ssect detected.
@@ -2555,7 +2555,7 @@ Class scrartcl Warning: incompatible usage of \@ssect detected.
 (scrartcl)              from within a non compatible caller, that does not
 (scrartcl)              \scr@s@ct@@nn@m@ locally.
 (scrartcl)              This could result in several error messages on input li
-ne 56.
+ne 57.
 
 
 Class scrartcl Warning: incompatible usage of \@ssect detected.
@@ -2563,7 +2563,7 @@ Class scrartcl Warning: incompatible usage of \@ssect detected.
 (scrartcl)              from within a non compatible caller, that does not
 (scrartcl)              \scr@s@ct@@nn@m@ locally.
 (scrartcl)              This could result in several error messages on input li
-ne 59.
+ne 60.
 
 
 Class scrartcl Warning: incompatible usage of \@ssect detected.
@@ -2571,7 +2571,7 @@ Class scrartcl Warning: incompatible usage of \@ssect detected.
 (scrartcl)              from within a non compatible caller, that does not
 (scrartcl)              \scr@s@ct@@nn@m@ locally.
 (scrartcl)              This could result in several error messages on input li
-ne 62.
+ne 63.
 
 
 Class scrartcl Warning: incompatible usage of \@ssect detected.
@@ -2579,7 +2579,7 @@ Class scrartcl Warning: incompatible usage of \@ssect detected.
 (scrartcl)              from within a non compatible caller, that does not
 (scrartcl)              \scr@s@ct@@nn@m@ locally.
 (scrartcl)              This could result in several error messages on input li
-ne 65.
+ne 66.
 
 )
 File: tulogo.pdf Graphic file (type pdf)
@@ -2656,7 +2656,7 @@ Package epstopdf Info: Source file: <dischargeFit01.eps>
 d-to.pdf dischargeFit01.eps>
 (epstopdf)             \includegraphics on input line 53.
 Package epstopdf Info: Output file is already uptodate.
- <dischargeFit01-eps-converted-to.pdf, id=459, 633.36626pt x 317.185pt>
+ <dischargeFit01-eps-converted-to.pdf, id=462, 633.36626pt x 317.185pt>
 File: dischargeFit01-eps-converted-to.pdf Graphic file (type pdf)
 
 <use dischargeFit01-eps-converted-to.pdf>
@@ -2682,7 +2682,7 @@ Package epstopdf Info: Source file: <dischargeFit02.eps>
 d-to.pdf dischargeFit02.eps>
 (epstopdf)             \includegraphics on input line 60.
 Package epstopdf Info: Output file is already uptodate.
-<dischargeFit02-eps-converted-to.pdf, id=461, 633.36626pt x 317.185pt>
+<dischargeFit02-eps-converted-to.pdf, id=464, 633.36626pt x 317.185pt>
 File: dischargeFit02-eps-converted-to.pdf Graphic file (type pdf)
 
 <use dischargeFit02-eps-converted-to.pdf>
@@ -2762,7 +2762,7 @@ Package epstopdf Info: Source file: <interpMethod.eps>
 to.pdf interpMethod.eps>
 (epstopdf)             \includegraphics on input line 154.
 Package epstopdf Info: Output file is already uptodate.
- <interpMethod-eps-converted-to.pdf, id=546, 633.36626pt x 317.185pt>
+ <interpMethod-eps-converted-to.pdf, id=550, 633.36626pt x 317.185pt>
 File: interpMethod-eps-converted-to.pdf Graphic file (type pdf)
 
 <use interpMethod-eps-converted-to.pdf>
@@ -2780,7 +2780,7 @@ verted-to.pdf dischargeCurvesIlim.eps>
 (epstopdf)             \includegraphics on input line 162.
 Package epstopdf Info: Output file is already uptodate.
 
-<dischargeCurvesIlim-eps-converted-to.pdf, id=549, 633.36626pt x 317.185pt>
+<dischargeCurvesIlim-eps-converted-to.pdf, id=553, 633.36626pt x 317.185pt>
 File: dischargeCurvesIlim-eps-converted-to.pdf Graphic file (type pdf)
 
 <use dischargeCurvesIlim-eps-converted-to.pdf>
@@ -2831,15 +2831,15 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 ]
 \openout2 = `ageModel.aux'.
 
- (ageModel.tex <observer_schema.pdf, id=606, 604.50844pt x 536.75531pt>
+ (ageModel.tex <observer_schema.pdf, id=612, 604.50844pt x 536.75531pt>
 File: observer_schema.pdf Graphic file (type pdf)
 
 <use observer_schema.pdf>
-Package pdftex.def Info: observer_schema.pdf used on input line 12.
+Package pdftex.def Info: observer_schema.pdf used on input line 13.
 (pdftex.def)             Requested size: 452.9679pt x 402.19691pt.
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 16.
+Package pdftex.def Info: tulogo.pdf used on input line 17.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -2854,7 +2854,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 ]
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 27.
+Package pdftex.def Info: tulogo.pdf used on input line 28.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -2866,11 +2866,11 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 [14 <./observer_schema.pdf>]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\lstinline' on input line 39.
+(hyperref)                removing `\lstinline' on input line 40.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\lstinline' on input line 42.
+(hyperref)                removing `\lstinline' on input line 43.
 
 Package epstopdf Info: Source file: <DAM01.eps>
 (epstopdf)                    date: 2017-01-08 21:12:37
@@ -2880,13 +2880,13 @@ Package epstopdf Info: Source file: <DAM01.eps>
 (epstopdf)                    size: 16596 bytes
 (epstopdf)             Command: <epstopdf --outfile=DAM01-eps-converted-to.pdf 
 DAM01.eps>
-(epstopdf)             \includegraphics on input line 46.
+(epstopdf)             \includegraphics on input line 47.
 Package epstopdf Info: Output file is already uptodate.
-<DAM01-eps-converted-to.pdf, id=653, 422.57875pt x 317.185pt>
+<DAM01-eps-converted-to.pdf, id=659, 422.57875pt x 317.185pt>
 File: DAM01-eps-converted-to.pdf Graphic file (type pdf)
 
 <use DAM01-eps-converted-to.pdf>
-Package pdftex.def Info: DAM01-eps-converted-to.pdf used on input line 46.
+Package pdftex.def Info: DAM01-eps-converted-to.pdf used on input line 47.
 (pdftex.def)             Requested size: 226.48395pt x 169.99962pt.
 Package epstopdf Info: Source file: <DAM02.eps>
 (epstopdf)                    date: 2017-01-08 21:15:53
@@ -2896,23 +2896,23 @@ Package epstopdf Info: Source file: <DAM02.eps>
 (epstopdf)                    size: 16251 bytes
 (epstopdf)             Command: <epstopdf --outfile=DAM02-eps-converted-to.pdf 
 DAM02.eps>
-(epstopdf)             \includegraphics on input line 47.
+(epstopdf)             \includegraphics on input line 48.
 Package epstopdf Info: Output file is already uptodate.
 
-<DAM02-eps-converted-to.pdf, id=654, 422.57875pt x 317.185pt>
+<DAM02-eps-converted-to.pdf, id=660, 422.57875pt x 317.185pt>
 File: DAM02-eps-converted-to.pdf Graphic file (type pdf)
 
 <use DAM02-eps-converted-to.pdf>
-Package pdftex.def Info: DAM02-eps-converted-to.pdf used on input line 47.
+Package pdftex.def Info: DAM02-eps-converted-to.pdf used on input line 48.
 (pdftex.def)             Requested size: 226.48395pt x 169.99962pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 43--54
+Underfull \hbox (badness 10000) in paragraph at lines 44--55
 
  []
 
 File: tulogo.pdf Graphic file (type pdf)
 <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 54.
+Package pdftex.def Info: tulogo.pdf used on input line 55.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -2930,18 +2930,18 @@ Package epstopdf Info: Source file: <cdoc_hists.eps>
 (epstopdf)                    size: 53220 bytes
 (epstopdf)             Command: <epstopdf --outfile=cdoc_hists-eps-converted-to
 .pdf cdoc_hists.eps>
-(epstopdf)             \includegraphics on input line 65.
+(epstopdf)             \includegraphics on input line 66.
 Package epstopdf Info: Output file is already uptodate.
- <cdoc_hists-eps-converted-to.pdf, id=675, 633.36626pt x 317.185pt>
+ <cdoc_hists-eps-converted-to.pdf, id=681, 633.36626pt x 317.185pt>
 File: cdoc_hists-eps-converted-to.pdf Graphic file (type pdf)
 
 <use cdoc_hists-eps-converted-to.pdf>
-Package pdftex.def Info: cdoc_hists-eps-converted-to.pdf used on input line 65.
+Package pdftex.def Info: cdoc_hists-eps-converted-to.pdf used on input line 66.
 
 (pdftex.def)             Requested size: 452.9679pt x 226.84845pt.
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 69.
+Package pdftex.def Info: tulogo.pdf used on input line 70.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -2954,7 +2954,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 File: tulogo.pdf Graphic file (type pdf)
 
 <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 87.
+Package pdftex.def Info: tulogo.pdf used on input line 86.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -2972,28 +2972,28 @@ Package epstopdf Info: Source file: <woehlerFit.eps>
 (epstopdf)                    size: 54782 bytes
 (epstopdf)             Command: <epstopdf --outfile=woehlerFit-eps-converted-to
 .pdf woehlerFit.eps>
-(epstopdf)             \includegraphics on input line 92.
+(epstopdf)             \includegraphics on input line 93.
 Package epstopdf Info: Output file is already uptodate.
 
-<woehlerFit-eps-converted-to.pdf, id=721, 633.36626pt x 317.185pt>
+<woehlerFit-eps-converted-to.pdf, id=726, 633.36626pt x 317.185pt>
 File: woehlerFit-eps-converted-to.pdf Graphic file (type pdf)
 
 <use woehlerFit-eps-converted-to.pdf>
-Package pdftex.def Info: woehlerFit-eps-converted-to.pdf used on input line 92.
+Package pdftex.def Info: woehlerFit-eps-converted-to.pdf used on input line 93.
 
 (pdftex.def)             Requested size: 452.9679pt x 226.84845pt.
 
 
 LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <8> not available
-(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 93.
+(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 94.
 
 
 LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <6> not available
-(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 93.
+(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 94.
 
 File: tulogo.pdf Graphic file (type pdf)
 <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 110.
+Package pdftex.def Info: tulogo.pdf used on input line 111.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -3005,7 +3005,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 [18 <./woehlerFit-eps-converted-to.pdf>]
 File: tulogo.pdf Graphic file (type pdf)
  <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 153.
+Package pdftex.def Info: tulogo.pdf used on input line 154.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -3017,17 +3017,17 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 [19
 
 ]
-LaTeX Font Info:    Try loading font information for OML+pcr on input line 161.
+LaTeX Font Info:    Try loading font information for OML+pcr on input line 162.
 
  ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omlpcr.fd"
 File: omlpcr.fd 
 )
 LaTeX Font Info:    Font shape `OML/pcr/m/n' in size <10> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 161.
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 162.
 File: tulogo.pdf Graphic file (type pdf)
 
 <use tulogo.pdf>
-Package pdftex.def Info: tulogo.pdf used on input line 188.
+Package pdftex.def Info: tulogo.pdf used on input line 189.
 (pdftex.def)             Requested size: 45.29955pt x 25.34097pt.
 
 
@@ -3054,13 +3054,13 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 \openout2 = `batteryInterface.aux'.
 
  (batteryInterface.tex
-<topologies2.pdf, id=822, 360.59718pt x 273.27094pt>
+<topologies2.pdf, id=828, 360.59718pt x 273.27094pt>
 File: topologies2.pdf Graphic file (type pdf)
  <use topologies2.pdf>
 Package pdftex.def Info: topologies2.pdf used on input line 17.
 (pdftex.def)             Requested size: 452.9679pt x 343.27238pt.
 
-<composite_schema.pdf, id=826, 785.93625pt x 560.0925pt>
+<composite_schema.pdf, id=832, 785.93625pt x 560.0925pt>
 File: composite_schema.pdf Graphic file (type pdf)
 
 <use composite_schema.pdf>
@@ -3081,7 +3081,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 
 
  <./topologies2.pdf>]
-<method_delegation.pdf, id=846, 682.04813pt x 329.73187pt>
+<method_delegation.pdf, id=852, 682.04813pt x 329.73187pt>
 File: method_delegation.pdf Graphic file (type pdf)
 
 <use method_delegation.pdf>
@@ -3134,19 +3134,19 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[26] <powerRequest.pdf, id=963, 599.99156pt x 477.28313pt>
+[26] <powerRequest.pdf, id=969, 599.99156pt x 477.28313pt>
 File: powerRequest.pdf Graphic file (type pdf)
 
 <use powerRequest.pdf>
 Package pdftex.def Info: powerRequest.pdf used on input line 156.
 (pdftex.def)             Requested size: 452.9679pt x 360.33563pt.
- <iteratePower.pdf, id=965, 717.43031pt x 463.7325pt>
+ <iteratePower.pdf, id=971, 717.43031pt x 463.7325pt>
 File: iteratePower.pdf Graphic file (type pdf)
 
 <use iteratePower.pdf>
 Package pdftex.def Info: iteratePower.pdf used on input line 164.
 (pdftex.def)             Requested size: 452.9679pt x 292.79692pt.
- <iterateCurrent.pdf, id=967, 628.59843pt x 384.6872pt>
+ <iterateCurrent.pdf, id=973, 628.59843pt x 384.6872pt>
 File: iterateCurrent.pdf Graphic file (type pdf)
 
 <use iterateCurrent.pdf>
@@ -3163,7 +3163,7 @@ Package epstopdf Info: Source file: <simulations01.eps>
 (epstopdf)             \includegraphics on input line 180.
 Package epstopdf Info: Output file is already uptodate.
 
-<simulations01-eps-converted-to.pdf, id=970, 633.36626pt x 317.185pt>
+<simulations01-eps-converted-to.pdf, id=976, 633.36626pt x 317.185pt>
 File: simulations01-eps-converted-to.pdf Graphic file (type pdf)
 
 <use simulations01-eps-converted-to.pdf>
@@ -3217,7 +3217,7 @@ Package epstopdf Info: Source file: <simulations02.eps>
 (epstopdf)             \includegraphics on input line 194.
 Package epstopdf Info: Output file is already uptodate.
 
-<simulations02-eps-converted-to.pdf, id=1048, 633.36626pt x 317.185pt>
+<simulations02-eps-converted-to.pdf, id=1054, 633.36626pt x 317.185pt>
 File: simulations02-eps-converted-to.pdf Graphic file (type pdf)
 
 <use simulations02-eps-converted-to.pdf>
@@ -3235,7 +3235,7 @@ ted-to.pdf mdischargeCurves.eps>
 (epstopdf)             \includegraphics on input line 201.
 Package epstopdf Info: Output file is already uptodate.
 
-<mdischargeCurves-eps-converted-to.pdf, id=1050, 633.36626pt x 317.185pt>
+<mdischargeCurves-eps-converted-to.pdf, id=1056, 633.36626pt x 317.185pt>
 File: mdischargeCurves-eps-converted-to.pdf Graphic file (type pdf)
 
 <use mdischargeCurves-eps-converted-to.pdf>
@@ -3266,7 +3266,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  This may cause the page layout to be inconsistent, however.
 
 [31 <./simulations02-eps-converted-to.pdf> <./mdischargeCurves-eps-converted-to
-.pdf>] <cccv_qualitative.pdf, id=1090, 408.02437pt x 179.92218pt>
+.pdf>] <cccv_qualitative.pdf, id=1096, 408.02437pt x 179.92218pt>
 File: cccv_qualitative.pdf Graphic file (type pdf)
 
 <use cccv_qualitative.pdf>
@@ -3309,14 +3309,14 @@ f cccvFit.eps>
 (epstopdf)             \includegraphics on input line 257.
 Package epstopdf Info: Output file is already uptodate.
 
-<cccvFit-eps-converted-to.pdf, id=1132, 633.36626pt x 317.185pt>
+<cccvFit-eps-converted-to.pdf, id=1138, 633.36626pt x 317.185pt>
 File: cccvFit-eps-converted-to.pdf Graphic file (type pdf)
 
 <use cccvFit-eps-converted-to.pdf>
 Package pdftex.def Info: cccvFit-eps-converted-to.pdf used on input line 257.
 (pdftex.def)             Requested size: 452.9679pt x 226.84845pt.
 
-<cccvBMS.pdf, id=1136, 438.13687pt x 380.92313pt>
+<cccvBMS.pdf, id=1142, 438.13687pt x 380.92313pt>
 File: cccvBMS.pdf Graphic file (type pdf)
  <use cccvBMS.pdf>
 Package pdftex.def Info: cccvBMS.pdf used on input line 269.
@@ -3513,7 +3513,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 [42]
 \openout2 = `guiTools.aux'.
 
- (guiTools.tex <Designer.png, id=1256, 928.97063pt x 403.5075pt>
+ (guiTools.tex <Designer.png, id=1262, 928.97063pt x 403.5075pt>
 File: Designer.png Graphic file (type png)
 
 <use Designer.png>
@@ -3533,7 +3533,7 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
 [43
 
 
- <./Designer.png>] <digitizeTool01.png, id=1270, 1770.615pt x 1002.74625pt>
+ <./Designer.png>] <digitizeTool01.png, id=1277, 1770.615pt x 1002.74625pt>
 File: digitizeTool01.png Graphic file (type png)
 
 <use digitizeTool01.png>
@@ -3551,13 +3551,13 @@ Package Fancyhdr Warning: \headheight is too small (18.125pt):
  This may cause the page layout to be inconsistent, however.
 
 [44 <./digitizeTool01.png>]
-<file_chooser.png, id=1281, 704.6325pt x 684.5575pt>
+<file_chooser.png, id=1288, 704.6325pt x 684.5575pt>
 File: file_chooser.png Graphic file (type png)
  <use file_chooser.png>
 Package pdftex.def Info: file_chooser.png used on input line 53.
 (pdftex.def)             Requested size: 258.195pt x 250.83806pt.
 
-<digitizeTool02.png, id=1282, 1770.615pt x 1002.74625pt>
+<digitizeTool02.png, id=1289, 1770.615pt x 1002.74625pt>
 File: digitizeTool02.png Graphic file (type png)
 
 <use digitizeTool02.png>
@@ -3724,11 +3724,11 @@ Package logreq Info: Writing requests to 'lfpBattery_Documentation.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 46538 strings out of 493363
- 872587 string characters out of 3139771
+ 46543 strings out of 493363
+ 872667 string characters out of 3139771
  1493313 words of memory out of 3000000
- 48630 multiletter control sequences out of 15000+200000
- 33073 words of font info for 176 fonts, out of 3000000 for 9000
+ 48631 multiletter control sequences out of 15000+200000
+ 33122 words of font info for 177 fonts, out of 3000000 for 9000
  1127 hyphenation exceptions out of 8191
  73i,17n,71p,10399b,2370s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{C:/Pr
@@ -3760,9 +3760,9 @@ s0800.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/cm-super/sfss1200.pfb
 ram Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrb8a.pfb><C:/Program Files/MiKTe
 X 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/typ
 e1/urw/courier/ucrro8a.pfb>
-Output written on lfpBattery_Documentation.pdf (58 pages, 3457009 bytes).
+Output written on lfpBattery_Documentation.pdf (58 pages, 3436946 bytes).
 PDF statistics:
- 1541 PDF objects out of 1728 (max. 8388607)
- 484 named destinations out of 1000 (max. 500000)
+ 1549 PDF objects out of 1728 (max. 8388607)
+ 487 named destinations out of 1000 (max. 500000)
  45092 words of extra memory for PDF output out of 51595 (max. 10000000)
 
