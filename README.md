@@ -1,4 +1,13 @@
 # lfpBattery
+
+> [![Maintenance](https://img.shields.io/badge/Maintained%3F-no-red.svg)](https://bitbucket.org/lbesson/ansi-colors)
+>
+> __NOTE:__
+>
+> Since I no longer use Matlab, I cannot actively maintain this repo.
+> I will gladly accept PRs, as long as I can review them without Matlab.
+
+
 Cell-resolved OOP LiFe-battery model for Matlab
 
 To install, add the folder containing this package and it's subfolders to Matlab's search path.
